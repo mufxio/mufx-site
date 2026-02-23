@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>muFX — Independent Quantitative FX Research</title>
+<meta name="description" content="muFX delivers institutional-grade foreign exchange research, macro analysis, and quantitative strategy for the global currency markets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060608;
+    --bg-card: #0c0c12;
+    --cyan: #00b4f0;
+    --cyan-dim: rgba(0,180,240,0.15);
+    --cyan-ghost: rgba(0,180,240,0.06);
+    --teal: #4ecdc4;
+    --gold: #f7b731;
+    --pink: #e056a0;
+    --text: #c8d0d8;
+    --text-dim: rgba(200,210,220,0.45);
+    --text-ghost: rgba(200,210,220,0.2);
+    --border: rgba(0,180,240,0.08);
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; line-height: 1.7; }
+
+  /* Scanlines */
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events: none; z-index: 1000;
+  }
+  /* Grid */
+  body::after {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: linear-gradient(rgba(0,200,255,0.008) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.008) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 999;
+  }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; background: rgba(6,6,8,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: baseline; gap: 2px; text-decoration: none; }
+  .nav-logo .mu { color: var(--cyan); font-family: var(--sans); font-weight: 300; font-size: 22px; letter-spacing: 4px; }
+  .nav-logo .fx { color: #d8dde2; font-family: var(--sans); font-weight: 200; font-size: 22px; letter-spacing: 4px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--cyan); }
+  .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); opacity: 0.6; animation: pulse 2s ease-in-out infinite; display: inline-block; }
+  @keyframes pulse { 0%,100%{opacity:0.3;box-shadow:0 0 4px rgba(0,180,240,0.2)} 50%{opacity:0.8;box-shadow:0 0 12px rgba(0,180,240,0.5)} }
+
+  /* HERO */
+  .hero { position: relative; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 120px 32px 80px; overflow: hidden; }
+  .hero-wash { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 40%, rgba(0,80,140,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(0,60,100,0.05) 0%, transparent 50%); pointer-events: none; }
+  .hero-ticker { position: absolute; white-space: nowrap; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: rgba(0,180,240,0.04); animation: scroll-left 90s linear infinite; pointer-events: none; }
+  .hero-ticker.t1 { top: 15%; }
+  .hero-ticker.t2 { top: 30%; animation-duration: 120s; animation-direction: reverse; }
+  .hero-ticker.t3 { top: 55%; animation-duration: 100s; }
+  .hero-ticker.t4 { top: 75%; animation-duration: 110s; animation-direction: reverse; }
+  .hero-ticker.t5 { top: 90%; animation-duration: 80s; }
+  @keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .bracket { position: absolute; z-index: 10; }
+  .bracket-tl { top: 24px; left: 24px; width: 32px; height: 32px; border-top: 1px solid rgba(0,180,240,0.08); border-left: 1px solid rgba(0,180,240,0.08); }
+  .bracket-tr { top: 24px; right: 24px; width: 32px; height: 32px; border-top: 1px solid rgba(0,180,240,0.08); border-right: 1px solid rgba(0,180,240,0.08); }
+  .bracket-bl { bottom: 24px; left: 24px; width: 32px; height: 32px; border-bottom: 1px solid rgba(0,180,240,0.08); border-left: 1px solid rgba(0,180,240,0.08); }
+  .bracket-br { bottom: 24px; right: 24px; width: 32px; height: 32px; border-bottom: 1px solid rgba(0,180,240,0.08); border-right: 1px solid rgba(0,180,240,0.08); }
+  .eye-outer { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 500px; height: 200px; border: 1px solid rgba(0,180,240,0.02); border-radius: 50%/50%; pointer-events: none; }
+  .eye-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: 80px; border: 1px solid rgba(0,180,240,0.03); border-radius: 50%; pointer-events: none; }
+  .hero-content { position: relative; z-index: 10; text-align: center; max-width: 720px; }
+  .hero-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--cyan); opacity: 0.5; margin-bottom: 24px; animation: fadeUp 1s ease 0.2s both; }
+  .hero-title { font-family: var(--sans); font-weight: 200; font-size: clamp(48px,8vw,96px); letter-spacing: 12px; color: #d8dde2; margin-bottom: 16px; animation: fadeUp 1s ease 0.4s both; }
+  .hero-title .mu { color: var(--cyan); font-weight: 300; }
+  .hero-sub { font-family: var(--sans); font-weight: 300; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 48px; animation: fadeUp 1s ease 0.6s both; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; border: 1px solid var(--cyan-dim); background: var(--cyan-ghost); color: var(--cyan); font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; animation: fadeUp 1s ease 0.8s both; }
+  .hero-cta:hover { background: rgba(0,180,240,0.12); border-color: rgba(0,180,240,0.3); box-shadow: 0 0 24px rgba(0,180,240,0.1); }
+  .hero-cta .arrow { font-size: 14px; transition: transform 0.3s; }
+  .hero-cta:hover .arrow { transform: translateX(4px); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* DIVIDER & STATUS */
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), rgba(0,180,240,0.2), var(--border), transparent); max-width: 1100px; margin: 0 auto; }
+  .status-bar { max-width: 1100px; margin: 0 auto; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .status-item { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--text-ghost); }
+  .status-item .val { color: var(--text-dim); margin-left: 6px; }
+
+  /* SECTIONS */
+  .section { max-width: 1100px; margin: 0 auto; padding: 60px 32px; }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+  .section-title { font-family: var(--mono); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--cyan); opacity: 0.6; }
+
+  /* ARTICLE CARDS */
+  .article-card { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-card); padding: 40px; position: relative; overflow: hidden; transition: all 0.4s; margin-bottom: 20px; }
+  .article-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--cyan), var(--teal)); opacity: 0; transition: opacity 0.4s; }
+  .article-card:hover { border-color: rgba(0,180,240,0.15); background: rgba(12,12,18,0.9); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 1px rgba(0,180,240,0.1); }
+  .article-card:hover::before { opacity: 1; }
+  .article-card.featured { padding: 48px; border-color: rgba(0,180,240,0.12); }
+  .article-card.featured::after { content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(ellipse at top right, rgba(0,180,240,0.04), transparent 70%); pointer-events: none; }
+  .card-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; border-radius: 2px; border: 1px solid; }
+  .tag-quarterly { color: var(--cyan); border-color: var(--cyan-dim); background: var(--cyan-ghost); }
+  .card-date { font-family: var(--mono); font-size: 10px; color: var(--text-ghost); letter-spacing: 1px; }
+  .card-title { font-family: var(--sans); font-weight: 400; font-size: 22px; line-height: 1.4; color: #d8dde2; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .article-card.featured .card-title { font-size: 28px; font-weight: 500; }
+  .card-excerpt { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.7; color: var(--text-dim); max-width: 680px; }
+  .card-read { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); opacity: 0.5; transition: opacity 0.3s; }
+  .article-card:hover .card-read { opacity: 1; }
+
+  /* ABOUT STRIP */
+  .about-strip { max-width: 1100px; margin: 0 auto; padding: 60px 32px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+  .about-block { border-top: 1px solid var(--border); padding-top: 20px; }
+  .about-label { font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); opacity: 0.5; margin-bottom: 12px; }
+  .about-text { font-family: var(--sans); font-weight: 300; font-size: 13px; line-height: 1.8; color: var(--text-dim); }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 32px; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo .mu { color: var(--cyan); font-weight: 300; letter-spacing: 4px; font-size: 16px; }
+  .footer-logo .fx { color: #d8dde2; font-weight: 200; letter-spacing: 4px; font-size: 16px; }
+  .footer-text { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-ghost); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-ghost); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--cyan); }
+  .bottom-line { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,180,240,0.1) 20%, rgba(0,180,240,0.25) 50%, rgba(0,180,240,0.1) 80%, transparent); }
+
+  @media (max-width: 768px) {
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 8px; letter-spacing: 2px; }
+    .hero { min-height: 70vh; padding: 100px 20px 60px; }
+    .hero-title { letter-spacing: 6px; }
+    .section { padding: 40px 20px; }
+    .article-card { padding: 24px; }
+    .about-strip { grid-template-columns: 1fr; gap: 24px; }
+    .status-bar { padding: 16px 20px; }
+    .footer-inner { flex-direction: column; gap: 16px; }
+    .nav-inner { padding: 0 20px; }
+  }
+  @media (max-width: 480px) {
+    .nav-links a:nth-child(-n+3) { display: none; }
+    .hero-sub { font-size: 11px; letter-spacing: 2px; }
+    .card-title { font-size: 18px; }
+    .article-card.featured .card-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="index.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-wash"></div>
+  <div class="hero-ticker t1">EUR/USD 1.1785 &nbsp;&nbsp;&nbsp; GBP/USD 1.3473 &nbsp;&nbsp;&nbsp; USD/JPY 155.00 &nbsp;&nbsp;&nbsp; AUD/USD 0.7100 &nbsp;&nbsp;&nbsp; DXY 97.79 &nbsp;&nbsp;&nbsp; GOLD 5040 &nbsp;&nbsp;&nbsp; US10Y 4.287 &nbsp;&nbsp;&nbsp; FED 3.50-3.75 &nbsp;&nbsp;&nbsp; ECB 2.00 &nbsp;&nbsp;&nbsp; BOJ 0.75 &nbsp;&nbsp;&nbsp; EUR/USD 1.1785 &nbsp;&nbsp;&nbsp; GBP/USD 1.3473 &nbsp;&nbsp;&nbsp; USD/JPY 155.00 &nbsp;&nbsp;&nbsp; AUD/USD 0.7100 &nbsp;&nbsp;&nbsp; DXY 97.79 &nbsp;&nbsp;&nbsp; GOLD 5040 &nbsp;&nbsp;&nbsp; US10Y 4.287 &nbsp;&nbsp;&nbsp; FED 3.50-3.75 &nbsp;&nbsp;&nbsp; ECB 2.00 &nbsp;&nbsp;&nbsp; BOJ 0.75</div>
+  <div class="hero-ticker t2">CFTC NET EUR +82.4K &nbsp;&nbsp;&nbsp; NET JPY -124.8K &nbsp;&nbsp;&nbsp; SOFR 5.31 &nbsp;&nbsp;&nbsp; EURIBOR 3.862 &nbsp;&nbsp;&nbsp; MOVE 98.4 &nbsp;&nbsp;&nbsp; JP10Y 2.019 &nbsp;&nbsp;&nbsp; DE10Y 2.341 &nbsp;&nbsp;&nbsp; CFTC NET EUR +82.4K &nbsp;&nbsp;&nbsp; NET JPY -124.8K &nbsp;&nbsp;&nbsp; SOFR 5.31 &nbsp;&nbsp;&nbsp; EURIBOR 3.862 &nbsp;&nbsp;&nbsp; MOVE 98.4 &nbsp;&nbsp;&nbsp; JP10Y 2.019 &nbsp;&nbsp;&nbsp; DE10Y 2.341</div>
+  <div class="hero-ticker t3">USD/CNH 6.89 &nbsp;&nbsp;&nbsp; USD/KRW 1328 &nbsp;&nbsp;&nbsp; BRENT 82.14 &nbsp;&nbsp;&nbsp; WTI 77.38 &nbsp;&nbsp;&nbsp; SPX 5026 &nbsp;&nbsp;&nbsp; NKY 39142 &nbsp;&nbsp;&nbsp; USD/CNH 6.89 &nbsp;&nbsp;&nbsp; USD/KRW 1328 &nbsp;&nbsp;&nbsp; BRENT 82.14 &nbsp;&nbsp;&nbsp; WTI 77.38 &nbsp;&nbsp;&nbsp; SPX 5026 &nbsp;&nbsp;&nbsp; NKY 39142</div>
+  <div class="hero-ticker t4">IEEPA STRUCK DOWN 6-3 &nbsp;&nbsp;&nbsp; SECTION 122 15% SURCHARGE &nbsp;&nbsp;&nbsp; WARSH NOMINATION JAN 30 &nbsp;&nbsp;&nbsp; POWELL TERM EXPIRES MAY 15 &nbsp;&nbsp;&nbsp; IEEPA STRUCK DOWN 6-3 &nbsp;&nbsp;&nbsp; SECTION 122 15% SURCHARGE &nbsp;&nbsp;&nbsp; WARSH NOMINATION JAN 30 &nbsp;&nbsp;&nbsp; POWELL TERM EXPIRES MAY 15</div>
+  <div class="hero-ticker t5">CORE PCE 3.0% &nbsp;&nbsp;&nbsp; EZ HICP 1.7% &nbsp;&nbsp;&nbsp; UK CPI 3.4% &nbsp;&nbsp;&nbsp; GOLD ATH 5595 JAN 29 &nbsp;&nbsp;&nbsp; CB BUYING 863T &nbsp;&nbsp;&nbsp; CORE PCE 3.0% &nbsp;&nbsp;&nbsp; EZ HICP 1.7% &nbsp;&nbsp;&nbsp; UK CPI 3.4% &nbsp;&nbsp;&nbsp; GOLD ATH 5595 JAN 29 &nbsp;&nbsp;&nbsp; CB BUYING 863T</div>
+  <div class="bracket bracket-tl"></div>
+  <div class="bracket bracket-tr"></div>
+  <div class="bracket bracket-bl"></div>
+  <div class="bracket bracket-br"></div>
+  <div class="eye-outer"></div>
+  <div class="eye-inner"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Global FX &amp; Macro Intelligence</div>
+    <h1 class="hero-title"><span class="mu">mu</span>FX</h1>
+    <p class="hero-sub">Independent Quantitative FX Research</p>
+    <a href="q2-2026-outlook.html" class="hero-cta">Read Latest Research <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="status-bar">
+  <div class="status-item">DXY<span class="val">97.79</span></div>
+  <div class="status-item">EUR/USD<span class="val">1.1785</span></div>
+  <div class="status-item">USD/JPY<span class="val">155.00</span></div>
+  <div class="status-item">GOLD<span class="val">5,040</span></div>
+  <div class="status-item">FED<span class="val">3.50-3.75%</span></div>
+  <div class="status-item">AS OF<span class="val">20 FEB 2026</span></div>
+</div>
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Latest Research</h2>
+  </div>
+  <a href="q2-2026-outlook.html" class="article-card featured">
+    <div class="card-meta">
+      <span class="card-tag tag-quarterly">Quarterly Outlook</span>
+      <span class="card-date">February 2026</span>
+    </div>
+    <h3 class="card-title">Q2 2026: The Post-Tariff Dollar and What Comes Next</h3>
+    <p class="card-excerpt">The dollar enters Q2 2026 structurally weaker than at any point since 2021, but not broken. DXY has traded a 96–100 range for eight months, and positioning against the greenback is the most extreme in fourteen years. The Supreme Court's ruling striking down IEEPA tariffs removes a key source of trade policy uncertainty but introduces fiscal ambiguity.</p>
+    <div class="card-read">Read Full Report <span>→</span></div>
+  </a>
+</section>
+
+<div class="divider"></div>
+<section class="about-strip">
+  <div class="about-block">
+    <div class="about-label">Mission</div>
+    <p class="about-text">Institutional-grade FX research, built from zero with AI-augmented intelligence systems. One analyst operating at the output of a research desk.</p>
+  </div>
+  <div class="about-block">
+    <div class="about-label">Coverage</div>
+    <p class="about-text">G10 &amp; EM currencies, central bank policy, gold, positioning data, and the macro-structural forces driving FX markets.</p>
+  </div>
+  <div class="about-block">
+    <div class="about-label">Contact</div>
+    <p class="about-text">research@mufx.io<br>mufx.io</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line"></div>
+
+</body>
+</html>

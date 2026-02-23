@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — muFX</title>
+<meta name="description" content="muFX is an independent quantitative FX research operation delivering institutional-grade currency market analysis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060608;
+    --bg-card: #0c0c12;
+    --cyan: #00b4f0;
+    --cyan-dim: rgba(0,180,240,0.15);
+    --cyan-ghost: rgba(0,180,240,0.06);
+    --teal: #4ecdc4;
+    --text: #c8d0d8;
+    --text-dim: rgba(200,210,220,0.45);
+    --text-ghost: rgba(200,210,220,0.2);
+    --border: rgba(0,180,240,0.08);
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px); pointer-events: none; z-index: 1000; }
+  body::after { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(0,200,255,0.008) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.008) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 999; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; background: rgba(6,6,8,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: baseline; gap: 2px; text-decoration: none; }
+  .nav-logo .mu { color: var(--cyan); font-family: var(--sans); font-weight: 300; font-size: 22px; letter-spacing: 4px; }
+  .nav-logo .fx { color: #d8dde2; font-family: var(--sans); font-weight: 200; font-size: 22px; letter-spacing: 4px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+  .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); opacity: 0.6; animation: pulse 2s ease-in-out infinite; display: inline-block; }
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.8;box-shadow:0 0 12px rgba(0,180,240,0.5)} }
+
+  .page-content {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 120px 32px 80px;
+  }
+
+  .page-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+
+  .page-content h1 {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 36px;
+    color: #d8dde2;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+  }
+
+  .page-content h1 .mu { color: var(--cyan); font-weight: 400; }
+
+  .about-section {
+    margin-bottom: 48px;
+  }
+
+  .about-section h2 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.5;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-section p {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.85;
+    color: rgba(200,210,220,0.65);
+    margin-bottom: 16px;
+  }
+
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .coverage-item {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg-card);
+  }
+
+  .coverage-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+
+  .coverage-desc {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+
+  .contact-block {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg-card);
+    margin-top: 16px;
+  }
+
+  .contact-block a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    transition: opacity 0.3s;
+  }
+
+  .contact-block a:hover { opacity: 0.7; }
+
+  .contact-block p {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  footer { border-top: 1px solid var(--border); padding: 32px; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo .mu { color: var(--cyan); font-weight: 300; letter-spacing: 4px; font-size: 16px; }
+  .footer-logo .fx { color: #d8dde2; font-weight: 200; letter-spacing: 4px; font-size: 16px; }
+  .footer-text { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-ghost); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-ghost); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--cyan); }
+  .bottom-line { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,180,240,0.1) 20%, rgba(0,180,240,0.25) 50%, rgba(0,180,240,0.1) 80%, transparent); }
+
+  @media (max-width: 768px) {
+    .page-content { padding: 100px 20px 60px; }
+    .coverage-grid { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; gap: 16px; }
+    .nav-inner { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="index.html">Research</a>
+      <a href="about.html" class="active">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-tag">About</div>
+  <h1>About <span class="mu">mu</span>FX</h1>
+
+  <div class="about-section">
+    <h2>Mission</h2>
+    <p>muFX is an independent quantitative FX research operation. We deliver institutional-grade analysis of global currency markets, central bank policy, and the macro-structural forces that drive exchange rates.</p>
+    <p>We believe the best research comes from combining deep market knowledge with modern analytical tools. muFX uses AI-augmented intelligence systems to monitor sources, process data, and maintain the breadth of coverage typically associated with multi-analyst research desks — operated by a single analyst with skin in the game.</p>
+  </div>
+
+  <div class="about-section">
+    <h2>Coverage</h2>
+    <div class="coverage-grid">
+      <div class="coverage-item">
+        <div class="coverage-label">G10 FX</div>
+        <div class="coverage-desc">EUR/USD, USD/JPY, GBP/USD, AUD/USD, NZD/USD, USD/CAD, USD/CHF — rates, positioning, and cross-currency dynamics.</div>
+      </div>
+      <div class="coverage-item">
+        <div class="coverage-label">EM FX</div>
+        <div class="coverage-desc">USD/CNH, Asian FX, LATAM currencies — managed regimes, carry trades, and political risk premia.</div>
+      </div>
+      <div class="coverage-item">
+        <div class="coverage-label">Central Banks</div>
+        <div class="coverage-desc">Fed, ECB, BOJ, BOE, PBOC, RBA — rate decisions, forward guidance, balance sheet policy, and leadership transitions.</div>
+      </div>
+      <div class="coverage-item">
+        <div class="coverage-label">Macro & Gold</div>
+        <div class="coverage-desc">Fiscal policy, trade policy, gold as a dollar confidence signal, reserve diversification, and positioning flows.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h2>Publication Schedule</h2>
+    <p>Quarterly outlooks at the start of each quarter. Flash notes on market-moving events. Deep dives on structural themes as they develop. All published at mufx.io.</p>
+  </div>
+
+  <div class="about-section">
+    <h2>Contact</h2>
+    <div class="contact-block">
+      <a href="mailto:research@mufx.io">research@mufx.io</a>
+      <p>For research inquiries, media, or collaboration opportunities.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="index.html">Research</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line"></div>
+
+</body>
+</html>

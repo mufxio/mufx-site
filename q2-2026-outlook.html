@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q2 2026: The Post-Tariff Dollar and What Comes Next — muFX</title>
+<meta name="description" content="muFX Quarterly Outlook Q2 2026: SCOTUS strikes down IEEPA tariffs, Powell-to-Warsh transition, EUR/USD toward 1.20, gold above $5,000, and the positioning framework for Q2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060608;
+    --bg-card: #0c0c12;
+    --cyan: #00b4f0;
+    --cyan-dim: rgba(0,180,240,0.15);
+    --cyan-ghost: rgba(0,180,240,0.06);
+    --teal: #4ecdc4;
+    --gold: #f7b731;
+    --pink: #e056a0;
+    --text: #c8d0d8;
+    --text-dim: rgba(200,210,220,0.45);
+    --text-ghost: rgba(200,210,220,0.2);
+    --border: rgba(0,180,240,0.08);
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+    --serif: 'Source Serif 4', Georgia, serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--serif); min-height: 100vh; overflow-x: hidden; }
+
+  /* Scanlines */
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    pointer-events: none; z-index: 1000;
+  }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; background: rgba(6,6,8,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: baseline; gap: 2px; text-decoration: none; }
+  .nav-logo .mu { color: var(--cyan); font-family: var(--sans); font-weight: 300; font-size: 22px; letter-spacing: 4px; }
+  .nav-logo .fx { color: #d8dde2; font-family: var(--sans); font-weight: 200; font-size: 22px; letter-spacing: 4px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--cyan); }
+  .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); opacity: 0.6; animation: pulse 2s ease-in-out infinite; display: inline-block; }
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.8;box-shadow:0 0 12px rgba(0,180,240,0.5)} }
+
+  /* ARTICLE HEADER */
+  .article-header {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 120px 32px 48px;
+  }
+
+  .article-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-ghost);
+    text-decoration: none;
+    margin-bottom: 40px;
+    transition: color 0.3s;
+  }
+  .article-back:hover { color: var(--cyan); }
+
+  .article-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--cyan-dim);
+    background: var(--cyan-ghost);
+    color: var(--cyan);
+    margin-bottom: 20px;
+  }
+
+  .article-header h1 {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.3;
+    color: #e2e6ea;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-ghost);
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-meta .sep { color: rgba(0,180,240,0.15); }
+
+  /* READING PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    height: 2px;
+    background: rgba(0,180,240,0.05);
+    z-index: 499;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--cyan), var(--teal));
+    transition: width 0.1s linear;
+  }
+
+  /* ARTICLE BODY */
+  .article-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .article-body p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.85;
+    color: rgba(200, 210, 220, 0.75);
+    margin-bottom: 24px;
+  }
+
+  .article-body h2 {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 22px;
+    color: #d8dde2;
+    margin-top: 56px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-left: 16px;
+  }
+
+  .article-body h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--cyan), var(--teal));
+    border-radius: 2px;
+  }
+
+  .article-body h3 {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 17px;
+    color: rgba(200, 210, 220, 0.85);
+    margin-top: 40px;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+
+  .article-body em {
+    color: rgba(200, 210, 220, 0.6);
+    font-style: italic;
+  }
+
+  .article-body strong {
+    color: #d8dde2;
+    font-weight: 500;
+  }
+
+  /* Scenario boxes */
+  .scenario {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin: 24px 0;
+    background: var(--bg-card);
+  }
+
+  .scenario-title {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .scenario-title .prob {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .scenario.bull .scenario-title { color: var(--teal); }
+  .scenario.bull .prob { border: 1px solid rgba(78,205,196,0.2); color: var(--teal); background: rgba(78,205,196,0.06); }
+  .scenario.base .scenario-title { color: var(--cyan); }
+  .scenario.base .prob { border: 1px solid var(--cyan-dim); color: var(--cyan); background: var(--cyan-ghost); }
+  .scenario.bear .scenario-title { color: var(--pink); }
+  .scenario.bear .prob { border: 1px solid rgba(224,86,160,0.2); color: var(--pink); background: rgba(224,86,160,0.06); }
+
+  .scenario ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .scenario li {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(200,210,220,0.6);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+
+  .scenario li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text-ghost);
+  }
+
+  /* Key dates */
+  .dates-grid {
+    display: grid;
+    gap: 8px;
+    margin: 24px 0;
+  }
+
+  .date-row {
+    display: flex;
+    gap: 16px;
+    padding: 10px 16px;
+    border: 1px solid rgba(0,180,240,0.04);
+    border-radius: 3px;
+    background: rgba(0,180,240,0.015);
+    align-items: baseline;
+  }
+
+  .date-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    opacity: 0.7;
+    white-space: nowrap;
+    min-width: 140px;
+  }
+
+  .date-desc {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 13px;
+    color: rgba(200,210,220,0.55);
+    line-height: 1.5;
+  }
+
+  /* Trade recs */
+  .trade-rec {
+    padding: 16px 20px;
+    border-left: 2px solid;
+    margin: 16px 0;
+    background: rgba(0,180,240,0.015);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .trade-rec.long { border-color: var(--teal); }
+  .trade-rec.short { border-color: var(--pink); }
+  .trade-rec.neutral { border-color: var(--gold); }
+  .trade-rec.watch { border-color: var(--cyan); }
+
+  .trade-pair {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .trade-rec.long .trade-pair { color: var(--teal); }
+  .trade-rec.short .trade-pair { color: var(--pink); }
+  .trade-rec.neutral .trade-pair { color: var(--gold); }
+  .trade-rec.watch .trade-pair { color: var(--cyan); }
+
+  .trade-desc {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(200,210,220,0.6);
+  }
+
+  /* Section divider in article */
+  .article-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), rgba(0,180,240,0.15), var(--border), transparent);
+    margin: 48px 0;
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    color: var(--text-ghost);
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    margin-top: 48px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 32px; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo .mu { color: var(--cyan); font-weight: 300; letter-spacing: 4px; font-size: 16px; }
+  .footer-logo .fx { color: #d8dde2; font-weight: 200; letter-spacing: 4px; font-size: 16px; }
+  .footer-text { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-ghost); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-ghost); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--cyan); }
+  .bottom-line { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,180,240,0.1) 20%, rgba(0,180,240,0.25) 50%, rgba(0,180,240,0.1) 80%, transparent); }
+
+  @media (max-width: 768px) {
+    .article-header { padding: 100px 20px 32px; }
+    .article-body { padding: 32px 20px 60px; }
+    .article-body h2 { font-size: 19px; }
+    .date-row { flex-direction: column; gap: 4px; }
+    .date-label { min-width: auto; }
+    .nav-inner { padding: 0 20px; }
+    .footer-inner { flex-direction: column; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="index.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">← Back to Research</a>
+  <div class="article-tag">Quarterly Outlook</div>
+  <h1>Q2 2026: The Post-Tariff Dollar and What Comes Next</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>February 2026</span>
+    <span class="sep">|</span>
+    <span>18 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+
+<h2>I. Executive Summary</h2>
+
+<p>The dollar enters Q2 2026 structurally weaker than at any point since 2021, but not broken. DXY has traded a 96–100 range for eight months, and positioning against the greenback is the most extreme in fourteen years. The Supreme Court's February 20 ruling striking down IEEPA tariffs removes a key source of trade policy uncertainty but introduces fiscal ambiguity: up to $175 billion in refunds may be owed, and the administration's replacement 15% tariff under Section 122 expires in July.</p>
+
+<p>The Federal Reserve sits at 3.50–3.75% in a hawkish pause, with the Powell-to-Warsh transition set for May. The ECB holds at 2.0% with inflation below target, and the Bank of Japan is the only major central bank still tightening. Gold above $5,000 is not a panic signal — it is a structural repricing of dollar confidence driven by 800+ tonnes of annual central bank buying.</p>
+
+<p>Our base case for Q2: DXY trades 95–99, EUR/USD grinds toward 1.20, USD/JPY tests the low 150s, and the yuan continues its managed appreciation toward 6.80. The dominant risk is a positioning squeeze if US data surprises to the upside, which could produce a sharp but temporary dollar rally.</p>
+
+<div class="article-divider"></div>
+
+<h2>II. The Macro Regime Shift: Post-IEEPA America</h2>
+
+<h3>What the Supreme Court Changed</h3>
+
+<p>On February 20, 2026, the Supreme Court ruled 6-3 in <em>Learning Resources, Inc. v. Trump</em> that IEEPA does not authorize the President to impose tariffs. Chief Justice Roberts delivered the majority opinion, joined by Justices Gorsuch and Barrett in full, with Sotomayor, Kagan, and Jackson joining in part. The decision's language was unambiguous: the two words "regulate" and "importation," separated by sixteen others in the IEEPA statute, "cannot bear such weight." Roberts noted that IEEPA contains no reference to tariffs or duties and that no previous president had ever read the law to confer such power.</p>
+
+<p>The practical consequences are significant but layered. The ruling immediately invalidated the "reciprocal" tariffs announced on Liberation Day in April 2025, the fentanyl-related duties on China, Canada, and Mexico, and the broader tariff architecture that had been the centerpiece of Trump's second-term trade policy. However, Section 232 tariffs on steel and aluminum, Section 301 tariffs on Chinese goods, and the termination of de minimis duty-free treatment remain in effect — these rest on separate statutory authorities untouched by the decision.</p>
+
+<h3>The Replacement Architecture and Its Limitations</h3>
+
+<p>Within hours of the ruling, the administration invoked Section 122 of the Trade Act of 1974 to impose a new "temporary import surcharge." Initially set at 10%, Trump raised it to 15% by Saturday — the statutory maximum. The critical constraint is time: Section 122 tariffs are limited to 150 days without Congressional approval, placing an expiration date of approximately July 24, 2026, on the replacement regime. The administration has simultaneously launched Section 232 and Section 301 investigations across multiple sectors — pharmaceuticals, semiconductors, critical minerals — to establish more durable tariff authorities. Treasury Secretary Bessent told the Economic Club of Dallas that the combination of these measures would produce "virtually unchanged tariff revenue in 2026."</p>
+
+<p>For currency markets, the structural shift is this: the era of unilateral, open-ended presidential tariff authority via emergency powers is over. Future tariff actions require either Congressional authorization or investigations under specific trade statutes with defined procedural requirements. The speed and unpredictability that characterized IEEPA-based tariffs — a material source of dollar volatility throughout 2025 — has been substantially reduced.</p>
+
+<h3>The Refund Question</h3>
+
+<p>The Penn Wharton Budget Model projects up to $175 billion in refunds owed to importers who paid IEEPA tariffs. The Supreme Court itself did not address the refund mechanism, and the administration's executive order revoking the tariffs was similarly silent. Justice Kavanaugh's dissent flagged the fiscal risk directly, noting that the government had collected more than $130 billion in tariff revenue and that refunds could amount to billions of dollars even though many importers had already passed costs through to consumers. The Court of International Trade will likely need to resolve individual claims through administrative remedies and litigation — a process that could stretch well into 2027.</p>
+
+<p>For FX flows, the refund overhang matters less as an immediate catalyst than as a medium-term fiscal drag. If refunds are ultimately paid from the Treasury's general fund, they widen an already expansive deficit picture without any corresponding reduction in government spending. Combined with the One Big Beautiful Bill Act's estimated $3.4 trillion in additional deficits over ten years — with costs heavily front-loaded, peaking at over $500 billion in FY2027 — the fiscal trajectory reinforces the structural case for dollar weakness over the medium term.</p>
+
+<div class="article-divider"></div>
+
+<h2>III. The Fed Transition: Powell to Warsh</h2>
+
+<h3>The Current Stance</h3>
+
+<p>The Federal Reserve sits at a 3.50–3.75% target range after three consecutive 25bp cuts in late 2025. The January 27-28 FOMC meeting produced a 10-2 vote to hold, with Governors Waller and Miran dissenting in favor of an immediate 25bp cut. The minutes, released February 18, revealed a committee deeply divided over the path ahead but broadly comfortable characterizing the economy as "solid" — an upgrade from "moderate." Core PCE remains sticky at 3.0% as of December, well above the 2% target, and the January FOMC characterized recent tariff-driven price increases as "one-time effects" expected to fade by mid-2026.</p>
+
+<p>The CME FedWatch tool as of February 20 prices a greater than 90% probability of a hold at the March 17-18 meeting. Markets are not pricing a cut until the second half of 2026, with the June meeting — the first that a confirmed Warsh could chair — emerging as the earliest plausible window. The January minutes included a notable detail: several participants favored language that would have explicitly preserved the option of raising the federal funds rate if inflation proves more persistent than projected. This hawkish contingency language, combined with the Fed's description of a "productivity miracle" driven by AI investment supporting 2.2% GDP growth without stoking inflation, paints a picture of a central bank that sees no urgency to ease.</p>
+
+<h3>What a Warsh-Led Fed Means</h3>
+
+<p>Kevin Warsh was nominated on January 30 and faces a Senate confirmation process complicated by Senator Tillis' hold on all Fed nominees pending resolution of the DOJ investigation into Powell over the headquarters renovation. Powell's term expires May 15, and the earliest FOMC meeting Warsh could chair is June 16-17.</p>
+
+<p>The market's initial read of Warsh as a hawk is likely overdrawn. During his 2006-2011 tenure on the Board, Warsh opposed some crisis-era rate cuts and was a persistent critic of quantitative easing. But his recent positioning has shifted materially. He has publicly advocated for greater policy easing in 2026, argued that AI-driven productivity gains can sustain faster growth without triggering inflation, and signaled interest in a new Treasury-Fed Accord to coordinate fiscal and monetary policy. His stated desire to reduce the Fed's public commentary footprint — he has argued that officials have become "prisoners of their own words" — may actually reduce forward guidance volatility.</p>
+
+<p>The likely scenario is a Warsh Fed that delivers one to two 25bp cuts in the second half of 2026, consistent with current market pricing, while being somewhat less resistant to White House preferences for lower rates than Powell has been. The real divergence from the Powell era will emerge in 2027, when the interaction between fiscal expansion, the balance sheet, and potential inflationary pressures creates harder tradeoffs.</p>
+
+<h3>Market Pricing vs. Likely Outcomes</h3>
+
+<p>Markets currently price roughly 50-75bp of easing by year-end 2026. This feels modestly aggressive. The Fed has made clear that the bar for cuts is high: inflation needs to demonstrate sustained progress toward 2%, and the "one-time" tariff effects need to wash out of the data. With core PCE at 3.0% and the new Section 122 tariff adding another layer of import price pressure, the most likely outcome is a single 25bp cut in H2 2026, with a second cut contingent on labor market deterioration that has not yet materialized. The risk is asymmetric: if US growth disappoints meaningfully, the Warsh Fed could cut faster than markets expect, accelerating dollar weakness.</p>
+
+<div class="article-divider"></div>
+
+<h2>IV. G10 Currency Outlook — Q2 2026</h2>
+
+<h3>EUR/USD: The Grind Toward 1.20</h3>
+
+<p>EUR/USD closed at 1.1785 on February 20, up approximately 15% year-over-year from the 1.03 trough set in January 2025. The pair briefly touched 1.2016 on January 27 — a three-year high — before retreating on dollar strength tied to hawkish FOMC minutes and geopolitical risk premia associated with Iran tensions.</p>
+
+<p>The fundamental setup favors continued, if grinding, euro strength through Q2. The ECB held its deposit facility rate at 2.0% on February 5 for the fifth consecutive meeting, and Lagarde reiterated that the bank is in a "good place." Eurozone inflation eased to 1.7% in January, below target, but the ECB staff projects a return to 2.0% over the medium term. Growth has surprised modestly to the upside: the February PMI showed private-sector activity expanding at the fastest pace since November, with German manufacturing expanding for the first time since June 2022. The fiscal tailwind from German infrastructure and defense spending, authorized under the Merz government's fiscal expansion package, begins to filter into activity data from Q2 onward.</p>
+
+<p>The succession question adds a layer of political premium. Bloomberg and the Financial Times reported that Lagarde may depart before her October 2027 term end to allow Macron and Merz to select her successor before French elections that could bring Marine Le Pen's National Rally to power. Leading candidates include former DNB chief Klaas Knot and former BIS head Pablo Hernández de Cos. A smooth transition with a consensus-oriented successor would be euro-neutral to mildly positive.</p>
+
+<p>The rate differential continues to lean EUR-positive. With the Fed at 3.50-3.75% and the ECB at 2.0%, the spread has narrowed significantly from its 2023-2024 peaks. If the Fed delivers even one cut in H2 2026 while the ECB holds, the compression accelerates. Deutsche Bank's base case is for the ECB to remain at 2.0% through 2026, with the next move a hike in mid-2027 — a scenario that would further support EUR/USD upside.</p>
+
+<p>Our Q2 range estimate: 1.17–1.21. A break above 1.20 on a sustained basis would likely trigger more aggressive ECB commentary about disinflationary risks from euro strength, potentially capping the move. But absent a severe global risk-off event, the gravitational pull is higher.</p>
+
+<h3>USD/JPY: The BOJ's Tightrope</h3>
+
+<p>USD/JPY traded at 155.0 on February 20, trapped between the BOJ's normalization ambitions and the yen's structural weakness from still-negative real rates. The pair's 52-week range of 139.88–159.46 captures the tension: the yen rallied sharply on BOJ rate hike expectations and carry trade unwind fears, then gave ground when those expectations were deferred.</p>
+
+<p>The BOJ raised rates to 0.75% in December 2025 — a 30-year high — and held in January ahead of the snap election. Prime Minister Takaichi's landslide victory on February 8 initially strengthened the yen on expectations that her pro-growth platform would indirectly support faster BOJ normalization. But Takaichi's fiscal ambitions — including a proposed two-year suspension of the food consumption tax — introduce sovereign risk concerns that could pressure JGBs and ultimately weigh on the yen.</p>
+
+<p>Markets are pricing approximately a 50% probability of a BOJ hike in April, with June considered the more likely date. Japanese 10-year JGB yields have surged to 2.0%, their highest since 1999, and 30-year yields have hit record highs above 3.4%. The abandonment of yield curve control in March 2024 means these moves are now market-driven, introducing genuine two-way risk.</p>
+
+<p>For Q2, the key variable is whether the 155-160 zone triggers Japanese official intervention, as it did in 2024 when the MOF sold approximately $100 billion. Our Q2 view: USD/JPY trades 150–158, with bias lower if the BOJ delivers an April hike. A material break above 160 is the tail risk — it would require both a US data upside surprise and BOJ inaction.</p>
+
+<h3>GBP/USD: Sterling's Fragile Hold</h3>
+
+<p>GBP/USD closed at 1.3473 on February 20, up approximately 6.5% year-over-year. Sterling's performance has been almost entirely a function of dollar weakness rather than domestic strength — GBP fell against both EUR and CHF in 2025 while rallying against the dollar.</p>
+
+<p>The Bank of England held at 3.75% on February 4 by a razor-thin 5-4 vote. Four MPC members preferred an immediate 25bp cut to 3.50%. UK CPI remains at 3.4% but is projected to fall to 2.0% by June 2026 as energy base effects and Budget 2025 measures flow through. The labor market is loosening materially, with forward-looking redundancy indicators pointing higher. GDP growth ended 2025 on a weak footing, and investment intentions remain depressed.</p>
+
+<p>Our Q2 view: GBP/USD trades 1.33–1.38. The pair's upside is capped by domestic weakness and the BOE's dovish lean, while dollar weakness provides a floor. The risk of a sharper selloff centers on a leadership challenge scenario following May local elections, which would likely push EUR/GBP toward 0.90 and drag cable below 1.30.</p>
+
+<h3>Commodity Currencies: Post-Tariff Recalibration</h3>
+
+<p>The SCOTUS ruling is net positive for commodity currencies. The removal of IEEPA tariffs reduces the risk premium on global trade, and the replacement 15% tariff under Section 122 is lower than many of the bilateral rates previously in effect. Australia's RBA raised rates in February and markets are pricing further tightening — a hawkish outlier among G10 central banks that supports AUD/USD near 0.71. NZD/USD at approximately 0.60 benefits from reduced trade war risk. USD/CAD faces opposing forces: Canadian fundamentals remain weak, but USMCA-qualifying goods are exempt from the Section 122 tariff.</p>
+
+<div class="article-divider"></div>
+
+<h2>V. EM FX Spotlight</h2>
+
+<h3>USD/CNH: Post-Tariff Recalibration</h3>
+
+<p>The offshore yuan strengthened to a 34-month high below 6.89 per dollar in mid-February, and USD/CNH has fallen 2,500 pips since November. The SCOTUS ruling fundamentally alters the yuan's tariff calculus: the IEEPA tariffs on China — including the 145% cumulative rate on many goods — are struck down, replaced by a uniform 15% global surcharge. While Section 301 tariffs on Chinese goods remain, the net reduction in effective tariff rates is substantial.</p>
+
+<p>President Xi's public aspiration to establish the renminbi as a global reserve currency signals strategic intent. Chinese regulators have advised domestic banks to reduce US Treasury allocations over concentration risk concerns. The PBOC, however, continues to manage the pace of appreciation: the daily fixing on February 13 came in 301 pips weaker than Bloomberg's estimate, the largest gap since the survey began in 2018. The central bank is permitting appreciation but disciplining its speed.</p>
+
+<p>Our view aligns with a gradual move toward 6.75-6.85 by mid-year, with the pace determined by PBOC tolerance and the outcome of the planned Trump-Xi summit in April. The primary risk is a breakdown in US-China trade talks or an escalation of tech export controls that would prompt Beijing to weaponize currency weakness as a countermeasure.</p>
+
+<h3>Broader EM Dynamics</h3>
+
+<p>The post-tariff landscape is cautiously constructive for EM FX. The removal of IEEPA's unpredictable tariff authorities reduces the tail risk that had compressed EM risk premia throughout 2025. Brazil's real benefits from fat carry near 15% and the start of BCB easing. Korean won flows benefit from the WGBI index inclusion beginning in April, with an estimated $55 billion in FX-unhedged inflows through November. The principal EM risks for Q2 center on geopolitical escalation — the US military buildup around Iran has pushed implied strike probabilities above 60% — and any resumption of aggressive US trade actions through Section 232 and 301 investigations.</p>
+
+<div class="article-divider"></div>
+
+<h2>VI. Gold and the Dollar Confidence Signal</h2>
+
+<h3>$5,000+ Gold in Context</h3>
+
+<p>Gold traded at $5,040 on February 20, up over $2,100 year-over-year. The metal hit an all-time high of $5,595 on January 29 before suffering its steepest single-day drop since 1983 on January 30 — falling over 11% as the Warsh nomination triggered a massive deleveraging event — before plunging further to $4,400 and then recovering. JPMorgan has issued a $6,300 year-end target, Deutsche Bank maintains $6,000, Goldman Sachs targets $5,400, and UBS sees $6,000 with upside to $7,200 in a risk scenario. The Reuters consensus of 30 analysts puts the median 2026 forecast at $4,746.50 — already the highest in the poll's history.</p>
+
+<p>The structural forces behind gold's repricing are not speculative froth. Central bank purchases reached 863 tonnes in 2025 and are forecast at 800 tonnes in 2026, representing roughly 26% of annual mine output. ETF inflows surged to 801 tonnes in 2025 — the second-largest annual total on record. De-dollarization pressures, while incremental, are directionally clear: China's guidance to banks to reduce Treasury exposure, the OMFIF's Global Public Investor survey showing plans to increase euro holdings, and the broader trend of EM central banks diversifying reserves away from dollar assets all contribute to a structural shift in demand.</p>
+
+<h3>Implications for FX Positioning</h3>
+
+<p>Gold at $5,000 is not a signal that the dollar is about to collapse. It is a signal that the marginal buyer of reserve assets is allocating differently than they did five years ago. The dollar still accounts for approximately 58% of global FX reserves, and the yuan's 2% share means any "dethroning" narrative is measured in decades, not quarters. But the rate of change matters: if central banks continue to absorb 25-30% of annual mine supply in gold, and if the yuan's trajectory from 7.14 to below 6.90 continues, the dollar's gravitational pull on global capital weakens incrementally with each passing quarter.</p>
+
+<p>For Q2, gold's primary function in the FX complex is as a real-time sentiment indicator on dollar confidence. Sustained trading above $5,000 alongside DXY below 97 would confirm the structural bear thesis. A sharp gold correction below $4,500 coinciding with a DXY move above 100 would signal that the bear positioning has become overextended and a squeeze is underway.</p>
+
+<div class="article-divider"></div>
+
+<h2>VII. muFX Q2 Positioning Framework</h2>
+
+<h3>DXY Scenario Analysis</h3>
+
+<div class="scenario bull">
+  <div class="scenario-title">Bull Case — DXY 100–103 <span class="prob">20%</span></div>
+  <ul>
+    <li>US growth data surprise materially to the upside; Q1 GDP prints above 2.5%</li>
+    <li>Core PCE remains above 3%, forcing the Fed to shelve any H2 cut expectations</li>
+    <li>Geopolitical escalation with Iran triggers safe-haven USD bid</li>
+    <li>Section 122 tariff extended by Congress, preserving revenue</li>
+    <li>Short squeeze on record bearish positioning</li>
+  </ul>
+</div>
+
+<div class="scenario base">
+  <div class="scenario-title">Base Case — DXY 95–99 <span class="prob">55%</span></div>
+  <ul>
+    <li>Economy grows at 2.0-2.2% as projected; labor market stable but not booming</li>
+    <li>Fed holds through Q2, delivers one 25bp cut in H2</li>
+    <li>Warsh confirmed, provides continuity with modest dovish tilt</li>
+    <li>IEEPA tariff refunds remain unresolved; Section 122 expires without replacement</li>
+    <li>EUR/USD grinds toward 1.20; USD/JPY drifts lower on BOJ April/June hike</li>
+  </ul>
+</div>
+
+<div class="scenario bear">
+  <div class="scenario-title">Bear Case — DXY 92–95 <span class="prob">25%</span></div>
+  <ul>
+    <li>US growth decelerates sharply; government shutdown or fiscal brinkmanship resurfaces</li>
+    <li>Fed delivers two or more cuts, including a June move under new Warsh leadership</li>
+    <li>SCOTUS ruling accelerates trade partner renegotiations at lower tariff rates</li>
+    <li>Central bank gold buying surges above forecast; yuan appreciation accelerates</li>
+    <li>DXY breaks below 96.00 support decisively, triggering trend-following flows</li>
+  </ul>
+</div>
+
+<h3>Key Dates and Events</h3>
+
+<div class="dates-grid">
+  <div class="date-row"><span class="date-label">Mar 17-18</span><span class="date-desc">FOMC meeting — Powell's penultimate as Chair; no cut expected</span></div>
+  <div class="date-row"><span class="date-label">Mar 19</span><span class="date-desc">ECB Governing Council meeting with updated staff projections</span></div>
+  <div class="date-row"><span class="date-label">Apr (TBD)</span><span class="date-desc">BOJ meeting — potential rate hike to 1.0%</span></div>
+  <div class="date-row"><span class="date-label">Apr (TBD)</span><span class="date-desc">Trump-Xi summit; trade deal recalibration likely</span></div>
+  <div class="date-row"><span class="date-label">Apr 28-29</span><span class="date-desc">FOMC meeting — Powell's final meeting as Chair</span></div>
+  <div class="date-row"><span class="date-label">May 15</span><span class="date-desc">Powell's term expires; Warsh takes Chair (if confirmed)</span></div>
+  <div class="date-row"><span class="date-label">Jun 16-17</span><span class="date-desc">FOMC meeting — first under Warsh; earliest window for a cut</span></div>
+  <div class="date-row"><span class="date-label">Jul 24</span><span class="date-desc">Section 122 tariff expiration (unless modified by Congress)</span></div>
+  <div class="date-row"><span class="date-label">Throughout Q2</span><span class="date-desc">CFTC positioning data for short-covering triggers; IEEPA refund litigation</span></div>
+</div>
+
+<h3>Cross-Currency Framework</h3>
+
+<div class="trade-rec long">
+  <div class="trade-pair">Long EUR/USD</div>
+  <div class="trade-desc">Structural bias higher. Rate differential compression, eurozone recovery, German fiscal stimulus all supportive. Enter on dips toward 1.17; target 1.20-1.22.</div>
+</div>
+
+<div class="trade-rec short">
+  <div class="trade-pair">Short USD/JPY</div>
+  <div class="trade-desc">Conditional on BOJ April hike. If delivered, target 150 area. Without it, the pair remains range-bound 153-158.</div>
+</div>
+
+<div class="trade-rec neutral">
+  <div class="trade-pair">Neutral GBP/USD</div>
+  <div class="trade-desc">Domestic headwinds offset dollar weakness. No strong directional conviction. Watch May UK local elections for political catalyst.</div>
+</div>
+
+<div class="trade-rec long">
+  <div class="trade-pair">Long CNH vs USD</div>
+  <div class="trade-desc">Managed appreciation continues. Target 6.75-6.80 by end of Q2. Risk is geopolitical breakdown.</div>
+</div>
+
+<div class="trade-rec watch">
+  <div class="trade-pair">Watch AUD/USD</div>
+  <div class="trade-desc">Positive carry and RBA hawkishness make this the cleanest G10 long for Q2 if risk appetite holds.</div>
+</div>
+
+<div class="disclaimer">
+  This report is produced for informational and educational purposes only. It does not constitute financial advice. All views expressed are those of muFX and are subject to change without notice.
+</div>
+
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line"></div>
+
+<script>
+// Reading progress bar
+window.addEventListener('scroll', () => {
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrolled = window.scrollY;
+  const progress = Math.min((scrolled / docHeight) * 100, 100);
+  document.getElementById('progress').style.width = progress + '%';
+});
+</script>
+
+</body>
+</html>
