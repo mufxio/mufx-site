@@ -5,352 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Q2 2026: The Post-Tariff Dollar and What Comes Next — muFX</title>
 <meta name="description" content="muFX Quarterly Outlook Q2 2026: SCOTUS strikes down IEEPA tariffs, Powell-to-Warsh transition, EUR/USD toward 1.20, gold above $5,000, and the positioning framework for Q2.">
+<meta property="og:title" content="Q2 2026: The Post-Tariff Dollar and What Comes Next — muFX">
+<meta property="og:description" content="Quarterly outlook: DXY 95-99, EUR/USD toward 1.20, gold above $5,000. SCOTUS IEEPA ruling, Powell-to-Warsh transition, positioning framework.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mufx.io/q2-2026-outlook.html">
+<meta property="og:site_name" content="muFX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="muFX Q2 2026 Outlook">
+<meta name="twitter:description" content="Quarterly outlook: DXY 95-99, EUR/USD toward 1.20, gold structural bid above $5,000.">
+<link rel="canonical" href="https://mufx.io/q2-2026-outlook.html">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="Q2 2026, FX outlook, dollar, DXY, EUR/USD, gold, SCOTUS, IEEPA, tariffs, Warsh, Powell, muFX">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Q2 2026: The Post-Tariff Dollar and What Comes Next",
+  "description": "muFX Quarterly Outlook Q2 2026: SCOTUS IEEPA ruling, Powell-to-Warsh transition, and the positioning framework for Q2.",
+  "author": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "publisher": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "datePublished": "2026-02-20",
+  "dateModified": "2026-02-26",
+  "mainEntityOfPage": "https://mufx.io/q2-2026-outlook.html",
+  "keywords": ["FX","Q2 2026","dollar","DXY","EUR/USD","gold","SCOTUS","IEEPA","tariffs","Warsh"]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #060608;
-    --bg-card: #0c0c12;
-    --cyan: #00b4f0;
-    --cyan-dim: rgba(0,180,240,0.15);
-    --cyan-ghost: rgba(0,180,240,0.06);
-    --teal: #4ecdc4;
-    --gold: #f7b731;
-    --pink: #e056a0;
-    --text: #c8d0d8;
-    --text-dim: rgba(200,210,220,0.45);
-    --text-ghost: rgba(200,210,220,0.2);
-    --border: rgba(0,180,240,0.08);
-    --mono: 'JetBrains Mono', 'Courier New', monospace;
-    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
-    --serif: 'Source Serif 4', Georgia, serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--serif); min-height: 100vh; overflow-x: hidden; }
-
-  /* Scanlines */
-  body::before {
-    content: '';
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
-    pointer-events: none; z-index: 1000;
-  }
-
-  /* NAV */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; background: rgba(6,6,8,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-  .nav-logo { display: flex; align-items: baseline; gap: 2px; text-decoration: none; }
-  .nav-logo .mu { color: var(--cyan); font-family: var(--sans); font-weight: 300; font-size: 22px; letter-spacing: 4px; }
-  .nav-logo .fx { color: #d8dde2; font-family: var(--sans); font-weight: 200; font-size: 22px; letter-spacing: 4px; }
-  .nav-links { display: flex; align-items: center; gap: 32px; }
-  .nav-links a { color: var(--text-dim); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; transition: color 0.3s; }
-  .nav-links a:hover { color: var(--cyan); }
-  .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); opacity: 0.6; animation: pulse 2s ease-in-out infinite; display: inline-block; }
-  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.8;box-shadow:0 0 12px rgba(0,180,240,0.5)} }
-
-  /* ARTICLE HEADER */
-  .article-header {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 120px 32px 48px;
-  }
-
-  .article-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-ghost);
-    text-decoration: none;
-    margin-bottom: 40px;
-    transition: color 0.3s;
-  }
-  .article-back:hover { color: var(--cyan); }
-
-  .article-tag {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 2px;
-    border: 1px solid var(--cyan-dim);
-    background: var(--cyan-ghost);
-    color: var(--cyan);
-    margin-bottom: 20px;
-  }
-
-  .article-header h1 {
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: clamp(28px, 5vw, 40px);
-    line-height: 1.3;
-    color: #e2e6ea;
-    letter-spacing: 0.5px;
-    margin-bottom: 20px;
-  }
-
-  .article-meta {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: var(--text-ghost);
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .article-meta .sep { color: rgba(0,180,240,0.15); }
-
-  /* READING PROGRESS BAR */
-  .progress-bar {
-    position: fixed;
-    top: 56px; left: 0; right: 0;
-    height: 2px;
-    background: rgba(0,180,240,0.05);
-    z-index: 499;
-  }
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--cyan), var(--teal));
-    transition: width 0.1s linear;
-  }
-
-  /* ARTICLE BODY */
-  .article-body {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 48px 32px 80px;
-  }
-
-  .article-body p {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 1.85;
-    color: rgba(200, 210, 220, 0.75);
-    margin-bottom: 24px;
-  }
-
-  .article-body h2 {
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: 22px;
-    color: #d8dde2;
-    margin-top: 56px;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-    position: relative;
-    padding-left: 16px;
-  }
-
-  .article-body h2::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 4px;
-    bottom: 4px;
-    width: 3px;
-    background: linear-gradient(180deg, var(--cyan), var(--teal));
-    border-radius: 2px;
-  }
-
-  .article-body h3 {
-    font-family: var(--sans);
-    font-weight: 400;
-    font-size: 17px;
-    color: rgba(200, 210, 220, 0.85);
-    margin-top: 40px;
-    margin-bottom: 16px;
-    letter-spacing: 0.3px;
-  }
-
-  .article-body em {
-    color: rgba(200, 210, 220, 0.6);
-    font-style: italic;
-  }
-
-  .article-body strong {
-    color: #d8dde2;
-    font-weight: 500;
-  }
-
-  /* Scenario boxes */
-  .scenario {
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 24px;
-    margin: 24px 0;
-    background: var(--bg-card);
-  }
-
-  .scenario-title {
-    font-family: var(--sans);
-    font-weight: 500;
-    font-size: 14px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .scenario-title .prob {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 1px;
-    padding: 2px 8px;
-    border-radius: 2px;
-  }
-
-  .scenario.bull .scenario-title { color: var(--teal); }
-  .scenario.bull .prob { border: 1px solid rgba(78,205,196,0.2); color: var(--teal); background: rgba(78,205,196,0.06); }
-  .scenario.base .scenario-title { color: var(--cyan); }
-  .scenario.base .prob { border: 1px solid var(--cyan-dim); color: var(--cyan); background: var(--cyan-ghost); }
-  .scenario.bear .scenario-title { color: var(--pink); }
-  .scenario.bear .prob { border: 1px solid rgba(224,86,160,0.2); color: var(--pink); background: rgba(224,86,160,0.06); }
-
-  .scenario ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .scenario li {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(200,210,220,0.6);
-    padding: 4px 0 4px 16px;
-    position: relative;
-  }
-
-  .scenario li::before {
-    content: '—';
-    position: absolute;
-    left: 0;
-    color: var(--text-ghost);
-  }
-
-  /* Key dates */
-  .dates-grid {
-    display: grid;
-    gap: 8px;
-    margin: 24px 0;
-  }
-
-  .date-row {
-    display: flex;
-    gap: 16px;
-    padding: 10px 16px;
-    border: 1px solid rgba(0,180,240,0.04);
-    border-radius: 3px;
-    background: rgba(0,180,240,0.015);
-    align-items: baseline;
-  }
-
-  .date-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: var(--cyan);
-    opacity: 0.7;
-    white-space: nowrap;
-    min-width: 140px;
-  }
-
-  .date-desc {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 13px;
-    color: rgba(200,210,220,0.55);
-    line-height: 1.5;
-  }
-
-  /* Trade recs */
-  .trade-rec {
-    padding: 16px 20px;
-    border-left: 2px solid;
-    margin: 16px 0;
-    background: rgba(0,180,240,0.015);
-    border-radius: 0 4px 4px 0;
-  }
-
-  .trade-rec.long { border-color: var(--teal); }
-  .trade-rec.short { border-color: var(--pink); }
-  .trade-rec.neutral { border-color: var(--gold); }
-  .trade-rec.watch { border-color: var(--cyan); }
-
-  .trade-pair {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .trade-rec.long .trade-pair { color: var(--teal); }
-  .trade-rec.short .trade-pair { color: var(--pink); }
-  .trade-rec.neutral .trade-pair { color: var(--gold); }
-  .trade-rec.watch .trade-pair { color: var(--cyan); }
-
-  .trade-desc {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(200,210,220,0.6);
-  }
-
-  /* Section divider in article */
-  .article-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), rgba(0,180,240,0.15), var(--border), transparent);
-    margin: 48px 0;
-  }
-
-  /* Disclaimer */
-  .disclaimer {
-    font-family: var(--mono);
-    font-size: 10px;
-    line-height: 1.8;
-    letter-spacing: 0.5px;
-    color: var(--text-ghost);
-    border-top: 1px solid var(--border);
-    padding-top: 32px;
-    margin-top: 48px;
-    font-style: italic;
-  }
-
-  /* FOOTER */
-  footer { border-top: 1px solid var(--border); padding: 32px; }
-  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-  .footer-logo .mu { color: var(--cyan); font-weight: 300; letter-spacing: 4px; font-size: 16px; }
-  .footer-logo .fx { color: #d8dde2; font-weight: 200; letter-spacing: 4px; font-size: 16px; }
-  .footer-text { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-ghost); }
-  .footer-links { display: flex; gap: 24px; }
-  .footer-links a { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-ghost); text-decoration: none; transition: color 0.3s; }
-  .footer-links a:hover { color: var(--cyan); }
-  .bottom-line { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,180,240,0.1) 20%, rgba(0,180,240,0.25) 50%, rgba(0,180,240,0.1) 80%, transparent); }
-
-  @media (max-width: 768px) {
-    .article-header { padding: 100px 20px 32px; }
-    .article-body { padding: 32px 20px 60px; }
-    .article-body h2 { font-size: 19px; }
-    .date-row { flex-direction: column; gap: 4px; }
-    .date-label { min-width: auto; }
-    .nav-inner { padding: 0 20px; }
-    .footer-inner { flex-direction: column; gap: 16px; }
-  }
-</style>
+<link rel="stylesheet" href="mufx.css">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 </head>
 <body>
@@ -360,7 +43,7 @@
     <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
     <div class="nav-links">
       <a href="index.html">Research</a>
-      <a href="signal-20260224.html">Signals</a>
+      <a href="signal-20260226.html">Signals</a>
       <a href="about.html">About</a>
       <a href="mailto:research@mufx.io">Contact</a>
       <a href="#"><span class="pulse"></span></a>
@@ -372,7 +55,7 @@
 
 <header class="article-header">
   <a href="index.html" class="article-back">← Back to Research</a>
-  <div class="article-tag">Quarterly Outlook</div>
+  <div class="article-tag tag-quarterly">Quarterly Outlook</div>
   <h1>Q2 2026: The Post-Tariff Dollar and What Comes Next</h1>
   <div class="article-meta">
     <span>muFX Research</span>
@@ -382,8 +65,6 @@
     <span>18 min read</span>
   </div>
 </header>
-
-<article class="article-body">
 
 <h2>I. Executive Summary</h2>
 
@@ -591,13 +272,23 @@
   This report is produced for informational and educational purposes only. It does not constitute financial advice. All views expressed are those of muFX and are subject to change without notice.
 </div>
 
-</article>
+
+<div style="max-width:760px;margin:40px auto 0;padding:0 32px;">
+  <div class="integrity-box">
+    <div class="integrity-label">Publication Integrity</div>
+    <div class="integrity-text">
+      This report was first published on <strong>20 February 2026</strong> and updated 26 February 2026. A SHA-256 hash is generated at each publication to prove the analysis existed in its stated form on these dates.
+      <span class="integrity-hash">Verification: <a href="https://mufx.io/verify">mufx.io/verify</a></span>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-inner">
     <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
     <span class="footer-text">© 2026 muFX. All rights reserved.</span>
     <div class="footer-links">
+      <a href="index.html">Research</a>
       <a href="about.html">About</a>
       <a href="mailto:research@mufx.io">Contact</a>
     </div>
@@ -606,14 +297,11 @@
 <div class="bottom-line"></div>
 
 <script>
-// Reading progress bar
 window.addEventListener('scroll', () => {
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const scrolled = window.scrollY;
-  const progress = Math.min((scrolled / docHeight) * 100, 100);
-  document.getElementById('progress').style.width = progress + '%';
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
 });
 </script>
-
 </body>
 </html>

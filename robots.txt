@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mufx.io/sitemap.xml
+
+# muFX — Institutional-grade FX research
+# https://mufx.io
