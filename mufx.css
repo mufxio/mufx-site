@@ -731,3 +731,81 @@ footer { border-top: 1px solid var(--border); padding: 32px; }
   .card-title { font-size: 18px; }
   .article-card.featured .card-title { font-size: 20px; }
 }
+
+/* Article hash display in meta */
+.article-hash {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text-ghost);
+  font-family: var(--mono);
+  font-size: 10px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.article-hash:hover { opacity: 0.8; }
+.article-hash code {
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}
+.article-hash .hash-icon::before {
+  content: '#';
+  color: var(--gold);
+  opacity: 0.5;
+  font-weight: 500;
+}
+
+/* Weekly review tag */
+.tag-weekly {
+  background: rgba(0,180,240,0.08);
+  color: rgba(0,180,240,0.85);
+  border: 1px solid rgba(0,180,240,0.15);
+}
+
+/* Weekly scorecard grid */
+.weekly-scorecard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(0,180,240,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+}
+.scorecard-cell {
+  background: rgba(8,12,20,0.95);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.scorecard-pair {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-ghost);
+  letter-spacing: 0.06em;
+}
+.scorecard-price {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.scorecard-week {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+.scorecard-week.up { color: rgba(78,205,196,0.85); }
+.scorecard-week.down { color: rgba(224,86,160,0.85); }
+.scorecard-week.flat { color: var(--text-ghost); }
+.scorecard-range {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: rgba(200,210,220,0.25);
+  margin-top: 0.15rem;
+}
+@media (max-width: 600px) {
+  .weekly-scorecard { grid-template-columns: 1fr; }
+}

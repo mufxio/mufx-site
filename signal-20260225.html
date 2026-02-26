@@ -526,7 +526,8 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
     <div class="nav-links">
-      <a href="index.html">Research</a>
+      <a href="research.html">Research</a>
+      <a href="signals.html" class="active">Signals</a>
       <a href="about.html">About</a>
       <a href="mailto:research@mufx.io">Contact</a>
       <a href="#"><span class="pulse"></span></a>
@@ -792,7 +793,8 @@
     <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
     <span class="footer-text">© 2026 muFX. All rights reserved.</span>
     <div class="footer-links">
-      <a href="index.html">Research</a>
+      <a href="research.html">Research</a>
+      <a href="signals.html" class="active">Signals</a>
       <a href="about.html">About</a>
       <a href="mailto:research@mufx.io">Contact</a>
     </div>
@@ -802,4 +804,22 @@
 
 <script>
 window.addEventListener('scroll', () => {
-  const h = document.documentElem
+  ent;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
+});
+</script>
+
+<script>
+// Hash display
+(function(){
+  var a = document.querySelector('[data-hash]');
+  var d = document.querySelector('[data-hash-display]');
+  if(a && d && a.dataset.hash) {
+    d.textContent = a.dataset.hash.substring(0, 16);
+    d.title = 'SHA-256: ' + a.dataset.hash;
+  }
+})();
+</script>
+</body>
+</html>
