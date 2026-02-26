@@ -135,7 +135,7 @@
 <section class="about-strip">
   <div class="about-block">
     <div class="about-label">Mission</div>
-    <p class="about-text">Institutional-grade FX research, built from zero with AI-augmented intelligence systems. One analyst operating at the output of a research desk.</p>
+    <p class="about-text">Institutional-grade FX research, built from zero with AI-augmented intelligence systems.</p>
   </div>
   <div class="about-block">
     <div class="about-label">Coverage</div>
@@ -161,17 +161,5 @@
 </footer>
 <div class="bottom-line"></div>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>

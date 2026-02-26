@@ -42,7 +42,7 @@
   <div class="about-section">
     <h2>Mission</h2>
     <p>muFX is an independent quantitative FX research operation. We deliver institutional-grade analysis of global currency markets, central bank policy, and the macro-structural forces that drive exchange rates.</p>
-    <p>We believe the best research comes from combining deep market knowledge with modern analytical tools. muFX uses AI-augmented intelligence systems to monitor sources, process data, and maintain the breadth of coverage typically associated with multi-analyst research desks — operated by a single analyst with skin in the game.</p>
+    <p>We believe the best research comes from combining deep market knowledge with modern analytical tools. muFX uses AI-augmented intelligence systems to monitor sources, process data, and maintain the breadth of coverage typically associated with multi-analyst research desks.</p>
   </div>
 
   <div class="about-section">
@@ -94,17 +94,5 @@
 </footer>
 <div class="bottom-line"></div>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>

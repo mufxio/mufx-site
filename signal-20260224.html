@@ -766,17 +766,5 @@ window.addEventListener('scroll', () => {
 })();
 </script>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>

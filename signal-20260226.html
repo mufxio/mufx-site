@@ -327,15 +327,6 @@
 
 </article>
 
-<div style="max-width:760px;margin:40px auto 0;padding:0 32px;">
-  <div class="integrity-box">
-    <div class="integrity-label">Publication Integrity</div>
-    <div class="integrity-text">
-      This report was published on <strong>26 February 2026</strong>. A SHA-256 hash of the report content is generated at publication and anchored to a public timestamp, proving this analysis existed in its current form on this date. No retroactive edits.
-      <span class="integrity-hash">Hash: <code>PENDING — generated at git commit</code><br>Verification: <a href="https://mufx.io/verify">mufx.io/verify</a></span>
-    </div>
-  </div>
-</div>
 
 <footer>
   <div class="footer-inner">
@@ -370,17 +361,5 @@ window.addEventListener('scroll', () => {
 })();
 </script>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>

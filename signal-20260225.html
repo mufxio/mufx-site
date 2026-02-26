@@ -777,17 +777,6 @@
 
 </article>
 
-
-<div style="max-width:760px;margin:40px auto 0;padding:0 32px;">
-  <div style="border:1px solid rgba(247,183,49,0.12);border-radius:4px;padding:16px 20px;background:rgba(247,183,49,0.02);">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-bottom:8px;">PUBLICATION INTEGRITY</div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);line-height:1.6;">
-      This report was published on <strong style="color:var(--gold);">25 February 2026</strong>. A SHA-256 hash of the report content is generated at publication and anchored to a public timestamp, proving this analysis existed in its current form on this date. No retroactive edits. 
-      <span style="display:block;margin-top:8px;color:var(--text-ghost);font-size:9px;">Hash: <code style="color:var(--gold);font-size:8px;word-break:break-all;">01eb1c277fbb7184201ad180964d739ead10704e0e69c831d31bc6abebdfbb9e</code><br>Verification: <a href="https://mufx.io/verify" style="color:var(--gold);text-decoration:none;">mufx.io/verify</a></span>
-    </div>
-  </div>
-</div>
-
 <footer>
   <div class="footer-inner">
     <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
@@ -822,17 +811,5 @@ window.addEventListener('scroll', () => {
 })();
 </script>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>

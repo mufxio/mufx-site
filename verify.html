@@ -63,7 +63,7 @@
         <div class="step-num">02</div>
         <div class="step-content">
           <div class="step-title">Check the commit</div>
-          <p>Visit the <a href="https://github.com/muhammadfazeel/mufx-site" target="_blank" rel="noopener">public repository</a> and find the commit that published the article. The commit date is the publication timestamp.</p>
+          <p>Visit the <a href="https://github.com/mufxio/mufx-site" target="_blank" rel="noopener">public repository</a> and find the commit that published the article. The commit date is the publication timestamp.</p>
         </div>
       </div>
       <div class="verify-step">
@@ -83,7 +83,7 @@
 
   <div class="about-section" style="margin-top:48px;">
     <div class="contact-block">
-      <a href="https://github.com/muhammadfazeel/mufx-site" target="_blank" rel="noopener">View Public Repository →</a>
+      <a href="https://github.com/mufxio/mufx-site" target="_blank" rel="noopener">View Public Repository →</a>
       <p>All source files, commit history, and publication timestamps.</p>
     </div>
   </div>
@@ -102,17 +102,5 @@
 </footer>
 <div class="bottom-line"></div>
 
-<script>
-// Page transition fade
-document.addEventListener('click', function(e) {
-  var a = e.target.closest('a');
-  if (!a) return;
-  var href = a.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-  e.preventDefault();
-  document.body.classList.add('fade-out');
-  setTimeout(function() { window.location.href = href; }, 200);
-});
-</script>
 </body>
 </html>
