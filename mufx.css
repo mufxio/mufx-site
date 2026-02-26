@@ -809,3 +809,16 @@ footer { border-top: 1px solid var(--border); padding: 32px; }
 @media (max-width: 600px) {
   .weekly-scorecard { grid-template-columns: 1fr; }
 }
+
+/* Page transition fade */
+body {
+  animation: fadeIn 0.3s ease-in;
+}
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
