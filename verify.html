@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify — muFX</title>
+<meta name="description" content="How muFX publication integrity works. Every article is cryptographically timestamped at publication via SHA-256 hash and public git commit.">
+<meta property="og:title" content="Publication Integrity — muFX">
+<meta property="og:description" content="Every muFX article is cryptographically timestamped. Verify any report's publication date and content integrity.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mufx.io/verify.html">
+<meta property="og:site_name" content="muFX">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://mufx.io/verify.html">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="research.html">Research</a>
+      <a href="signals.html">Signals</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<main class="page-content">
+  <div class="page-tag">Verification</div>
+  <h1>Publication Integrity</h1>
+
+  <div class="about-section">
+    <p>Every muFX article carries a SHA-256 hash of its content, generated at publication and committed to a public Git repository. This creates an immutable, timestamped record proving exactly what was published and when.</p>
+  </div>
+
+  <div class="about-section">
+    <h2>What the hash proves</h2>
+    <p>The hash in each article header is a cryptographic fingerprint of the article's text content. If a single character changes after publication, the hash no longer matches. The Git commit timestamp is the proof of when the content existed in that exact form.</p>
+    <p>This means no retroactive edits, no quiet corrections, no claiming calls that weren't made. The record is public and independently verifiable.</p>
+  </div>
+
+  <div class="about-section">
+    <h2>How to verify</h2>
+    <div class="verify-steps">
+      <div class="verify-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Find the hash</div>
+          <p>Click the hash code in any article header. It looks like: <code class="hash-example">a1b2c3d4e5f6</code></p>
+        </div>
+      </div>
+      <div class="verify-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Check the commit</div>
+          <p>Visit the <a href="https://github.com/muhammadfazeel/mufx-site" target="_blank" rel="noopener">public repository</a> and find the commit that published the article. The commit date is the publication timestamp.</p>
+        </div>
+      </div>
+      <div class="verify-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Reproduce the hash</div>
+          <p>Clone the repo, extract the article text from the HTML, and run <code>echo -n "$TEXT" | shasum -a 256</code>. If the output matches the hash in the article, the content is unchanged from publication.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h2>Why this matters</h2>
+    <p>FX research has a credibility problem. Analysts revise calls after the fact, delete bad predictions, and selectively highlight wins. muFX publishes with cryptographic proof specifically so this isn't possible. Every call is on the record, permanently.</p>
+  </div>
+
+  <div class="about-section" style="margin-top:48px;">
+    <div class="contact-block">
+      <a href="https://github.com/muhammadfazeel/mufx-site" target="_blank" rel="noopener">View Public Repository →</a>
+      <p>All source files, commit history, and publication timestamps.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="research.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line"></div>
+</body>
+</html>

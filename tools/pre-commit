@@ -1,0 +1,24 @@
+#!/bin/bash
+# ═══════════════════════════════════════════════════════════
+# muFX Pre-Commit Hook
+# Automatically generates SHA-256 hashes for all article pages.
+#
+# INSTALLATION:
+#   cp tools/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# What it does:
+#   Before every commit, runs hash-articles.sh to inject
+#   content hashes into article HTML files. The modified
+#   files are automatically staged for the commit.
+# ═══════════════════════════════════════════════════════════
+
+echo "muFX: Generating article hashes..."
+
+# Run the hash generator
+bash tools/hash-articles.sh
+
+# Re-stage any modified HTML files
+git add *.html 2>/dev/null
+
+echo "muFX: Hashes injected and staged."

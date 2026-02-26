@@ -64,10 +64,12 @@
     <span>26 Feb 2026</span>
     <span class="sep">|</span>
     <span>2 min read</span>
+    <span class="sep">|</span>
+    <a href="verify.html" class="article-hash" title="Publication integrity — click to learn more"><span class="hash-icon"></span><code data-hash-display>—</code></a>
   </div>
 </header>
 
-<article class="article-body">
+<article class="article-body" data-hash="f52be29027b0f8ff213628cbffa2f7bf2eb7644a19c57a8e5bb5e59d61aa81cc">
 
 <p><strong>Dollar extends post-SOTU weakness to 97.65 as Geneva nuclear talks and tomorrow's PPI define the next 48 hours — gold reclaims 5,200 on the structural bid.</strong></p>
 
@@ -324,15 +326,7 @@
 
 </article>
 
-<div style="max-width:760px;margin:40px auto 0;padding:0 32px;">
-  <div class="integrity-box">
-    <div class="integrity-label">Publication Integrity</div>
-    <div class="integrity-text">
-      This report was published on <strong>26 February 2026</strong>. A SHA-256 hash of the report content is generated at publication and anchored to a public timestamp, proving this analysis existed in its current form on this date. No retroactive edits.
-      <span class="integrity-hash">Hash: <code>PENDING — generated at git commit</code><br>Verification: <a href="https://mufx.io/verify">mufx.io/verify</a></span>
-    </div>
-  </div>
-</div>
+
 
 <footer>
   <div class="footer-inner">
@@ -353,6 +347,16 @@ window.addEventListener('scroll', () => {
   const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
   document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
 });
+// Display article hash from data attribute
+(function() {
+  const article = document.querySelector('article[data-hash]');
+  const display = document.querySelector('[data-hash-display]');
+  if (article && display) {
+    const hash = article.getAttribute('data-hash');
+    display.textContent = hash.substring(0, 12);
+    display.title = hash;
+  }
+})();
 </script>
 </body>
 </html>
