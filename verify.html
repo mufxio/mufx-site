@@ -19,6 +19,176 @@
 <link rel="stylesheet" href="mufx.css">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <meta name="google-site-verification" content="SSm7YTqRRbTUd8xSXDc10tGaIXCREDpamdQHvLHr6j4" />
+<style>
+  .verify-tool {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .verify-tool-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 24px;
+  }
+  .verify-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 300;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300b4f0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  .verify-select:focus {
+    outline: none;
+    border-color: var(--cyan);
+  }
+  .verify-select option {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .verify-btn {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .verify-btn:hover {
+    background: var(--cyan);
+    color: var(--bg);
+  }
+  .verify-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .verify-btn:disabled:hover {
+    background: transparent;
+    color: var(--cyan);
+  }
+  .verify-result {
+    margin-top: 28px;
+    display: none;
+  }
+  .verify-result.show {
+    display: block;
+  }
+  .hash-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .hash-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    min-width: 90px;
+  }
+  .hash-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text);
+    word-break: break-all;
+    line-height: 1.6;
+  }
+  .verify-status {
+    margin-top: 20px;
+    padding: 14px 20px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .verify-status.pass {
+    background: rgba(78, 205, 196, 0.08);
+    border: 1px solid rgba(78, 205, 196, 0.25);
+    color: var(--teal);
+  }
+  .verify-status.fail {
+    background: rgba(224, 86, 160, 0.08);
+    border: 1px solid rgba(224, 86, 160, 0.25);
+    color: var(--pink);
+  }
+  .verify-status.loading {
+    background: rgba(0, 180, 240, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .verify-steps {
+    margin-top: 8px;
+  }
+  .verify-step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cyan);
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .step-content {}
+  .step-title {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .step-content p {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    margin: 0;
+  }
+  .step-content code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold);
+    background: rgba(247,183,49,0.06);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  @media (max-width: 600px) {
+    .verify-tool { padding: 20px; }
+    .hash-row { flex-direction: column; gap: 4px; }
+    .hash-label { min-width: auto; }
+  }
+</style>
 </head>
 <body>
 
@@ -43,34 +213,54 @@
     <p>Every muFX article carries a SHA-256 hash of its content, generated at publication and committed to a public Git repository. This creates an immutable, timestamped record proving exactly what was published and when.</p>
   </div>
 
-  <div class="about-section">
-    <h2>What the hash proves</h2>
-    <p>The hash in each article header is a cryptographic fingerprint of the article's text content. If a single character changes after publication, the hash no longer matches. The Git commit timestamp is the proof of when the content existed in that exact form.</p>
-    <p>This means no retroactive edits, no quiet corrections, no claiming calls that weren't made. The record is public and independently verifiable.</p>
+  <div class="verify-tool">
+    <div class="verify-tool-title">Verify an Article</div>
+    <select class="verify-select" id="article-select">
+      <option value="" disabled selected>Select an article to verify</option>
+      <option value="signal-20260227.html">Signal Check — 27 February 2026</option>
+      <option value="signal-20260226.html">Signal Check — 26 February 2026</option>
+      <option value="signal-20260225.html">Signal Check — 25 February 2026</option>
+      <option value="signal-20260224.html">Signal Check — 24 February 2026</option>
+      <option value="weekly-20260228.html">Weekly Review — 28 February 2026</option>
+      <option value="q2-2026-outlook.html">Q2 2026 Outlook — Dollar Decline</option>
+    </select>
+    <button class="verify-btn" id="verify-btn" disabled>Verify Integrity</button>
+
+    <div class="verify-result" id="verify-result">
+      <div class="hash-row">
+        <span class="hash-label">Published</span>
+        <span class="hash-val" id="hash-published">—</span>
+      </div>
+      <div class="hash-row">
+        <span class="hash-label">Computed</span>
+        <span class="hash-val" id="hash-computed">—</span>
+      </div>
+      <div class="verify-status" id="verify-status"></div>
+    </div>
   </div>
 
   <div class="about-section">
-    <h2>How to verify</h2>
+    <h2>How it works</h2>
     <div class="verify-steps">
       <div class="verify-step">
         <div class="step-num">01</div>
         <div class="step-content">
-          <div class="step-title">Find the hash</div>
-          <p>Click the hash code in any article header. It looks like: <code class="hash-example">a1b2c3d4e5f6</code></p>
+          <div class="step-title">Content is hashed at publication</div>
+          <p>When an article is published, the text content inside the <code>&lt;article&gt;</code> tag is extracted, HTML tags are stripped, whitespace is normalized, and a SHA-256 hash is computed. This hash is embedded in the page and committed to a public Git repository.</p>
         </div>
       </div>
       <div class="verify-step">
         <div class="step-num">02</div>
         <div class="step-content">
-          <div class="step-title">Check the commit</div>
-          <p>Visit the <a href="https://github.com/mufxio/mufx-site" target="_blank" rel="noopener">public repository</a> and find the commit that published the article. The commit date is the publication timestamp.</p>
+          <div class="step-title">The hash is a fingerprint</div>
+          <p>SHA-256 produces a unique 64-character string for any given input. If a single character of the article changes after publication, the hash will no longer match. No retroactive edits, no quiet corrections, no claiming calls that weren't made.</p>
         </div>
       </div>
       <div class="verify-step">
         <div class="step-num">03</div>
         <div class="step-content">
-          <div class="step-title">Reproduce the hash</div>
-          <p>Clone the repo, extract the article text from the HTML, and run <code>echo -n "$TEXT" | shasum -a 256</code>. If the output matches the hash in the article, the content is unchanged from publication.</p>
+          <div class="step-title">Anyone can verify</div>
+          <p>The tool above fetches the article, extracts the text, computes SHA-256 in your browser using the Web Crypto API, and compares it to the published hash. Everything runs client-side — nothing is sent to a server. You can also clone the <a href="https://github.com/mufxio/mufx-site" target="_blank" rel="noopener">public repository</a> and run <code>python3 verify.py signal-20260227.html</code> to verify locally.</p>
         </div>
       </div>
     </div>
@@ -101,6 +291,87 @@
   </div>
 </footer>
 <div class="bottom-line"></div>
+
+<script>
+(function() {
+  var select = document.getElementById('article-select');
+  var btn = document.getElementById('verify-btn');
+  var result = document.getElementById('verify-result');
+  var hashPub = document.getElementById('hash-published');
+  var hashComp = document.getElementById('hash-computed');
+  var status = document.getElementById('verify-status');
+
+  select.addEventListener('change', function() {
+    btn.disabled = !this.value;
+    result.classList.remove('show');
+  });
+
+  btn.addEventListener('click', async function() {
+    var file = select.value;
+    if (!file) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    result.classList.add('show');
+    hashPub.textContent = '...';
+    hashComp.textContent = '...';
+    status.className = 'verify-status loading';
+    status.textContent = 'Fetching article...';
+
+    try {
+      var resp = await fetch(file);
+      if (!resp.ok) throw new Error('Failed to fetch article');
+      var html = await resp.text();
+
+      // Extract published hash from data-hash attribute
+      var pubMatch = html.match(/data-hash="([a-f0-9]{64})"/);
+      var published = pubMatch ? pubMatch[1] : null;
+
+      if (!published) {
+        throw new Error('No published hash found in article');
+      }
+
+      // Extract article body
+      var artMatch = html.match(/<article[^>]*>([\s\S]*?)<\/article>/);
+      if (!artMatch) throw new Error('No <article> tag found');
+
+      // Strip HTML tags
+      var text = artMatch[1].replace(/<[^>]+>/g, '');
+      // Normalize whitespace (same as Python: re.sub(r'\s+', ' ', text).strip())
+      text = text.replace(/\s+/g, ' ').trim();
+
+      // Compute SHA-256 via Web Crypto API
+      var encoder = new TextEncoder();
+      var data = encoder.encode(text);
+      var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      var hashArray = Array.from(new Uint8Array(hashBuffer));
+      var computed = hashArray.map(function(b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+
+      // Display results
+      hashPub.textContent = published;
+      hashComp.textContent = computed;
+
+      if (computed === published) {
+        status.className = 'verify-status pass';
+        status.textContent = '\u2713 VERIFIED \u2014 Content matches published hash. No modifications detected.';
+      } else {
+        status.className = 'verify-status fail';
+        status.textContent = '\u2717 MISMATCH \u2014 Computed hash does not match. Content may have been modified after publication.';
+      }
+    } catch (e) {
+      hashPub.textContent = '\u2014';
+      hashComp.textContent = '\u2014';
+      status.className = 'verify-status fail';
+      status.textContent = 'Error: ' + e.message;
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Verify Integrity';
+  });
+})();
+</script>
 
 </body>
 </html>
