@@ -183,6 +183,33 @@
     padding: 2px 6px;
     border-radius: 3px;
   }
+  .verify-step-log {
+    margin-bottom: 20px;
+  }
+  .step-line {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 2.0;
+    color: var(--text-dim);
+    opacity: 0;
+    animation: stepIn 0.3s ease forwards;
+  }
+  .step-line .step-icon {
+    color: var(--cyan);
+    margin-right: 8px;
+  }
+  .step-line .step-detail {
+    color: var(--text-ghost);
+    font-size: 11px;
+  }
+  .step-line .step-val {
+    color: var(--gold);
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   @media (max-width: 600px) {
     .verify-tool { padding: 20px; }
     .hash-row { flex-direction: column; gap: 4px; }
@@ -227,15 +254,16 @@
     <button class="verify-btn" id="verify-btn" disabled>Verify Integrity</button>
 
     <div class="verify-result" id="verify-result">
-      <div class="hash-row">
+      <div class="verify-step-log" id="step-log"></div>
+      <div class="hash-row" id="row-published" style="display:none;">
         <span class="hash-label">Published</span>
         <span class="hash-val" id="hash-published">—</span>
       </div>
-      <div class="hash-row">
+      <div class="hash-row" id="row-computed" style="display:none;">
         <span class="hash-label">Computed</span>
         <span class="hash-val" id="hash-computed">—</span>
       </div>
-      <div class="verify-status" id="verify-status"></div>
+      <div class="verify-status" id="verify-status" style="display:none;"></div>
     </div>
   </div>
 
@@ -297,14 +325,28 @@
   var select = document.getElementById('article-select');
   var btn = document.getElementById('verify-btn');
   var result = document.getElementById('verify-result');
+  var stepLog = document.getElementById('step-log');
+  var rowPub = document.getElementById('row-published');
+  var rowComp = document.getElementById('row-computed');
   var hashPub = document.getElementById('hash-published');
   var hashComp = document.getElementById('hash-computed');
-  var status = document.getElementById('verify-status');
+  var statusEl = document.getElementById('verify-status');
 
   select.addEventListener('change', function() {
     btn.disabled = !this.value;
     result.classList.remove('show');
   });
+
+  function addStep(html) {
+    var line = document.createElement('div');
+    line.className = 'step-line';
+    line.innerHTML = html;
+    stepLog.appendChild(line);
+  }
+
+  function delay(ms) {
+    return new Promise(function(r) { setTimeout(r, ms); });
+  }
 
   btn.addEventListener('click', async function() {
     var file = select.value;
@@ -312,35 +354,53 @@
 
     btn.disabled = true;
     btn.textContent = 'Verifying...';
+    stepLog.innerHTML = '';
+    rowPub.style.display = 'none';
+    rowComp.style.display = 'none';
+    statusEl.style.display = 'none';
     result.classList.add('show');
-    hashPub.textContent = '...';
-    hashComp.textContent = '...';
-    status.className = 'verify-status loading';
-    status.textContent = 'Fetching article...';
 
     try {
+      // Step 1: Fetch
+      addStep('<span class="step-icon">→</span> Fetching <span class="step-val">' + file + '</span>');
+      await delay(400);
+
       var resp = await fetch(file);
       if (!resp.ok) throw new Error('Failed to fetch article');
       var html = await resp.text();
+      var sizeKB = (new Blob([html])).size;
+      addStep('<span class="step-icon">✓</span> Received ' + Math.round(sizeKB / 1024) + ' KB');
+      await delay(300);
 
-      // Extract published hash from data-hash attribute
+      // Step 2: Extract published hash
+      addStep('<span class="step-icon">→</span> Reading published hash from <span class="step-val">data-hash</span> attribute');
+      await delay(300);
+
       var pubMatch = html.match(/data-hash="([a-f0-9]{64})"/);
       var published = pubMatch ? pubMatch[1] : null;
+      if (!published) throw new Error('No published hash found in article');
 
-      if (!published) {
-        throw new Error('No published hash found in article');
-      }
+      addStep('<span class="step-icon">✓</span> Found: <span class="step-val">' + published.substring(0, 16) + '...</span>');
+      await delay(300);
 
-      // Extract article body
+      // Step 3: Extract article body
+      addStep('<span class="step-icon">→</span> Extracting text from <span class="step-val">&lt;article&gt;</span> tag');
+      await delay(300);
+
       var artMatch = html.match(/<article[^>]*>([\s\S]*?)<\/article>/);
       if (!artMatch) throw new Error('No <article> tag found');
 
-      // Strip HTML tags
+      // Step 4: Strip HTML
       var text = artMatch[1].replace(/<[^>]+>/g, '');
-      // Normalize whitespace (same as Python: re.sub(r'\s+', ' ', text).strip())
       text = text.replace(/\s+/g, ' ').trim();
+      var wordCount = text.split(/\s+/).length;
+      addStep('<span class="step-icon">✓</span> Stripped HTML, normalized whitespace — <span class="step-val">' + wordCount + ' words</span>');
+      await delay(300);
 
-      // Compute SHA-256 via Web Crypto API
+      // Step 5: Compute SHA-256
+      addStep('<span class="step-icon">→</span> Computing SHA-256 via Web Crypto API');
+      await delay(400);
+
       var encoder = new TextEncoder();
       var data = encoder.encode(text);
       var hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -349,22 +409,32 @@
         return b.toString(16).padStart(2, '0');
       }).join('');
 
-      // Display results
+      addStep('<span class="step-icon">✓</span> Result: <span class="step-val">' + computed.substring(0, 16) + '...</span>');
+      await delay(300);
+
+      // Step 6: Compare
+      addStep('<span class="step-icon">→</span> Comparing hashes...');
+      await delay(500);
+
+      // Show full hashes
       hashPub.textContent = published;
       hashComp.textContent = computed;
+      rowPub.style.display = 'flex';
+      rowComp.style.display = 'flex';
 
+      // Show status
+      statusEl.style.display = 'block';
       if (computed === published) {
-        status.className = 'verify-status pass';
-        status.textContent = '\u2713 VERIFIED \u2014 Content matches published hash. No modifications detected.';
+        statusEl.className = 'verify-status pass';
+        statusEl.textContent = '\u2713 VERIFIED \u2014 Content matches published hash. No modifications detected.';
       } else {
-        status.className = 'verify-status fail';
-        status.textContent = '\u2717 MISMATCH \u2014 Computed hash does not match. Content may have been modified after publication.';
+        statusEl.className = 'verify-status fail';
+        statusEl.textContent = '\u2717 MISMATCH \u2014 Computed hash does not match. Content may have been modified after publication.';
       }
     } catch (e) {
-      hashPub.textContent = '\u2014';
-      hashComp.textContent = '\u2014';
-      status.className = 'verify-status fail';
-      status.textContent = 'Error: ' + e.message;
+      statusEl.style.display = 'block';
+      statusEl.className = 'verify-status fail';
+      statusEl.textContent = 'Error: ' + e.message;
     }
 
     btn.disabled = false;
