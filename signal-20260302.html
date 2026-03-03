@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Check: 2 March 2026 — muFX</title>
+<meta name="description" content="muFX Daily Signal Check — Operation Epic Fury reshapes the macro map. DXY spikes to 98.57 but fails at SMA200. Gold +2% to 5,336. Brent +7.1%. ISM prices paid explode to 70.5. Dollar rally is a reflex, not a reversal.">
+<meta property="og:title" content="Signal Check: 2 March 2026 — muFX">
+<meta property="og:description" content="DXY +0.98% to 98.57 — fails at SMA200. Gold +2.0% to 5,336. Brent +7.1% on Hormuz closure. ISM prices paid 70.5. War bid, not structural reversal.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mufx.io/signal-20260302.html">
+<meta property="og:site_name" content="muFX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="muFX Signal Check — 2 Mar 2026">
+<meta name="twitter:description" content="Epic Fury spike: DXY +0.98% but fails SMA200. Gold 5,336. Brent +7.1%. ISM prices 70.5. Reflex rally, not regime change.">
+<link rel="canonical" href="https://mufx.io/signal-20260302.html">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="FX, forex, dollar index, DXY, EUR/USD, gold, XAU/USD, signal check, macro, Iran, Epic Fury, Hormuz, oil, ISM, muFX">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Signal Check: 2 March 2026",
+  "description": "muFX Daily Signal Check — Operation Epic Fury reshapes the macro map but the dollar's spike to 98.57 fails at the SMA200. Gold +2% to 5,336. Brent +7.1%. ISM prices paid explode to 70.5.",
+  "author": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "publisher": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "datePublished": "2026-03-02",
+  "dateModified": "2026-03-02",
+  "mainEntityOfPage": "https://mufx.io/signal-20260302.html",
+  "keywords": ["FX","forex","dollar index","DXY","EUR/USD","gold","XAU/USD","macro","Iran","Epic Fury","Hormuz","oil","ISM"]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+<meta name="google-site-verification" content="SSm7YTqRRbTUd8xSXDc10tGaIXCREDpamdQHvLHr6j4" />
+<style>
+/* ── Signal 3/2 custom visuals ── */
+.war-impact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: rgba(224,86,160,0.08); border-radius: 4px; overflow: hidden;
+  margin: 32px 0;
+}
+.war-impact-cell {
+  background: rgba(8,10,16,0.97); padding: 20px; position: relative;
+}
+.war-impact-cell::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224,86,160,0.15), transparent);
+}
+.wic-label {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text-ghost); margin-bottom: 6px;
+}
+.wic-value {
+  font-family: var(--mono); font-size: 22px; font-weight: 500;
+  letter-spacing: 1px; margin-bottom: 3px;
+}
+.wic-value.crisis { color: var(--pink); }
+.wic-value.surge { color: var(--gold); }
+.wic-value.safe { color: var(--teal); }
+.wic-value.neutral { color: var(--text); }
+.wic-note {
+  font-family: var(--sans); font-weight: 300; font-size: 11px;
+  color: var(--text-dim); line-height: 1.5;
+}
+
+/* Hormuz flow visual */
+.hormuz-visual {
+  border: 1px solid rgba(224,86,160,0.12); border-radius: 4px;
+  background: var(--bg-card); padding: 24px; margin: 32px 0;
+  position: relative; overflow: hidden;
+}
+.hormuz-visual::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 60%, rgba(224,86,160,0.04), transparent 60%);
+  pointer-events: none;
+}
+.hormuz-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--pink); opacity: 0.7; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+
+/* Gold structural visual */
+.gold-structure {
+  border: 1px solid rgba(247,183,49,0.12); border-radius: 4px;
+  background: var(--bg-card); padding: 24px; margin: 32px 0;
+  position: relative; overflow: hidden;
+}
+.gold-structure::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 30%, rgba(247,183,49,0.03), transparent 60%);
+  pointer-events: none;
+}
+.gold-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+
+/* ISM prices visual */
+.ism-visual {
+  border: 1px solid rgba(224,86,160,0.12); border-radius: 4px;
+  background: var(--bg-card); padding: 24px; margin: 32px 0;
+  position: relative; overflow: hidden;
+}
+.ism-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--pink); opacity: 0.7; margin-bottom: 16px;
+}
+
+/* Fear gauge */
+.fear-strip {
+  display: flex; align-items: center; gap: 16px;
+  border: 1px solid var(--border); border-radius: 4px; background: var(--bg-card);
+  padding: 16px 20px; margin: 24px 0;
+}
+.fear-gauge {
+  width: 120px; height: 8px; border-radius: 4px; flex-shrink: 0;
+  background: linear-gradient(90deg, var(--pink), var(--gold), var(--teal));
+  position: relative;
+}
+.fear-needle {
+  position: absolute; top: -3px; width: 3px; height: 14px;
+  background: #fff; border-radius: 2px; box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+.fear-val {
+  font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--pink);
+}
+.fear-text {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px; color: var(--text-dim);
+}
+
+/* Thesis box override for "under pressure" state */
+.thesis-box.pressure {
+  border-color: rgba(247,183,49,0.2);
+  background: rgba(247,183,49,0.03);
+}
+.thesis-box.pressure::before {
+  background: linear-gradient(180deg, var(--gold), var(--teal));
+}
+.thesis-box.pressure .thesis-label { color: var(--gold); }
+.thesis-box.pressure .thesis-label .dot { background: var(--gold); animation: pulse-gold 2s ease-in-out infinite; }
+@keyframes pulse-gold {
+  0%,100% { opacity: 0.4; box-shadow: 0 0 4px rgba(247,183,49,0.2); }
+  50% { opacity: 1; box-shadow: 0 0 12px rgba(247,183,49,0.5); }
+}
+@media (max-width: 600px) {
+  .war-impact-grid { grid-template-columns: 1fr; }
+  .fear-strip { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="research.html">Research</a>
+      <a href="signals.html" class="active">Signals</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="signals.html" class="article-back">← Back to Signals</a>
+  <div class="article-tag tag-signal">Daily Signal</div>
+  <h1>Signal Check: 2 March 2026</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>2 Mar 2026</span>
+    <span class="sep">|</span>
+    <span>3 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+
+<p><strong>Operation Epic Fury rewrites the macro map. DXY spikes +0.98% to 98.57 on safe-haven flows — but fails at the 200-day SMA. Gold +2.0% to 5,336. Brent +7.1% on de facto Hormuz closure. ISM prices paid explode to 70.5. The dollar is catching a war bid, not building a structural base.</strong></p>
+
+<div class="signal-strip">
+  <div class="signal-cell up">
+    <div class="signal-pair">DXY</div>
+    <div class="signal-price">98.57</div>
+    <div class="signal-change up">▲ +0.98%</div>
+  </div>
+  <div class="signal-cell down">
+    <div class="signal-pair">EUR/USD</div>
+    <div class="signal-price">1.1693</div>
+    <div class="signal-change down">▼ −0.93%</div>
+  </div>
+  <div class="signal-cell up">
+    <div class="signal-pair">XAU/USD</div>
+    <div class="signal-price">5,336</div>
+    <div class="signal-change up">▲ +2.0%</div>
+  </div>
+  <div class="signal-cell up">
+    <div class="signal-pair">USD/JPY</div>
+    <div class="signal-price">157.35</div>
+    <div class="signal-change up">▲ +0.96%</div>
+  </div>
+</div>
+
+<!-- WAR IMPACT DASHBOARD -->
+<div class="war-impact-grid">
+  <div class="war-impact-cell">
+    <div class="wic-label">Brent Crude</div>
+    <div class="wic-value crisis">$77.66 <span style="font-size:12px;opacity:0.6;">+7.1%</span></div>
+    <div class="wic-note">Biggest single-day gain since June 2025. Hormuz de facto closed — Maersk, Hapag-Lloyd suspended transit.</div>
+  </div>
+  <div class="war-impact-cell">
+    <div class="wic-label">VIX</div>
+    <div class="wic-value crisis">21.44 <span style="font-size:12px;opacity:0.6;">+8.0%</span></div>
+    <div class="wic-note">Above 20-day (19.35) and 200-day (17.30). Risk regime elevated but not panic.</div>
+  </div>
+  <div class="war-impact-cell">
+    <div class="wic-label">ISM Prices Paid</div>
+    <div class="wic-value surge">70.5 <span style="font-size:12px;opacity:0.6;">+11.5 pts</span></div>
+    <div class="wic-note">59 → 70.5 in one month. Tariff pass-through + oil shock = stagflation input.</div>
+  </div>
+  <div class="war-impact-cell">
+    <div class="wic-label">Crypto Fear/Greed</div>
+    <div class="wic-value crisis">10 <span style="font-size:12px;opacity:0.6;">Extreme Fear</span></div>
+    <div class="wic-note">7th consecutive day sub-15. BTC at $69.3K — 28% below 200-day SMA.</div>
+  </div>
+</div>
+
+<table class="price-table">
+  <thead>
+    <tr><th>Instrument</th><th>Close</th><th>Chg</th><th>Note</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>S&P 500</td><td>6,882</td><td class="val-flat">+0.04%</td><td>Opened −1.2%, full reversal — Nvidia +3%, Northrop +6%</td></tr>
+    <tr><td>US 10Y</td><td>4.048%</td><td class="val-up">+8.6 bps</td><td>Yields spike on ISM prices; inflation expectations repricing</td></tr>
+    <tr><td>5Y Breakeven</td><td>2.46%</td><td class="val-up">+2.5%</td><td>Biggest daily jump in breakevens since tariff announcement</td></tr>
+    <tr><td>WTI Crude</td><td>$71.03</td><td class="val-up">+6.0%</td><td>IRGC: "no oil leaves the region." Three tankers hit.</td></tr>
+    <tr><td>Silver</td><td>$89.61</td><td class="val-down">−3.3%</td><td>Gold/silver ratio at 59.5 — divergence flagging industrial demand fear</td></tr>
+    <tr><td>Bitcoin</td><td>$69,322</td><td class="val-up">+5.5%</td><td>Bounce off $65.7K but still 28% below 200d SMA ($96,841)</td></tr>
+  </tbody>
+</table>
+
+<div class="regime-strip">
+  <div class="regime-item">
+    <span class="regime-label">DXY Regime</span>
+    <span class="regime-val ranging">War Bid ↑ Temporary</span>
+  </div>
+  <div class="regime-item">
+    <span class="regime-label">Trend</span>
+    <span class="regime-val bearish">Bearish Structure Intact</span>
+  </div>
+  <div class="regime-item">
+    <span class="regime-label">Gold</span>
+    <span class="regime-val bullish">Parabolic ↑ All SMAs Below</span>
+  </div>
+</div>
+
+<div class="article-divider"></div>
+
+<!-- ═══════════ VISUAL 1: DXY SMA200 REJECTION ═══════════ -->
+<div class="visual-panel">
+  <div class="visual-label">DXY vs. 200-Day SMA — The Ceiling That Matters</div>
+  <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
+    <!-- Grid -->
+    <line x1="60" y1="20" x2="60" y2="220" stroke="rgba(0,180,240,0.04)" stroke-width="1"/>
+    <line x1="60" y1="220" x2="680" y2="220" stroke="rgba(0,180,240,0.06)" stroke-width="1"/>
+    <!-- Y-axis labels: 96 to 100 mapped to y220..y20 -->
+    <text x="50" y="223" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="end">96</text>
+    <text x="50" y="173" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="end">97</text>
+    <text x="50" y="123" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="end">98</text>
+    <text x="50" y="73" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="end">99</text>
+    <text x="50" y="23" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="end">100</text>
+    <!-- Grid lines -->
+    <line x1="60" y1="170" x2="680" y2="170" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="60" y1="120" x2="680" y2="120" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="60" y1="70" x2="680" y2="70" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="4,4"/>
+    <!-- SMA200 line at 98.42 → y = 220 - (98.42-96)*50 = 220 - 121 = 99 -->
+    <line x1="60" y1="99" x2="680" y2="99" stroke="rgba(224,86,160,0.4)" stroke-width="1.5" stroke-dasharray="8,6"/>
+    <text x="685" y="102" fill="rgba(224,86,160,0.6)" font-family="JetBrains Mono, monospace" font-size="8">SMA200</text>
+    <!-- SMA50 line at 97.93 → y = 220 - (97.93-96)*50 = 220 - 96.5 = 123.5 -->
+    <line x1="60" y1="124" x2="680" y2="124" stroke="rgba(0,180,240,0.25)" stroke-width="1" stroke-dasharray="4,4"/>
+    <text x="685" y="127" fill="rgba(0,180,240,0.35)" font-family="JetBrains Mono, monospace" font-size="8">SMA50</text>
+    <!-- SMA20 at 97.51 → y = 220 - (97.51-96)*50 = 220 - 75.5 = 144.5 -->
+    <line x1="60" y1="145" x2="680" y2="145" stroke="rgba(78,205,196,0.2)" stroke-width="1" stroke-dasharray="3,5"/>
+    <text x="685" y="148" fill="rgba(78,205,196,0.3)" font-family="JetBrains Mono, monospace" font-size="8">SMA20</text>
+    <!-- DXY price action last 10 trading days (approximate) -->
+    <!-- Feb 19: 97.8, Feb 20: 97.36 (SCOTUS low), Feb 21: 97.9, Feb 24: 97.5, Feb 25: 97.7, Feb 26: 97.65, Feb 27: 97.61, Feb 28: 97.61 (close before strike), Mar 2: 98.57 -->
+    <!-- y = 220 - (price - 96) * 50 -->
+    <polyline points="100,130 160,188 220,115 310,145 370,135 430,138 490,140 550,140 640,92"
+      fill="none" stroke="rgba(200,210,220,0.7)" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Session high dot at 98.57 →  y = 220 - 128.5 = 91.5 -->
+    <circle cx="640" cy="92" r="4" fill="none" stroke="#e056a0" stroke-width="2"/>
+    <circle cx="640" cy="92" r="2" fill="#e056a0"/>
+    <!-- Annotation: SCOTUS low -->
+    <line x1="160" y1="188" x2="160" y2="205" stroke="rgba(78,205,196,0.3)" stroke-width="1"/>
+    <text x="160" y="215" fill="rgba(78,205,196,0.5)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">SCOTUS</text>
+    <text x="160" y="225" fill="rgba(78,205,196,0.4)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">97.36</text>
+    <!-- Annotation: 98.00 ceiling tests -->
+    <rect x="200" y="118" width="310" height="6" rx="1" fill="rgba(247,183,49,0.08)" stroke="rgba(247,183,49,0.15)" stroke-width="0.5"/>
+    <text x="355" y="115" fill="rgba(247,183,49,0.4)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">98.00 — 4 FAILED TESTS LAST WEEK</text>
+    <!-- Annotation: Epic Fury spike -->
+    <line x1="640" y1="92" x2="640" y2="55" stroke="rgba(224,86,160,0.4)" stroke-width="1"/>
+    <text x="640" y="50" fill="rgba(224,86,160,0.7)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">EPIC FURY</text>
+    <text x="640" y="42" fill="rgba(224,86,160,0.5)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">98.57 — REJECTED AT SMA200</text>
+    <!-- X axis dates -->
+    <text x="100" y="238" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Feb 19</text>
+    <text x="310" y="238" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Feb 24</text>
+    <text x="490" y="238" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Feb 27</text>
+    <text x="640" y="238" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Mar 2</text>
+  </svg>
+</div>
+
+<p>The question every FX desk is asking: does a US-Iran war reverse the structural dollar bear? The data says no — at least not yet. DXY spiked to 98.57 on safe-haven flows, its highest in five weeks, but stopped dead at the 200-day SMA (98.42). Last week saw four failed tests at 98.00. The war bought one extra point of altitude. That's it.</p>
+
+<p>The price action is telling. Equities opened −1.2% and fully reversed by the close — the S&P 500 finished flat. The dollar held gains but couldn't extend. Gold and oil both held their surges. This is a market that absorbed a decapitation strike against a major oil-producing nation, the de facto closure of the world's most important energy chokepoint, and the assassination of a supreme leader — and still couldn't push DXY above its 200-day moving average.</p>
+
+<!-- ═══════════ VISUAL 2: GOLD STRUCTURAL POSITION ═══════════ -->
+<div class="gold-structure">
+  <div class="gold-label">Gold — Distance Above Moving Averages (% Spread)</div>
+  <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- Bars showing how far gold (5336) is above each SMA -->
+    <!-- SMA20: 5027 → +6.1%, SMA50: 4783 → +11.6%, SMA200: 3943 → +35.3% -->
+    <!-- Zero line -->
+    <line x1="140" y1="140" x2="680" y2="140" stroke="rgba(247,183,49,0.1)" stroke-width="1"/>
+    <text x="130" y="143" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">0%</text>
+
+    <!-- SMA20 bar: +6.1% → height = 6.1 * 3 = 18.3 -->
+    <rect x="180" y="122" width="80" height="18" rx="2" fill="rgba(247,183,49,0.15)" stroke="rgba(247,183,49,0.3)" stroke-width="1"/>
+    <text x="220" y="115" fill="rgba(247,183,49,0.8)" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" font-weight="500">+6.1%</text>
+    <text x="220" y="160" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">SMA 20</text>
+    <text x="220" y="170" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">5,027</text>
+
+    <!-- SMA50 bar: +11.6% → height = 11.6 * 3 = 34.8 -->
+    <rect x="340" y="105" width="80" height="35" rx="2" fill="rgba(247,183,49,0.2)" stroke="rgba(247,183,49,0.35)" stroke-width="1"/>
+    <text x="380" y="98" fill="rgba(247,183,49,0.9)" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" font-weight="500">+11.6%</text>
+    <text x="380" y="160" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">SMA 50</text>
+    <text x="380" y="170" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">4,783</text>
+
+    <!-- SMA200 bar: +35.3% → height = 35.3 * 3 = 105.9 (cap at 105) -->
+    <rect x="500" y="35" width="80" height="105" rx="2" fill="rgba(247,183,49,0.3)" stroke="rgba(247,183,49,0.5)" stroke-width="1"/>
+    <text x="540" y="28" fill="var(--gold)" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle" font-weight="500">+35.3%</text>
+    <text x="540" y="160" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">SMA 200</text>
+    <text x="540" y="170" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">3,943</text>
+
+    <!-- Price label -->
+    <text x="60" y="30" fill="var(--gold)" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500">XAU/USD</text>
+    <text x="60" y="45" fill="var(--gold)" font-family="JetBrains Mono, monospace" font-size="18" font-weight="500">5,336</text>
+    <text x="60" y="60" fill="rgba(247,183,49,0.5)" font-family="JetBrains Mono, monospace" font-size="8">2 MAR 2026</text>
+  </svg>
+</div>
+
+<p>Gold is now 35% above its 200-day moving average. That is not a trade — it is a structural repricing. The metal has been absorbing central bank demand for two years, and Epic Fury just added a geopolitical accelerant. GLD closed at $490, up from $448 two weeks ago. The gold/oil ratio at 68.7 is screaming flight to safety — anything above 25 signals stress, and we're nearly three times that.</p>
+
+<!-- ═══════════ VISUAL 3: ISM PRICES PAID SPIKE ═══════════ -->
+<div class="ism-visual">
+  <div class="ism-label">ISM Manufacturing Prices Paid — 12 Months</div>
+  <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Y axis: 45 to 75, mapped to y170..y20 -->
+    <line x1="60" y1="170" x2="680" y2="170" stroke="rgba(0,180,240,0.06)" stroke-width="1"/>
+    <text x="50" y="173" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">45</text>
+    <text x="50" y="123" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">55</text>
+    <text x="50" y="73" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">65</text>
+    <text x="50" y="23" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">75</text>
+    <!-- Horizontal grid -->
+    <line x1="60" y1="120" x2="680" y2="120" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="60" y1="70" x2="680" y2="70" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="4,4"/>
+    <!-- 50 line (neutral) at y = 170 - (50-45)*5 = 170-25 = 145 -->
+    <line x1="60" y1="145" x2="680" y2="145" stroke="rgba(200,210,220,0.1)" stroke-width="1"/>
+    <text x="685" y="148" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7">50</text>
+    <!-- Monthly data: Mar25:53, Apr:51, May:52.5, Jun:54, Jul:55.5, Aug:56.5, Sep:57, Oct:58, Nov:58.5, Dec:58.5, Jan26:59, Feb26:70.5 -->
+    <!-- y = 170 - (val-45)*5 -->
+    <!-- Mar25:53→y=130, Apr:51→y=140, May:52.5→y=133, Jun:54→y=125, Jul:55.5→y=118, Aug:56.5→y=113, Sep:57→y=110, Oct:58→y=105, Nov:58.5→y=103, Dec:58.5→y=103, Jan:59→y=100, Feb:70.5→y=43 -->
+    <polyline points="80,130 135,140 190,133 245,125 300,118 355,113 410,110 465,105 520,103 575,103 630,100"
+      fill="none" stroke="rgba(200,210,220,0.3)" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Feb spike line -->
+    <line x1="630" y1="100" x2="665" y2="43" stroke="var(--pink)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="665" cy="43" r="5" fill="none" stroke="var(--pink)" stroke-width="2"/>
+    <circle cx="665" cy="43" r="2.5" fill="var(--pink)"/>
+    <!-- Annotation -->
+    <text x="665" y="33" fill="var(--pink)" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle" font-weight="500">70.5</text>
+    <text x="665" y="18" fill="rgba(224,86,160,0.5)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">+11.5 pts</text>
+    <!-- Previous range annotation -->
+    <rect x="65" y="98" width="575" height="35" rx="1" fill="rgba(200,210,220,0.02)" stroke="rgba(200,210,220,0.05)" stroke-width="0.5"/>
+    <text x="352" y="93" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">53–59 RANGE — 12 MONTHS</text>
+    <!-- X axis -->
+    <text x="80" y="185" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Mar</text>
+    <text x="245" y="185" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Jun</text>
+    <text x="410" y="185" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Sep</text>
+    <text x="575" y="185" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Dec</text>
+    <text x="665" y="185" fill="rgba(224,86,160,0.5)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Feb</text>
+  </svg>
+</div>
+
+<p>ISM prices paid jumped from 59.0 to 70.5 — the largest single-month increase in the index since 2021. This happened <em>before</em> the Hormuz shock hits supply chains. February ISM Manufacturing PMI held at 52.4 (slightly above consensus of 51.8), but the composition is toxic: new orders softened to 55.8, employment remains in contraction, and that prices-paid print is a tariff-plus-oil dual shock. Steel and aluminum are now the most expensive in the world — ISM panelists are explicitly citing Section 232 tariffs as counterproductive.</p>
+
+<p>The combination is the definition of stagflation input: rising costs, softening demand, constrained monetary policy. The Fed sits at 3.50–3.75% with a 95.6% market probability of holding in March. If Hormuz stays disrupted and oil stays bid, the March PCE print (due March 13) could come in hot enough to push cut expectations out to September.</p>
+
+<div class="level-grid">
+  <div class="level-box resistance">
+    <div class="level-name">Resistance 1</div>
+    <div class="level-val">98.57</div>
+    <div class="level-note">Today's session high — coincides with SMA200 (98.42). First close above this since January.</div>
+  </div>
+  <div class="level-box support">
+    <div class="level-name">Support 1</div>
+    <div class="level-val">97.71</div>
+    <div class="level-note">Pre-strike Friday close zone. Gap fill target if war premium fades.</div>
+  </div>
+  <div class="level-box resistance">
+    <div class="level-name">Resistance 2</div>
+    <div class="level-val">99.00</div>
+    <div class="level-note">Psychological + upper bound of 8-month range. Break above = thesis reassessment.</div>
+  </div>
+  <div class="level-box support">
+    <div class="level-name">Support 2</div>
+    <div class="level-val">96.50</div>
+    <div class="level-note">Jan 27 structural floor. Break below = Q2 thesis in acceleration.</div>
+  </div>
+</div>
+
+<!-- Crypto fear gauge -->
+<div class="fear-strip">
+  <div>
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-ghost);margin-bottom:4px;">Crypto Sentiment</div>
+    <div class="fear-gauge">
+      <!-- 10 out of 100, so 10% from left -->
+      <div class="fear-needle" style="left:10%;"></div>
+    </div>
+  </div>
+  <div class="fear-val">10</div>
+  <div class="fear-text">Extreme Fear — 7 consecutive days below 15. Lowest sustained reading since FTX collapse.</div>
+</div>
+
+<div class="article-divider"></div>
+
+<p>Liquidity data adds texture. The ON RRP collapsed to $0.63 billion on March 2 — effectively zero, down from $16.3 billion the prior session. This is a month-end/quarter-adjacent technical distortion, but the trajectory is clear: ON RRP has gone from $2.2 trillion in early 2023 to nothing. That excess liquidity cushion is gone. Meanwhile, the TGA balance dropped 5.6% to $839 billion and the Fed's balance sheet contracted 2.8% to $888 billion. The plumbing is tightening while the geopolitical pressure is rising.</p>
+
+<p>The Strait of Hormuz is the data point the internet can't ignore, and our FIRMS data quantifies it: 5 fire detections in the Strait zone itself, 115 across Iran, 60 in the Israel/Lebanon theater (including a high-confidence FRP reading of 84.56 — consistent with military-grade ordnance). Shipping giants Maersk, Hapag-Lloyd, CMA CGM have suspended transit. Insurance premiums at six-year highs. Tanker traffic down 70%. This is not a risk premium — it is a physical supply disruption affecting 20% of global petroleum flow.</p>
+
+<p>Polymarket has Mohsen Araki at 80% to be the next Supreme Leader. The market is pricing regime succession, not regime survival.</p>
+
+<!-- ═══════════ VISUAL 4: DERIVED SIGNALS DASHBOARD ═══════════ -->
+<div class="visual-panel">
+  <div class="visual-label">CIPHER Derived Signals — 2 March 2026</div>
+  <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg">
+    <!-- Signal bars -->
+    <!-- Gold/Oil ratio: 68.7 (extreme) -->
+    <text x="20" y="35" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8">GOLD/OIL</text>
+    <rect x="120" y="25" width="400" height="16" rx="2" fill="rgba(247,183,49,0.25)" stroke="rgba(247,183,49,0.4)" stroke-width="0.5"/>
+    <text x="530" y="37" fill="var(--gold)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">68.7</text>
+    <text x="600" y="37" fill="rgba(247,183,49,0.4)" font-family="JetBrains Mono, monospace" font-size="7">EXTREME STRESS</text>
+    <!-- Stress threshold marker at 25 → 120 + (25/68.7)*400 = 120+145=265 -->
+    <line x1="265" y1="23" x2="265" y2="43" stroke="rgba(200,210,220,0.2)" stroke-width="1"/>
+    <text x="265" y="18" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="middle">25 threshold</text>
+
+    <!-- Real yield 10Y: 1.68% -->
+    <text x="20" y="70" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8">REAL 10Y</text>
+    <rect x="120" y="60" width="168" height="16" rx="2" fill="rgba(0,180,240,0.15)" stroke="rgba(0,180,240,0.3)" stroke-width="0.5"/>
+    <text x="298" y="72" fill="var(--cyan)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">1.68%</text>
+    <text x="370" y="72" fill="rgba(0,180,240,0.4)" font-family="JetBrains Mono, monospace" font-size="7">↓ COMPRESSING</text>
+
+    <!-- Credit spread: 2.26 -->
+    <text x="20" y="105" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8">HY-IG GAP</text>
+    <rect x="120" y="95" width="226" height="16" rx="2" fill="rgba(224,86,160,0.12)" stroke="rgba(224,86,160,0.25)" stroke-width="0.5"/>
+    <text x="356" y="107" fill="var(--pink)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">2.26</text>
+    <text x="410" y="107" fill="rgba(224,86,160,0.4)" font-family="JetBrains Mono, monospace" font-size="7">WIDENING</text>
+
+    <!-- Brent-WTI spread: 6.63 -->
+    <text x="20" y="140" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8">BRT-WTI</text>
+    <rect x="120" y="130" width="265" height="16" rx="2" fill="rgba(224,86,160,0.15)" stroke="rgba(224,86,160,0.3)" stroke-width="0.5"/>
+    <text x="395" y="142" fill="var(--pink)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">$6.63</text>
+    <text x="455" y="142" fill="rgba(224,86,160,0.4)" font-family="JetBrains Mono, monospace" font-size="7">GLOBAL TIGHTER THAN US</text>
+
+    <!-- Yield curve 2-10: +0.59 -->
+    <text x="20" y="175" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="8">2Y-10Y</text>
+    <rect x="120" y="165" width="118" height="16" rx="2" fill="rgba(78,205,196,0.12)" stroke="rgba(78,205,196,0.25)" stroke-width="0.5"/>
+    <text x="248" y="177" fill="var(--teal)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">+0.59%</text>
+    <text x="330" y="177" fill="rgba(78,205,196,0.4)" font-family="JetBrains Mono, monospace" font-size="7">STEEPENING — INFLATION PRICED</text>
+  </svg>
+</div>
+
+<div class="thesis-box pressure">
+  <div class="thesis-label"><span class="dot"></span> Q2 Thesis Status: Intact — Under Pressure</div>
+  <div class="thesis-text">Structurally bearish USD, long gold, long EUR on dips — but the war introduces a genuine test. The dollar's safe-haven bid is real but historically temporary in conflict scenarios where the US is a belligerent, not a bystander. The SMA200 rejection at 98.57 is the line to watch: a sustained close above 99.00 forces reassessment. Below that, the thesis holds. Gold's structural bid is now reinforced by physical supply disruption (Hormuz), inflation expectations repricing (breakevens +2.5%), and regime uncertainty (Araki succession). The risk is a positioning squeeze on short-dollar crowded trades if the dollar breaks higher. Key test: 99.00 on DXY. If it fails there, the war bid fades and we resume the downtrend.</div>
+</div>
+
+<div class="calendar-strip">
+  <div class="calendar-title">Key Events — This Week</div>
+  <div class="calendar-row">
+    <span class="calendar-time">Tue</span>
+    <span class="calendar-event"><strong>ADP Nonfarm Employment</strong> — February. First labor market read since the strikes.</span>
+    <span class="calendar-flag medium">Medium</span>
+  </div>
+  <div class="calendar-row">
+    <span class="calendar-time">Wed</span>
+    <span class="calendar-event"><strong>ISM Services PMI + Fed Beige Book</strong> — Services prices paid will confirm if ISM mfg prices signal is broad-based.</span>
+    <span class="calendar-flag high">High</span>
+  </div>
+  <div class="calendar-row">
+    <span class="calendar-time">Ongoing</span>
+    <span class="calendar-event"><strong>Strait of Hormuz</strong> — Watch tanker traffic data. Any resumption of transits = oil premium unwinds fast.</span>
+    <span class="calendar-flag high">High</span>
+  </div>
+  <div class="calendar-row">
+    <span class="calendar-time">Fri 08:30</span>
+    <span class="calendar-event"><strong>February Nonfarm Payrolls</strong> — The most important non-war data point this week. Sets March FOMC tone.</span>
+    <span class="calendar-flag high">High</span>
+  </div>
+  <div class="calendar-row">
+    <span class="calendar-time">Ongoing</span>
+    <span class="calendar-event"><strong>Iran succession</strong> — Araki at 80% on Polymarket. Assembly of Experts convenes. Regime stability = oil premium duration.</span>
+    <span class="calendar-flag high">High</span>
+  </div>
+</div>
+
+<div class="keywatch-box">
+  <div class="keywatch-label">Key Watch</div>
+  <div class="keywatch-text"><strong>99.00 on DXY</strong> — the upper bound of the 8-month range and the line between a temporary war bid and a structural reversal. If DXY cannot sustain above 99.00 this week with a literal war as tailwind, the structural bear case is confirmed with extreme prejudice. <strong>Hormuz duration</strong> — if the strait reopens within a week, Brent gives back most of the +7% and the inflation scare dissipates. If it stays disrupted, the March 13 PCE print becomes the most important number of the year. <strong>Silver divergence</strong> — gold +2%, silver −3.3%. When silver refuses to follow gold higher, the bid is pure fear, not reflation. Watch for silver to confirm or deny.</div>
+</div>
+
+<div class="disclaimer">
+  This material is published for informational purposes only by muFX and does not constitute investment advice, a solicitation, or a recommendation to buy or sell any financial instrument. All views expressed are those of muFX and are subject to change without notice. Past performance is not indicative of future results. Trading foreign exchange carries significant risk of loss.
+</div>
+
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="research.html">Research</a>
+      <a href="signals.html" class="active">Signals</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line gold"></div>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
+});
+</script>
+
+</body>
+</html>
