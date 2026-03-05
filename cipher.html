@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIPHER — muFX Intelligence Terminal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#030810;font-family:'JetBrains Mono',monospace;overflow-x:hidden}
+  
+  /* Correlation Banner */
+  .corr-banner{
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    height:28px;background:rgba(3,8,16,0.95);
+    border-bottom:1px solid rgba(0,247,255,0.06);
+    overflow:hidden;display:flex;align-items:center;
+    backdrop-filter:blur(10px);
+  }
+  .corr-track{
+    display:flex;gap:0;animation:corrScroll 40s linear infinite;
+    width:max-content;
+  }
+  .corr-track:hover{animation-play-state:paused}
+  .corr-chip{
+    display:flex;align-items:center;gap:6px;
+    padding:0 16px;height:28px;
+    border-right:1px solid rgba(0,247,255,0.03);
+    cursor:default;white-space:nowrap;
+  }
+  .corr-chip:hover{background:rgba(0,247,255,0.03)}
+  .corr-name{font-size:8px;letter-spacing:1px;color:rgba(90,138,155,0.7)}
+  .corr-nums{font-size:8px;color:rgba(90,138,155,0.5)}
+  .corr-div{font-size:9px;font-weight:500}
+  .corr-div.pos{color:#ffd700}
+  .corr-div.neg{color:#00f7ff}
+  .corr-div.flip{color:#ff006a}
+  .corr-flip-tag{
+    font-size:6px;letter-spacing:1px;color:#ff006a;
+    border:1px solid rgba(255,0,106,0.2);padding:0 3px;
+  }
+  @keyframes corrScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  
+  /* Push content below banner */
+  #cipher-root{padding-top:28px}
+  
+  /* Loading state */
+  .cipher-loading{
+    display:flex;align-items:center;justify-content:center;
+    height:100vh;flex-direction:column;gap:12px;
+    font-family:'JetBrains Mono',monospace;color:#00f7ff;
+  }
+  .cipher-loading .spinner{
+    width:24px;height:24px;border:2px solid rgba(0,247,255,0.1);
+    border-top-color:#00f7ff;border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .cipher-loading .status{font-size:9px;letter-spacing:3px;color:rgba(0,247,255,0.4)}
+  .cipher-loading .sub{font-size:7px;color:rgba(0,247,255,0.2);margin-top:4px}
+  
+  /* Error state */
+  .cipher-error{
+    display:flex;align-items:center;justify-content:center;
+    height:100vh;flex-direction:column;gap:16px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .cipher-error .msg{font-size:10px;color:#ff006a;letter-spacing:2px}
+  .cipher-error .hint{font-size:8px;color:rgba(200,210,220,0.3)}
+  .cipher-error button{
+    background:none;border:1px solid rgba(0,247,255,0.1);
+    color:#00f7ff;padding:8px 20px;font-family:'JetBrains Mono',monospace;
+    font-size:8px;letter-spacing:2px;cursor:pointer;
+  }
+  .cipher-error button:hover{background:rgba(0,247,255,0.03)}
+</style>
+</head>
+<body>
+
+<!-- Correlation Banner (populated by JS) -->
+<div class="corr-banner" id="corr-banner" style="display:none">
+  <div class="corr-track" id="corr-track"></div>
+</div>
+
+<!-- React mount point -->
+<div id="cipher-root">
+  <div class="cipher-loading">
+    <div class="spinner"></div>
+    <div class="status">CONNECTING TO CIPHER</div>
+    <div class="sub">Fetching latest briefing from server...</div>
+  </div>
+</div>
+
+<!-- File upload fallback (hidden by default) -->
+<input type="file" id="fallback-upload" accept=".json" style="display:none">
+
+<!-- React + Babel for client-side JSX -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<script>
+// ═══ CONFIGURATION ═══
+const CIPHER_API = 'http://157.230.1.82';
+const REFRESH_INTERVAL = 60 * 60 * 1000; // 1 hour
+const PW = 'kova2026';
+
+// ═══ CORRELATION BANNER ═══
+function renderCorrelationBanner(correlations) {
+  if (!correlations || !correlations.length) return;
+  const banner = document.getElementById('corr-banner');
+  const track = document.getElementById('corr-track');
+  banner.style.display = 'flex';
+  
+  // Build chips — duplicate for seamless scroll
+  const chips = correlations.slice(0, 10);
+  const html = [...chips, ...chips].map(c => {
+    const abs = Math.abs(c.divergence);
+    const flipped = Math.sign(c.corr_1y) !== Math.sign(c.corr_20d) && abs > 0.15;
+    const cls = flipped ? 'flip' : c.divergence > 0 ? 'pos' : 'neg';
+    const sign = c.divergence > 0 ? '+' : '';
+    return `<div class="corr-chip">
+      <span class="corr-name">${c.pair}</span>
+      <span class="corr-nums">1Y:${c.corr_1y > 0 ? '+' : ''}${c.corr_1y}</span>
+      <span class="corr-nums">→</span>
+      <span class="corr-nums">20d:${c.corr_20d > 0 ? '+' : ''}${c.corr_20d}</span>
+      <span class="corr-div ${cls}">${sign}${c.divergence}</span>
+      ${flipped ? '<span class="corr-flip-tag">FLIP</span>' : ''}
+    </div>`;
+  }).join('');
+  
+  track.innerHTML = html;
+}
+
+// ═══ DATA FETCHING ═══
+async function fetchBriefing() {
+  try {
+    const res = await fetch(CIPHER_API + '/api/briefing/latest');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error('API fetch failed:', e);
+    return null;
+  }
+}
+
+// ═══ BOOT ═══
+async function boot() {
+  const briefing = await fetchBriefing();
+  
+  if (briefing) {
+    // Render correlation banner
+    renderCorrelationBanner(briefing.correlations);
+    
+    // Load and render the portal
+    loadPortal(briefing);
+    
+    // Schedule refresh
+    setInterval(async () => {
+      const fresh = await fetchBriefing();
+      if (fresh) {
+        renderCorrelationBanner(fresh.correlations);
+        loadPortal(fresh);
+      }
+    }, REFRESH_INTERVAL);
+  } else {
+    // Show error with file upload fallback
+    document.getElementById('cipher-root').innerHTML = `
+      <div class="cipher-error">
+        <div class="msg">CIPHER API UNREACHABLE</div>
+        <div class="hint">Could not connect to ${CIPHER_API}</div>
+        <button onclick="document.getElementById('fallback-upload').click()">UPLOAD BRIEFING JSON</button>
+        <button onclick="location.reload()">RETRY CONNECTION</button>
+      </div>`;
+    
+    document.getElementById('fallback-upload').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          renderCorrelationBanner(data.correlations);
+          loadPortal(data);
+        } catch(err) { console.error(err); }
+      };
+      reader.readAsText(file);
+    });
+  }
+}
+
+function loadPortal(briefing) {
+  // Store briefing globally for the React component
+  window.__CIPHER_BRIEFING__ = briefing;
+  
+  // Load the portal JSX
+  const script = document.createElement('script');
+  script.type = 'text/babel';
+  script.setAttribute('data-type', 'module');
+  script.src = 'cipher-portal.jsx';
+  
+  // Fallback: if JSX file not available, use inline render
+  script.onerror = () => {
+    console.warn('cipher-portal.jsx not found, using inline renderer');
+    renderInline(briefing);
+  };
+  
+  document.body.appendChild(script);
+  
+  // Re-process babel scripts
+  if (window.Babel) {
+    setTimeout(() => {
+      Babel.transformScriptTags();
+    }, 100);
+  }
+}
+
+// Inline fallback renderer (minimal — just shows data loaded)
+function renderInline(b) {
+  const root = document.getElementById('cipher-root');
+  const dv = b.derivatives || {};
+  const sp = dv.spot || {};
+  const ch = dv.changes_pct || {};
+  const corr = b.correlations || [];
+  
+  root.innerHTML = `
+    <div style="font-family:'JetBrains Mono',monospace;color:#b0d4ea;max-width:1400px;margin:0 auto;padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,247,255,0.04);margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:14px;letter-spacing:5px;color:#00f7ff;font-weight:bold">CIPHER</span>
+          <span style="font-size:7px;color:#1a3a4a;letter-spacing:2px">MUFX INTELLIGENCE</span>
+        </div>
+        <div style="font-size:8px;color:#1a3a4a">${b.date || 'N/A'} | ${b.meta?.pipes_successful || 0} PIPES</div>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        ${renderStatBox('GOLD', sp.gold, ch.gold, '$')}
+        ${renderStatBox('DXY', sp.dxy, ch.dxy, '')}
+        ${renderStatBox('BRENT', sp.brent, ch.brent, '$')}
+        ${renderStatBox('BTC', sp.btc, ch.btc, '$')}
+        ${renderStatBox('VIX', sp.vix, ch.vix, '')}
+        ${renderStatBox('SPX', sp.spx, ch.spx, '')}
+        ${renderStatBox('EUR/USD', sp.eurusd, ch.eurusd, '')}
+        ${renderStatBox('USD/JPY', sp.usdjpy, ch.usdjpy, '')}
+      </div>
+      
+      <div style="margin-top:16px;padding:12px;background:#0a0a10;border:1px solid rgba(0,247,255,0.06)">
+        <div style="font-size:7px;letter-spacing:2px;color:rgba(0,247,255,0.4);margin-bottom:8px">CORRELATION DIVERGENCES</div>
+        ${corr.slice(0,8).map(c => {
+          const col = Math.abs(c.divergence) > 0.3 ? '#ffd700' : '#4a7a9b';
+          return `<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:8px;border-bottom:1px solid rgba(0,247,255,0.02)">
+            <span style="color:#5a8a9b">${c.pair}</span>
+            <span style="color:${col}">1Y:${c.corr_1y > 0 ? '+' : ''}${c.corr_1y} → 20d:${c.corr_20d > 0 ? '+' : ''}${c.corr_20d} (${c.divergence > 0 ? '+' : ''}${c.divergence})</span>
+          </div>`;
+        }).join('')}
+      </div>
+      
+      <div style="margin-top:16px;padding:12px;background:#0a0a10;border:1px solid rgba(0,247,255,0.06)">
+        <div style="font-size:7px;letter-spacing:2px;color:rgba(0,247,255,0.4);margin-bottom:8px">KEY DERIVATIVES</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:8px">
+          ${renderDeriv('Au/Ag', dv.gold_silver_ratio)}
+          ${renderDeriv('Au/Oil', dv.gold_oil_ratio)}
+          ${renderDeriv('Cu/Au', dv.copper_gold_ratio)}
+          ${renderDeriv('2s10s', dv.curve_2s10s)}
+          ${renderDeriv('Real 10Y', dv.real_yield_10y)}
+          ${renderDeriv('HY-IG', dv.credit_spread_hy_ig)}
+          ${renderDeriv('Net Liq', dv.net_liquidity_b, '$', 'B')}
+          ${renderDeriv('SOFR-EFFR', dv.sofr_effr_spread)}
+          ${renderDeriv('BTC Basis', dv.btc_basis_pct, '', '%')}
+        </div>
+      </div>
+      
+      <div style="margin-top:12px;font-size:7px;color:#1a3a4a;text-align:center">
+        Full interactive portal: load cipher-portal.jsx as artifact in Claude
+      </div>
+    </div>`;
+}
+
+function renderStatBox(label, value, pct, prefix) {
+  if (value == null) return '';
+  const col = pct > 0 ? '#00ff88' : pct < 0 ? '#ff006a' : '#3a6a8b';
+  const pctStr = pct != null ? `<div style="font-size:8px;color:${col}">${pct > 0 ? '+' : ''}${pct?.toFixed(2)}%</div>` : '';
+  const fv = typeof value === 'number' ? value.toLocaleString(undefined, {maximumFractionDigits: value > 1000 ? 0 : value > 100 ? 1 : 4}) : value;
+  return `<div style="background:#0a0a10;border:1px solid rgba(0,247,255,0.04);padding:8px 10px;text-align:center">
+    <div style="font-size:6px;color:#3a5a6b;letter-spacing:1.5px">${label}</div>
+    <div style="font-size:14px;color:#b0d4ea;font-weight:500;margin:2px 0">${prefix}${fv}</div>
+    ${pctStr}
+  </div>`;
+}
+
+function renderDeriv(label, value, prefix, suffix) {
+  if (value == null) return '';
+  return `<div style="display:flex;justify-content:space-between;padding:2px 4px;border-bottom:1px solid rgba(0,247,255,0.02)">
+    <span style="color:#3a5a6b">${label}</span>
+    <span style="color:#b0d4ea">${prefix || ''}${value}${suffix || ''}</span>
+  </div>`;
+}
+
+// Boot on load
+window.addEventListener('DOMContentLoaded', boot);
+</script>
+
+</body>
+</html>
