@@ -192,29 +192,7 @@ async function boot() {
 }
 
 function loadPortal(briefing) {
-  // Store briefing globally for the React component
-  window.__CIPHER_BRIEFING__ = briefing;
-  
-  // Load the portal JSX
-  const script = document.createElement('script');
-  script.type = 'text/babel';
-  script.setAttribute('data-type', 'module');
-  script.src = 'cipher-portal.jsx';
-  
-  // Fallback: if JSX file not available, use inline render
-  script.onerror = () => {
-    console.warn('cipher-portal.jsx not found, using inline renderer');
-    renderInline(briefing);
-  };
-  
-  document.body.appendChild(script);
-  
-  // Re-process babel scripts
-  if (window.Babel) {
-    setTimeout(() => {
-      Babel.transformScriptTags();
-    }, 100);
-  }
+  renderInline(briefing);
 }
 
 // Inline fallback renderer (minimal — just shows data loaded)
