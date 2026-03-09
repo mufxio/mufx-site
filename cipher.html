@@ -253,6 +253,8 @@ const c=pct>0?"up":pct<0?"down":"flat";
 const fv=typeof value==="number"?value.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}):value;
 return<div className={`stat-row${big?" big":""}`}><span className="stat-label">{label}</span><div style={{display:"flex",gap:6,alignItems:"baseline"}}><span className="stat-value" style={accent?{color:accent}:{}}>{prefix}{fv}{suffix}</span>{pct!==undefined&&pct!==null&&<span className={`stat-pct ${c}`}>{pct>0?"+":""}{pct.toFixed(2)}%</span>}</div></div>};
 
+const ChartBtn=({asset,onChart,active,children})=>{if(!onChart)return children;const sel=active===asset;return<div onClick={()=>onChart(asset)} style={{cursor:"pointer",borderLeft:sel?"2px solid var(--cyan)":"2px solid transparent",paddingLeft:sel?4:4,background:sel?"rgba(0,180,240,0.03)":"transparent",transition:"all 0.15s",borderRadius:2}} title={"Chart "+asset.toUpperCase()}>{children}</div>};
+
 const Spark=({data,w=100,h=24,vKey="close",label})=>{
 if(!data?.length)return null;
 const vals=data.map(d=>typeof d==="number"?d:(d[vKey]??d.value));
@@ -413,8 +415,8 @@ const CommandTab=({a})=><div className="grid-4" style={{animation:"fadeIn 0.3s"}
 </div>;
 
 /* ═══ GOLD TAB ═══ */
-const GoldTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
-<Panel title="SPOT METALS" accent="var(--gold)" glow ts={a.pipeTs?.prices}><Stat label="XAU" value={a.gold} pct={a.goldPct} prefix="$" big accent="var(--gold)"/><Stat label="XAG" value={a.silver} pct={a.silverPct} prefix="$" big/><Stat label="COPPER" value={a.copper} pct={a.copperPct} prefix="$" dec={3} big/></Panel>
+const GoldTab=({a,onChart,active})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="SPOT METALS" accent="var(--gold)" glow ts={a.pipeTs?.prices}><ChartBtn asset="gold" onChart={onChart} active={active}><Stat label="XAU" value={a.gold} pct={a.goldPct} prefix="$" big accent="var(--gold)"/></ChartBtn><ChartBtn asset="silver" onChart={onChart} active={active}><Stat label="XAG" value={a.silver} pct={a.silverPct} prefix="$" big/></ChartBtn><ChartBtn asset="copper" onChart={onChart} active={active}><Stat label="COPPER" value={a.copper} pct={a.copperPct} prefix="$" dec={3} big/></ChartBtn></Panel>
 <Panel title="RELATIVE VALUE" accent="var(--gold)"><Stat label="Au/Ag" value={a.gsR} dec={1} big/><Stat label="Au/Oil" value={a.goR} dec={1} big/><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.goR>60?"var(--pink)":"var(--text-ghost)",marginTop:4}}>{a.goR>60?"EXTREME - safe-haven flight":a.goR>40?"ELEVATED":"NORMAL"}</div></Panel>
 <Panel title="MACRO DRIVERS" accent="#b388ff"><Stat label="Real 10Y" value={a.real10} suffix="%" big/><Stat label="Real 5Y" value={a.real5} suffix="%"/><Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3}/><Stat label="10Y BE" value={a.be10} suffix="%"/></Panel>
 <Panel title="PHYSICAL MARKET" accent="var(--gold)" span={2}><div style={{display:"flex",gap:16,alignItems:"start",flexWrap:"wrap"}}><Donut pct={a.cxGRp} label="AU REG" sub={a.cxGR?.toFixed(0)+"t"} accent="var(--gold)"/><Donut pct={a.cxSRp} label="AG REG" sub={a.cxSR?.toFixed(0)+"t"} accent="var(--text)"/><div style={{flex:1}}><Stat label="Au Eligible" value={a.cxGE} suffix="t" dec={1}/><Stat label="COMEX Value" value={a.cxTotB} prefix="$" suffix="B"/><Stat label="COMEX/GLD" value={a.cxCov} suffix="%"/><Stat label="GLD" value={a.gldT} suffix="t" dec={1}/><Stat label="SGE CNY/g" value={a.sgeCny} dec={2}/><Spark data={a.gldH} label="GLD" vKey="close" w={80} h={22}/></div></div></Panel>
@@ -422,9 +424,9 @@ const GoldTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
 </div>;
 
 /* ═══ ENERGY TAB ═══ */
-const EnergyTab=({a,zf})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
-<Panel title="CRUDE" glow ts={a.pipeTs?.prices}><Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/><Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$" big/><Stat label="B-W Spread" value={a.bwS} prefix="$" big/><Stat label="Au/Oil" value={a.goR} dec={1}/></Panel>
-<Panel title="NATURAL GAS"><Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3} big/><Stat label="Oil/Gas" value={a.ogR} dec={1} big/></Panel>
+const EnergyTab=({a,zf,onChart,active})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="CRUDE" glow ts={a.pipeTs?.prices}><ChartBtn asset="brent" onChart={onChart} active={active}><Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/></ChartBtn><ChartBtn asset="wti" onChart={onChart} active={active}><Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$" big/></ChartBtn><Stat label="B-W Spread" value={a.bwS} prefix="$" big/><Stat label="Au/Oil" value={a.goR} dec={1}/></Panel>
+<Panel title="NATURAL GAS"><ChartBtn asset="natgas" onChart={onChart} active={active}><Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3} big/></ChartBtn><Stat label="Oil/Gas" value={a.ogR} dec={1} big/></Panel>
 <Panel title="SUPPLY RISK" accent="var(--gold)"><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:4}}>{["strait_of_hormuz","red_sea","saudi_oil","libya_oil"].map(id=>{const z=zf(id);return<div key={id} style={{textAlign:"center",padding:4,background:z.fires>100?"rgba(224,86,160,0.05)":"var(--bg-el)",border:"1px solid "+(z.fires>100?"rgba(224,86,160,0.12)":"var(--border)")}}><div style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)",letterSpacing:1}}>{id.replace(/_/g," ").toUpperCase().substring(0,10)}</div><div style={{fontFamily:"var(--mono)",fontSize:14,color:z.fires>100?"var(--pink)":z.fires>0?"var(--gold)":"var(--text-ghost)",fontWeight:500}}>{z.fires||"CLR"}</div></div>})}</div></Panel>
 <Panel title="ENERGY COT" span={2}>{a.cot.filter(c=>["wti","brent","natgas"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
 <Panel title="CROSS-ASSET" accent="var(--gold)"><Stat label="Au/Oil" value={a.goR} dec={1} big/><Stat label="VIX" value={a.vix} pct={a.vixPct}/></Panel>
@@ -441,19 +443,19 @@ const RatesTab=({a})=><div style={{display:"grid",gridTemplateColumns:"2fr 1fr",
 </div>;
 
 /* ═══ FX TAB ═══ */
-const FxTab=({a})=><div className="grid-2" style={{animation:"fadeIn 0.3s"}}>
-<Panel title="DOLLAR" glow ts={a.pipeTs?.prices}><Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3} big/><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>{a.dxy<100?"WEAK DOLLAR - supports commodities":"STRONG DOLLAR - risk headwind"}</div></Panel>
+const FxTab=({a,onChart,active})=><div className="grid-2" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="DOLLAR" glow ts={a.pipeTs?.prices}><ChartBtn asset="dxy" onChart={onChart} active={active}><Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3} big/></ChartBtn><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>{a.dxy<100?"WEAK DOLLAR - supports commodities":"STRONG DOLLAR - risk headwind"}</div></Panel>
 <Panel title="CENTRAL BANKS" accent="#b388ff"><Stat label="PBOC Fix" value={a.pboc} dec={4} big/><Stat label="CNH Spread" value={a.cnyS} dec={4}/>{a.bojZ&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:a.bojZ.includes?.("CRITICAL")?"var(--pink)":"var(--text-ghost)",marginTop:2}}>BOJ: {a.bojZ}</div>}<Stat label="ECB Depo" value={a.ecbD} suffix="%"/><Stat label="ECB Refi" value={a.ecbR} suffix="%"/></Panel>
-<Panel title="FX SPOT + COT" span={2}><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>{[{n:"EUR/USD",v:a.eurusd,p:a.eurusdPct,c:a.cEur},{n:"USD/JPY",v:a.usdjpy,p:a.usdjpyPct,c:a.cJpy},{n:"GBP/USD",v:a.gbpusd,p:a.gbpusdPct,c:a.cGbp},{n:"AUD/USD",v:a.audusd,p:a.audusdPct,c:a.cAud},{n:"USD/CAD",v:a.usdcad,p:a.usdcadPct,c:a.cCad},{n:"USD/CHF",v:a.usdchf,p:a.usdchfPct,c:a.cChf}].map(f=><div key={f.n} style={{background:"var(--bg-el)",padding:"6px 8px",border:"1px solid var(--border)"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--cyan)",opacity:0.5}}>{f.n}</span><span style={{fontFamily:"var(--mono)",fontSize:7,color:(f.c||0)>0?"var(--teal)":"var(--pink)"}}>{(f.c||0)>0?"LONG":"SHORT"} {f.c}%</span></div><div style={{fontFamily:"var(--mono)",fontSize:14,color:"var(--text)"}}>{f.v?.toFixed(4)}</div><div style={{fontFamily:"var(--mono)",fontSize:8,color:(f.p||0)>0?"var(--teal)":"var(--pink)"}}>{(f.p||0)>0?"+":""}{f.p?.toFixed(2)}%</div></div>)}</div></Panel>
+<Panel title="FX SPOT + COT" span={2}><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>{[{n:"EUR/USD",v:a.eurusd,p:a.eurusdPct,c:a.cEur,k:"eurusd"},{n:"USD/JPY",v:a.usdjpy,p:a.usdjpyPct,c:a.cJpy,k:"usdjpy"},{n:"GBP/USD",v:a.gbpusd,p:a.gbpusdPct,c:a.cGbp,k:"gbpusd"},{n:"AUD/USD",v:a.audusd,p:a.audusdPct,c:a.cAud,k:"audusd"},{n:"USD/CAD",v:a.usdcad,p:a.usdcadPct,c:a.cCad,k:"usdcad"},{n:"USD/CHF",v:a.usdchf,p:a.usdchfPct,c:a.cChf,k:"usdchf"}].map(f=><div key={f.n} onClick={()=>onChart&&onChart(f.k)} style={{background:active===f.k?"rgba(0,180,240,0.06)":"var(--bg-el)",padding:"6px 8px",border:"1px solid "+(active===f.k?"rgba(0,180,240,0.2)":"var(--border)"),cursor:onChart?"pointer":"default",transition:"all 0.15s"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--cyan)",opacity:0.5}}>{f.n}</span><span style={{fontFamily:"var(--mono)",fontSize:7,color:(f.c||0)>0?"var(--teal)":"var(--pink)"}}>{(f.c||0)>0?"LONG":"SHORT"} {f.c}%</span></div><div style={{fontFamily:"var(--mono)",fontSize:14,color:"var(--text)"}}>{f.v?.toFixed(4)}</div><div style={{fontFamily:"var(--mono)",fontSize:8,color:(f.p||0)>0?"var(--teal)":"var(--pink)"}}>{(f.p||0)>0?"+":""}{f.p?.toFixed(2)}%</div></div>)}</div></Panel>
 <Panel title="FX COT" span={2}>{a.cot.filter(c=>["eurusd","usdjpy","gbpusd","usdchf","audusd","usdcad"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
 {Object.keys(a.swift).length>0&&<Panel title="SWIFT PAYMENT SHARE" accent="#b388ff" span={2}><div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
 {["USD","EUR","GBP","JPY","CNY"].map(c=>{const v=a.swift[c],t=a.swiftTrends[c];if(!v)return null;const col=c==="USD"?"var(--cyan)":c==="CNY"?"var(--pink)":c==="EUR"?"var(--gold)":"var(--text-dim)";return<div key={c} style={{textAlign:"center",padding:"6px 12px",minWidth:65,background:"var(--bg-el)",border:"1px solid var(--border)"}}><div style={{fontFamily:"var(--mono)",fontSize:8,color:col,fontWeight:500}}>{c}</div><div style={{fontFamily:"var(--mono)",fontSize:15,color:"var(--text)",fontWeight:500}}>{v}%</div>{t&&<div style={{fontFamily:"var(--mono)",fontSize:7,color:t.direction==="rising"?"var(--teal)":t.direction==="falling"?"var(--pink)":"var(--text-ghost)"}}>{t.direction}</div>}</div>})}</div></Panel>}
 </div>;
 
 /* ═══ CRYPTO TAB ═══ */
-const CryptoTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+const CryptoTab=({a,onChart,active})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
 <Panel title="SENTIMENT" accent={a.fg<=20?"var(--pink)":"var(--cyan)"} glow ts={a.pipeTs?.crypto}><FGGauge value={a.fg} label={a.fgL}/><Spark data={a.fgH} label="7d" vKey="value" w={85} h={22}/><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>{a.fg<=15?"EXTREME FEAR - contrarian buy":a.fg<=25?"FEAR zone":a.fg>=75?"EXTREME GREED":"Neutral"}</div></Panel>
-<Panel title="BITCOIN"><Stat label="BTC Spot" value={a.btc} pct={a.btcPct} prefix="$" dec={0} big/><Stat label="BTC Perp" value={a.perpBtc} prefix="$" dec={0}/><Stat label="Basis" value={a.basis} suffix="%" dec={3} big/><Stat label="ETH Perp" value={a.perpEth} prefix="$" dec={2}/></Panel>
+<Panel title="BITCOIN"><ChartBtn asset="btc" onChart={onChart} active={active}><Stat label="BTC Spot" value={a.btc} pct={a.btcPct} prefix="$" dec={0} big/></ChartBtn><Stat label="BTC Perp" value={a.perpBtc} prefix="$" dec={0}/><Stat label="Basis" value={a.basis} suffix="%" dec={3} big/><Stat label="ETH Perp" value={a.perpEth} prefix="$" dec={2}/></Panel>
 <Panel title="STRUCTURE" accent="#b388ff"><Stat label="Mcap" value={a.mcapT} prefix="$" suffix="T" big/><Stat label="BTC Dom" value={a.btcDom} suffix="%" dec={1} big/><Stat label="ETH Dom" value={a.ethDom} suffix="%" dec={1}/></Panel>
 <Panel title="STABLECOIN SUPPLY"><StableDonut stables={a.stables} total={a.stMcapB}/></Panel>
 <Panel title="DEFI" accent="#b388ff"><div style={{textAlign:"center",background:"var(--bg-el)",padding:8,border:"1px solid var(--border)"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>TVL</div><div style={{fontFamily:"var(--mono)",fontSize:20,color:"#b388ff",fontWeight:500}}>{"$"+a.tvlB+"B"}</div><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.tvlWk<-2?"var(--pink)":"var(--text-ghost)"}}>7d: {a.tvlWk}%</div></div></Panel>
@@ -461,9 +463,9 @@ const CryptoTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}
 </div>;
 
 /* ═══ RISK TAB ═══ */
-const RiskTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
-<Panel title="VOLATILITY" accent={a.vix>25?"var(--pink)":"var(--cyan)"} glow ts={a.pipeTs?.prices}><Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"var(--pink)":undefined}/><Stat label="COT VIX" value={a.cVix} suffix="%"/>{a.percentiles?.vix!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>1Y Percentile: {a.percentiles.vix}%</div>}</Panel>
-<Panel title="EQUITIES"><Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/><Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0} big/>{a.percentiles?.spx!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>SPX 1Y: {a.percentiles.spx}%</div>}</Panel>
+const RiskTab=({a,onChart,active})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="VOLATILITY" accent={a.vix>25?"var(--pink)":"var(--cyan)"} glow ts={a.pipeTs?.prices}><ChartBtn asset="vix" onChart={onChart} active={active}><Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"var(--pink)":undefined}/></ChartBtn><Stat label="COT VIX" value={a.cVix} suffix="%"/>{a.percentiles?.vix!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>1Y Percentile: {a.percentiles.vix}%</div>}</Panel>
+<Panel title="EQUITIES"><ChartBtn asset="spx" onChart={onChart} active={active}><Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/></ChartBtn><ChartBtn asset="nikkei" onChart={onChart} active={active}><Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0} big/></ChartBtn>{a.percentiles?.spx!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>SPX 1Y: {a.percentiles.spx}%</div>}</Panel>
 <Panel title="REGIME RADAR"><Radar data={a.regime}/></Panel>
 <Panel title="CORRELATIONS" accent="#b388ff" glow span={3}>{a.correlations.slice(0,8).map((c,i)=>{const abs=Math.abs(c.divergence);const flipped=Math.sign(c.corr_1y)!==Math.sign(c.corr_20d)&&abs>0.15;const col=flipped?"var(--pink)":abs>0.3?"var(--gold)":"var(--text-ghost)";return<div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"3px 0",borderBottom:"1px solid var(--border)"}}><div style={{width:5,height:5,borderRadius:"50%",background:col}}/><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-dim)",flex:1}}>{c.pair}</span><span style={{fontFamily:"var(--mono)",fontSize:8,color:col,fontWeight:500}}>{c.divergence>0?"+":""}{c.divergence}</span>{flipped&&<span style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--pink)"}}>FLIP</span>}</div>})}</Panel>
 <Panel title="BOND COT" accent="#b388ff">{a.cot.filter(c=>["ust_2y","ust_10y"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
@@ -688,6 +690,10 @@ const Dashboard=({a,intel,gen2})=>{
 const hasGen2=gen2?.narrative||gen2?.identity;
 const[tab,setTab]=useState(hasGen2?"cypher":"gold");
 const[time,setTime]=useState(new Date());
+const defaultChartAsset={gold:"gold",energy:"brent",fx:"dxy",risk:"vix",crypto:"btc"};
+const[chartAsset,setChartAsset]=useState(null);
+const activeChart=chartAsset||defaultChartAsset[tab]||null;
+const switchTab=(t)=>{setTab(t);setChartAsset(null)};
 useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t)},[]);
 const zf=(id)=>a.zones.find(z=>z.id===id)||{fires:0,high:0};
 const stName=gen2?.identity?.state?.name||"CALM";
@@ -701,16 +707,16 @@ return<div className="cipher-shell">
 <span style={{fontFamily:"var(--mono)",fontSize:7,letterSpacing:2,color:stColor,textTransform:"uppercase",flexShrink:0}}>{stName}</span>
 <span style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.6,wordBreak:"break-word"}}>{gen2.identity.status_line}</span>
 </div>}
-<div className="cipher-tabs">{tabs.map(t=><button key={t.id} className={tab===t.id?"active":""} onClick={()=>setTab(t.id)} style={t.id==="cypher"?{color:tab==="cypher"?stColor:"var(--text-ghost)",borderBottomColor:tab==="cypher"?stColor:"transparent"}:{}}>{t.l}</button>)}</div>
+<div className="cipher-tabs">{tabs.map(t=><button key={t.id} className={tab===t.id?"active":""} onClick={()=>switchTab(t.id)} style={t.id==="cypher"?{color:tab==="cypher"?stColor:"var(--text-ghost)",borderBottomColor:tab==="cypher"?stColor:"transparent"}:{}}>{t.l}</button>)}</div>
 {tab==="cypher"&&<CypherTab gen2={gen2} a={a} intel={intel}/>}
-{tab==="gold"&&<><TabContextBar tabId="gold" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="gold" span={3}/><GoldTab a={a}/></>}
-{tab==="energy"&&<><TabContextBar tabId="energy" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="brent" span={3}/><EnergyTab a={a} zf={zf}/></>}
-{tab==="rates"&&<><TabContextBar tabId="rates" gen2={gen2} a={a} onTabChange={setTab}/><RatesTab a={a}/></>}
-{tab==="fx"&&<><TabContextBar tabId="fx" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="dxy" span={2}/><FxTab a={a}/></>}
-{tab==="risk"&&<><TabContextBar tabId="risk" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="vix" span={3}/><RiskTab a={a}/></>}
-{tab==="crypto"&&<><TabContextBar tabId="crypto" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="btc" span={3}/><CryptoTab a={a}/></>}
-{tab==="geo"&&<><TabContextBar tabId="geo" gen2={gen2} a={a} onTabChange={setTab}/><GeoTab a={a} zf={zf} ts={a.pipeTs?.firms}/></>}
-{tab==="liq"&&<><TabContextBar tabId="liq" gen2={gen2} a={a} onTabChange={setTab}/><LiqTab a={a}/></>}
+{tab==="gold"&&<><TabContextBar tabId="gold" gen2={gen2} a={a} onTabChange={switchTab}/><CipherChart asset={activeChart} span={3}/><GoldTab a={a} onChart={setChartAsset} active={activeChart}/></>}
+{tab==="energy"&&<><TabContextBar tabId="energy" gen2={gen2} a={a} onTabChange={switchTab}/><CipherChart asset={activeChart} span={3}/><EnergyTab a={a} zf={zf} onChart={setChartAsset} active={activeChart}/></>}
+{tab==="rates"&&<><TabContextBar tabId="rates" gen2={gen2} a={a} onTabChange={switchTab}/><RatesTab a={a}/></>}
+{tab==="fx"&&<><TabContextBar tabId="fx" gen2={gen2} a={a} onTabChange={switchTab}/><CipherChart asset={activeChart} span={2}/><FxTab a={a} onChart={setChartAsset} active={activeChart}/></>}
+{tab==="risk"&&<><TabContextBar tabId="risk" gen2={gen2} a={a} onTabChange={switchTab}/><CipherChart asset={activeChart} span={3}/><RiskTab a={a} onChart={setChartAsset} active={activeChart}/></>}
+{tab==="crypto"&&<><TabContextBar tabId="crypto" gen2={gen2} a={a} onTabChange={switchTab}/><CipherChart asset={activeChart} span={3}/><CryptoTab a={a} onChart={setChartAsset} active={activeChart}/></>}
+{tab==="geo"&&<><TabContextBar tabId="geo" gen2={gen2} a={a} onTabChange={switchTab}/><GeoTab a={a} zf={zf} ts={a.pipeTs?.firms}/></>}
+{tab==="liq"&&<><TabContextBar tabId="liq" gen2={gen2} a={a} onTabChange={switchTab}/><LiqTab a={a}/></>}
 </div>};
 
 /* ═══ APP ROOT ═══ */
