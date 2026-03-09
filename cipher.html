@@ -6,1042 +6,729 @@
 <title>CIPHER — muFX Intelligence Terminal</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#030810;font-family:'JetBrains Mono',monospace;overflow-x:hidden}
-  
-  /* Correlation Banner */
-  .corr-banner{
-    position:fixed;top:0;left:0;right:0;z-index:9999;
-    height:28px;background:rgba(3,8,16,0.95);
-    border-bottom:1px solid rgba(0,247,255,0.06);
-    overflow:hidden;display:flex;align-items:center;
-    backdrop-filter:blur(10px);
-  }
-  .corr-track{
-    display:flex;gap:0;animation:corrScroll 40s linear infinite;
-    width:max-content;
-  }
-  .corr-track:hover{animation-play-state:paused}
-  .corr-chip{
-    display:flex;align-items:center;gap:6px;
-    padding:0 16px;height:28px;
-    border-right:1px solid rgba(0,247,255,0.03);
-    cursor:default;white-space:nowrap;
-  }
-  .corr-chip:hover{background:rgba(0,247,255,0.03)}
-  .corr-name{font-size:8px;letter-spacing:1px;color:rgba(90,138,155,0.7)}
-  .corr-nums{font-size:8px;color:rgba(90,138,155,0.5)}
-  .corr-div{font-size:9px;font-weight:500}
-  .corr-div.pos{color:#ffd700}
-  .corr-div.neg{color:#00f7ff}
-  .corr-div.flip{color:#ff006a}
-  .corr-flip-tag{
-    font-size:6px;letter-spacing:1px;color:#ff006a;
-    border:1px solid rgba(255,0,106,0.2);padding:0 3px;
-  }
-  @keyframes corrScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  
-  /* Push content below banner */
-  #cipher-root{padding-top:28px}
-  
-  /* Loading state */
-  .cipher-loading{
-    display:flex;align-items:center;justify-content:center;
-    height:100vh;flex-direction:column;gap:12px;
-    font-family:'JetBrains Mono',monospace;color:#00f7ff;
-  }
-  .cipher-loading .spinner{
-    width:24px;height:24px;border:2px solid rgba(0,247,255,0.1);
-    border-top-color:#00f7ff;border-radius:50%;
-    animation:spin 0.8s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .cipher-loading .status{font-size:9px;letter-spacing:3px;color:rgba(0,247,255,0.4)}
-  .cipher-loading .sub{font-size:7px;color:rgba(0,247,255,0.2);margin-top:4px}
-  
-  /* Error state */
-  .cipher-error{
-    display:flex;align-items:center;justify-content:center;
-    height:100vh;flex-direction:column;gap:16px;
-    font-family:'JetBrains Mono',monospace;
-  }
-  .cipher-error .msg{font-size:10px;color:#ff006a;letter-spacing:2px}
-  .cipher-error .hint{font-size:8px;color:rgba(200,210,220,0.3)}
-  .cipher-error button{
-    background:none;border:1px solid rgba(0,247,255,0.1);
-    color:#00f7ff;padding:8px 20px;font-family:'JetBrains Mono',monospace;
-    font-size:8px;letter-spacing:2px;cursor:pointer;
-  }
-  .cipher-error button:hover{background:rgba(0,247,255,0.03)}
+:root{--bg:#060608;--bg-card:#0c0c12;--bg-el:#10101a;--cyan:#00b4f0;--cyan-dim:rgba(0,180,240,0.15);--cyan-ghost:rgba(0,180,240,0.06);--teal:#4ecdc4;--gold:#f7b731;--pink:#e056a0;--text:#c8d0d8;--text-dim:rgba(200,210,220,0.45);--text-ghost:rgba(200,210,220,0.2);--border:rgba(0,180,240,0.08);--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:1000}
+.cipher-loading{display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:var(--mono)}
+.cipher-loading .spinner{width:20px;height:20px;border:2px solid var(--cyan-ghost);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cipher-loading .status{font-size:10px;letter-spacing:4px;color:var(--text-ghost)}
+.cipher-error{display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:20px;font-family:var(--mono)}
+.cipher-error .msg{font-size:11px;color:var(--pink);letter-spacing:3px}
+.cipher-error .hint{font-size:9px;color:var(--text-ghost)}
+.cipher-error button{background:none;border:1px solid var(--border);color:var(--cyan);padding:10px 24px;font-family:var(--mono);font-size:9px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.cipher-error button:hover{background:var(--cyan-ghost)}
+.pw-gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);z-index:100}
+.pw-gate .title{font-size:11px;letter-spacing:6px;color:var(--cyan);opacity:.5;margin-bottom:8px}
+.pw-gate .subtitle{font-size:8px;letter-spacing:3px;color:var(--text-ghost);margin-bottom:32px}
+.pw-gate input{background:transparent;border:1px solid var(--border);color:var(--cyan);padding:10px 16px;font-size:11px;letter-spacing:4px;text-align:center;width:220px;outline:none;font-family:var(--mono);transition:border-color .2s}
+.pw-gate input:focus{border-color:var(--cyan-dim)}
+.pw-gate input::placeholder{color:var(--text-ghost);letter-spacing:2px;font-size:9px}
+.pw-gate .btn{display:block;margin:12px auto 0;background:transparent;border:1px solid rgba(0,180,240,0.05);color:var(--text-ghost);padding:6px 20px;font-size:8px;letter-spacing:3px;cursor:pointer;font-family:var(--mono);transition:all .2s}
+.pw-gate .btn:hover{color:var(--cyan);border-color:var(--border)}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.boot{position:fixed;inset:0;background:var(--bg);font-family:var(--mono);padding:32px;display:flex;flex-direction:column;z-index:90;transition:opacity .5s}
+.boot-line{font-size:11px;line-height:1.8}
+.boot-bar{height:2px;background:rgba(0,180,240,0.05)}
+.boot-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--teal));transition:width .15s}
+.boot-pct{display:flex;justify-content:space-between;font-size:8px;margin-bottom:4px}
+.boot-pct .l{color:var(--text-ghost);letter-spacing:2px}.boot-pct .r{color:var(--cyan)}
+.cipher-shell{max-width:1400px;margin:0 auto;padding:12px 16px;min-height:100vh}
+.cipher-header{display:flex;justify-content:space-between;align-items:center;padding:8px 0 10px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.cipher-brand{display:flex;align-items:center;gap:10px}
+.cipher-brand .name{font-family:var(--mono);font-size:13px;letter-spacing:6px;color:var(--cyan);font-weight:500}
+.cipher-brand .sub{font-family:var(--mono);font-size:7px;letter-spacing:3px;color:var(--text-ghost);text-transform:uppercase}
+.cipher-meta{display:flex;align-items:center;gap:12px}
+.cipher-clock{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--cyan)}
+.cipher-date{font-family:var(--mono);font-size:8px;color:var(--text-ghost);letter-spacing:1px}
+.cipher-pulse{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4;box-shadow:0 0 4px rgba(78,205,196,0.2)}50%{opacity:1;box-shadow:0 0 12px rgba(78,205,196,0.5)}}
+.cipher-tabs{display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid var(--border);overflow-x:auto}
+.cipher-tabs button{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-ghost);padding:8px 14px;font-family:var(--mono);font-size:9px;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase}
+.cipher-tabs button:hover{color:var(--text-dim)}
+.cipher-tabs button.active{color:var(--cyan);border-bottom-color:var(--cyan);background:var(--cyan-ghost)}
+.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:14px 16px;position:relative;overflow:hidden}
+.panel.glow{box-shadow:inset 0 0 20px rgba(0,180,240,0.02)}
+.panel.alert{animation:alertPulse 2s infinite}
+@keyframes alertPulse{0%,100%{border-color:var(--border)}50%{border-color:rgba(224,86,160,0.2)}}
+.panel-title{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.panel-title .diamond{width:4px;height:4px;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);opacity:.6}
+.panel-title .label{font-family:var(--mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;opacity:.6}
+.panel-title .line{flex:1;height:1px;background:linear-gradient(to right,rgba(0,180,240,0.08),transparent)}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:2px 0;border-bottom:1px solid rgba(0,180,240,0.02)}
+.stat-row.big{padding:3px 0}
+.stat-label{font-family:var(--mono);font-size:8px;color:var(--text-ghost);letter-spacing:1px}
+.stat-row.big .stat-label{font-size:9px}
+.stat-value{font-family:var(--mono);font-size:10px;color:var(--text);letter-spacing:.5px}
+.stat-row.big .stat-value{font-size:13px;font-weight:500}
+.stat-pct{font-family:var(--mono);font-size:8px;margin-left:8px;min-width:42px;text-align:right}
+.stat-pct.up{color:var(--teal)}.stat-pct.down{color:var(--pink)}.stat-pct.flat{color:var(--text-ghost)}
+.intel-summary{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.intel-stat{background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:10px 16px;text-align:center;min-width:100px;flex:1}
+.intel-stat .n{font-family:var(--mono);font-size:22px;font-weight:500}
+.intel-stat .n.critical{color:var(--pink)}.intel-stat .n.high{color:var(--gold)}.intel-stat .n.teal{color:var(--teal)}.intel-stat .n.cyan{color:var(--cyan)}
+.intel-stat .l{font-family:var(--mono);font-size:7px;letter-spacing:2px;color:var(--text-ghost);text-transform:uppercase;margin-top:2px}
+.thread-card{border:1px solid var(--border);border-radius:4px;background:var(--bg-card);padding:16px 18px;margin-bottom:8px;position:relative;overflow:hidden}
+.thread-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:2px 0 0 2px}
+.thread-card.critical::before{background:linear-gradient(180deg,var(--pink),var(--gold))}
+.thread-card.high::before{background:linear-gradient(180deg,var(--gold),var(--cyan))}
+.thread-sev{font-family:var(--mono);font-size:7px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.thread-card.critical .thread-sev{color:var(--pink)}.thread-card.high .thread-sev{color:var(--gold)}
+.thread-title{font-family:var(--sans);font-size:16px;font-weight:500;color:var(--text);margin-bottom:6px}
+.thread-summary{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text-dim);line-height:1.7;margin-bottom:8px}
+.thread-evidence .ev{font-family:var(--mono);font-size:9px;color:var(--text-dim);padding-left:10px;position:relative;margin-bottom:2px}
+.thread-evidence .ev::before{content:'\25B8';position:absolute;left:0;color:var(--cyan);opacity:.4}
+.tripwire-row{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:4px}
+.tripwire-light{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tripwire-light.triggered{background:var(--pink);box-shadow:0 0 8px rgba(224,86,160,0.5);animation:blink 1.5s infinite}
+.tripwire-light.warning{background:var(--gold);box-shadow:0 0 6px rgba(247,183,49,0.3)}
+.tripwire-light.clear{background:rgba(78,205,196,0.15);border:1px solid rgba(78,205,196,0.2)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.tripwire-info{flex:1}
+.tripwire-name{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--text)}
+.tripwire-detail{font-family:var(--sans);font-size:10px;font-weight:300;color:var(--text-dim)}
+.tripwire-value{font-family:var(--mono);font-size:11px;font-weight:500;min-width:60px;text-align:right}
+.tripwire-row.triggered .tripwire-value{color:var(--pink)}
+.tripwire-row.warning .tripwire-value{color:var(--gold)}
+.tripwire-row.clear .tripwire-value{color:var(--teal);opacity:.5}
+.priority-item{display:flex;gap:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;border-left:3px solid transparent}
+.priority-item.critical{border-left-color:var(--pink)}.priority-item.high{border-left-color:var(--gold)}
+.priority-item .sev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.priority-item.critical .sev-dot{background:var(--pink);box-shadow:0 0 6px rgba(224,86,160,0.4)}
+.priority-item.high .sev-dot{background:var(--gold);box-shadow:0 0 6px rgba(247,183,49,0.3)}
+.priority-item .type-tag{font-family:var(--mono);font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-ghost);margin-bottom:2px}
+.priority-item .title{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.priority-item .detail{font-family:var(--sans);font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.6}
+.priority-item .evidence{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.priority-item .chip{font-family:var(--mono);font-size:8px;padding:2px 8px;border-radius:2px;background:var(--cyan-ghost);border:1px solid var(--border);color:var(--text-dim)}
+.section-head{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text-ghost);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.section-head::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
+.delta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}
+.delta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:10px 12px;text-align:center}
+.delta-asset{font-family:var(--mono);font-size:7px;letter-spacing:2px;color:var(--text-ghost);text-transform:uppercase;margin-bottom:4px}
+.delta-pct{font-family:var(--mono);font-size:16px;font-weight:500}
+.delta-pct.up{color:var(--teal)}.delta-pct.down{color:var(--pink)}
+.delta-abs{font-family:var(--mono);font-size:8px;color:var(--text-ghost);margin-top:2px}
+.cot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px}
+.cot-cell{padding:4px 6px;text-align:center;border-radius:2px}
+.cot-cell .name{font-family:var(--mono);font-size:7px;color:var(--text-dim)}
+.cot-cell .pct{font-family:var(--mono);font-size:13px;font-weight:500}
+.cot-cell .oi{font-family:var(--mono);font-size:6px;color:var(--text-ghost)}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.span-4,.span-3{grid-column:span 2}}
+@media(max-width:600px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.span-2,.span-3,.span-4{grid-column:span 1}.cipher-header{flex-direction:column;gap:8px;text-align:center}.intel-summary{flex-direction:column}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ AMBIENT STATE ═══ */
+body[data-cipher-state="CALM"]{border-top:2px solid rgba(139,148,158,0.15)}
+body[data-cipher-state="ALERT"]{border-top:2px solid rgba(247,183,49,0.4)}
+body[data-cipher-state="ELEVATED"]{border-top:2px solid rgba(224,144,64,0.6)}
+body[data-cipher-state="CRITICAL"]{border-top:2px solid rgba(224,86,160,0.8);box-shadow:inset 0 0 80px rgba(224,86,160,0.02)}
+body[data-cipher-state="STORM"]{border-top:2px solid rgba(255,34,34,1);box-shadow:inset 0 0 80px rgba(255,34,34,0.03);animation:stormAmbient 4s ease-in-out infinite}
+@keyframes stormAmbient{0%,100%{box-shadow:inset 0 0 60px rgba(255,34,34,0.02)}50%{box-shadow:inset 0 0 120px rgba(255,34,34,0.05)}}
+/* ═══ CIPHER EYE ═══ */
+.cipher-eye{width:18px;height:18px;border-radius:50%;position:relative;flex-shrink:0;transition:all 0.5s}
+.cipher-eye::after{content:'';position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;transform:translate(-50%,-50%);background:currentColor;box-shadow:0 0 8px currentColor;transition:all 0.5s}
+.cipher-eye[data-state="CALM"]{color:#8B949E;border:1.5px solid rgba(139,148,158,0.3)}
+.cipher-eye[data-state="ALERT"]{color:#F7B731;border:1.5px solid rgba(247,183,49,0.4);animation:eyePulse 2.5s ease-in-out infinite}
+.cipher-eye[data-state="ELEVATED"]{color:#E09040;border:1.5px solid rgba(224,144,64,0.5);animation:eyePulse 1.5s ease-in-out infinite}
+.cipher-eye[data-state="CRITICAL"]{color:#E056A0;border:1.5px solid rgba(224,86,160,0.6);animation:eyePulse 0.8s ease-in-out infinite}
+.cipher-eye[data-state="STORM"]{color:#FF2222;border:1.5px solid rgba(255,34,34,0.7);animation:eyePulse 0.4s ease-in-out infinite;box-shadow:0 0 12px rgba(255,34,34,0.3)}
+@keyframes eyePulse{0%,100%{opacity:0.7;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+/* ═══ TAB CONTEXT BAR ═══ */
+.tab-ctx{display:flex;align-items:center;gap:8px;padding:7px 12px;margin-bottom:10px;background:rgba(12,12,18,0.8);border:1px solid var(--border);border-radius:4px;border-left:3px solid var(--cyan);overflow-x:auto;animation:fadeIn 0.3s}
+.tab-ctx .ctx-wire{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:all 0.3s}
+.tab-ctx .ctx-regime{font-family:var(--mono);font-size:7px;letter-spacing:1.5px;padding:2px 8px;border-radius:2px;background:rgba(0,180,240,0.06);border:1px solid var(--border);color:var(--cyan);white-space:nowrap;flex-shrink:0}
+.tab-ctx .ctx-div{font-family:var(--mono);font-size:7px;padding:2px 7px;border-radius:2px;white-space:nowrap;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.tab-ctx .ctx-div:hover{filter:brightness(1.3)}
+.tab-ctx .ctx-div.critical{background:rgba(224,86,160,0.06);border:1px solid rgba(224,86,160,0.12);color:var(--pink)}
+.tab-ctx .ctx-div.high{background:rgba(247,183,49,0.06);border:1px solid rgba(247,183,49,0.1);color:var(--gold)}
+.tab-ctx .ctx-div.warning{background:rgba(78,205,196,0.06);border:1px solid rgba(78,205,196,0.1);color:var(--teal)}
+.tab-ctx .ctx-whisper{font-family:var(--sans);font-size:10px;font-weight:300;color:var(--text-dim);font-style:italic;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab-ctx .ctx-links{display:flex;align-items:center;gap:3px;font-family:var(--mono);font-size:7px;color:var(--text-ghost);flex-shrink:0}
 </style>
 </head>
 <body>
-
-<!-- Correlation Banner -->
-<div class="corr-banner" id="corr-banner" style="display:none">
-  <div class="corr-track" id="corr-track"></div>
-</div>
-
-<!-- React mount point -->
-<div id="cipher-root">
-  <div class="cipher-loading">
-    <div class="spinner"></div>
-    <div class="status">CONNECTING TO CIPHER</div>
-    <div class="sub">Fetching latest briefing from server...</div>
-  </div>
-</div>
-
-<!-- File upload fallback (hidden) -->
+<div id="cipher-root"><div class="cipher-loading"><div class="spinner"></div><div class="status">CONNECTING TO CIPHER</div></div></div>
 <input type="file" id="fallback-upload" accept=".json" style="display:none">
-
-<!-- React + ReactDOM + Babel -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <script>
-// ═══ CONFIG ═══
-const CIPHER_API = 'https://api.mufx.io';
-const REFRESH_INTERVAL = 60 * 60 * 1000;
-
-// ═══ CORRELATION BANNER (vanilla JS, outside React) ═══
-function renderCorrelationBanner(correlations) {
-  if (!correlations || !correlations.length) return;
-  const banner = document.getElementById('corr-banner');
-  const track = document.getElementById('corr-track');
-  banner.style.display = 'flex';
-  const chips = correlations.slice(0, 10);
-  const html = [...chips, ...chips].map(c => {
-    const abs = Math.abs(c.divergence);
-    const flipped = Math.sign(c.corr_1y) !== Math.sign(c.corr_20d) && abs > 0.15;
-    const cls = flipped ? 'flip' : c.divergence > 0 ? 'pos' : 'neg';
-    const sign = c.divergence > 0 ? '+' : '';
-    return `<div class="corr-chip">
-      <span class="corr-name">${c.pair}</span>
-      <span class="corr-nums">1Y:${c.corr_1y > 0 ? '+' : ''}${c.corr_1y}</span>
-      <span class="corr-nums">&rarr;</span>
-      <span class="corr-nums">20d:${c.corr_20d > 0 ? '+' : ''}${c.corr_20d}</span>
-      <span class="corr-div ${cls}">${sign}${c.divergence}</span>
-      ${flipped ? '<span class="corr-flip-tag">FLIP</span>' : ''}
-    </div>`;
-  }).join('');
-  track.innerHTML = html;
-}
-
-// ═══ DATA FETCH ═══
-async function fetchBriefing() {
-  try {
-    const res = await fetch(CIPHER_API + '/api/briefing/latest');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } catch (e) {
-    console.error('API fetch failed:', e);
-    return null;
-  }
-}
-
-// ═══ BOOT SEQUENCE ═══
-let _briefingData = null;
-
-async function boot() {
-  const briefing = await fetchBriefing();
-  if (briefing) {
-    _briefingData = briefing;
-    renderCorrelationBanner(briefing.correlations);
-    mountReactPortal(briefing);
-    // auto-refresh
-    setInterval(async () => {
-      const fresh = await fetchBriefing();
-      if (fresh) {
-        _briefingData = fresh;
-        renderCorrelationBanner(fresh.correlations);
-        mountReactPortal(fresh);
-      }
-    }, REFRESH_INTERVAL);
-  } else {
-    // Show error with file upload fallback
-    document.getElementById('cipher-root').innerHTML = `
-      <div class="cipher-error">
-        <div class="msg">CIPHER API UNREACHABLE</div>
-        <div class="hint">Could not connect to ${CIPHER_API}</div>
-        <button onclick="document.getElementById('fallback-upload').click()">UPLOAD BRIEFING JSON</button>
-        <button onclick="location.reload()">RETRY CONNECTION</button>
-      </div>`;
-    document.getElementById('fallback-upload').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const data = JSON.parse(ev.target.result);
-          _briefingData = data;
-          renderCorrelationBanner(data.correlations);
-          mountReactPortal(data);
-        } catch(err) { console.error(err); }
-      };
-      reader.readAsText(file);
-    });
-  }
-}
-
-function mountReactPortal(briefing) {
-  // Store briefing globally for the React component
-  window.__CIPHER_BRIEFING__ = briefing;
-  const root = document.getElementById('cipher-root');
-  ReactDOM.render(React.createElement(window.CipherPortal), root);
-}
-
-window.addEventListener('DOMContentLoaded', boot);
+const CIPHER_API='https://api.mufx.io',PW='kova2026';
+async function fetchJSON(p){try{const r=await fetch(CIPHER_API+p);if(!r.ok)throw new Error(r.status);return await r.json()}catch(e){console.error(p,e);return null}}
+async function boot(){const[briefing,intel,narrative,identity,history,operator]=await Promise.all([
+fetchJSON('/api/briefing/latest'),fetchJSON('/api/intel'),
+fetchJSON('/api/narrative'),fetchJSON('/api/identity'),fetchJSON('/api/history'),fetchJSON('/api/operator')]);
+if(briefing){window.__CIPHER__={briefing,intel,narrative,identity,history,operator};ReactDOM.render(React.createElement(window.CipherApp),document.getElementById('cipher-root'))}
+else{document.getElementById('cipher-root').innerHTML='<div class="cipher-error"><div class="msg">CIPHER API UNREACHABLE</div><div class="hint">Could not connect</div><button onclick="document.getElementById(\'fallback-upload\').click()">UPLOAD JSON</button><button onclick="location.reload()">RETRY</button></div>';
+document.getElementById('fallback-upload').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{window.__CIPHER__={briefing:JSON.parse(ev.target.result),intel:null,narrative:null,identity:null,history:null,operator:null};ReactDOM.render(React.createElement(window.CipherApp),document.getElementById('cipher-root'))}catch(err){console.error(err)}};r.readAsText(f)}}}
+window.addEventListener('DOMContentLoaded',boot);
 </script>
-
-<!-- ═══ FULL CIPHER PORTAL (JSX transpiled by Babel) ═══ -->
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const{useState,useEffect,useRef}=React;
 
-const PW = "kova2026";
+/* ═══ HELPERS ═══ */
+const timeAgo=(iso)=>{if(!iso)return null;const d=new Date(iso),now=new Date(),sec=Math.max(0,Math.floor((now-d)/1000));if(sec<60)return"just now";const min=Math.floor(sec/60);if(min<60)return min+"m ago";const hr=Math.floor(min/60);if(hr<24)return hr+"h ago";const day=Math.floor(hr/24);return day+"d ago"};
+const isStale=(iso,hours=24)=>{if(!iso)return false;return(new Date()-new Date(iso))/(1e3*60*60)>hours};
 
-// ═══ COMPUTE — Thin mapper over briefing structure ═══
-const compute = (b) => {
-  if (!b?.derivatives) return null;
-  const dv = b.derivatives, sp = dv.spot||{}, ch = dv.changes_pct||{}, fr = dv.fred||{},
-    ct = dv.cot||{}, cr = dv.crypto||{}, ph = dv.physical||{}, cb = dv.central_banks||{},
-    fo = dv.fed_ops||{}, pc = dv.percentiles||{}, zs = dv.zscores||{};
+/* ═══ COMPUTE ═══ */
+const compute=(b)=>{
+if(!b?.derivatives)return null;
+const dv=b.derivatives,sp=dv.spot||{},ch=dv.changes_pct||{},fr=dv.fred||{},
+ct=dv.cot||{},cr=dv.crypto||{},ph=dv.physical||{},cb=dv.central_banks||{},
+pc=dv.percentiles||{},zs=dv.zscores||{};
+const vix=sp.vix||0;
+const rv=Math.min(vix/40*100,100),rc=Math.min((fr.hy_oas||0)/6*100,100),
+rg=Math.min(Math.abs(ch.gold||0)/5*100,100),ro=Math.min(Math.abs(ch.brent||0)/8*100,100),
+rf=Math.min(Math.abs(ch.dxy||0)/2*100,100),re=Math.min(((vix>20?50:0)+Math.abs(ch.gold||0)*10)/100*100,100);
+const cotArr=Object.entries(ct).map(([k,v])=>({id:k,name:k.replace(/_/g," ").toUpperCase(),pct:v.net_pct_oi,oi:v.oi,net:v.net,ncL:v.long,ncS:v.short})).sort((a,b)=>Math.abs(b.pct)-Math.abs(a.pct));
+const stables=Object.entries(cr.stables||{}).map(([k,v])=>({name:k,mcap:v})).sort((a,b)=>b.mcap-a.mcap);
+const fps=[];Object.entries(b.pipes?.firms?.data||{}).forEach(([zone,data])=>{if(data?.fires)data.fires.forEach(f=>{fps.push({zone,lat:f.latitude||f.lat,lon:f.longitude||f.lon,brightness:f.brightness,conf:f.confidence,frp:f.frp})})});
+return{
+date:b.date,generatedAt:b.generated_at,pipesOk:b.meta?.pipes_successful,flags:b.validation?.summary?.total_flags,
+pipeTs:{prices:b.pipes?.prices?.pulled_at,firms:b.pipes?.firms?.pulled_at,fred:b.pipes?.fred?.pulled_at,cot:b.pipes?.cot?.pulled_at,crypto:b.pipes?.crypto?.pulled_at,news:b.pipes?.news_sentiment?.pulled_at},
+gold:sp.gold,silver:sp.silver,copper:sp.copper,brent:sp.brent,wti:sp.wti,natgas:sp.natgas,
+dxy:sp.dxy,spx:sp.spx,vix:sp.vix,btc:sp.btc,nikkei:sp.nikkei,
+eurusd:sp.eurusd,usdjpy:sp.usdjpy,gbpusd:sp.gbpusd,audusd:sp.audusd,usdcad:sp.usdcad,usdchf:sp.usdchf,
+goldPct:ch.gold,silverPct:ch.silver,copperPct:ch.copper,brentPct:ch.brent,wtiPct:ch.wti,
+natgasPct:ch.natgas,dxyPct:ch.dxy,spxPct:ch.spx,vixPct:ch.vix,btcPct:ch.btc,nikkeiPct:ch.nikkei,
+eurusdPct:ch.eurusd,usdjpyPct:ch.usdjpy,gbpusdPct:ch.gbpusd,audusdPct:ch.audusd,usdcadPct:ch.usdcad,usdchfPct:ch.usdchf,
+gsR:dv.gold_silver_ratio,goR:dv.gold_oil_ratio,bwS:dv.brent_wti_spread,ogR:dv.oil_gas_ratio,
+s2s10:dv.curve_2s10s,s5s30:dv.curve_5s30s,s10s30:dv.curve_10s30s,
+real10:dv.real_yield_10y,real5:dv.real_yield_5y,
+hyIg:dv.credit_spread_hy_ig,sofrEffr:dv.sofr_effr_spread,usDeS:dv.us_germany_10y_spread,
+netLiq:dv.net_liquidity_b,basis:dv.btc_basis_pct,cxCov:dv.comex_gld_coverage_pct,
+y2:fr.y2,y5:fr.y5,y10:fr.y10,y30:fr.y30,be5:fr.be5,be10:fr.be10,
+ig:fr.ig_oas,hy:fr.hy_oas,sofr:fr.sofr,effr:fr.effr,
+rrp:fr.rrp,m2:fr.m2,de10:fr.de_10y,mortgage:fr.mortgage_30y,
+unemp:fr.unemployment,bsChg:fr.walcl_chg,tgaChg:fr.tga_chg,reserveBal:fr.reserve_bal,
+walclB:dv.walcl_b,tgaB:dv.tga_b,rrpB:dv.rrp_b,
+fg:cr.fear_greed,fgL:cr.fear_greed_label,fgH:cr.fear_greed_7d||[],
+btcDom:cr.btc_dom,ethDom:cr.eth_dom,mcapT:cr.total_mcap_t,stMcapB:cr.stablecoin_mcap_b,
+tvlB:cr.tvl_b,tvlWk:cr.tvl_weekly_chg,perpBtc:cr.perp_btc,perpEth:cr.perp_eth,
+gldT:ph.gld_tonnes,gldH:ph.gld_history_10d||[],
+cxGR:ph.comex_gold_reg_t,cxGE:ph.comex_gold_elig_t,cxGRp:ph.comex_gold_reg_pct,
+cxSR:ph.comex_silver_reg_t,cxSE:ph.comex_silver_elig_t,cxSRp:ph.comex_silver_reg_pct,
+cxTotB:ph.comex_value_b,sgeCny:dv.sge_cny_gram,
+pboc:cb.pboc_fix,bojZ:cb.boj_zone,ecbD:cb.ecb_depo,ecbR:cb.ecb_refi,cnyS:dv.cnh_onshore_spread,
+cot:cotArr,stables,
+cGold:ct.gold?.net_pct_oi,cSilver:ct.silver?.net_pct_oi,cCopper:ct.copper?.net_pct_oi,
+cWti:ct.wti?.net_pct_oi,cBrent:ct.brent?.net_pct_oi,cVix:ct.vix?.net_pct_oi,
+c10y:ct.ust_10y?.net_pct_oi,c2y:ct.ust_2y?.net_pct_oi,cNg:ct.natgas?.net_pct_oi,
+cEur:ct.eurusd?.net_pct_oi,cJpy:ct.usdjpy?.net_pct_oi,cGbp:ct.gbpusd?.net_pct_oi,
+cChf:ct.usdchf?.net_pct_oi,cAud:ct.audusd?.net_pct_oi,cCad:ct.usdcad?.net_pct_oi,
+correlations:(b.correlations||[]).map(c=>({...c})),
+summary:b.summary||{},fps,
+zones:(dv.firms?.zones||[]).map(z=>({id:z.id,name:z.name||z.id,fires:z.fires,high:z.high})),
+totF:dv.firms?.total_fires,totH:dv.firms?.total_high,
+poly:(dv.polymarket||[]).map(m=>({question:m.question,yes_probability:m.yes_pct})),
+percentiles:pc,zscores:zs,
+goldMa:dv.gold_ma,dxyMa:dv.dxy_ma,spxMa:dv.spx_ma,eurusdMa:dv.eurusd_ma,brentMa:dv.brent_ma,
+regime:{vol:rv,credit:rc,gold:rg,oil:ro,fx:rf,geo:re},
+oilInv:dv.oil_inventories||{},
+news:Object.values(b.pipes?.news_sentiment?.data||{}).flatMap(c=>c.articles||[]).filter(a=>a.title).slice(0,20),
+swift:dv.swift_shares||{},swiftTrends:dv.swift_trends||{},
+fpi:dv.food_price_index||{},
+indirectTrend:dv.indirect_bid_trend||{},
+wheat:sp.wheat,corn:sp.corn,soybeans:sp.soybeans,wheatPct:ch.wheat,cornPct:ch.corn,soyPct:ch.soybeans,
+copperGoldRatio:dv.copper_gold_ratio,recentAuctions:(dv.recent_auctions||[]).slice(0,8)
+}};
 
-  const vix=sp.vix||0, hy=fr.hy_oas||0;
-  const rv=Math.min(vix/40*100,100), rc=Math.min(hy/6*100,100),
-    rg=Math.min(Math.abs(ch.gold||0)/5*100,100), ro=Math.min(Math.abs(ch.brent||0)/8*100,100),
-    rf=Math.min(Math.abs(ch.dxy||0)/2*100,100), re=Math.min(((sp.vix||0)>20?50:0 + Math.abs(ch.gold||0)*10)/100*100,100);
+/* ═══ SHARED COMPONENTS ═══ */
+const Panel=({children,title,accent="var(--cyan)",glow,alert,span,ts})=><div className={`panel${glow?" glow":""}${alert?" alert":""} ${span?"span-"+span:""}`}>{title&&<div className="panel-title"><div className="diamond" style={{background:accent}}/><span className="label" style={{color:accent}}>{title}</span><div className="line"/>{ts&&<span style={{fontFamily:"var(--mono)",fontSize:7,color:isStale(ts)?"var(--pink)":"var(--text-ghost)",letterSpacing:1,flexShrink:0}} title={ts}>{isStale(ts)?"STALE ":""}{timeAgo(ts)}</span>}</div>}{children}</div>;
 
-  const cotArr = Object.entries(ct).map(([k,v])=>({
-    id:k, name:k.replace(/_/g," ").toUpperCase(), pct:v.net_pct_oi,
-    oi:v.oi, net:v.net, ncL:v.long, ncS:v.short
-  })).sort((a,b)=>Math.abs(b.pct)-Math.abs(a.pct));
+const Stat=({label,value,pct,prefix="",suffix="",dec=2,big,accent})=>{
+if(value===null||value===undefined)return null;
+const c=pct>0?"up":pct<0?"down":"flat";
+const fv=typeof value==="number"?value.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}):value;
+return<div className={`stat-row${big?" big":""}`}><span className="stat-label">{label}</span><div style={{display:"flex",gap:6,alignItems:"baseline"}}><span className="stat-value" style={accent?{color:accent}:{}}>{prefix}{fv}{suffix}</span>{pct!==undefined&&pct!==null&&<span className={`stat-pct ${c}`}>{pct>0?"+":""}{pct.toFixed(2)}%</span>}</div></div>};
 
-  const stables = Object.entries(cr.stables||{}).map(([k,v])=>({name:k,mcap:v})).sort((a,b)=>b.mcap-a.mcap);
+const Spark=({data,w=100,h=24,vKey="close",label})=>{
+if(!data?.length)return null;
+const vals=data.map(d=>typeof d==="number"?d:(d[vKey]??d.value));
+const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn||1;
+const pts=vals.map((v,i)=>(i/(vals.length-1))*w+","+(h-2-((v-mn)/rng)*(h-6))).join(" ");
+const last=vals[vals.length-1],first=vals[0],c=last>=first?"var(--teal)":"var(--pink)";
+return<div style={{display:"inline-flex",alignItems:"center",gap:6}}>
+{label&&<span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",minWidth:24}}>{label}</span>}
+<svg width={w} height={h}><polyline points={pts} fill="none" stroke={c} strokeWidth="1.2" opacity="0.6"/>
+<circle cx={w} cy={h-2-((last-mn)/rng)*(h-6)} r="2" fill={c} opacity="0.75"/></svg>
+<span style={{fontFamily:"var(--mono)",fontSize:9,color:c}}>{last?.toFixed?.(1)}</span>
+</div>};
 
-  const fps = [];
-  const rawFirms = b.pipes?.firms?.data||{};
-  Object.entries(rawFirms).forEach(([zone,data])=>{
-    if(data?.fires) data.fires.forEach(f=>{fps.push({zone,lat:f.latitude||f.lat,lon:f.longitude||f.lon,brightness:f.brightness,conf:f.confidence,frp:f.frp});});
-  });
+const Donut=({pct,label,sub,size=66,accent="var(--gold)"})=>{
+const rd=size/2-5,circ=2*Math.PI*rd,filled=circ*(pct||0)/100;
+return<div style={{textAlign:"center",display:"inline-block"}}>
+<svg width={size} height={size} viewBox={"0 0 "+size+" "+size}>
+<circle cx={size/2} cy={size/2} r={rd} fill="none" stroke="rgba(0,180,240,0.04)" strokeWidth="3.5"/>
+<circle cx={size/2} cy={size/2} r={rd} fill="none" stroke={accent} strokeWidth="3.5" strokeDasharray={filled+" "+(circ-filled)} strokeDashoffset={circ/4} strokeLinecap="round" opacity="0.65"/>
+<text x={size/2} y={size/2+1} textAnchor="middle" fill={accent} fontSize="11" fontWeight="bold" dominantBaseline="middle">{pct}%</text>
+</svg>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:accent,letterSpacing:1,marginTop:-1}}>{label}</div>
+{sub&&<div style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)"}}>{sub}</div>}
+</div>};
 
-  return {
-    date:b.date, pipesOk:b.meta?.pipes_successful, flags:b.validation?.summary?.total_flags,
-    gold:sp.gold, silver:sp.silver, copper:sp.copper, brent:sp.brent, wti:sp.wti, natgas:sp.natgas,
-    dxy:sp.dxy, spx:sp.spx, vix:sp.vix, btc:sp.btc, nikkei:sp.nikkei,
-    eurusd:sp.eurusd, usdjpy:sp.usdjpy, gbpusd:sp.gbpusd, audusd:sp.audusd, usdcad:sp.usdcad, usdchf:sp.usdchf,
-    goldPct:ch.gold, silverPct:ch.silver, copperPct:ch.copper, brentPct:ch.brent, wtiPct:ch.wti,
-    natgasPct:ch.natgas, dxyPct:ch.dxy, spxPct:ch.spx, vixPct:ch.vix, btcPct:ch.btc, nikkeiPct:ch.nikkei,
-    eurusdPct:ch.eurusd, usdjpyPct:ch.usdjpy, gbpusdPct:ch.gbpusd, audusdPct:ch.audusd, usdcadPct:ch.usdcad, usdchfPct:ch.usdchf,
-    gsR:dv.gold_silver_ratio, goR:dv.gold_oil_ratio, bwS:dv.brent_wti_spread, ogR:dv.oil_gas_ratio,
-    s2s10:dv.curve_2s10s, s5s30:dv.curve_5s30s, s10s30:dv.curve_10s30s,
-    real10:dv.real_yield_10y, real5:dv.real_yield_5y,
-    hyIg:dv.credit_spread_hy_ig, sofrEffr:dv.sofr_effr_spread, usDeS:dv.us_germany_10y_spread,
-    netLiq:dv.net_liquidity_b, basis:dv.btc_basis_pct, cxCov:dv.comex_gld_coverage_pct,
-    y2:fr.y2, y5:fr.y5, y10:fr.y10, y30:fr.y30, be5:fr.be5, be10:fr.be10,
-    ig:fr.ig_oas, hy:fr.hy_oas, sofr:fr.sofr, effr:fr.effr,
-    rrp:fr.rrp, tga:fr.tga, m2:fr.m2, de10:fr.de_10y, mortgage:fr.mortgage_30y,
-    unemp:fr.unemployment, claims:fr.claims,
-    fedBS:fr.walcl, bsChg:fr.walcl_chg, tgaChg:fr.tga_chg, reserveBal:fr.reserve_bal,
-    walclB:dv.walcl_b, tgaB:dv.tga_b, rrpB:dv.rrp_b,
-    fg:cr.fear_greed, fgL:cr.fear_greed_label, fgH:cr.fear_greed_7d||[],
-    btcDom:cr.btc_dom, ethDom:cr.eth_dom, mcapT:cr.total_mcap_t, stMcapB:cr.stablecoin_mcap_b,
-    tvlB:cr.tvl_b, tvlWk:cr.tvl_weekly_chg, perpBtc:cr.perp_btc, perpEth:cr.perp_eth,
-    gldT:ph.gld_tonnes, gldH:ph.gld_history_10d||[],
-    cxGR:ph.comex_gold_reg_t, cxGE:ph.comex_gold_elig_t, cxGRp:ph.comex_gold_reg_pct,
-    cxSR:ph.comex_silver_reg_t, cxSE:ph.comex_silver_elig_t, cxSRp:ph.comex_silver_reg_pct,
-    cxTotB:ph.comex_value_b, sgeCny:dv.sge_cny_gram,
-    pboc:cb.pboc_fix, bojR:cb.boj_rate, bojZ:cb.boj_zone,
-    ecbD:cb.ecb_depo, ecbR:cb.ecb_refi, cnyS:dv.cnh_onshore_spread,
-    cot:cotArr, stables,
-    cGold:ct.gold?.net_pct_oi, cSilver:ct.silver?.net_pct_oi, cCopper:ct.copper?.net_pct_oi,
-    cWti:ct.wti?.net_pct_oi, cBrent:ct.brent?.net_pct_oi, cVix:ct.vix?.net_pct_oi,
-    c10y:ct.ust_10y?.net_pct_oi, c2y:ct.ust_2y?.net_pct_oi, cNg:ct.natgas?.net_pct_oi,
-    cEur:ct.eurusd?.net_pct_oi, cJpy:ct.usdjpy?.net_pct_oi, cGbp:ct.gbpusd?.net_pct_oi,
-    cChf:ct.usdchf?.net_pct_oi, cAud:ct.audusd?.net_pct_oi, cCad:ct.usdcad?.net_pct_oi,
-    correlations: (b.correlations||[]).map(c=>({...c})),
-    summary:b.summary||{},
-    fps,
-    zones:(dv.firms?.zones||[]).map(z=>({id:z.id,name:z.name||z.id,fires:z.fires,high:z.high})),
-    totF:dv.firms?.total_fires, totH:dv.firms?.total_high,
-    poly:(dv.polymarket||[]).map(m=>({question:m.question,yes_probability:m.yes_pct})),
-    percentiles:pc, zscores:zs,
-    goldMa:dv.gold_ma, dxyMa:dv.dxy_ma, spxMa:dv.spx_ma, eurusdMa:dv.eurusd_ma, brentMa:dv.brent_ma,
-    regime:{vol:rv,credit:rc,gold:rg,oil:ro,fx:rf,geo:re},
-    oilInv:dv.oil_inventories||{},
-    news: Object.values(b.pipes?.news_sentiment?.data||{}).flatMap(c=>c.articles||[]).filter(a=>a.title).slice(0,20),
-    newsSentiment: Object.entries(b.pipes?.news_sentiment?.data||{}).map(([k,v])=>({cat:k,sentiment:v.avg_sentiment,count:v.article_count,signal:v.sentiment_signal})),
-    swift:dv.swift_shares||{}, swiftTrends:dv.swift_trends||{},
-    fpi:dv.food_price_index||{},
-    indirectTrend:dv.indirect_bid_trend||{},
-    wheat:sp.wheat, corn:sp.corn, soybeans:sp.soybeans,
-    wheatPct:ch.wheat, cornPct:ch.corn, soyPct:ch.soybeans,
-    copperGoldRatio:dv.copper_gold_ratio,
-    reserveBalB:dv.reserve_balances_b,
-    goldReserves:dv.gold_reserves||{}, goldResRankings:dv.gold_reserves_rankings||{},
-    fxReserves:dv.fx_reserves||{}, fxDrawdowns:dv.fx_reserves_drawdowns||[],
-    recentAuctions:(dv.recent_auctions||[]).slice(0,8),
-  };
-};
+const CotStack=({name,ncL,ncS,pct})=>{
+if(!ncL&&!ncS)return null;
+const total=(ncL||0)+(ncS||0);const lp=total>0?ncL/total*100:50;
+return<div style={{marginBottom:4}}>
+<div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}>
+<span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-dim)"}}>{name}</span>
+<span style={{fontFamily:"var(--mono)",fontSize:8,color:pct>0?"var(--teal)":"var(--pink)"}}>{pct>0?"+":""}{pct}%</span></div>
+<div style={{display:"flex",height:5,background:"var(--bg)",overflow:"hidden",borderRadius:2}}>
+<div style={{width:lp+"%",background:"var(--teal)",opacity:0.4}}/>
+<div style={{width:(100-lp)+"%",background:"var(--pink)",opacity:0.4}}/></div>
+<div style={{display:"flex",justifyContent:"space-between",fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)",marginTop:1}}>
+<span>{(ncL/1000).toFixed(0)}K long</span><span>{(ncS/1000).toFixed(0)}K short</span></div>
+</div>};
 
-// ═══ RADAR ═══
-const Radar = ({data}) => {
-  const ax=[{k:"vol",l:"VOL",c:"#ff006a"},{k:"credit",l:"CREDIT",c:"#ff6b00"},{k:"gold",l:"GOLD",c:"#ffd700"},
-    {k:"oil",l:"OIL",c:"#00f7ff"},{k:"fx",l:"FX",c:"#b388ff"},{k:"geo",l:"GEO",c:"#00ff88"}];
-  const cx=82,cy=78,r=58,n=ax.length;
-  const ang=i=>(Math.PI*2*i/n)-Math.PI/2;
-  const pt=(i,p)=>[cx+Math.cos(ang(i))*r*p/100,cy+Math.sin(ang(i))*r*p/100];
-  const dp=ax.map((a,i)=>pt(i,data[a.k]||0)).map((p,i)=>(i===0?"M":"L")+p[0]+" "+p[1]).join(" ")+"Z";
-  const avg=ax.reduce((s,a)=>s+(data[a.k]||0),0)/n;
-  const ac=avg>60?"#ff006a":avg>35?"#ffd700":"#00ff88";
-  return <svg width="164" height="160" viewBox="0 0 164 160">
-    {[25,50,75,100].map(p=><polygon key={p} points={ax.map((_,i)=>pt(i,p).join(",")).join(" ")} fill="none" stroke="#0a1a2a" strokeWidth={p===50?"0.5":"0.25"}/>)}
-    {ax.map((_,i)=><line key={i} x1={cx} y1={cy} x2={pt(i,100)[0]} y2={pt(i,100)[1]} stroke="#0a1a2a" strokeWidth="0.25"/>)}
-    <path d={dp} fill={ac+"10"} stroke={ac} strokeWidth="1.4" opacity="0.65"/>
-    {ax.map((a,i)=>{const[px,py]=pt(i,data[a.k]||0);const[lx,ly]=pt(i,118);
-      return <g key={a.k}><circle cx={px} cy={py} r="2.5" fill={a.c} opacity="0.65"/>
-        <text x={lx} y={ly+3} textAnchor="middle" fill={a.c} fontSize="6" opacity="0.6">{a.l}</text>
-        <text x={lx} y={ly+11} textAnchor="middle" fill="#4a6a7a" fontSize="7">{Math.round(data[a.k]||0)}</text></g>;})}
-    <text x={cx} y={cy+4} textAnchor="middle" fill={ac} fontSize="13" fontWeight="bold">{Math.round(avg)}</text>
-    <text x={cx} y={cy+12} textAnchor="middle" fill="#2a4a5a" fontSize="5">STRESS</text>
-  </svg>;
-};
+const FGGauge=({value,label})=>{
+if(!value&&value!==0)return null;
+const a=(value/100)*180-90,c=value<=20?"var(--pink)":value<=40?"var(--gold)":value<=60?"#b388ff":"var(--teal)";
+return<div style={{textAlign:"center"}}><svg width="76" height="42" viewBox="0 0 76 42">
+<defs><linearGradient id="fgg" x1="0%" x2="100%"><stop offset="0%" stopColor="#e056a0"/><stop offset="50%" stopColor="#f7b731"/><stop offset="100%" stopColor="#4ecdc4"/></linearGradient></defs>
+<path d="M 4 38 A 34 34 0 0 1 72 38" fill="none" stroke="url(#fgg)" strokeWidth="2" opacity="0.2"/>
+<line x1="38" y1="38" x2={38+28*Math.cos(a*Math.PI/180)} y2={38+28*Math.sin(a*Math.PI/180)} stroke={c} strokeWidth="1.5"/>
+<circle cx="38" cy="38" r="2" fill={c}/>
+<text x="38" y="32" textAnchor="middle" fill={c} fontSize="15" fontWeight="bold" fontFamily="var(--mono)">{value}</text>
+</svg><div style={{fontFamily:"var(--mono)",fontSize:7,color:c,letterSpacing:1}}>{label}</div></div>};
 
-// ═══ DONUT ═══
-const Donut = ({pct,label,sub,size=66,accent="#ffd700"}) => {
-  const rd=size/2-5,circ=2*Math.PI*rd,filled=circ*(pct||0)/100;
-  return <div style={{textAlign:"center",display:"inline-block"}}>
-    <svg width={size} height={size} viewBox={"0 0 "+size+" "+size}>
-      <circle cx={size/2} cy={size/2} r={rd} fill="none" stroke="#0a1520" strokeWidth="3.5"/>
-      <circle cx={size/2} cy={size/2} r={rd} fill="none" stroke={accent} strokeWidth="3.5"
-        strokeDasharray={filled+" "+(circ-filled)} strokeDashoffset={circ/4} strokeLinecap="round" opacity="0.65"/>
-      <text x={size/2} y={size/2+1} textAnchor="middle" fill={accent} fontSize="11" fontWeight="bold" dominantBaseline="middle">{pct}%</text>
-    </svg>
-    <div style={{fontSize:6.5,color:accent,letterSpacing:0.8,marginTop:-1}}>{label}</div>
-    {sub&&<div style={{fontSize:5.5,color:"#2a4a5a"}}>{sub}</div>}
-  </div>;
-};
+const StableDonut=({stables,total})=>{
+if(!stables?.length)return null;
+const rd=28,cxx=35,cyy=35,circ=2*Math.PI*rd;
+const cols=["var(--cyan)","#b388ff","var(--gold)","var(--teal)"];
+let off=circ/4;
+const segs=stables.map((s,i)=>{const pct=total>0?s.mcap/total*100:0;const seg=circ*pct/100;const o=off;off-=seg;return{name:s.name,mcap:s.mcap,seg,off:o,col:cols[i%cols.length]}});
+return<div style={{display:"flex",alignItems:"center",gap:10}}>
+<svg width="70" height="70" viewBox="0 0 70 70">
+<circle cx={cxx} cy={cyy} r={rd} fill="none" stroke="rgba(0,180,240,0.04)" strokeWidth="5"/>
+{segs.map(s=><circle key={s.name} cx={cxx} cy={cyy} r={rd} fill="none" stroke={s.col} strokeWidth="5" strokeDasharray={s.seg+" "+(circ-s.seg)} strokeDashoffset={s.off} opacity="0.55"/>)}
+<text x={cxx} y={cyy-2} textAnchor="middle" fill="var(--text)" fontSize="9" fontWeight="bold" dominantBaseline="middle">{"$"+(total||0)}</text>
+<text x={cxx} y={cyy+7} textAnchor="middle" fill="var(--text-ghost)" fontSize="5">BILLION</text>
+</svg>
+<div>{segs.map(s=><div key={s.name} style={{display:"flex",alignItems:"center",gap:4,marginBottom:1}}>
+<div style={{width:4,height:4,background:s.col,opacity:0.6}}/><span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-dim)"}}>{s.name}</span>
+<span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text)"}}>{"$"+s.mcap.toFixed(1)+"B"}</span></div>)}</div>
+</div>};
 
-// ═══ COT STACKED BAR ═══
-const CotStack = ({name,ncL,ncS,pct}) => {
-  if(!ncL&&!ncS) return null;
-  const total=(ncL||0)+(ncS||0);const lp=total>0?ncL/total*100:50;
-  return <div style={{marginBottom:3}}>
-    <div style={{display:"flex",justifyContent:"space-between",marginBottom:1.5}}>
-      <span style={{fontSize:7,color:"#5a8a9b"}}>{name}</span>
-      <span style={{fontSize:7,color:pct>0?"#00ff88":"#ff006a"}}>{pct>0?"+":""}{pct}%</span>
-    </div>
-    <div style={{display:"flex",height:5,background:"#060e18",overflow:"hidden"}}>
-      <div style={{width:lp+"%",background:"#00ff88",opacity:0.45}}/>
-      <div style={{width:(100-lp)+"%",background:"#ff006a",opacity:0.45}}/>
-    </div>
-    <div style={{display:"flex",justifyContent:"space-between",fontSize:5.5,color:"#2a4a5a",marginTop:1}}>
-      <span>{(ncL/1000).toFixed(0)}K long</span><span>{(ncS/1000).toFixed(0)}K short</span>
-    </div>
-  </div>;
-};
+const YieldDecomp=({nominal,breakeven,real})=>{
+if(!nominal)return null;
+const W=130,H=55,pad=4,bW=26,gap=16;
+const mx=Math.max(nominal,breakeven||0,Math.abs(real||0))+0.5;
+const sc=v=>Math.abs(v)/mx*(H-pad*2);
+const bars=[{x:pad,v:nominal,c:"var(--cyan)",l:"NOM"},{x:pad+bW+gap,v:breakeven,c:"var(--gold)",l:"INFL"},{x:pad+2*(bW+gap),v:real,c:"var(--teal)",l:"REAL"}];
+return<svg width={W} height={H+16} viewBox={"0 0 "+W+" "+(H+16)}>
+{bars.map(b=><g key={b.l}><rect x={b.x} y={H-pad-sc(b.v)} width={bW} height={sc(b.v)} fill={b.c} opacity="0.35"/>
+<text x={b.x+bW/2} y={H-pad-sc(b.v)-3} textAnchor="middle" fill={b.c} fontSize="8" fontWeight="bold" fontFamily="var(--mono)">{b.v}%</text>
+<text x={b.x+bW/2} y={H+9} textAnchor="middle" fill="var(--text-ghost)" fontSize="6" fontFamily="var(--mono)">{b.l}</text></g>)}
+</svg>};
 
-// ═══ PROBABILITY BAR ═══
-const ProbBar = ({question,prob}) => {
-  const c=prob>70?"#00ff88":prob>40?"#ffd700":"#ff006a";
-  return <div style={{marginBottom:3}}>
-    <div style={{fontSize:6.5,color:"#4a7a9b",marginBottom:1.5}}>{question?.substring(0,58)}</div>
-    <div style={{display:"flex",alignItems:"center",gap:4}}>
-      <div style={{flex:1,height:4,background:"#060e18",overflow:"hidden"}}>
-        <div style={{width:prob+"%",height:"100%",background:c,opacity:0.5}}/></div>
-      <span style={{fontSize:7.5,color:c,fontWeight:"bold",minWidth:26,textAlign:"right"}}>{prob}%</span>
-    </div>
-  </div>;
-};
+const Radar=({data})=>{const ax=[{k:"vol",l:"VOL",c:"#e056a0"},{k:"credit",l:"CREDIT",c:"#f7b731"},{k:"gold",l:"GOLD",c:"#f7b731"},{k:"oil",l:"OIL",c:"#00b4f0"},{k:"fx",l:"FX",c:"#b388ff"},{k:"geo",l:"GEO",c:"#4ecdc4"}];const cx=82,cy=78,r=58,n=ax.length;const ang=i=>(Math.PI*2*i/n)-Math.PI/2;const pt=(i,p)=>[cx+Math.cos(ang(i))*r*p/100,cy+Math.sin(ang(i))*r*p/100];const dp=ax.map((a,i)=>pt(i,data[a.k]||0)).map((p,i)=>(i===0?"M":"L")+p[0]+" "+p[1]).join(" ")+"Z";const avg=ax.reduce((s,a)=>s+(data[a.k]||0),0)/n;const ac=avg>60?"#e056a0":avg>35?"#f7b731":"#4ecdc4";return<svg width="164" height="160" viewBox="0 0 164 160">{[25,50,75,100].map(p=><polygon key={p} points={ax.map((_,i)=>pt(i,p).join(",")).join(" ")} fill="none" stroke="rgba(0,180,240,0.06)" strokeWidth={p===50?"0.5":"0.25"}/>)}{ax.map((_,i)=><line key={i} x1={cx} y1={cy} x2={pt(i,100)[0]} y2={pt(i,100)[1]} stroke="rgba(0,180,240,0.04)" strokeWidth="0.25"/>)}<path d={dp} fill="rgba(0,180,240,0.04)" stroke={ac} strokeWidth="1.4" opacity="0.65"/>{ax.map((a,i)=>{const[px,py]=pt(i,data[a.k]||0);const[lx,ly]=pt(i,118);return<g key={a.k}><circle cx={px} cy={py} r="2.5" fill={a.c} opacity="0.65"/><text x={lx} y={ly+3} textAnchor="middle" fill={a.c} fontSize="6.5" opacity="0.6" fontFamily="var(--mono)">{a.l}</text><text x={lx} y={ly+12} textAnchor="middle" fill="var(--text-ghost)" fontSize="7.5" fontFamily="var(--mono)">{Math.round(data[a.k]||0)}</text></g>})}<text x={cx} y={cy+4} textAnchor="middle" fill={ac} fontSize="14" fontWeight="bold" fontFamily="var(--mono)">{Math.round(avg)}</text><text x={cx} y={cy+13} textAnchor="middle" fill="var(--text-ghost)" fontSize="6" fontFamily="var(--mono)">STRESS</text></svg>};
 
-// ═══ YIELD DECOMP ═══
-const YieldDecomp = ({nominal,breakeven,real}) => {
-  if(!nominal) return null;
-  const W=130,H=55,pad=4,bW=26,gap=16;
-  const mx=Math.max(nominal,breakeven||0,Math.abs(real||0))+0.5;
-  const sc=v=>Math.abs(v)/mx*(H-pad*2);
-  const bars=[{x:pad,v:nominal,c:"#00f7ff",l:"NOM"},{x:pad+bW+gap,v:breakeven,c:"#ffd700",l:"INFL"},{x:pad+2*(bW+gap),v:real,c:"#00ff88",l:"REAL"}];
-  return <svg width={W} height={H+16} viewBox={"0 0 "+W+" "+(H+16)}>
-    {bars.map(b=><g key={b.l}><rect x={b.x} y={H-pad-sc(b.v)} width={bW} height={sc(b.v)} fill={b.c} opacity="0.35"/>
-      <text x={b.x+bW/2} y={H-pad-sc(b.v)-3} textAnchor="middle" fill={b.c} fontSize="8" fontWeight="bold">{b.v}%</text>
-      <text x={b.x+bW/2} y={H+9} textAnchor="middle" fill="#2a4a5a" fontSize="5.5">{b.l}</text></g>)}
-  </svg>;
-};
+const YCurve=({y2,y5,y10,y30,be5,be10,r5,r10})=>{if(!y2)return null;const W=300,H=100,pad=26;const pts=[{t:"2Y",v:y2},{t:"5Y",v:y5},{t:"10Y",v:y10},{t:"30Y",v:y30}];const all=[...pts.map(p=>p.v),be5,be10,r5,r10].filter(Boolean);const mn=Math.min(...all)-0.3,mx=Math.max(...all)+0.3;const sy=v=>H-pad-(v-mn)/(mx-mn)*(H-2*pad);const xs=pts.map((_,i)=>pad+i*(W-2*pad)/(pts.length-1));const np=pts.map((p,i)=>(i===0?"M":"L")+xs[i]+" "+sy(p.v)).join(" ");return<svg width={W} height={H} viewBox={"0 0 "+W+" "+H} style={{display:"block",margin:"0 auto"}}><path d={np} fill="none" stroke="var(--cyan)" strokeWidth="1.8" opacity="0.7"/>{pts.map((p,i)=><g key={i}><circle cx={xs[i]} cy={sy(p.v)} r="3" fill="var(--bg)" stroke="var(--cyan)" strokeWidth="1.3"/><text x={xs[i]} y={sy(p.v)-8} textAnchor="middle" fill="var(--text)" fontSize="9" fontWeight="500" fontFamily="var(--mono)">{p.v}%</text><text x={xs[i]} y={H-6} textAnchor="middle" fill="var(--text-ghost)" fontSize="7" fontFamily="var(--mono)">{p.t}</text></g>)}{[{v:be5,x:xs[1]},{v:be10,x:xs[2]}].filter(p=>p.v).map((p,i)=><g key={"b"+i}><circle cx={p.x} cy={sy(p.v)} r="2.5" fill="var(--gold)" opacity="0.5"/><text x={p.x+(i===0?-10:10)} y={sy(p.v)+3} textAnchor={i===0?"end":"start"} fill="var(--gold)" fontSize="6" opacity="0.6" fontFamily="var(--mono)">{p.v}%</text></g>)}{[{v:r5,x:xs[1]},{v:r10,x:xs[2]}].filter(p=>p.v).map((p,i)=><g key={"r"+i}><circle cx={p.x} cy={sy(p.v)} r="2.5" fill="var(--teal)" opacity="0.5"/><text x={p.x+(i===0?-10:10)} y={sy(p.v)+3} textAnchor={i===0?"end":"start"} fill="var(--teal)" fontSize="6" opacity="0.6" fontFamily="var(--mono)">{p.v}%</text></g>)}</svg>};
 
-// ═══ STABLE DONUT ═══
-const StableDonut = ({stables,total}) => {
-  if(!stables?.length) return null;
-  const rd=28,cxx=35,cyy=35,circ=2*Math.PI*rd;
-  const cols=["#00f7ff","#b388ff","#ffd700","#00ff88"];
-  let off=circ/4;
-  const segs=stables.map((s,i)=>{
-    const pct=total>0?s.mcap/total*100:0;
-    const seg=circ*pct/100;
-    const o=off; off-=seg;
-    return {name:s.name,mcap:s.mcap,seg,off:o,col:cols[i%cols.length]};
-  });
-  return <div style={{display:"flex",alignItems:"center",gap:10}}>
-    <svg width="70" height="70" viewBox="0 0 70 70">
-      <circle cx={cxx} cy={cyy} r={rd} fill="none" stroke="#0a1520" strokeWidth="5"/>
-      {segs.map(s=><circle key={s.name} cx={cxx} cy={cyy} r={rd} fill="none" stroke={s.col} strokeWidth="5"
-        strokeDasharray={s.seg+" "+(circ-s.seg)} strokeDashoffset={s.off} opacity="0.55"/>)}
-      <text x={cxx} y={cyy-2} textAnchor="middle" fill="#b0d4ea" fontSize="9" fontWeight="bold" dominantBaseline="middle">{"$"+(total||0)}</text>
-      <text x={cxx} y={cyy+7} textAnchor="middle" fill="#2a4a5a" fontSize="5">BILLION</text>
-    </svg>
-    <div>{segs.map(s=><div key={s.name} style={{display:"flex",alignItems:"center",gap:4,marginBottom:1}}>
-      <div style={{width:4,height:4,background:s.col,opacity:0.6}}/><span style={{fontSize:7,color:"#5a8a9b"}}>{s.name}</span>
-      <span style={{fontSize:7,color:"#b0d4ea"}}>{"$"+s.mcap.toFixed(1)+"B"}</span></div>)}</div>
-  </div>;
-};
+const CotCell=({name,pct,oi})=>{const norm=Math.min(Math.abs(pct)/36,1);const isL=pct>0;const bg=isL?`rgba(78,205,196,${norm*0.15})`:`rgba(224,86,160,${norm*0.15})`;const bd=isL?`rgba(78,205,196,${norm*0.2+0.05})`:`rgba(224,86,160,${norm*0.2+0.05})`;return<div className="cot-cell" style={{background:bg,border:`1px solid ${bd}`}}><div className="name">{name}</div><div className="pct" style={{color:isL?"var(--teal)":"var(--pink)"}}>{pct>0?"+":""}{pct}%</div><div className="oi">{(oi/1000).toFixed(0)}K</div></div>};
 
-// ═══ FIRE MAP ═══
-const FireMap = ({fires,zones}) => {
-  const canvasRef=useRef(null),animRef=useRef(null);
-  useEffect(()=>{
-    const c=canvasRef.current;if(!c) return;const ctx=c.getContext("2d");
-    const dpr=window.devicePixelRatio||1,rect=c.getBoundingClientRect();
-    c.width=rect.width*dpr;c.height=rect.height*dpr;ctx.scale(dpr,dpr);
-    const w=rect.width,h=rect.height;
-    const proj=(lat,lon)=>{const x=((lon+180)/360)*w;const lr=lat*Math.PI/180;const y=(h/2)-(w*Math.log(Math.tan(Math.PI/4+lr/2)))/(2*Math.PI);return[x,y];};
-    let frame=0;
-    const tick=()=>{frame++;ctx.fillStyle="#020a14";ctx.fillRect(0,0,w,h);
-      ctx.strokeStyle="rgba(0,247,255,0.015)";ctx.lineWidth=0.3;
-      for(let la=-60;la<=80;la+=15){const[,y]=proj(la,0);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
-      for(let lo=-180;lo<=180;lo+=20){const[x]=proj(0,lo);ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
-      ctx.strokeStyle="rgba(0,247,255,0.05)";ctx.lineWidth=0.5;
-      [[[71,-25],[36,-10],[36,45],[12,50],[-35,20],[-35,15],[5,-18]],
-       [[36,45],[10,80],[5,105],[22,120],[40,128],[55,140],[70,170],[71,40]],
-       [[32,32],[30,48],[25,60],[12,44]],
-       [[48,-8],[55,28],[55,60],[70,60],[71,-25],[48,-8]]
-      ].forEach(pts=>{ctx.beginPath();pts.forEach(([la,lo],i)=>{const[x,y]=proj(la,lo);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.stroke();});
-      fires.forEach((f,i)=>{const[x,y]=proj(f.lat,f.lon);if(x<-10||x>w+10||y<-10||y>h+10)return;
-        const isH=f.conf==="h"||f.conf==="high",pulse=Math.sin(frame*0.04+i*0.7)*0.3+0.7,sz=isH?3.5:1.8;
-        const grad=ctx.createRadialGradient(x,y,0,x,y,sz*5);
-        grad.addColorStop(0,isH?"rgba(255,0,106,"+(0.3*pulse)+")":"rgba(255,140,40,"+(0.12*pulse)+")");
-        grad.addColorStop(1,"transparent");ctx.fillStyle=grad;ctx.fillRect(x-sz*5,y-sz*5,sz*10,sz*10);
-        ctx.beginPath();ctx.arc(x,y,sz*pulse,0,Math.PI*2);
-        ctx.fillStyle=isH?"rgba(255,0,106,"+(0.75*pulse)+")":"rgba(255,140,40,"+(0.45*pulse)+")";ctx.fill();});
-      const zc={strait_of_hormuz:[26,56],red_sea:[15,40],iran:[32,53],israel_lebanon:[33,35],ukraine:[49,32],taiwan_strait:[24,120],saudi_oil:[24,46],libya_oil:[28,18]};
-      ctx.font="7px monospace";
-      zones.forEach(z=>{const center=zc[z.id];if(!center||z.fires===0)return;const[x,y]=proj(center[0],center[1]);
-        ctx.fillStyle=z.high>0?"rgba(255,0,106,0.65)":"rgba(255,160,64,0.45)";
-        ctx.fillText(z.name.replace(/_/g," ").toUpperCase().substring(0,14),x+8,y-2);
-        ctx.fillStyle="rgba(0,247,255,0.35)";ctx.fillText(z.fires+(z.high?" | "+z.high+"H":""),x+8,y+8);});
-      animRef.current=requestAnimationFrame(tick);};
-    tick();return()=>{if(animRef.current)cancelAnimationFrame(animRef.current);};
-  },[fires,zones]);
-  return <div style={{position:"relative",width:"100%",height:200,overflow:"hidden"}}>
-    <canvas ref={canvasRef} style={{width:"100%",height:"100%"}}/>
-    <div style={{position:"absolute",top:6,left:8,fontSize:7,color:"#00f7ff55",letterSpacing:2}}>NASA FIRMS</div>
-    <div style={{position:"absolute",bottom:5,right:8,fontSize:6,color:"#1a3a4a"}}>{fires.length} DETECTIONS</div>
-  </div>;
-};
+const LiqPipe=({bs,tga,rrp,net})=>{if(!bs)return null;const items=[{l:"FED BS",v:"$"+bs+"B",c:"var(--cyan)"},{l:"\u2212TGA",v:"$"+tga+"B",c:"var(--pink)"},{l:"\u2212RRP",v:"$"+(rrp||0)+"B",c:"var(--gold)"},{l:"= NET",v:"$"+net+"B",c:net>0?"var(--teal)":"var(--pink)",hl:true}];return<div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:0,flexWrap:"wrap"}}>{items.map((b,i)=><div key={i} style={{display:"flex",alignItems:"center"}}><div style={{textAlign:"center",padding:"8px 12px",minWidth:75,background:b.hl?"rgba(78,205,196,0.04)":"var(--bg-card)",border:"1px solid var(--border)"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2}}>{b.l}</div><div style={{fontFamily:"var(--mono)",fontSize:15,color:b.c,fontWeight:500,margin:"2px 0"}}>{b.v}</div></div>{i<items.length-1&&<span style={{color:"var(--text-ghost)",fontSize:10,padding:"0 4px"}}>{'\u2192'}</span>}</div>)}</div>};
 
-// ═══ SPARKLINE ═══
-const Spark = ({data,w=110,h=28,color,vKey="close",label,suffix=""}) => {
-  if(!data?.length) return null;
-  const vals=data.map(d=>typeof d==="number"?d:(d[vKey]??d.value));
-  const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn||1;
-  const pts=vals.map((v,i)=>(i/(vals.length-1))*w+","+(h-2-((v-mn)/rng)*(h-6))).join(" ");
-  const last=vals[vals.length-1],first=vals[0],c=color||(last>=first?"#00ff88":"#ff006a");
-  return <div style={{display:"inline-flex",alignItems:"center",gap:5}}>
-    {label&&<span style={{fontSize:7,color:"#3a5a6b",minWidth:28}}>{label}</span>}
-    <svg width={w} height={h}><polyline points={pts} fill="none" stroke={c} strokeWidth="1.2" opacity="0.6"/>
-      <circle cx={w} cy={h-2-((last-mn)/rng)*(h-6)} r="2" fill={c} opacity="0.75"/></svg>
-    <span style={{fontSize:9,color:c}}>{last?.toFixed?.(1)}{suffix}</span>
-  </div>;
-};
+const NewsLine=({title,source,sentiment})=>{const c=sentiment==null?"var(--text-ghost)":sentiment<-0.15?"var(--pink)":sentiment>0.15?"var(--teal)":"var(--text-dim)";return<div style={{display:"flex",gap:6,alignItems:"baseline",padding:"2px 0",borderBottom:"1px solid var(--border)"}}><div style={{width:4,height:4,borderRadius:"50%",background:c,flexShrink:0,marginTop:3}}/><div style={{flex:1,fontFamily:"var(--sans)",fontSize:10,color:"var(--text-dim)",fontWeight:300,lineHeight:1.5}}>{title}</div><span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",flexShrink:0}}>{source}</span></div>};
 
-// ═══ YIELD CURVE ═══
-const YCurve = ({y2,y5,y10,y30,be5,be10,r5,r10}) => {
-  if(!y2) return null;
-  const W=300,H=105,pad=26;
-  const pts=[{t:"2Y",v:y2},{t:"5Y",v:y5},{t:"10Y",v:y10},{t:"30Y",v:y30}];
-  const all=[...pts.map(p=>p.v),be5,be10,r5,r10].filter(Boolean);
-  const mn=Math.min(...all)-0.3,mx=Math.max(...all)+0.3;
-  const sy=v=>H-pad-(v-mn)/(mx-mn)*(H-2*pad);
-  const xs=pts.map((_,i)=>pad+i*(W-2*pad)/(pts.length-1));
-  const np=pts.map((p,i)=>(i===0?"M":"L")+xs[i]+" "+sy(p.v)).join(" ");
-  return <svg width={W} height={H} viewBox={"0 0 "+W+" "+H} style={{display:"block",margin:"0 auto"}}>
-    {Array.from({length:5}).map((_,i)=>{const v=mn+(mx-mn)*i/4;return <g key={i}>
-      <line x1={pad} x2={W-pad} y1={sy(v)} y2={sy(v)} stroke="#0a1a2a" strokeWidth="0.3"/>
-      <text x={pad-4} y={sy(v)+3} textAnchor="end" fill="#1a2a3a" fontSize="6">{v.toFixed(1)}</text></g>;})}
-    <path d={np+" L"+xs[3]+" "+(H-pad)+" L"+xs[0]+" "+(H-pad)+" Z"} fill="rgba(0,247,255,0.025)"/>
-    <path d={np} fill="none" stroke="#00f7ff" strokeWidth="1.8" opacity="0.7"/>
-    {pts.map((p,i)=><g key={i}>
-      <circle cx={xs[i]} cy={sy(p.v)} r="3" fill="#030810" stroke="#00f7ff" strokeWidth="1.3"/>
-      <text x={xs[i]} y={sy(p.v)-7} textAnchor="middle" fill="#b0d4ea" fontSize="8" fontWeight="bold">{p.v}%</text>
-      <text x={xs[i]} y={H-6} textAnchor="middle" fill="#2a4a5a" fontSize="7">{p.t}</text></g>)}
-    {[{v:be5,x:xs[1]},{v:be10,x:xs[2]}].filter(p=>p.v).map((p,i)=><g key={"b"+i}>
-      <circle cx={p.x} cy={sy(p.v)} r="2.5" fill="#ffd700" opacity="0.5"/>
-      <text x={p.x+(i===0?-10:10)} y={sy(p.v)+3} textAnchor={i===0?"end":"start"} fill="#ffd700" fontSize="6" opacity="0.6">{p.v}%</text></g>)}
-    {[{v:r5,x:xs[1]},{v:r10,x:xs[2]}].filter(p=>p.v).map((p,i)=><g key={"r"+i}>
-      <circle cx={p.x} cy={sy(p.v)} r="2.5" fill="#00ff88" opacity="0.5"/>
-      <text x={p.x+(i===0?-10:10)} y={sy(p.v)+3} textAnchor={i===0?"end":"start"} fill="#00ff88" fontSize="6" opacity="0.6">{p.v}%</text></g>)}
-    {[{c:"#00f7ff",l:"Nominal"},{c:"#ffd700",l:"Breakeven"},{c:"#00ff88",l:"Real"}].map((lg,i)=><g key={"l"+i}>
-      <circle cx={W-50} cy={7+i*9} r="2" fill={lg.c}/><text x={W-45} y={9+i*9} fill="#3a5a6b" fontSize="5.5">{lg.l}</text></g>)}
-  </svg>;
-};
+const FireMap=({fires,zones})=>{
+const canvasRef=useRef(null),animRef=useRef(null);
+const[hover,setHover]=useState(null);
+const zonePosRef=useRef([]);
+useEffect(()=>{const c=canvasRef.current;if(!c)return;const ctx=c.getContext("2d");const dpr=window.devicePixelRatio||1,rect=c.getBoundingClientRect();c.width=rect.width*dpr;c.height=rect.height*dpr;ctx.scale(dpr,dpr);const w=rect.width,h=rect.height;
+const proj=(lat,lon)=>{const x=((lon+180)/360)*w;const lr=lat*Math.PI/180;const y=(h/2)-(w*Math.log(Math.tan(Math.PI/4+lr/2)))/(2*Math.PI);return[x,y]};
+const zc={strait_of_hormuz:[26,56],red_sea:[15,40],iran:[32,53],israel_lebanon:[33,35],ukraine:[49,32],taiwan_strait:[24,120],saudi_oil:[24,46],libya_oil:[28,18]};
+const shortNames={strait_of_hormuz:"HORMUZ",red_sea:"RED SEA",iran:"IRAN",israel_lebanon:"ISR/LBN",ukraine:"UKRAINE",taiwan_strait:"TAIWAN",saudi_oil:"SAUDI",libya_oil:"LIBYA"};
+/* compute label positions with collision nudge */
+const labels=[];zones.forEach(z=>{const center=zc[z.id];if(!center||z.fires===0)return;const[x,y]=proj(center[0],center[1]);labels.push({id:z.id,name:z.name,short:shortNames[z.id]||z.id.toUpperCase(),fires:z.fires,high:z.high,cx:x,cy:y,lx:x+10,ly:y-2})});
+for(let i=0;i<labels.length;i++){for(let j=i+1;j<labels.length;j++){const dx=Math.abs(labels[i].lx-labels[j].lx),dy=Math.abs(labels[i].ly-labels[j].ly);if(dx<55&&dy<12){labels[j].ly+=14}}}
+zonePosRef.current=labels;
+let frame=0;
+const tick=()=>{frame++;ctx.fillStyle="#060608";ctx.fillRect(0,0,w,h);ctx.strokeStyle="rgba(0,180,240,0.015)";ctx.lineWidth=0.3;for(let la=-60;la<=80;la+=15){const[,y]=proj(la,0);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}for(let lo=-180;lo<=180;lo+=20){const[x]=proj(0,lo);ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+fires.forEach((f,i)=>{const[x,y]=proj(f.lat,f.lon);if(x<-10||x>w+10||y<-10||y>h+10)return;const isH=f.conf==="h"||f.conf==="high",pulse=Math.sin(frame*0.04+i*0.7)*0.3+0.7,sz=isH?3.5:1.8;const grad=ctx.createRadialGradient(x,y,0,x,y,sz*5);grad.addColorStop(0,isH?"rgba(224,86,160,"+(0.3*pulse)+")":"rgba(247,183,49,"+(0.12*pulse)+")");grad.addColorStop(1,"transparent");ctx.fillStyle=grad;ctx.fillRect(x-sz*5,y-sz*5,sz*10,sz*10);ctx.beginPath();ctx.arc(x,y,sz*pulse,0,Math.PI*2);ctx.fillStyle=isH?"rgba(224,86,160,"+(0.7*pulse)+")":"rgba(247,183,49,"+(0.4*pulse)+")";ctx.fill()});
+/* zone labels with collision-free positions */
+ctx.font="7px 'JetBrains Mono',monospace";
+labels.forEach(lb=>{
+ctx.beginPath();ctx.arc(lb.cx,lb.cy,4,0,Math.PI*2);ctx.fillStyle=lb.high>0?"rgba(224,86,160,0.7)":"rgba(247,183,49,0.5)";ctx.fill();
+ctx.strokeStyle="rgba(0,180,240,0.08)";ctx.beginPath();ctx.moveTo(lb.cx,lb.cy);ctx.lineTo(lb.lx,lb.ly);ctx.stroke();
+ctx.fillStyle=lb.high>0?"rgba(224,86,160,0.65)":"rgba(247,183,49,0.45)";ctx.fillText(lb.short,lb.lx,lb.ly);
+ctx.fillStyle="rgba(0,180,240,0.35)";ctx.fillText(lb.fires+(lb.high>0?" | "+lb.high+"H":""),lb.lx,lb.ly+10)});
+animRef.current=requestAnimationFrame(tick)};
+tick();
+/* hover detection */
+const onMove=(e)=>{const rect=c.getBoundingClientRect();const mx=e.clientX-rect.left,my=e.clientY-rect.top;let found=null;
+zonePosRef.current.forEach(lb=>{if(Math.abs(mx-lb.cx)<18&&Math.abs(my-lb.cy)<18)found={...lb,sx:mx,sy:my}});setHover(found)};
+c.addEventListener("mousemove",onMove);c.addEventListener("mouseleave",()=>setHover(null));
+return()=>{if(animRef.current)cancelAnimationFrame(animRef.current);c.removeEventListener("mousemove",onMove);c.removeEventListener("mouseleave",()=>setHover(null))}},[fires,zones]);
+return<div style={{position:"relative",width:"100%",height:320,overflow:"hidden"}}>
+<canvas ref={canvasRef} style={{width:"100%",height:"100%"}}/>
+<div style={{position:"absolute",top:6,left:8,fontFamily:"var(--mono)",fontSize:7,color:"rgba(0,180,240,0.3)",letterSpacing:2}}>NASA FIRMS</div>
+<div style={{position:"absolute",bottom:5,right:8,fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>{fires.length} DETECTIONS</div>
+{hover&&<div style={{position:"absolute",left:Math.min(hover.sx+14,280),top:Math.max(hover.sy-40,4),background:"rgba(12,12,18,0.95)",border:"1px solid var(--border)",padding:"8px 12px",borderRadius:4,fontFamily:"var(--mono)",fontSize:8,color:"var(--text)",pointerEvents:"none",zIndex:10,minWidth:120}}>
+<div style={{color:hover.high>0?"var(--pink)":"var(--gold)",letterSpacing:1,marginBottom:4,fontSize:9}}>{hover.name.replace(/_/g," ").toUpperCase()}</div>
+<div>Fires: <span style={{color:"var(--gold)"}}>{hover.fires}</span></div>
+{hover.high>0&&<div>High Conf: <span style={{color:"var(--pink)"}}>{hover.high}</span></div>}
+</div>}
+</div>};
 
-// ═══ COT HEATMAP ═══
-const CotMap = ({cot}) => {
-  if(!cot?.length) return null;
-  return <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(88px,1fr))",gap:3}}>
-    {cot.map(c=>{const norm=Math.min(Math.abs(c.pct)/36,1);const isL=c.pct>0;
-      return <div key={c.id} style={{background:isL?"rgba(0,255,136,"+(norm*0.18)+")":"rgba(255,0,106,"+(norm*0.18)+")",
-        border:"1px solid "+(isL?"rgba(0,255,136,"+(norm*0.22+0.04)+")":"rgba(255,0,106,"+(norm*0.22+0.04)+")"),padding:"3px 4px",textAlign:"center"}}>
-        <div style={{fontSize:6,color:"#5a8a9b"}}>{c.name}</div>
-        <div style={{fontSize:12,color:isL?"#00ff88":"#ff006a",fontWeight:"bold"}}>{c.pct>0?"+":""}{c.pct}%</div>
-        <div style={{fontSize:5,color:"#1a3a4a"}}>{(c.oi/1000).toFixed(0)}K</div></div>;})}
-  </div>;
-};
+/* ═══ CASE BOARD ═══ */
+const CaseBoard=({intel,a})=>{if(!intel)return<div style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--text-ghost)",textAlign:"center",padding:40}}>Intel layer unavailable</div>;const s=intel.summary||{},threads=intel.threads||[],priority=intel.priority||[],tripwires=intel.tripwires||{},deltas=intel.deltas||{};return<div style={{animation:"fadeIn 0.3s"}}><div className="intel-summary"><div className="intel-stat"><div className={`n ${s.critical_count>0?"critical":"teal"}`}>{s.critical_count||0}</div><div className="l">Critical</div></div><div className="intel-stat"><div className={`n ${s.high_count>0?"high":"teal"}`}>{s.high_count||0}</div><div className="l">High</div></div><div className="intel-stat"><div className="n cyan">{s.threads_count||0}</div><div className="l">Threads</div></div><div className="intel-stat"><div className={`n ${s.tripwires_triggered>0?"critical":"teal"}`}>{s.tripwires_triggered||0}</div><div className="l">Tripwires</div></div><div className="intel-stat"><div className="n teal">{a?.pipesOk||0}</div><div className="l">Pipes OK</div></div></div>
+{threads.length>0&&<React.Fragment><div className="section-head">Narrative Threads</div>{threads.map((t,i)=><div key={i} className={`thread-card ${t.severity}`}><div className="thread-sev">{t.severity}</div><div className="thread-title">{t.title}</div><div className="thread-summary">{t.summary}</div><div className="thread-evidence">{(t.evidence||[]).map((e,j)=><div key={j} className="ev">{e}</div>)}</div></div>)}</React.Fragment>}
+<div className="section-head">Tripwires</div>
+{(tripwires.triggered||[]).map((tw,i)=><div key={"t"+i} className="tripwire-row triggered"><div className="tripwire-light triggered"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div><div className="tripwire-detail">{tw.detail}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+{(tripwires.warning||[]).map((tw,i)=><div key={"w"+i} className="tripwire-row warning"><div className="tripwire-light warning"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div><div className="tripwire-detail">{tw.detail}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+{(tripwires.clear||[]).map((tw,i)=><div key={"c"+i} className="tripwire-row clear"><div className="tripwire-light clear"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+{deltas.spot?.length>0&&<React.Fragment><div className="section-head">Since Yesterday</div><div className="delta-grid">{deltas.spot.slice(0,8).map((d,i)=>{const up=d.change_pct>0;return<div key={i} className="delta-card"><div className="delta-asset">{d.asset}</div><div className={`delta-pct ${up?"up":"down"}`}>{up?"+":""}{d.change_pct.toFixed(2)}%</div><div className="delta-abs">{d.today?.toLocaleString(undefined,{maximumFractionDigits:2})}</div></div>})}</div></React.Fragment>}
+<div className="section-head">All Priority Items</div>
+{priority.filter(p=>p.type!=="thread").slice(0,12).map((item,i)=><div key={i} className={`priority-item ${item.severity}`}><div className="sev-dot"/><div style={{flex:1}}><div className="type-tag">{item.type?.replace(/_/g," ")}</div><div className="title">{item.title}</div><div className="detail">{item.detail}</div>{item.evidence?.length>0&&<div className="evidence">{item.evidence.map((e,j)=><span key={j} className="chip">{e}</span>)}</div>}</div></div>)}
+</div>};
 
-// ═══ LIQUIDITY PIPE ═══
-const LiqPipe = ({bs,tga,rrp,net}) => {
-  if(!bs) return null;
-  const items=[{l:"FED BS",v:"$"+bs+"B",c:"#00f7ff",s:"Assets"},
-    {l:"-TGA",v:"$"+tga+"B",c:"#ff006a",s:"Treasury"},
-    {l:"-RRP",v:"$"+(rrp||0)+"B",c:"#ff6b00",s:"Repo"},
-    {l:"= NET",v:"$"+net+"B",c:net>0?"#00ff88":"#ff006a",s:"Liquidity",hl:true}];
-  return <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:0,flexWrap:"wrap"}}>
-    {items.map((b,i)=><div key={i} style={{display:"flex",alignItems:"center"}}>
-      <div style={{textAlign:"center",padding:"6px 9px",minWidth:70,background:b.hl?b.c+"08":"rgba(0,10,25,0.2)",border:"1px solid "+b.c+(b.hl?"22":"10")}}>
-        <div style={{fontSize:6,color:b.c+"66",letterSpacing:1.5}}>{b.l}</div>
-        <div style={{fontSize:14,color:b.c,fontWeight:"bold",margin:"1px 0"}}>{b.v}</div>
-        <div style={{fontSize:5,color:"#1a3a4a"}}>{b.s}</div></div>
-      {i<items.length-1&&<svg width="16" height="12" viewBox="0 0 16 12"><path d="M2 6 L11 6 M8 3 L13 6 L8 9" fill="none" stroke="#00f7ff1a" strokeWidth="1"/></svg>}
-    </div>)}
-  </div>;
-};
+/* ═══ COMMAND TAB ═══ */
+const CommandTab=({a})=><div className="grid-4" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="REGIME RADAR" glow><Radar data={a.regime}/></Panel>
+<Panel title="PRECIOUS METALS" accent="var(--gold)"><Stat label="GOLD" value={a.gold} pct={a.goldPct} prefix="$" big accent="var(--gold)"/><Stat label="SILVER" value={a.silver} pct={a.silverPct} prefix="$"/><Stat label="Au/Ag" value={a.gsR} dec={1}/><Stat label="Au/Oil" value={a.goR} dec={1}/><Spark data={a.gldH} label="GLD" vKey="close" w={75} h={20}/></Panel>
+<Panel title="ENERGY"><Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/><Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$"/><Stat label="B-W" value={a.bwS} prefix="$"/><Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3}/></Panel>
+<Panel title="SENTIMENT" accent={a.fg<=20?"var(--pink)":"var(--cyan)"}><FGGauge value={a.fg} label={a.fgL}/><Stat label="BTC" value={a.btc} pct={a.btcPct} prefix="$" dec={0}/><Spark data={a.fgH} label="F/G" vKey="value" w={65} h={18}/></Panel>
+<Panel title="EQUITIES" accent={a.vix>25?"var(--pink)":"var(--cyan)"} alert={a.vix>30}><Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/><Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0}/><Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"var(--pink)":undefined}/></Panel>
+<Panel title="YIELD CURVE" accent="#b388ff"><YCurve y2={a.y2} y5={a.y5} y10={a.y10} y30={a.y30} be5={a.be5} be10={a.be10} r5={a.real5} r10={a.real10}/></Panel>
+<Panel title="CREDIT"><Stat label="IG OAS" value={a.ig} suffix="%" big/><Stat label="HY OAS" value={a.hy} suffix="%" big/><Stat label="HY-IG" value={a.hyIg} suffix="%"/><Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/></Panel>
+<Panel title="CORRELATIONS" accent="#b388ff" glow>{a.correlations.slice(0,5).map((c,i)=>{const abs=Math.abs(c.divergence);const flipped=Math.sign(c.corr_1y)!==Math.sign(c.corr_20d)&&abs>0.15;const col=flipped?"var(--pink)":abs>0.3?"var(--gold)":"var(--text-ghost)";return<div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"3px 0",borderBottom:"1px solid var(--border)"}}><div style={{width:5,height:5,borderRadius:"50%",background:col}}/><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-dim)",flex:1}}>{c.pair}</span><span style={{fontFamily:"var(--mono)",fontSize:8,color:col,fontWeight:500}}>{c.divergence>0?"+":""}{c.divergence}</span>{flipped&&<span style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--pink)"}}>FLIP</span>}</div>})}</Panel>
+<Panel title="1Y PERCENTILES" accent="#b388ff" span={2}><div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{Object.entries(a.percentiles||{}).map(([k,v])=>{const c=v>90?"var(--pink)":v>75?"var(--gold)":v<10?"var(--teal)":v<25?"var(--cyan)":"var(--text-ghost)";return<div key={k} style={{textAlign:"center",padding:"4px 8px",minWidth:52,background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:3}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:1}}>{k.toUpperCase()}</div><div style={{fontFamily:"var(--mono)",fontSize:12,color:c,fontWeight:500}}>{v}</div></div>})}</div></Panel>
+<Panel title="NET LIQUIDITY" span={2}><LiqPipe bs={a.walclB} tga={a.tgaB} rrp={a.rrpB} net={a.netLiq}/></Panel>
+<Panel title="COT POSITIONING" span={2}><div className="cot-grid">{a.cot.slice(0,12).map(c=><CotCell key={c.id} name={c.name} pct={c.pct} oi={c.oi}/>)}</div></Panel>
+<Panel title="TOP MOVERS" span={2}><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{(a.summary?.top_movers||[]).map((m,i)=>{const c=m.pct>0?"var(--teal)":"var(--pink)";return<div key={i} style={{textAlign:"center",padding:"5px 10px",minWidth:65,background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:3}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:1}}>{m.asset.toUpperCase()}</div><div style={{fontFamily:"var(--mono)",fontSize:14,color:c,fontWeight:500}}>{m.pct>0?"+":""}{m.pct}%</div></div>})}</div></Panel>
+<Panel title="NEWS" span={2}>{a.news.slice(0,6).map((n,i)=><NewsLine key={i} title={n.title} source={n.source} sentiment={n.sentiment}/>)}</Panel>
+</div>;
 
-// ═══ NEWS HEADLINE ═══
-const NewsLine = ({title,source,sentiment}) => {
-  const c = sentiment==null?"#3a5a6b":sentiment<-0.15?"#ff006a":sentiment>0.15?"#00ff88":"#4a7a9b";
-  return <div style={{display:"flex",gap:5,alignItems:"baseline",padding:"2px 0",borderBottom:"1px solid rgba(0,80,160,0.03)"}}>
-    <div style={{width:4,height:4,borderRadius:"50%",background:c,flexShrink:0,marginTop:3}}/>
-    <div style={{flex:1,fontSize:7,color:"#5a8a9b",lineHeight:1.5}}>{title}</div>
-    <span style={{fontSize:5.5,color:"#1a3a4a",flexShrink:0}}>{source}</span>
-  </div>;
-};
+/* ═══ GOLD TAB ═══ */
+const GoldTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="SPOT METALS" accent="var(--gold)" glow ts={a.pipeTs?.prices}><Stat label="XAU" value={a.gold} pct={a.goldPct} prefix="$" big accent="var(--gold)"/><Stat label="XAG" value={a.silver} pct={a.silverPct} prefix="$" big/><Stat label="COPPER" value={a.copper} pct={a.copperPct} prefix="$" dec={3} big/></Panel>
+<Panel title="RELATIVE VALUE" accent="var(--gold)"><Stat label="Au/Ag" value={a.gsR} dec={1} big/><Stat label="Au/Oil" value={a.goR} dec={1} big/><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.goR>60?"var(--pink)":"var(--text-ghost)",marginTop:4}}>{a.goR>60?"EXTREME - safe-haven flight":a.goR>40?"ELEVATED":"NORMAL"}</div></Panel>
+<Panel title="MACRO DRIVERS" accent="#b388ff"><Stat label="Real 10Y" value={a.real10} suffix="%" big/><Stat label="Real 5Y" value={a.real5} suffix="%"/><Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3}/><Stat label="10Y BE" value={a.be10} suffix="%"/></Panel>
+<Panel title="PHYSICAL MARKET" accent="var(--gold)" span={2}><div style={{display:"flex",gap:16,alignItems:"start",flexWrap:"wrap"}}><Donut pct={a.cxGRp} label="AU REG" sub={a.cxGR?.toFixed(0)+"t"} accent="var(--gold)"/><Donut pct={a.cxSRp} label="AG REG" sub={a.cxSR?.toFixed(0)+"t"} accent="var(--text)"/><div style={{flex:1}}><Stat label="Au Eligible" value={a.cxGE} suffix="t" dec={1}/><Stat label="COMEX Value" value={a.cxTotB} prefix="$" suffix="B"/><Stat label="COMEX/GLD" value={a.cxCov} suffix="%"/><Stat label="GLD" value={a.gldT} suffix="t" dec={1}/><Stat label="SGE CNY/g" value={a.sgeCny} dec={2}/><Spark data={a.gldH} label="GLD" vKey="close" w={80} h={22}/></div></div></Panel>
+<Panel title="METALS COT" accent="var(--cyan)">{a.cot.filter(c=>["gold","silver","copper"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
+</div>;
 
-// ═══ PANEL / STAT / SEGBAR / GAUGE ═══
-const Panel = ({children,title,accent="#00f7ff",glow,alert,span,style={}}) => (
-  <div style={{position:"relative",padding:"11px 12px",background:"linear-gradient(135deg,"+accent+"04 0%,transparent 50%)",
-    border:"1px solid "+accent+"10",boxShadow:glow?"inset 0 0 15px "+accent+"03":"none",
-    gridColumn:span?"span "+span:undefined,animation:alert?"alertPulse 2s infinite":"none",...style}}>
-    {title&&<div style={{display:"flex",alignItems:"center",gap:4,marginBottom:7}}>
-      <div style={{width:3,height:3,background:accent,clipPath:"polygon(50% 0%,100% 50%,50% 100%,0% 50%)",opacity:0.5}}/>
-      <span style={{fontSize:6.5,letterSpacing:2,color:accent,opacity:0.55}}>{title}</span>
-      <div style={{flex:1,height:1,background:"linear-gradient(to right,"+accent+"0e,transparent)"}}/></div>}
-    {children}</div>);
+/* ═══ ENERGY TAB ═══ */
+const EnergyTab=({a,zf})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="CRUDE" glow ts={a.pipeTs?.prices}><Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/><Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$" big/><Stat label="B-W Spread" value={a.bwS} prefix="$" big/><Stat label="Au/Oil" value={a.goR} dec={1}/></Panel>
+<Panel title="NATURAL GAS"><Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3} big/><Stat label="Oil/Gas" value={a.ogR} dec={1} big/></Panel>
+<Panel title="SUPPLY RISK" accent="var(--gold)"><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:4}}>{["strait_of_hormuz","red_sea","saudi_oil","libya_oil"].map(id=>{const z=zf(id);return<div key={id} style={{textAlign:"center",padding:4,background:z.fires>100?"rgba(224,86,160,0.05)":"var(--bg-el)",border:"1px solid "+(z.fires>100?"rgba(224,86,160,0.12)":"var(--border)")}}><div style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)",letterSpacing:1}}>{id.replace(/_/g," ").toUpperCase().substring(0,10)}</div><div style={{fontFamily:"var(--mono)",fontSize:14,color:z.fires>100?"var(--pink)":z.fires>0?"var(--gold)":"var(--text-ghost)",fontWeight:500}}>{z.fires||"CLR"}</div></div>})}</div></Panel>
+<Panel title="ENERGY COT" span={2}>{a.cot.filter(c=>["wti","brent","natgas"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
+<Panel title="CROSS-ASSET" accent="var(--gold)"><Stat label="Au/Oil" value={a.goR} dec={1} big/><Stat label="VIX" value={a.vix} pct={a.vixPct}/></Panel>
+</div>;
 
-const Stat = ({label,value,pct,prefix="",suffix="",dec=2,big,accent}) => {
-  if(value===null||value===undefined) return null;
-  const c=pct>0?"#00ff88":pct<0?"#ff006a":"#3a6a8b";
-  const fv=typeof value==="number"?value.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}):value;
-  return <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",padding:big?"2px 0":"1.5px 0",borderBottom:"1px solid rgba(0,80,160,0.02)"}}>
-    <span style={{fontSize:big?8:7,color:"#3a6a8b"}}>{label}</span>
-    <div style={{display:"flex",gap:5,alignItems:"baseline"}}>
-      <span style={{fontSize:big?12:9.5,color:accent||"#b0d4ea",fontFamily:"monospace"}}>{prefix}{fv}{suffix}</span>
-      {pct!==undefined&&pct!==null&&<span style={{fontSize:7,color:c,minWidth:40,textAlign:"right"}}>{pct>0?"+":""}{pct.toFixed(2)}%</span>}
-    </div></div>;
-};
+/* ═══ RATES TAB ═══ */
+const RatesTab=({a})=><div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:8,animation:"fadeIn 0.3s"}}>
+<Panel title="US TREASURY CURVE" accent="#b388ff" glow ts={a.pipeTs?.fred}><YCurve y2={a.y2} y5={a.y5} y10={a.y10} y30={a.y30} be5={a.be5} be10={a.be10} r5={a.real5} r10={a.real10}/><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:4,marginTop:6}}>{[{l:"2s10s",v:a.s2s10},{l:"5s30s",v:a.s5s30},{l:"10s30s",v:a.s10s30},{l:"US-DE",v:a.usDeS}].map(s=><div key={s.l} style={{textAlign:"center",background:"var(--bg-el)",padding:3,border:"1px solid "+((s.v||0)<0?"rgba(224,86,160,0.1)":"var(--border)")}}><div style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)"}}>{s.l}</div><div style={{fontFamily:"var(--mono)",fontSize:12,color:(s.v||0)<0?"var(--pink)":"var(--text)",fontWeight:500}}>{s.v}%</div></div>)}</div></Panel>
+<Panel title="10Y DECOMPOSITION" accent="var(--gold)"><YieldDecomp nominal={a.y10} breakeven={a.be10} real={a.real10}/><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>Nominal = Inflation + Real</div></Panel>
+<Panel title="CREDIT"><Stat label="IG OAS" value={a.ig} suffix="%" big/><Stat label="HY OAS" value={a.hy} suffix="%" big/><Stat label="HY-IG" value={a.hyIg} suffix="%" big/><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.hyIg>3?"var(--pink)":"var(--text-ghost)",marginTop:4}}>{a.hyIg>3?"STRESS: HY diverging":"Credit stable"}</div></Panel>
+<Panel title="FUNDING"><Stat label="SOFR" value={a.sofr} suffix="%" big/><Stat label="EFFR" value={a.effr} suffix="%"/><Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/><Stat label="German 10Y" value={a.de10} suffix="%"/><Stat label="US-DE" value={a.usDeS} suffix="%"/></Panel>
+<Panel title="BOND COT" span={2}>{a.cot.filter(c=>["ust_2y","ust_10y","vix"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
+{a.indirectTrend?.avg_10_auction&&<Panel title="FOREIGN DEMAND (INDIRECT BIDS)" accent="#b388ff" span={2}><div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center"}}>{[{l:"10-AUC AVG",v:a.indirectTrend.avg_10_auction+"%",c:a.indirectTrend.signal==="WEAK_DEMAND"?"var(--pink)":"var(--text)"},{l:"Z-SCORE",v:a.indirectTrend.z_score,c:a.indirectTrend.z_score<-1?"var(--pink)":a.indirectTrend.z_score>1?"var(--teal)":"var(--text-dim)"},{l:"TREND",v:a.indirectTrend.trend?.toUpperCase(),c:a.indirectTrend.trend==="declining"?"var(--pink)":"var(--teal)"},{l:"SIGNAL",v:a.indirectTrend.signal,c:a.indirectTrend.signal==="WEAK_DEMAND"?"var(--pink)":"var(--teal)"}].map(d=><div key={d.l} style={{textAlign:"center",padding:"6px 14px",background:"var(--bg-el)",border:"1px solid var(--border)",minWidth:70}}><div style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--text-ghost)",letterSpacing:1}}>{d.l}</div><div style={{fontFamily:"var(--mono)",fontSize:13,color:d.c,fontWeight:500}}>{d.v}</div></div>)}</div></Panel>}
+</div>;
 
-const SegBar = ({value,max=10,label,sub,segs=24}) => {
-  const p=Math.min((value||0)/max,1),c=p>0.7?"#ff006a":p>0.5?"#ff6b00":p>0.3?"#ffd700":"#00ff88";
-  return <div><div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
-    <span style={{fontSize:7,color:"#3a5a6b",letterSpacing:1.5}}>{label}</span>
-    <span style={{fontSize:14,color:c,fontWeight:"bold"}}>{value||0}<span style={{fontSize:8,color:"#2a4a5a"}}>/{max}</span></span></div>
-    <div style={{display:"flex",gap:1}}>{Array.from({length:segs}).map((_,i)=>
-      <div key={i} style={{flex:1,height:4,background:i/segs<p?c:"#0a1520",opacity:i/segs<p?0.5+(i/segs)*0.5:0.12}}/>)}</div>
-    {sub&&<div style={{fontSize:6,color:"#2a4a5a",marginTop:2,letterSpacing:1}}>{sub}</div>}</div>;
-};
+/* ═══ FX TAB ═══ */
+const FxTab=({a})=><div className="grid-2" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="DOLLAR" glow ts={a.pipeTs?.prices}><Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3} big/><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>{a.dxy<100?"WEAK DOLLAR - supports commodities":"STRONG DOLLAR - risk headwind"}</div></Panel>
+<Panel title="CENTRAL BANKS" accent="#b388ff"><Stat label="PBOC Fix" value={a.pboc} dec={4} big/><Stat label="CNH Spread" value={a.cnyS} dec={4}/>{a.bojZ&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:a.bojZ.includes?.("CRITICAL")?"var(--pink)":"var(--text-ghost)",marginTop:2}}>BOJ: {a.bojZ}</div>}<Stat label="ECB Depo" value={a.ecbD} suffix="%"/><Stat label="ECB Refi" value={a.ecbR} suffix="%"/></Panel>
+<Panel title="FX SPOT + COT" span={2}><div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>{[{n:"EUR/USD",v:a.eurusd,p:a.eurusdPct,c:a.cEur},{n:"USD/JPY",v:a.usdjpy,p:a.usdjpyPct,c:a.cJpy},{n:"GBP/USD",v:a.gbpusd,p:a.gbpusdPct,c:a.cGbp},{n:"AUD/USD",v:a.audusd,p:a.audusdPct,c:a.cAud},{n:"USD/CAD",v:a.usdcad,p:a.usdcadPct,c:a.cCad},{n:"USD/CHF",v:a.usdchf,p:a.usdchfPct,c:a.cChf}].map(f=><div key={f.n} style={{background:"var(--bg-el)",padding:"6px 8px",border:"1px solid var(--border)"}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--cyan)",opacity:0.5}}>{f.n}</span><span style={{fontFamily:"var(--mono)",fontSize:7,color:(f.c||0)>0?"var(--teal)":"var(--pink)"}}>{(f.c||0)>0?"LONG":"SHORT"} {f.c}%</span></div><div style={{fontFamily:"var(--mono)",fontSize:14,color:"var(--text)"}}>{f.v?.toFixed(4)}</div><div style={{fontFamily:"var(--mono)",fontSize:8,color:(f.p||0)>0?"var(--teal)":"var(--pink)"}}>{(f.p||0)>0?"+":""}{f.p?.toFixed(2)}%</div></div>)}</div></Panel>
+<Panel title="FX COT" span={2}>{a.cot.filter(c=>["eurusd","usdjpy","gbpusd","usdchf","audusd","usdcad"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
+{Object.keys(a.swift).length>0&&<Panel title="SWIFT PAYMENT SHARE" accent="#b388ff" span={2}><div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
+{["USD","EUR","GBP","JPY","CNY"].map(c=>{const v=a.swift[c],t=a.swiftTrends[c];if(!v)return null;const col=c==="USD"?"var(--cyan)":c==="CNY"?"var(--pink)":c==="EUR"?"var(--gold)":"var(--text-dim)";return<div key={c} style={{textAlign:"center",padding:"6px 12px",minWidth:65,background:"var(--bg-el)",border:"1px solid var(--border)"}}><div style={{fontFamily:"var(--mono)",fontSize:8,color:col,fontWeight:500}}>{c}</div><div style={{fontFamily:"var(--mono)",fontSize:15,color:"var(--text)",fontWeight:500}}>{v}%</div>{t&&<div style={{fontFamily:"var(--mono)",fontSize:7,color:t.direction==="rising"?"var(--teal)":t.direction==="falling"?"var(--pink)":"var(--text-ghost)"}}>{t.direction}</div>}</div>})}</div></Panel>}
+</div>;
 
-const FGGauge = ({value,label}) => {
-  if(!value&&value!==0) return null;
-  const a=(value/100)*180-90,c=value<=20?"#ff006a":value<=40?"#ff6b00":value<=60?"#ffd700":"#00ff88";
-  return <div style={{textAlign:"center"}}><svg width="76" height="42" viewBox="0 0 76 42">
-    <defs><linearGradient id="fgg" x1="0%" x2="100%"><stop offset="0%" stopColor="#ff006a"/><stop offset="50%" stopColor="#ffd700"/><stop offset="100%" stopColor="#00ff88"/></linearGradient></defs>
-    <path d="M 4 38 A 34 34 0 0 1 72 38" fill="none" stroke="url(#fgg)" strokeWidth="2" opacity="0.2"/>
-    <line x1="38" y1="38" x2={38+28*Math.cos(a*Math.PI/180)} y2={38+28*Math.sin(a*Math.PI/180)} stroke={c} strokeWidth="1.5"/>
-    <circle cx="38" cy="38" r="2" fill={c}/>
-    <text x="38" y="32" textAnchor="middle" fill={c} fontSize="15" fontWeight="bold">{value}</text>
-  </svg><div style={{fontSize:6,color:c,letterSpacing:1}}>{label}</div></div>;
-};
+/* ═══ CRYPTO TAB ═══ */
+const CryptoTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="SENTIMENT" accent={a.fg<=20?"var(--pink)":"var(--cyan)"} glow ts={a.pipeTs?.crypto}><FGGauge value={a.fg} label={a.fgL}/><Spark data={a.fgH} label="7d" vKey="value" w={85} h={22}/><div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>{a.fg<=15?"EXTREME FEAR - contrarian buy":a.fg<=25?"FEAR zone":a.fg>=75?"EXTREME GREED":"Neutral"}</div></Panel>
+<Panel title="BITCOIN"><Stat label="BTC Spot" value={a.btc} pct={a.btcPct} prefix="$" dec={0} big/><Stat label="BTC Perp" value={a.perpBtc} prefix="$" dec={0}/><Stat label="Basis" value={a.basis} suffix="%" dec={3} big/><Stat label="ETH Perp" value={a.perpEth} prefix="$" dec={2}/></Panel>
+<Panel title="STRUCTURE" accent="#b388ff"><Stat label="Mcap" value={a.mcapT} prefix="$" suffix="T" big/><Stat label="BTC Dom" value={a.btcDom} suffix="%" dec={1} big/><Stat label="ETH Dom" value={a.ethDom} suffix="%" dec={1}/></Panel>
+<Panel title="STABLECOIN SUPPLY"><StableDonut stables={a.stables} total={a.stMcapB}/></Panel>
+<Panel title="DEFI" accent="#b388ff"><div style={{textAlign:"center",background:"var(--bg-el)",padding:8,border:"1px solid var(--border)"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>TVL</div><div style={{fontFamily:"var(--mono)",fontSize:20,color:"#b388ff",fontWeight:500}}>{"$"+a.tvlB+"B"}</div><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.tvlWk<-2?"var(--pink)":"var(--text-ghost)"}}>7d: {a.tvlWk}%</div></div></Panel>
+<Panel title="ANALYSIS"><div style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.7}}>{a.fg<=20?"Fear extreme. ":(a.fg>=75?"Greed extreme. ":"")}{a.stMcapB>200?"$"+a.stMcapB+"B sidelined. ":""}{a.btcDom>55?"BTC dominant - risk-off crypto. ":""}</div></Panel>
+</div>;
 
-// ═══ BOOT ═══
-const Boot = ({onDone}) => {
-  const [lines,setLines]=useState([]);const [prog,setProg]=useState(0);const [fade,setFade]=useState(false);
-  const log=[{t:"CIPHER INTELLIGENCE v1.5",d:120,c:"#00f7ff"},{t:"> Secure channel...... OK",d:150,c:"#00ff88"},
-    {t:"> Credentials......... OK",d:130,c:"#00ff88"},{t:"SOURCES:",d:150,c:"#00f7ff"},
-    {t:"  FRED/COT/COMEX..... ONLINE",d:70,c:"#00ff88"},{t:"  FIRMS/ECB/BOJ...... ONLINE",d:70,c:"#00ff88"},
-    {t:"  Polymarket......... ONLINE",d:70,c:"#00ff88"},{t:"  Synergies.......... LOADED",d:70,c:"#ffd700"},
-    {t:"ANALYTICS READY",d:200,c:"#00f7ff"},{t:"ENTERING SURVEILLANCE",d:300,c:"#00f7ff"}];
-  useEffect(()=>{let cum=0;log.forEach((l,i)=>{cum+=l.d;setTimeout(()=>{setLines(p=>[...p,l]);setProg(Math.round(((i+1)/log.length)*100));},cum);});
-    setTimeout(()=>setFade(true),cum+150);setTimeout(()=>onDone(),cum+600);},[]);
-  return <div style={{position:"fixed",inset:0,background:"#030810",fontFamily:"monospace",padding:"28px",display:"flex",flexDirection:"column",opacity:fade?0:1,transition:"opacity 0.4s"}}>
-    <div style={{flex:1,maxWidth:500}}>{lines.map((l,i)=><div key={i} style={{fontSize:10,color:l.c||"#4a7a9b",lineHeight:1.5}}>{l.t}</div>)}</div>
-    <div><div style={{display:"flex",justifyContent:"space-between",fontSize:7,marginBottom:3}}><span style={{color:"#0a3a5a"}}>INIT</span><span style={{color:"#00f7ff"}}>{prog}%</span></div>
-      <div style={{height:2,background:"#0a1a2a"}}><div style={{height:"100%",width:prog+"%",background:"linear-gradient(90deg,#00f7ff,#00ff88)",transition:"width 0.15s"}}/></div></div></div>;
-};
+/* ═══ RISK TAB ═══ */
+const RiskTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="VOLATILITY" accent={a.vix>25?"var(--pink)":"var(--cyan)"} glow ts={a.pipeTs?.prices}><Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"var(--pink)":undefined}/><Stat label="COT VIX" value={a.cVix} suffix="%"/>{a.percentiles?.vix!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>1Y Percentile: {a.percentiles.vix}%</div>}</Panel>
+<Panel title="EQUITIES"><Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/><Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0} big/>{a.percentiles?.spx!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",marginTop:4}}>SPX 1Y: {a.percentiles.spx}%</div>}</Panel>
+<Panel title="REGIME RADAR"><Radar data={a.regime}/></Panel>
+<Panel title="CORRELATIONS" accent="#b388ff" glow span={3}>{a.correlations.slice(0,8).map((c,i)=>{const abs=Math.abs(c.divergence);const flipped=Math.sign(c.corr_1y)!==Math.sign(c.corr_20d)&&abs>0.15;const col=flipped?"var(--pink)":abs>0.3?"var(--gold)":"var(--text-ghost)";return<div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"3px 0",borderBottom:"1px solid var(--border)"}}><div style={{width:5,height:5,borderRadius:"50%",background:col}}/><span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-dim)",flex:1}}>{c.pair}</span><span style={{fontFamily:"var(--mono)",fontSize:8,color:col,fontWeight:500}}>{c.divergence>0?"+":""}{c.divergence}</span>{flipped&&<span style={{fontFamily:"var(--mono)",fontSize:6,color:"var(--pink)"}}>FLIP</span>}</div>})}</Panel>
+<Panel title="BOND COT" accent="#b388ff">{a.cot.filter(c=>["ust_2y","ust_10y"].includes(c.id)).map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
+</div>;
 
-// ═══ PASSWORD ═══
-const PwGate = ({onAuth}) => {
-  const [pw,setPw]=useState("");const [shake,setShake]=useState(false);const ref=useRef(null);
-  useEffect(()=>{ref.current?.focus();},[]);
-  const go=()=>{if(pw===PW)onAuth();else{setShake(true);setTimeout(()=>setShake(false),500);setPw("");}};
-  return <div style={{position:"fixed",inset:0,background:"#030810",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"monospace"}}>
-    <div style={{textAlign:"center",animation:shake?"shake 0.4s":"fadeIn 0.8s"}}>
-      <div style={{fontSize:10,letterSpacing:4,color:"#00f7ff77",marginBottom:22}}>CIPHER</div>
-      <input ref={ref} type="password" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()} placeholder="ACCESS CODE"
-        style={{background:"transparent",border:"1px solid rgba(0,247,255,0.08)",color:"#00f7ff",padding:"8px 12px",fontSize:10,letterSpacing:3,textAlign:"center",width:200,outline:"none",fontFamily:"monospace",marginBottom:8}}/>
-      <br/><button onClick={go} style={{background:"transparent",border:"1px solid rgba(0,247,255,0.05)",color:"rgba(0,247,255,0.2)",padding:"4px 18px",fontSize:7,letterSpacing:2,cursor:"pointer",fontFamily:"monospace"}}>AUTHENTICATE</button>
-    </div>
-    <style>{["@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}",
-      "@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}"].join("")}</style>
-  </div>;
-};
+/* ═══ GEO TAB ═══ */
+const GeoTab=({a,zf,ts})=><div className="grid-2" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="THREAT LEVEL" accent="var(--gold)" glow span={2}><div style={{display:"flex",gap:12,justifyContent:"center"}}><div style={{textAlign:"center"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>TOTAL</div><div style={{fontFamily:"var(--mono)",fontSize:22,color:a.totF>1000?"var(--pink)":"var(--gold)",fontWeight:500}}>{a.totF}</div></div><div style={{textAlign:"center"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>HIGH CONF</div><div style={{fontFamily:"var(--mono)",fontSize:22,color:a.totH>50?"var(--pink)":"var(--gold)",fontWeight:500}}>{a.totH}</div></div><div style={{textAlign:"center"}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>ZONES</div><div style={{fontFamily:"var(--mono)",fontSize:22,color:"var(--text)",fontWeight:500}}>{a.zones.filter(z=>z.fires>0).length}/{a.zones.length}</div></div></div></Panel>
+<Panel title="FIRMS SATELLITE" accent="var(--gold)" span={2} ts={ts}><FireMap fires={a.fps} zones={a.zones}/></Panel>
+<Panel title="ZONES" accent="var(--gold)">{a.zones.map(z=><div key={z.id} style={{display:"flex",alignItems:"center",gap:6,padding:"2px 0"}}><div style={{width:6,height:6,borderRadius:"50%",background:z.fires===0?"var(--bg-el)":z.high>0?"var(--pink)":"var(--gold)",boxShadow:z.high>0?"0 0 4px var(--pink)":"none",animation:z.high>0?"blink 1.5s infinite":"none"}}/><span style={{flex:1,fontFamily:"var(--mono)",fontSize:8,color:z.fires===0?"var(--text-ghost)":"var(--text-dim)"}}>{z.name.replace(/_/g," ")}</span><span style={{fontFamily:"var(--mono)",fontSize:8,color:z.fires===0?"var(--text-ghost)":z.high>0?"var(--pink)":"var(--gold)"}}>{z.fires||"CLR"}</span></div>)}</Panel>
+<Panel title="PREDICTIONS">{a.poly.map((m,i)=>{const c=m.yes_probability>70?"var(--teal)":m.yes_probability>40?"var(--gold)":"var(--pink)";return<div key={i} style={{marginBottom:4}}><div style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,marginBottom:2}}>{m.question?.substring(0,58)}</div><div style={{display:"flex",alignItems:"center",gap:6}}><div style={{flex:1,height:4,background:"var(--bg-el)",overflow:"hidden",borderRadius:2}}><div style={{width:m.yes_probability+"%",height:"100%",background:c,opacity:.5,borderRadius:2}}/></div><span style={{fontFamily:"var(--mono)",fontSize:9,color:c,fontWeight:500,minWidth:30,textAlign:"right"}}>{m.yes_probability}%</span></div></div>})}</Panel>
+<Panel title="SUPPLY RISK" accent="var(--gold)" span={2}><div style={{display:"flex",gap:6,justifyContent:"center"}}>{["strait_of_hormuz","red_sea","saudi_oil","libya_oil"].map(id=>{const z=zf(id);return<div key={id} style={{textAlign:"center",padding:"6px 12px",minWidth:70,background:z.fires>100?"rgba(224,86,160,0.05)":"var(--bg-el)",border:"1px solid "+(z.fires>100?"rgba(224,86,160,0.12)":"var(--border)")}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:1}}>{id.replace(/_/g," ").toUpperCase().substring(0,10)}</div><div style={{fontFamily:"var(--mono)",fontSize:16,color:z.fires>100?"var(--pink)":z.fires>0?"var(--gold)":"var(--text-ghost)",fontWeight:500}}>{z.fires||"CLR"}</div></div>})}</div></Panel>
+</div>;
 
-// ═══ BACKGROUND ═══
-const Bg = () => {
-  const ref=useRef(null);
-  useEffect(()=>{const c=ref.current;if(!c)return;const ctx=c.getContext("2d");
-    const resize=()=>{c.width=window.innerWidth;c.height=window.innerHeight;};resize();window.addEventListener("resize",resize);
-    const pts=Array.from({length:25},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-0.5)*0.1,vy:(Math.random()-0.5)*0.1,s:Math.random()*0.7+0.2}));
-    let f;const draw=()=>{ctx.clearRect(0,0,c.width,c.height);
-      pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
-        ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle="rgba(0,247,255,"+(0.05+p.s*0.03)+")";ctx.fill();});
-      for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
-        if(d<130){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle="rgba(0,247,255,"+(0.01*(1-d/130))+")";ctx.stroke();}}
-      f=requestAnimationFrame(draw);};draw();return()=>{cancelAnimationFrame(f);window.removeEventListener("resize",resize);};},[]);
-  return <React.Fragment><div style={{position:"fixed",inset:0,zIndex:0,background:"radial-gradient(ellipse at 50% 20%,#040e1a,#020810 55%,#000205)"}}/><canvas ref={ref} style={{position:"fixed",inset:0,zIndex:1}}/></React.Fragment>;
-};
+/* ═══ LIQUIDITY TAB ═══ */
+const LiqTab=({a})=><div className="grid-3" style={{animation:"fadeIn 0.3s"}}>
+<Panel title="NET LIQUIDITY" glow span={3} ts={a.pipeTs?.fred}><LiqPipe bs={a.walclB} tga={a.tgaB} rrp={a.rrpB} net={a.netLiq}/></Panel>
+<Panel title="FED BS"><Stat label="Total" value={a.walclB} prefix="$" suffix="B" dec={0} big/><Stat label="Chg" value={a.bsChg} suffix="M" dec={0}/><Stat label="Reserves" value={a.reserveBal} prefix="$" suffix="M" dec={0}/><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.bsChg<-10000?"var(--pink)":"var(--text-ghost)",marginTop:4}}>{a.bsChg<-10000?"QT active":a.bsChg>10000?"EXPANDING":"Stable"}</div></Panel>
+<Panel title="TGA" accent="var(--gold)"><Stat label="Balance" value={a.tgaB} prefix="$" suffix="B" dec={0} big/><Stat label="Chg" value={a.tgaChg} suffix="M" dec={0}/><div style={{fontFamily:"var(--mono)",fontSize:8,color:a.tgaChg<-20000?"var(--teal)":"var(--text-ghost)",marginTop:4}}>{a.tgaChg<-20000?"DRAWDOWN":a.tgaChg>20000?"BUILDING":"Stable"}</div></Panel>
+<Panel title="MONEY MARKETS"><Stat label="ON RRP" value={a.rrpB} prefix="$" suffix="B" big/><Stat label="SOFR" value={a.sofr} suffix="%" big/><Stat label="EFFR" value={a.effr} suffix="%"/><Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/></Panel>
+<Panel title="MACRO" accent="#b388ff"><Stat label="M2" value={a.m2} prefix="$" suffix="B" dec={1} big/><Stat label="Unemployment" value={a.unemp} suffix="%"/><Stat label="Mortgage" value={a.mortgage} suffix="%"/></Panel>
+<Panel title="INTERPRETATION"><div style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.7}}>{a.netLiq>5500?"Net liq positive - risk-on. ":a.netLiq>0?"Net liq low. ":"Negative - headwind. "}{a.tgaChg<-20000?"TGA drawdown. ":""}{a.bsChg<-10000?"QT running. ":""}{(a.sofrEffr||0)>0.05?"Funding stress. ":""}</div></Panel>
+</div>;
 
-// ═══ DASHBOARD ═══
-const Dash = ({a}) => {
-  const [tab,setTab]=useState("cmd");
-  const [time,setTime]=useState(new Date());
-  const [scanY,setScanY]=useState(0);
-  useEffect(()=>{const t1=setInterval(()=>setTime(new Date()),1000);const t2=setInterval(()=>setScanY(p=>(p+0.07)%100),30);return()=>{clearInterval(t1);clearInterval(t2);};},[]);
+/* ═══ BOOT + AUTH ═══ */
+const Boot=({onDone})=>{const[lines,setLines]=useState([]);const[prog,setProg]=useState(0);const[fade,setFade]=useState(false);const log=[{t:"CIPHER INTELLIGENCE v2.0 — GEN 2",d:100,c:"var(--cyan)"},{t:"> Secure channel...... OK",d:120,c:"var(--teal)"},{t:"> Credentials......... OK",d:100,c:"var(--teal)"},{t:"SOURCES:",d:120,c:"var(--cyan)"},{t:"  FRED/COT/COMEX..... ONLINE",d:60,c:"var(--teal)"},{t:"  FIRMS/ECB/BOJ...... ONLINE",d:60,c:"var(--teal)"},{t:"  Polymarket......... ONLINE",d:60,c:"var(--teal)"},{t:"  Intel Layer........ ACTIVE",d:60,c:"var(--gold)"},{t:"  Tripwires.......... ARMED",d:60,c:"var(--pink)"},{t:"GEN 2 LAYERS:",d:100,c:"var(--cyan)"},{t:"  Narrative.......... ACTIVE",d:50,c:"var(--gold)"},{t:"  Identity........... ACTIVE",d:50,c:"var(--gold)"},{t:"  History/Jiang...... ACTIVE",d:50,c:"var(--gold)"},{t:"  Operator........... ACTIVE",d:50,c:"var(--gold)"},{t:"  Price Charts....... ACTIVE",d:50,c:"var(--cyan)"},{t:"  Tab Intelligence... ACTIVE",d:50,c:"var(--cyan)"},{t:"ENTERING SURVEILLANCE",d:200,c:"var(--cyan)"}];useEffect(()=>{let cum=0;log.forEach((l,i)=>{cum+=l.d;setTimeout(()=>{setLines(p=>[...p,l]);setProg(Math.round(((i+1)/log.length)*100))},cum)});setTimeout(()=>setFade(true),cum+120);setTimeout(()=>onDone(),cum+500)},[]);return<div className="boot" style={{opacity:fade?0:1}}><div style={{flex:1,maxWidth:500}}>{lines.map((l,i)=><div key={i} className="boot-line" style={{color:l.c}}>{l.t}</div>)}</div><div><div className="boot-pct"><span className="l">INIT</span><span className="r">{prog}%</span></div><div className="boot-bar"><div className="boot-bar-fill" style={{width:prog+"%"}}/></div></div></div>};
 
-  const tabs=[{id:"cmd",l:"COMMAND"},{id:"gold",l:"GOLD"},{id:"energy",l:"ENERGY"},{id:"rates",l:"RATES"},
-    {id:"fx",l:"FX"},{id:"risk",l:"RISK"},{id:"crypto",l:"CRYPTO"},{id:"geo",l:"GEO"},{id:"liq",l:"LIQUIDITY"}];
+const PwGate=({onAuth})=>{const[pw,setPw]=useState("");const[shake,setShake]=useState(false);const ref=useRef(null);useEffect(()=>{ref.current?.focus()},[]);const go=()=>{if(pw===PW)onAuth();else{setShake(true);setTimeout(()=>setShake(false),500);setPw("")}};return<div className="pw-gate"><div className={shake?"shake":""} style={{textAlign:"center"}}><div className="title">CIPHER</div><div className="subtitle">muFX Intelligence Terminal</div><input ref={ref} type="password" value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()} placeholder="ACCESS CODE"/><button className="btn" onClick={go}>AUTHENTICATE</button></div></div>};
 
-  const zf=(id)=>a.zones.find(z=>z.id===id)||{fires:0,high:0};
+/* ═══ CYPHER OVERVIEW TAB (GEN 2) ═══ */
+const CypherTab=({gen2,a,intel})=>{
+const nar=gen2.narrative,id=gen2.identity,hist=gen2.history,op=gen2.operator;
+const fg=op?.first_glance;
+const regime=nar?.regime?.primary;
+const conv=nar?.conviction;
+const divs=nar?.divergences||[];
+const analogues=hist?.analogues||[];
+const stateColors={CALM:"#8B949E",ALERT:"#F7B731",ELEVATED:"#E09040",CRITICAL:"#E056A0",STORM:"#FF2222"};
+const stName=id?.state?.name||"CALM";
+const stColor=stateColors[stName]||"var(--cyan)";
+if(!nar&&!id)return<div style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--text-ghost)",textAlign:"center",padding:60}}>Gen 2 layers not available. Run cipher_narrative.py and cipher_identity.py on VPS.</div>;
+return<div style={{animation:"fadeIn 0.3s"}}>
+{id&&<div style={{background:"linear-gradient(135deg,rgba(6,6,8,0.95),rgba(16,16,26,0.95))",border:"1px solid "+stColor+"33",borderRadius:6,padding:"20px 24px",marginBottom:16,position:"relative",overflow:"hidden"}}>
+<div style={{position:"absolute",top:0,left:0,width:4,height:"100%",background:stColor}}/>
+<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,flexWrap:"wrap"}}>
+<div style={{flex:1,minWidth:280}}>
+<div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+<div style={{width:10,height:10,borderRadius:"50%",background:stColor,boxShadow:"0 0 12px "+stColor+"80",animation:"pulse "+(id.state?.pulse_rate||3)+"s ease-in-out infinite"}}/>
+<span style={{fontFamily:"var(--mono)",fontSize:9,letterSpacing:3,color:stColor,textTransform:"uppercase"}}>{stName}</span>
+<span style={{fontFamily:"var(--mono)",fontSize:7,letterSpacing:2,color:"var(--text-ghost)"}}>CIPHER GEN 2</span>
+</div>
+<div style={{fontFamily:"var(--sans)",fontSize:16,fontWeight:400,color:"var(--text)",lineHeight:1.5,wordBreak:"break-word"}}>{id.status_line}</div>
+</div>
+<div style={{display:"flex",gap:16,alignItems:"center"}}>
+{regime&&<div style={{textAlign:"center",padding:"8px 16px",background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:4}}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2}}>REGIME</div>
+<div style={{fontFamily:"var(--mono)",fontSize:13,color:"var(--cyan)",fontWeight:500}}>{regime.name?.replace(/_/g," ")}</div>
+<div style={{fontFamily:"var(--mono)",fontSize:9,color:regime.confidence>0.7?"var(--gold)":"var(--text-dim)"}}>{(regime.confidence*100).toFixed(0)}%</div>
+</div>}
+{conv&&<div style={{textAlign:"center",padding:"8px 16px",background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:4}}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2}}>CONVICTION</div>
+<div style={{fontFamily:"var(--mono)",fontSize:13,color:conv.score>0.6?"var(--gold)":"var(--text-dim)",fontWeight:500}}>{(conv.score*100).toFixed(0)}%</div>
+<div style={{fontFamily:"var(--mono)",fontSize:9,color:"var(--text-ghost)"}}>{conv.direction?.toUpperCase()}</div>
+</div>}
+</div></div></div>}
+{nar?.headline&&<div style={{fontFamily:"var(--sans)",fontSize:14,fontWeight:300,color:"var(--text-dim)",lineHeight:1.7,padding:"0 0 14px",borderBottom:"1px solid var(--border)",marginBottom:14,wordBreak:"break-word"}}>{nar.headline}</div>}
+{nar?.narrative_summary&&<div style={{fontFamily:"var(--sans)",fontSize:12,color:"var(--text-dim)",fontWeight:300,lineHeight:1.7,padding:"0 0 10px",wordBreak:"break-word"}}>{nar.narrative_summary}</div>}
+<div className="grid-4">
+{nar?.narrative&&<Panel title="NARRATIVE" accent={stColor} glow span={2}>
+{nar.narrative.top_changes?.length>0&&<React.Fragment>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2,marginBottom:4}}>TOP CHANGES</div>
+{nar.narrative.top_changes.map((c,i)=><div key={i} style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.6,padding:"2px 0",paddingLeft:10,position:"relative"}}><span style={{position:"absolute",left:0,color:stColor,opacity:0.5}}>{"\u25B8"}</span>{typeof c==="string"?c:c.summary||c.asset}</div>)}
+</React.Fragment>}
+{nar.narrative.top_risks?.length>0&&<React.Fragment>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--pink)",letterSpacing:2,marginTop:10,marginBottom:4}}>RISKS</div>
+{nar.narrative.top_risks.map((r,i)=><div key={i} style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.6,padding:"2px 0",paddingLeft:10,position:"relative"}}><span style={{position:"absolute",left:0,color:"var(--pink)",opacity:0.5}}>{"\u25B8"}</span><strong style={{color:"var(--text)",fontWeight:500}}>{r.name||""}: </strong>{typeof r==="string"?r:r.summary||""}</div>)}
+</React.Fragment>}
+{nar.narrative.top_opportunities?.length>0&&<React.Fragment>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--teal)",letterSpacing:2,marginTop:10,marginBottom:4}}>OPPORTUNITIES</div>
+{nar.narrative.top_opportunities.map((o,i)=><div key={i} style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.6,padding:"2px 0",paddingLeft:10,position:"relative"}}><span style={{position:"absolute",left:0,color:"var(--teal)",opacity:0.5}}>{"\u25B8"}</span>{typeof o==="string"?o:o.summary||o.asset}</div>)}
+</React.Fragment>}
+</Panel>}
+{nar?.regime?.all_active&&<Panel title="ACTIVE REGIMES" accent="var(--cyan)" span={2}>
+{nar.regime.all_active.map((r,i)=>{const pct=r.confidence*100;const w=Math.max(pct,5);const c=pct>80?"var(--pink)":pct>50?"var(--gold)":"var(--cyan)";
+return<div key={i} style={{marginBottom:6}}>
+<div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}>
+<span style={{fontFamily:"var(--mono)",fontSize:9,color:i===0?c:"var(--text-dim)",fontWeight:i===0?500:300}}>{r.name?.replace(/_/g," ")}</span>
+<span style={{fontFamily:"var(--mono)",fontSize:9,color:c}}>{pct.toFixed(0)}%</span></div>
+<div style={{height:4,background:"var(--bg)",borderRadius:2,overflow:"hidden"}}><div style={{width:w+"%",height:"100%",background:c,opacity:0.5,borderRadius:2}}/></div>
+</div>})}
+</Panel>}
+{divs.length>0&&<Panel title="DIVERGENCES" accent="var(--gold)" span={2}>
+{divs.map((d,i)=><div key={i} style={{padding:"8px 10px",background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:4,marginBottom:4,borderLeft:"3px solid var(--gold)"}}>
+<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:2}}>
+<span style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--gold)",letterSpacing:1}}>{d.type?.replace(/_/g," ").toUpperCase()}</span>
+<span style={{fontFamily:"var(--mono)",fontSize:8,color:d.severity==="critical"?"var(--pink)":d.severity==="high"?"var(--gold)":"var(--text-ghost)"}}>{(d.severity||"").toUpperCase()}</span></div>
+<div style={{fontFamily:"var(--sans)",fontSize:12,color:"var(--text)",fontWeight:400,marginBottom:2}}>{d.name}</div>
+<div style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.5,wordBreak:"break-word"}}>{d.detail||d.description||d.title||""}</div>
+</div>)}
+</Panel>}
+{analogues.length>0&&<Panel title="HISTORICAL RHYMES" accent="#b388ff" span={2}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2,marginBottom:6}}>JIANG LAYER</div>
+{analogues.slice(0,5).map((h,i)=>{const sim=h.similarity_score||h.similarity||h.match_score||0;const pct=(sim*100).toFixed(0);const c=sim>0.6?"var(--pink)":sim>0.4?"var(--gold)":"#b388ff";
+return<div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",borderBottom:"1px solid var(--border)"}}>
+<div style={{width:40,textAlign:"center"}}><span style={{fontFamily:"var(--mono)",fontSize:14,color:c,fontWeight:500}}>{pct}</span><span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)"}}>%</span></div>
+<div style={{flex:1}}>
+<div style={{fontFamily:"var(--mono)",fontSize:10,color:"var(--text)"}}>{h.reference_name||h.label||h.name||"Archive Match"}</div>
+<div style={{fontFamily:"var(--sans)",fontSize:10,color:"var(--text-dim)",fontWeight:300}}>{h.reference_date||h.date||""} {h.matched_count?("\u2014 "+h.matched_count+" dims"):""}</div>
+{h.summary&&typeof h.summary==="string"&&<div style={{fontFamily:"var(--sans)",fontSize:9,color:"var(--text-ghost)",fontWeight:300,marginTop:2}}>{h.summary}</div>}
+{h.summary&&typeof h.summary==="object"&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginTop:3}}>{Object.entries(h.summary).filter(([k,v])=>typeof v==="number"&&k.endsWith("_pct")).map(([k,v])=><span key={k} style={{fontFamily:"var(--mono)",fontSize:7,color:v>0?"var(--teal)":"var(--pink)"}}>{k.replace("_pct","").toUpperCase()} {v>0?"+":""}{v.toFixed(1)}%</span>)}</div>}
+</div></div>})}
+</Panel>}
+{id?.awakening&&<Panel title="SINCE YOU WERE GONE" accent="var(--teal)" span={2}>
+<div style={{fontFamily:"var(--sans)",fontSize:13,color:"var(--text)",fontWeight:400,lineHeight:1.7,marginBottom:8,wordBreak:"break-word"}}>{id.awakening.greeting}</div>
+{(id.awakening.significant_changes||id.awakening.changes||[]).length>0&&<div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+{(id.awakening.significant_changes||id.awakening.changes||[]).map((c,i)=><div key={i} style={{fontFamily:"var(--mono)",fontSize:8,padding:"3px 10px",background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:3,color:"var(--text-dim)"}}>{typeof c==="string"?c:(c.summary||c.asset||"")}</div>)}
+</div>}
+</Panel>}
+{fg&&<Panel title="FIRST GLANCE" accent="var(--cyan)" span={2}>
+<div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+{[{l:"STATE",v:fg.cypher_state,c:stColor},{l:"REGIME",v:(fg.regime||"").replace(/_/g," "),c:"var(--cyan)"},{l:"CONVICTION",v:((fg.conviction||0)*100).toFixed(0)+"%",c:fg.conviction>0.6?"var(--gold)":"var(--text-dim)"},{l:"THREADS",v:String(fg.since_last_check?.major_moves?.length||0),c:"var(--text)"}].map(s=>
+<div key={s.l} style={{textAlign:"center",padding:"8px 14px",background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:4,flex:1,minWidth:80}}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2}}>{s.l}</div>
+<div style={{fontFamily:"var(--mono)",fontSize:14,color:s.c,fontWeight:500}}>{s.v||"\u2014"}</div>
+</div>)}
+</div>
+{fg.since_last_check?.major_moves?.length>0&&<div style={{marginTop:8}}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:2,marginBottom:4}}>MAJOR MOVES</div>
+{fg.since_last_check.major_moves.map((m,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"2px 0",fontFamily:"var(--mono)",fontSize:9,borderBottom:"1px solid var(--border)"}}>
+<span style={{color:"var(--text-dim)"}}>{m.asset?.toUpperCase()}</span>
+<span style={{color:m.change_pct>0?"var(--teal)":"var(--pink)"}}>{m.change_pct>0?"+":""}{m.change_pct?.toFixed(2)}%</span>
+</div>)}
+</div>}
+</Panel>}
+{intel?.tripwires&&<Panel title="TRIPWIRES" accent="var(--gold)" span={2}>
+{(intel.tripwires.triggered||[]).map((tw,i)=><div key={"t"+i} className="tripwire-row triggered"><div className="tripwire-light triggered"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div><div className="tripwire-detail">{tw.detail}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+{(intel.tripwires.warning||[]).map((tw,i)=><div key={"w"+i} className="tripwire-row warning"><div className="tripwire-light warning"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div><div className="tripwire-detail">{tw.detail}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+{(intel.tripwires.clear||[]).slice(0,5).map((tw,i)=><div key={"c"+i} className="tripwire-row clear"><div className="tripwire-light clear"/><div className="tripwire-info"><div className="tripwire-name">{tw.name}</div></div><div className="tripwire-value">{tw.value}</div></div>)}
+</Panel>}
+{a.summary?.top_movers?.length>0&&<Panel title="TOP MOVERS" accent="var(--teal)" span={2}>
+<div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{a.summary.top_movers.map((m,i)=>{const c=m.pct>0?"var(--teal)":"var(--pink)";return<div key={i} style={{textAlign:"center",padding:"5px 10px",minWidth:65,background:"var(--bg-el)",border:"1px solid var(--border)",borderRadius:3}}><div style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",letterSpacing:1}}>{m.asset.toUpperCase()}</div><div style={{fontFamily:"var(--mono)",fontSize:14,color:c,fontWeight:500}}>{m.pct>0?"+":""}{m.pct}%</div></div>})}</div>
+</Panel>}
+{a.news?.length>0&&<Panel title="NEWS" accent="var(--cyan)" span={2} ts={a.pipeTs?.news}>
+{a.news.slice(0,8).map((n,i)=><NewsLine key={i} title={n.title} source={n.source} sentiment={n.sentiment}/>)}
+</Panel>}
+</div>
+</div>};
 
-  return <div style={{position:"relative",zIndex:10,minHeight:"100vh",fontFamily:"monospace",color:"#b0d4ea"}}>
-    <Bg/>
-    <div style={{position:"fixed",top:scanY+"%",left:0,right:0,height:1,background:"rgba(0,247,255,0.02)",zIndex:999,pointerEvents:"none"}}/>
-    <div style={{position:"relative",zIndex:10,maxWidth:1400,margin:"0 auto",padding:"8px 12px"}}>
-      {/* Header */}
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"5px 0 7px",borderBottom:"1px solid rgba(0,247,255,0.04)",marginBottom:8}}>
-        <div style={{display:"flex",alignItems:"center",gap:7}}>
-          <span style={{fontSize:12,letterSpacing:5,color:"#00f7ff",fontWeight:"bold"}}>CIPHER</span>
-          <span style={{fontSize:6,color:"#1a3a4a",letterSpacing:2}}>MUFX INTELLIGENCE</span></div>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <div style={{textAlign:"right"}}>
-            <div style={{fontSize:10,color:"#00f7ff",letterSpacing:2}}>{time.toLocaleTimeString("en-US",{hour12:false})}</div>
-            <div style={{fontSize:6,color:"#1a3a4a"}}>{a.date} | {a.pipesOk} PIPES | {a.flags} FLAGS</div></div>
-          <div style={{width:5,height:5,borderRadius:"50%",background:"#00ff88",boxShadow:"0 0 4px #00ff88",animation:"blink 3s infinite"}}/></div>
-      </div>
-      {/* Tabs */}
-      <div style={{display:"flex",gap:0,marginBottom:10,borderBottom:"1px solid rgba(0,247,255,0.03)",overflowX:"auto"}}>
-        {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:tab===t.id?"rgba(0,247,255,0.03)":"transparent",border:"none",
-          borderBottom:tab===t.id?"1px solid #00f7ff":"1px solid transparent",color:tab===t.id?"#00f7ff":"#1a4a6a",
-          padding:"7px 11px",fontSize:7,letterSpacing:1.5,cursor:"pointer",fontFamily:"monospace",whiteSpace:"nowrap"}}>{t.l}</button>)}
-      </div>
+/* ═══ TAB DOMAIN MAP ═══ */
+const TAB_DOMAIN_MAP={gold:["gold","silver","copper"],energy:["brent","wti","natgas"],rates:["spx","vix"],fx:["dxy","eurusd","usdjpy","gbpusd","audusd","usdcad","usdchf"],risk:["vix","spx"],crypto:["btc"],geo:["brent","wti","natgas","wheat"],liq:["spx","btc","vix"]};
 
-      {/* COMMAND */}
-      {tab==="cmd"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="REGIME RADAR" glow><Radar data={a.regime}/></Panel>
-        <Panel title="PRECIOUS METALS" accent="#ffd700">
-          <Stat label="GOLD" value={a.gold} pct={a.goldPct} prefix="$" big accent="#ffd700"/>
-          <Stat label="SILVER" value={a.silver} pct={a.silverPct} prefix="$"/>
-          <Stat label="Au/Ag" value={a.gsR} dec={1}/><Stat label="Au/Oil" value={a.goR} dec={1}/>
-          <Spark data={a.gldH} label="GLD" vKey="close" w={75} h={20}/></Panel>
-        <Panel title="ENERGY">
-          <Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/>
-          <Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$"/>
-          <Stat label="B-W" value={a.bwS} prefix="$"/><Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3}/></Panel>
-        <Panel title="SENTIMENT" accent={a.fg<=20?"#ff006a":"#00f7ff"}>
-          <FGGauge value={a.fg} label={a.fgL}/><Stat label="BTC" value={a.btc} pct={a.btcPct} prefix="$" dec={0}/>
-          <Spark data={a.fgH} label="F/G" vKey="value" w={65} h={18}/></Panel>
-        <Panel title="EQUITIES" accent={a.vix>25?"#ff006a":"#00f7ff"} alert={a.vix>30}>
-          <Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/>
-          <Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0}/>
-          <Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"#ff006a":undefined}/></Panel>
-        <Panel title="YIELD CURVE" accent="#b388ff">
-          <YCurve y2={a.y2} y5={a.y5} y10={a.y10} y30={a.y30} be5={a.be5} be10={a.be10} r5={a.real5} r10={a.real10}/></Panel>
-        <Panel title="CREDIT">
-          <Stat label="IG OAS" value={a.ig} suffix="%" big/><Stat label="HY OAS" value={a.hy} suffix="%" big/>
-          <Stat label="HY-IG" value={a.hyIg} suffix="%"/><Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/></Panel>
-        <Panel title="CORRELATIONS" accent="#b388ff" glow span={2}>
-          {a.correlations.length>0 ? a.correlations.slice(0,6).map((c,i)=>{
-            const abs=Math.abs(c.divergence);const intense=abs>0.3;const flipped=Math.sign(c.corr_1y)!==Math.sign(c.corr_20d)&&abs>0.15;
-            const col=flipped?"#ff006a":intense?"#ffd700":"#4a7a9b";
-            return <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"3px 0",borderBottom:"1px solid rgba(0,80,160,0.03)"}}>
-              <div style={{width:5,height:5,borderRadius:"50%",background:col,flexShrink:0}}/>
-              <span style={{fontSize:7.5,color:"#5a8a9b",flex:1}}>{c.pair}</span>
-              <span style={{fontSize:7,color:"#3a5a6b",minWidth:50}}>1Y {c.corr_1y>0?"+":""}{c.corr_1y}</span>
-              <span style={{fontSize:7,color:col,fontWeight:"bold",minWidth:50}}>20d {c.corr_20d>0?"+":""}{c.corr_20d}</span>
-              <span style={{fontSize:8,color:col,fontWeight:"bold",minWidth:40,textAlign:"right"}}>{c.divergence>0?"+":""}{c.divergence}</span>
-              {flipped&&<span style={{fontSize:5,color:"#ff006a",letterSpacing:0.5}}>FLIP</span>}
-            </div>;})
-            : <div style={{fontSize:7,color:"#1a3a4a",textAlign:"center",padding:8}}>No correlation data</div>}
-          <div style={{fontSize:5.5,color:"#1a3a4a",marginTop:4}}>Divergence = 20d correlation minus 1Y baseline. Large values = relationships changing. FLIP = sign reversal.</div>
-        </Panel>
-        <Panel title="1Y PERCENTILES" accent="#b388ff" span={2}>
-          <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
-            {Object.entries(a.percentiles||{}).map(([k,v])=>{
-              const c=v>90?"#ff006a":v>75?"#ffd700":v<10?"#00ff88":v<25?"#00f7ff":"#3a5a6b";
-              return <div key={k} style={{textAlign:"center",padding:"3px 6px",minWidth:48,background:c+"08",border:"1px solid "+c+"15"}}>
-                <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:0.5}}>{k.toUpperCase()}</div>
-                <div style={{fontSize:11,color:c,fontWeight:"bold"}}>{v}</div>
-              </div>;})}
-            {a.copperGoldRatio&&<div style={{textAlign:"center",padding:"3px 6px",minWidth:48,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:0.5}}>CU/AU</div>
-              <div style={{fontSize:11,color:"#b0d4ea",fontWeight:"bold"}}>{a.copperGoldRatio}</div></div>}
-          </div>
-        </Panel>
-        <Panel title="NET LIQUIDITY" span={2}><LiqPipe bs={a.walclB} tga={a.tgaB} rrp={a.rrpB} net={a.netLiq}/></Panel>
-        <Panel title="COT POSITIONING" span={2}><CotMap cot={a.cot}/></Panel>
-        <Panel title="TOP MOVERS" span={2}>
-          <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-            {(a.summary?.top_movers||[]).map((m,i)=>{const c=m.pct>0?"#00ff88":"#ff006a";
-              return <div key={i} style={{textAlign:"center",padding:"4px 8px",minWidth:60,background:c+"08",border:"1px solid "+c+"18"}}>
-                <div style={{fontSize:6,color:"#3a5a6b",letterSpacing:1}}>{m.asset.toUpperCase()}</div>
-                <div style={{fontSize:13,color:c,fontWeight:"bold"}}>{m.pct>0?"+":""}{m.pct}%</div></div>;})}
-          </div>
-        </Panel>
-        <Panel title="NEWS FEED" span={2}>
-          {a.news.slice(0,8).map((n,i)=><NewsLine key={i} title={n.title} source={n.source} sentiment={n.sentiment}/>)}
-          {a.news.length===0&&<div style={{fontSize:7,color:"#1a3a4a",textAlign:"center",padding:8}}>No news data</div>}
-        </Panel>
-        <Panel title="SUPPLY" span={2}>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
-            {a.oilInv?.commercial_crude&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:70,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>CRUDE</div>
-              <div style={{fontSize:12,color:"#b0d4ea",fontWeight:"bold"}}>{(a.oilInv.commercial_crude.value/1000).toFixed(0)}M</div>
-              <div style={{fontSize:6,color:(a.oilInv.commercial_crude.change||0)>0?"#ff006a":"#00ff88"}}>{a.oilInv.commercial_crude.change>0?"+":""}{(a.oilInv.commercial_crude.change/1000).toFixed(1)}M</div></div>}
-            {a.oilInv?.days_of_supply!=null&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:70,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>DAYS SUPPLY</div>
-              <div style={{fontSize:12,color:a.oilInv.days_of_supply<25?"#ff006a":"#b0d4ea",fontWeight:"bold"}}>{a.oilInv.days_of_supply}</div></div>}
-            {a.oilInv?.spr&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:70,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>SPR</div>
-              <div style={{fontSize:12,color:"#b0d4ea",fontWeight:"bold"}}>{(a.oilInv.spr.value/1000).toFixed(0)}M</div></div>}
-            {a.fpi?.value&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:70,background:a.fpi.alert?.includes("CRISIS")?"rgba(255,0,106,0.06)":"rgba(0,10,25,0.2)",border:"1px solid "+(a.fpi.alert?.includes("CRISIS")?"rgba(255,0,106,0.12)":"rgba(0,247,255,0.05)")}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>FAO FPI</div>
-              <div style={{fontSize:12,color:a.fpi.value>130?"#ff006a":"#b0d4ea",fontWeight:"bold"}}>{a.fpi.value}</div>
-              <div style={{fontSize:5,color:"#1a3a4a"}}>{a.fpi.alert}</div></div>}
-            {a.wheat&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:55,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>WHEAT</div>
-              <div style={{fontSize:10,color:"#b0d4ea"}}>{a.wheat?.toFixed(0)}</div>
-              <div style={{fontSize:6,color:(a.wheatPct||0)>0?"#00ff88":"#ff006a"}}>{a.wheatPct?.toFixed(1)}%</div></div>}
-            {a.corn&&<div style={{textAlign:"center",padding:"4px 8px",minWidth:55,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b"}}>CORN</div>
-              <div style={{fontSize:10,color:"#b0d4ea"}}>{a.corn?.toFixed(0)}</div>
-              <div style={{fontSize:6,color:(a.cornPct||0)>0?"#00ff88":"#ff006a"}}>{a.cornPct?.toFixed(1)}%</div></div>}
-          </div>
-        </Panel>
-      </div>}
+/* ═══ TAB CONTEXT BAR ═══ */
+const TabContextBar=({tabId,gen2,a,onTabChange})=>{
+const nar=gen2?.narrative,id=gen2?.identity,op=gen2?.operator;
+const stName=id?.state?.name||"CALM";
+const stColors={CALM:"#8B949E",ALERT:"#F7B731",ELEVATED:"#E09040",CRITICAL:"#E056A0",STORM:"#FF2222"};
+const domains=TAB_DOMAIN_MAP[tabId]||[];
+const regime=nar?.regime?.primary;
+const divs=(nar?.divergences||[]).filter(d=>{const da=[d.asset_a,d.asset_b,...(d.assets||[])].filter(Boolean).map(x=>x.toLowerCase());return da.some(x=>domains.includes(x))});
+const analogues=gen2?.history?.analogues||[];
+const firstMatch=analogues.find(h=>{const s=h.summary;if(!s||typeof s!=="object")return false;return domains.some(d=>(d+"_pct") in s||(d+"_spot") in s)});
+const whisper=firstMatch?("Jiang: "+(firstMatch.reference_name||"pattern")+" ("+(((firstMatch.similarity_score||0)*100).toFixed(0))+"%)"):analogues[0]?("Jiang: "+(analogues[0].reference_name||"pattern")+" ("+(((analogues[0].similarity_score||0)*100).toFixed(0))+"%)"):null;
+const ctl=op?.cross_tab_links||{};const tabAliases={gold:["gold","metals"],energy:["energy","oil"],rates:["rates","bonds","yields"],fx:["fx","currency"],risk:["risk","equities","correlations","volatility"],crypto:["crypto","bitcoin"],geo:["geo","geopolitical"],liq:["liq","liquidity","macro"]};const myAliases=tabAliases[tabId]||[tabId];const links=Object.values(ctl).filter(tabs=>Array.isArray(tabs)&&tabs.some(t=>myAliases.includes(t))).length;
+if(!nar&&!id)return null;
+return<div className="tab-ctx" style={{borderLeftColor:stColors[stName]||"var(--cyan)"}}>
+<div className="ctx-wire" style={{background:stColors[stName],boxShadow:"0 0 6px "+stColors[stName]}}/>
+{regime&&<span className="ctx-regime">{regime.name?.replace(/_/g," ")}</span>}
+{divs.slice(0,3).map((d,i)=><span key={i} className={"ctx-div "+(d.severity||"warning")} title={d.detail||d.name}>{d.name||d.type}</span>)}
+{whisper&&<span className="ctx-whisper">{whisper}</span>}
+{links>0&&<span className="ctx-links"><span style={{width:4,height:4,borderRadius:"50%",background:"var(--cyan)",display:"inline-block",marginRight:2}}/>{links} wire{links>1?"s":""}</span>}
+</div>};
 
-      {/* GOLD */}
-      {tab==="gold"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="SPOT METALS" accent="#ffd700" glow>
-          <Stat label="XAU" value={a.gold} pct={a.goldPct} prefix="$" big accent="#ffd700"/>
-          <Stat label="XAG" value={a.silver} pct={a.silverPct} prefix="$" big/>
-          <Stat label="COPPER" value={a.copper} pct={a.copperPct} prefix="$" dec={3} big/></Panel>
-        <Panel title="RELATIVE VALUE" accent="#ffd700">
-          <Stat label="Au/Ag" value={a.gsR} dec={1} big/><Stat label="Au/Oil" value={a.goR} dec={1} big/>
-          <div style={{fontSize:7,color:a.goR>60?"#ff006a":"#3a5a6b",marginTop:3}}>
-            {a.goR>60?"EXTREME - safe-haven flight":a.goR>40?"ELEVATED":"NORMAL"}</div></Panel>
-        <Panel title="MACRO DRIVERS" accent="#b388ff">
-          <Stat label="Real 10Y" value={a.real10} suffix="%" big/><Stat label="Real 5Y" value={a.real5} suffix="%"/>
-          <Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3}/><Stat label="10Y BE" value={a.be10} suffix="%"/></Panel>
-        <Panel title="PHYSICAL MARKET" accent="#ffd700" span={2}>
-          <div style={{display:"grid",gridTemplateColumns:"auto auto 1fr",gap:12,alignItems:"start"}}>
-            <Donut pct={a.cxGRp} label="AU REG" sub={a.cxGR?.toFixed(0)+"t"} accent="#ffd700"/>
-            <Donut pct={a.cxSRp} label="AG REG" sub={a.cxSR?.toFixed(0)+"t"} accent="#b0d4ea"/>
-            <div><Stat label="Au Eligible" value={a.cxGE} suffix="t" dec={1}/><Stat label="COMEX Value" value={a.cxTotB} prefix="$" suffix="B"/>
-              <Stat label="COMEX/GLD" value={a.cxCov} suffix="%"/><Stat label="GLD" value={a.gldT} suffix="t" dec={1}/>
-              <Stat label="SGE CNY/g" value={a.sgeCny} dec={2}/><Spark data={a.gldH} label="GLD" vKey="close" w={80} h={22}/></div></div></Panel>
-        <Panel title="METALS COT" accent="#00f7ff">
-          {a.cot.filter(c=>["gold","silver","copper"].includes(c.id)).map(c=>
-            <CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
-      </div>}
+/* ═══ CIPHER CHART (Candlestick + 1Y) ═══ */
+const CipherChart=({asset,span})=>{
+const containerRef=useRef(null);const chartRef=useRef(null);const seriesRef=useRef(null);const roRef=useRef(null);
+const[loading,setLoading]=useState(true);const[err,setErr]=useState(null);
+const[maVis,setMaVis]=useState({sma20:true,sma50:true,sma200:true});
+const[data,setData]=useState(null);
+useEffect(()=>{fetch(CIPHER_API+"/api/price-history/"+asset+"?days=365").then(r=>r.json()).then(d=>{setData(d);setLoading(false)}).catch(e=>{setErr(e.message);setLoading(false)})},[asset]);
+/* Effect 1: chart creation — deferred to setTimeout so container has layout width */
+useEffect(()=>{
+if(!data?.series?.length||!window.LightweightCharts)return;
+const buildChart=()=>{
+const el=containerRef.current;if(!el||el.clientWidth<10)return;
+if(chartRef.current){chartRef.current.remove();chartRef.current=null}
+const chart=LightweightCharts.createChart(el,{width:el.clientWidth,height:220,
+layout:{background:{color:"#0c0c12"},textColor:"rgba(200,210,220,0.45)",fontFamily:"'JetBrains Mono',monospace",fontSize:9},
+grid:{vertLines:{color:"rgba(0,180,240,0.03)"},horzLines:{color:"rgba(0,180,240,0.03)"}},
+crosshair:{mode:0,vertLine:{color:"rgba(0,180,240,0.15)",labelBackgroundColor:"#0c0c12"},horzLine:{color:"rgba(0,180,240,0.15)",labelBackgroundColor:"#0c0c12"}},
+rightPriceScale:{borderColor:"rgba(0,180,240,0.08)"},timeScale:{borderColor:"rgba(0,180,240,0.08)",timeVisible:false}});
+const hasOHLC=data.series[0]?.open!=null;
+let mainSeries;
+if(hasOHLC){mainSeries=chart.addCandlestickSeries({upColor:"#4ecdc4",downColor:"#e056a0",borderUpColor:"#4ecdc4",borderDownColor:"#e056a0",wickUpColor:"#4ecdc488",wickDownColor:"#e056a088"});mainSeries.setData(data.series.map(p=>({time:p.date,open:p.open,high:p.high,low:p.low,close:p.close})))}
+else{mainSeries=chart.addLineSeries({color:"#00b4f0",lineWidth:2,priceLineVisible:false,lastValueVisible:true,crosshairMarkerRadius:4});mainSeries.setData(data.series.map(p=>({time:p.date,value:p.close})))}
+const maC={sma20:"#4ecdc4",sma50:"#f7b731",sma200:"#e056a0"};const refs={main:mainSeries};
+["sma20","sma50","sma200"].forEach(ma=>{
+const md=data.series.filter(p=>p[ma]).map(p=>({time:p.date,value:p[ma]}));
+if(md.length>0){const s=chart.addLineSeries({color:maC[ma],lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false,visible:maVis[ma]});s.setData(md);refs[ma]=s}
+else if(data.current_ma?.[ma]){mainSeries.createPriceLine({price:data.current_ma[ma],color:maC[ma],lineWidth:1,lineStyle:1,axisLabelVisible:true,title:ma.toUpperCase()})}});
+chart.timeScale().fitContent();chartRef.current=chart;seriesRef.current=refs;
+const ro=new ResizeObserver(()=>{if(el&&chartRef.current)chartRef.current.applyOptions({width:el.clientWidth})});ro.observe(el);roRef.current=ro};
+/* Try immediately, retry after short delay if container not ready */
+const tid=setTimeout(()=>{if(!chartRef.current)buildChart()},50);
+buildChart();
+return()=>{clearTimeout(tid);if(roRef.current)roRef.current.disconnect();if(chartRef.current){chartRef.current.remove();chartRef.current=null;seriesRef.current=null}}},[data]);
+/* Effect 2: MA visibility toggle — no chart recreation */
+useEffect(()=>{const refs=seriesRef.current;if(!refs)return;["sma20","sma50","sma200"].forEach(ma=>{if(refs[ma])refs[ma].applyOptions({visible:maVis[ma]})})},[maVis]);
+if(loading)return<Panel title={asset.toUpperCase()+" CHART"} span={span}><div style={{height:220,display:"flex",alignItems:"center",justifyContent:"center"}}><div className="spinner"/></div></Panel>;
+if(err||!data?.series?.length)return<Panel title={asset.toUpperCase()+" CHART"} span={span}><div style={{fontFamily:"var(--mono)",fontSize:9,color:"var(--text-ghost)",textAlign:"center",padding:40}}>Chart: {data?.points||0} points</div></Panel>;
+const last=data.series[data.series.length-1];
+return<Panel title={asset.toUpperCase()+" PRICE"} accent="var(--cyan)" glow span={span} ts={data.pulled_at}>
+<div ref={containerRef} style={{width:"100%",height:220}}/>
+<div style={{display:"flex",gap:6,marginTop:6,justifyContent:"center",alignItems:"center"}}>
+{["sma20","sma50","sma200"].map(ma=>{const has=data.series.some(p=>p[ma])||data.current_ma?.[ma];if(!has)return null;const rgb={sma20:"78,205,196",sma50:"247,183,49",sma200:"224,86,160"};const hex={sma20:"#4ecdc4",sma50:"#f7b731",sma200:"#e056a0"};return<button key={ma} onClick={()=>setMaVis(p=>({...p,[ma]:!p[ma]}))} style={{fontFamily:"var(--mono)",fontSize:7,letterSpacing:1,padding:"2px 8px",background:maVis[ma]?"rgba("+rgb[ma]+",0.1)":"var(--bg)",border:"1px solid "+(maVis[ma]?hex[ma]+"44":"var(--border)"),color:maVis[ma]?hex[ma]:"var(--text-ghost)",cursor:"pointer",borderRadius:2}}>{ma.toUpperCase()}</button>})}
+{data.points>0&&<span style={{fontFamily:"var(--mono)",fontSize:7,color:"var(--text-ghost)",marginLeft:8}}>{data.points}d</span>}
+</div>
+{data.percentile!=null&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",textAlign:"center",marginTop:4}}>1Y Percentile: <span style={{color:data.percentile>80?"var(--pink)":data.percentile<20?"var(--teal)":"var(--text)"}}>{data.percentile}%</span></div>}
+</Panel>};
 
-      {/* ENERGY */}
-      {tab==="energy"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="CRUDE" glow>
-          <Stat label="BRENT" value={a.brent} pct={a.brentPct} prefix="$" big/>
-          <Stat label="WTI" value={a.wti} pct={a.wtiPct} prefix="$" big/>
-          <Stat label="B-W Spread" value={a.bwS} prefix="$" big/><Stat label="Au/Oil" value={a.goR} dec={1}/></Panel>
-        <Panel title="NATURAL GAS">
-          <Stat label="NATGAS" value={a.natgas} pct={a.natgasPct} prefix="$" dec={3} big/>
-          <Stat label="Oil/Gas" value={a.ogR} dec={1} big/></Panel>
-        <Panel title="SUPPLY RISK" accent="#ff6b00">
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:3}}>
-            {["strait_of_hormuz","red_sea","saudi_oil","libya_oil"].map(id=>{const z=zf(id);
-              return <div key={id} style={{textAlign:"center",padding:"4px",background:z.fires>100?"rgba(255,0,106,0.05)":"rgba(0,10,25,0.2)",border:"1px solid "+(z.fires>100?"rgba(255,0,106,0.12)":"rgba(0,247,255,0.03)")}}>
-                <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>{id.replace(/_/g," ").toUpperCase().substring(0,10)}</div>
-                <div style={{fontSize:14,color:z.fires>100?"#ff006a":z.fires>0?"#ffa040":"#0a1520",fontWeight:"bold"}}>{z.fires||"CLR"}</div>
-                {z.high>0&&<div style={{fontSize:5.5,color:"#ff006a"}}>{z.high}H</div>}</div>;})}</div></Panel>
-        <Panel title="ENERGY COT" span={2}>
-          {a.cot.filter(c=>["wti","brent","natgas"].includes(c.id)).map(c=>
-            <CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
-        <Panel title="CROSS-ASSET" accent="#ffd700">
-          <Stat label="Au/Oil" value={a.goR} dec={1} big/><Stat label="VIX" value={a.vix} pct={a.vixPct}/></Panel>
-        <Panel title="US INVENTORIES (EIA)" accent="#ff6b00" span={3}>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
-            {[{k:"commercial_crude",l:"COMMERCIAL",u:"K bbl"},{k:"spr",l:"SPR",u:"K bbl"},{k:"cushing",l:"CUSHING",u:"K bbl"},
-              {k:"crude_production",l:"PRODUCTION",u:"K/d"},{k:"crude_imports",l:"IMPORTS",u:"K/d"},{k:"refinery_inputs",l:"REFINERY",u:"K/d"}
-            ].map(s=>{const d=a.oilInv?.[s.k];if(!d) return null;
-              return <div key={s.k} style={{textAlign:"center",padding:"5px 10px",minWidth:80,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-                <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>{s.l}</div>
-                <div style={{fontSize:13,color:"#b0d4ea",fontWeight:"bold"}}>{(d.value/1000).toFixed(0)}M</div>
-                {d.change!=null&&<div style={{fontSize:7,color:d.change>0?"#ff006a":"#00ff88"}}>{d.change>0?"+":""}{(d.change/1000).toFixed(1)}M</div>}
-                <div style={{fontSize:5,color:"#1a3a4a"}}>{d.date}</div></div>;})}
-            {a.oilInv?.days_of_supply!=null&&<div style={{textAlign:"center",padding:"5px 10px",minWidth:80,
-              background:a.oilInv.days_of_supply<25?"rgba(255,0,106,0.06)":"rgba(0,10,25,0.2)",
-              border:"1px solid "+(a.oilInv.days_of_supply<25?"rgba(255,0,106,0.12)":"rgba(0,247,255,0.05)")}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>DAYS SUPPLY</div>
-              <div style={{fontSize:16,color:a.oilInv.days_of_supply<25?"#ff006a":"#00ff88",fontWeight:"bold"}}>{a.oilInv.days_of_supply}</div>
-              <div style={{fontSize:5,color:"#1a3a4a"}}>days at current refinery rate</div></div>}
-            {a.oilInv?.spr_commercial_pct!=null&&<div style={{textAlign:"center",padding:"5px 10px",minWidth:80,background:"rgba(0,10,25,0.2)",border:"1px solid rgba(0,247,255,0.05)"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>SPR/COMM</div>
-              <div style={{fontSize:16,color:"#b388ff",fontWeight:"bold"}}>{a.oilInv.spr_commercial_pct}%</div></div>}
-          </div>
-        </Panel>
-      </div>}
+/* ═══ DASHBOARD SHELL ═══ */
+const Dashboard=({a,intel,gen2})=>{
+const hasGen2=gen2?.narrative||gen2?.identity;
+const[tab,setTab]=useState(hasGen2?"cypher":"gold");
+const[time,setTime]=useState(new Date());
+useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t)},[]);
+const zf=(id)=>a.zones.find(z=>z.id===id)||{fires:0,high:0};
+const stName=gen2?.identity?.state?.name||"CALM";
+const stColors={CALM:"#8B949E",ALERT:"#F7B731",ELEVATED:"#E09040",CRITICAL:"#E056A0",STORM:"#FF2222"};
+const stColor=stColors[stName]||"var(--cyan)";
+const pulseRate=gen2?.identity?.state?.pulse_rate||3;
+const tabs=[...(hasGen2?[{id:"cypher",l:"CYPHER"}]:[]),{id:"gold",l:"GOLD"},{id:"energy",l:"ENERGY"},{id:"rates",l:"RATES"},{id:"fx",l:"FX"},{id:"risk",l:"RISK"},{id:"crypto",l:"CRYPTO"},{id:"geo",l:"GEO"},{id:"liq",l:"LIQUIDITY"}];
+return<div className="cipher-shell">
+<div className="cipher-header"><div className="cipher-brand"><div className="cipher-eye" data-state={stName}/><span className="name">CIPHER</span><span className="sub">muFX Intelligence</span></div><div className="cipher-meta"><div><div className="cipher-clock">{time.toLocaleTimeString("en-US",{hour12:false})}</div><div className="cipher-date">{a.date} {'\u00B7'} {a.generatedAt?timeAgo(a.generatedAt):"--"} {'\u00B7'} {a.pipesOk} PIPES {'\u00B7'} {a.flags} FLAGS{isStale(a.generatedAt)&&<span style={{color:"var(--pink)",marginLeft:4}}>STALE</span>}</div></div><div className="cipher-pulse" style={{background:stColor,boxShadow:"0 0 6px "+stColor,animation:"pulse "+pulseRate+"s ease-in-out infinite"}}/></div></div>
+{gen2?.identity?.status_line&&<div style={{padding:"6px 0",marginBottom:2,borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:8}}>
+<span style={{fontFamily:"var(--mono)",fontSize:7,letterSpacing:2,color:stColor,textTransform:"uppercase",flexShrink:0}}>{stName}</span>
+<span style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text-dim)",fontWeight:300,lineHeight:1.6,wordBreak:"break-word"}}>{gen2.identity.status_line}</span>
+</div>}
+<div className="cipher-tabs">{tabs.map(t=><button key={t.id} className={tab===t.id?"active":""} onClick={()=>setTab(t.id)} style={t.id==="cypher"?{color:tab==="cypher"?stColor:"var(--text-ghost)",borderBottomColor:tab==="cypher"?stColor:"transparent"}:{}}>{t.l}</button>)}</div>
+{tab==="cypher"&&<CypherTab gen2={gen2} a={a} intel={intel}/>}
+{tab==="gold"&&<><TabContextBar tabId="gold" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="gold" span={3}/><GoldTab a={a}/></>}
+{tab==="energy"&&<><TabContextBar tabId="energy" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="brent" span={3}/><EnergyTab a={a} zf={zf}/></>}
+{tab==="rates"&&<><TabContextBar tabId="rates" gen2={gen2} a={a} onTabChange={setTab}/><RatesTab a={a}/></>}
+{tab==="fx"&&<><TabContextBar tabId="fx" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="dxy" span={2}/><FxTab a={a}/></>}
+{tab==="risk"&&<><TabContextBar tabId="risk" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="vix" span={3}/><RiskTab a={a}/></>}
+{tab==="crypto"&&<><TabContextBar tabId="crypto" gen2={gen2} a={a} onTabChange={setTab}/><CipherChart asset="btc" span={3}/><CryptoTab a={a}/></>}
+{tab==="geo"&&<><TabContextBar tabId="geo" gen2={gen2} a={a} onTabChange={setTab}/><GeoTab a={a} zf={zf} ts={a.pipeTs?.firms}/></>}
+{tab==="liq"&&<><TabContextBar tabId="liq" gen2={gen2} a={a} onTabChange={setTab}/><LiqTab a={a}/></>}
+</div>};
 
-      {/* RATES */}
-      {tab==="rates"&&<div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="US TREASURY CURVE" accent="#b388ff" glow>
-          <YCurve y2={a.y2} y5={a.y5} y10={a.y10} y30={a.y30} be5={a.be5} be10={a.be10} r5={a.real5} r10={a.real10}/>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:4,marginTop:6}}>
-            {[{l:"2s10s",v:a.s2s10},{l:"5s30s",v:a.s5s30},{l:"10s30s",v:a.s10s30},{l:"US-DE",v:a.usDeS}].map(s=>
-              <div key={s.l} style={{textAlign:"center",background:"rgba(0,10,25,0.2)",padding:"3px",border:"1px solid "+((s.v||0)<0?"rgba(255,0,106,0.1)":"rgba(0,247,255,0.03)")}}>
-                <div style={{fontSize:5.5,color:"#3a5a6b"}}>{s.l}</div>
-                <div style={{fontSize:12,color:(s.v||0)<0?"#ff006a":"#b0d4ea",fontWeight:"bold"}}>{s.v}%</div></div>)}</div></Panel>
-        <Panel title="10Y DECOMPOSITION" accent="#ffd700">
-          <YieldDecomp nominal={a.y10} breakeven={a.be10} real={a.real10}/>
-          <div style={{fontSize:7,color:"#3a5a6b",marginTop:3}}>Nominal = Inflation + Real</div></Panel>
-        <Panel title="CREDIT">
-          <Stat label="IG OAS" value={a.ig} suffix="%" big/><Stat label="HY OAS" value={a.hy} suffix="%" big/>
-          <Stat label="HY-IG" value={a.hyIg} suffix="%" big/>
-          <div style={{fontSize:7,color:a.hyIg>3?"#ff006a":"#3a5a6b",marginTop:3}}>{a.hyIg>3?"STRESS: HY diverging":"Credit stable"}</div></Panel>
-        <Panel title="FUNDING">
-          <Stat label="SOFR" value={a.sofr} suffix="%" big/><Stat label="EFFR" value={a.effr} suffix="%"/>
-          <Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/>
-          <Stat label="German 10Y" value={a.de10} suffix="%"/><Stat label="US-DE" value={a.usDeS} suffix="%"/></Panel>
-        <Panel title="BOND COT" span={2}>
-          {a.cot.filter(c=>["ust_2y","ust_10y","vix"].includes(c.id)).map(c=>
-            <CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
-        {a.indirectTrend?.avg_10_auction&&<Panel title="FOREIGN DEMAND (INDIRECT BIDS)" accent="#b388ff" span={2}>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center",alignItems:"center"}}>
-            <div style={{textAlign:"center",padding:"5px 12px"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>10-AUCTION AVG</div>
-              <div style={{fontSize:18,color:a.indirectTrend.signal==="WEAK_DEMAND"?"#ff006a":"#b0d4ea",fontWeight:"bold"}}>{a.indirectTrend.avg_10_auction}%</div></div>
-            <div style={{textAlign:"center",padding:"5px 12px"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>FULL AVG</div>
-              <div style={{fontSize:14,color:"#5a8a9b"}}>{a.indirectTrend.avg_all}%</div></div>
-            <div style={{textAlign:"center",padding:"5px 12px"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>Z-SCORE</div>
-              <div style={{fontSize:14,color:a.indirectTrend.z_score<-1?"#ff006a":a.indirectTrend.z_score>1?"#00ff88":"#5a8a9b",fontWeight:"bold"}}>{a.indirectTrend.z_score}</div></div>
-            <div style={{textAlign:"center",padding:"5px 12px"}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>TREND</div>
-              <div style={{fontSize:11,color:a.indirectTrend.trend==="declining"?"#ff006a":a.indirectTrend.trend==="rising"?"#00ff88":"#5a8a9b",fontWeight:"bold",letterSpacing:1}}>{a.indirectTrend.trend?.toUpperCase()}</div></div>
-            <div style={{textAlign:"center",padding:"5px 12px",background:a.indirectTrend.signal==="WEAK_DEMAND"?"rgba(255,0,106,0.06)":"rgba(0,255,136,0.04)",border:"1px solid "+(a.indirectTrend.signal==="WEAK_DEMAND"?"rgba(255,0,106,0.15)":"rgba(0,247,255,0.05)"),minWidth:90}}>
-              <div style={{fontSize:5.5,color:"#3a5a6b",letterSpacing:1}}>SIGNAL</div>
-              <div style={{fontSize:11,color:a.indirectTrend.signal==="WEAK_DEMAND"?"#ff006a":"#00ff88",fontWeight:"bold"}}>{a.indirectTrend.signal}</div></div>
-          </div>
-          <div style={{fontSize:6,color:"#1a3a4a",marginTop:4,textAlign:"center"}}>Indirect bidders = foreign central bank proxy. Declining trend = petrodollar recycling slowdown.</div>
-        </Panel>}
-      </div>}
+/* ═══ APP ROOT ═══ */
+window.CipherApp=function CipherApp(){
+const[phase,setPhase]=useState("auth");
+const[analytics,setAnalytics]=useState(null);
+const[intel,setIntel]=useState(null);
+const[gen2,setGen2]=useState({});
+useEffect(()=>{if(phase==="dash"&&!analytics&&window.__CIPHER__){
+setAnalytics(compute(window.__CIPHER__.briefing));setIntel(window.__CIPHER__.intel);
+setGen2({narrative:window.__CIPHER__.narrative,identity:window.__CIPHER__.identity,history:window.__CIPHER__.history,operator:window.__CIPHER__.operator});
+}},[phase]);
+useEffect(()=>{document.body.setAttribute("data-cipher-state",gen2?.identity?.state?.name||"CALM")},[gen2]);
+if(phase==="auth")return<PwGate onAuth={()=>setPhase("boot")}/>;
+if(phase==="boot")return<Boot onDone={()=>setPhase("dash")}/>;
+if(!analytics)return<div className="cipher-loading"><div className="spinner"/><div className="status">PROCESSING</div></div>;
+return<Dashboard a={analytics} intel={intel} gen2={gen2}/>};
 
-      {/* FX */}
-      {tab==="fx"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="DOLLAR" glow>
-          <Stat label="DXY" value={a.dxy} pct={a.dxyPct} dec={3} big/>
-          <div style={{fontSize:7,color:"#3a5a6b",marginTop:3}}>{a.dxy<100?"WEAK DOLLAR - supports commodities":"STRONG DOLLAR - risk headwind"}</div></Panel>
-        <Panel title="CENTRAL BANKS" accent="#b388ff">
-          <Stat label="PBOC Fix" value={a.pboc} dec={4} big/><Stat label="CNH Spread" value={a.cnyS} dec={4}/>
-          {a.bojZ&&<div style={{fontSize:7,color:a.bojZ.includes("CRITICAL")?"#ff006a":"#3a5a6b",marginTop:2}}>BOJ: {a.bojZ}</div>}
-          <Stat label="ECB Depo" value={a.ecbD} suffix="%"/><Stat label="ECB Refi" value={a.ecbR} suffix="%"/></Panel>
-        <Panel title="FX SPOT + COT" span={2}>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
-            {[{n:"EUR/USD",v:a.eurusd,p:a.eurusdPct,c:a.cEur},{n:"USD/JPY",v:a.usdjpy,p:a.usdjpyPct,c:a.cJpy},
-              {n:"GBP/USD",v:a.gbpusd,p:a.gbpusdPct,c:a.cGbp},{n:"AUD/USD",v:a.audusd,p:a.audusdPct,c:a.cAud},
-              {n:"USD/CAD",v:a.usdcad,p:a.usdcadPct,c:a.cCad},{n:"USD/CHF",v:a.usdchf,p:a.usdchfPct,c:a.cChf}].map(f=>
-              <div key={f.n} style={{background:"rgba(0,10,25,0.2)",padding:"5px 6px",border:"1px solid rgba(0,247,255,0.03)"}}>
-                <div style={{display:"flex",justifyContent:"space-between",marginBottom:2}}>
-                  <span style={{fontSize:7,color:"#00f7ff77"}}>{f.n}</span>
-                  <span style={{fontSize:6,color:(f.c||0)>0?"#00ff88":"#ff006a"}}>{(f.c||0)>0?"LONG":"SHORT"} {f.c}%</span></div>
-                <div style={{fontSize:13,color:"#b0d4ea"}}>{f.v?.toFixed(4)}</div>
-                <div style={{fontSize:7,color:(f.p||0)>0?"#00ff88":"#ff006a"}}>{(f.p||0)>0?"+":""}{f.p?.toFixed(2)}%</div></div>)}</div></Panel>
-        <Panel title="FX COT" span={2}>
-          {a.cot.filter(c=>["eurusd","usdjpy","gbpusd","usdchf","audusd","usdcad"].includes(c.id)).map(c=>
-            <CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
-        {Object.keys(a.swift).length>0&&<Panel title="SWIFT PAYMENT SHARE" accent="#b388ff" span={2}>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center"}}>
-            {["USD","EUR","GBP","JPY","CNY"].map(c=>{const v=a.swift[c];const t=a.swiftTrends[c];
-              if(!v) return null;
-              const col=c==="USD"?"#00f7ff":c==="CNY"?"#ff006a":c==="EUR"?"#ffd700":"#5a8a9b";
-              return <div key={c} style={{textAlign:"center",padding:"5px 10px",minWidth:65,background:"rgba(0,10,25,0.2)",border:"1px solid "+col+"15"}}>
-                <div style={{fontSize:7,color:col,fontWeight:"bold"}}>{c}</div>
-                <div style={{fontSize:14,color:"#b0d4ea",fontWeight:"bold"}}>{v}%</div>
-                {t&&<div style={{fontSize:6,color:t.direction==="rising"?"#00ff88":t.direction==="falling"?"#ff006a":"#3a5a6b"}}>{t.direction} ({t.change>0?"+":""}{t.change})</div>}
-              </div>;})}
-          </div>
-        </Panel>}
-      </div>}
-
-      {/* RISK */}
-      {tab==="risk"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="VOLATILITY" accent={a.vix>25?"#ff006a":"#00f7ff"} glow>
-          <Stat label="VIX" value={a.vix} pct={a.vixPct} big accent={a.vix>25?"#ff006a":undefined}/>
-          <Stat label="COT VIX" value={a.cVix} suffix="%"/>
-          {a.percentiles?.vix!=null&&<div style={{fontSize:7,color:"#3a5a6b",marginTop:3}}>1Y Percentile: {a.percentiles.vix}%</div>}</Panel>
-        <Panel title="EQUITIES">
-          <Stat label="SPX" value={a.spx} pct={a.spxPct} dec={0} big/>
-          <Stat label="NIKKEI" value={a.nikkei} pct={a.nikkeiPct} dec={0} big/>
-          {a.percentiles?.spx!=null&&<div style={{fontSize:7,color:"#3a5a6b",marginTop:3}}>SPX 1Y Percentile: {a.percentiles.spx}%</div>}</Panel>
-        <Panel title="REGIME RADAR"><Radar data={a.regime}/></Panel>
-        <Panel title="CORRELATION SHIFTS" accent="#b388ff" glow span={2}>
-          {a.correlations.slice(0,4).map((c,i)=>{const col=Math.abs(c.divergence)>0.3?"#ffd700":"#4a7a9b";
-            return <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"2px 0",fontSize:7}}>
-              <span style={{color:"#5a8a9b"}}>{c.pair}</span>
-              <span style={{color:col}}>{c.divergence>0?"+":""}{c.divergence} (1Y:{c.corr_1y} → 20d:{c.corr_20d})</span>
-            </div>;})}
-        </Panel>
-        <Panel title="BOND COT" accent="#b388ff">
-          {a.cot.filter(c=>["ust_2y","ust_10y"].includes(c.id)).map(c=>
-            <CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}</Panel>
-      </div>}
-
-      {/* CRYPTO */}
-      {tab==="crypto"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="SENTIMENT" accent={a.fg<=20?"#ff006a":"#00f7ff"} glow>
-          <FGGauge value={a.fg} label={a.fgL}/>
-          <Spark data={a.fgH} label="7d" vKey="value" w={85} h={22}/>
-          <div style={{fontSize:7,color:"#3a5a6b",marginTop:3}}>
-            {a.fg<=15?"EXTREME FEAR - contrarian buy":a.fg<=25?"FEAR zone":a.fg>=75?"EXTREME GREED":"Neutral"}</div></Panel>
-        <Panel title="BITCOIN">
-          <Stat label="BTC Spot" value={a.btc} pct={a.btcPct} prefix="$" dec={0} big/>
-          <Stat label="BTC Perp" value={a.perpBtc} prefix="$" dec={0}/>
-          <Stat label="Basis" value={a.basis} suffix="%" dec={3} big/>
-          <Stat label="ETH Perp" value={a.perpEth} prefix="$" dec={2}/></Panel>
-        <Panel title="STRUCTURE" accent="#b388ff">
-          <Stat label="Mcap" value={a.mcapT} prefix="$" suffix="T" big/>
-          <Stat label="BTC Dom" value={a.btcDom} suffix="%" dec={1} big/>
-          <Stat label="ETH Dom" value={a.ethDom} suffix="%" dec={1}/></Panel>
-        <Panel title="STABLECOIN SUPPLY"><StableDonut stables={a.stables} total={a.stMcapB}/></Panel>
-        <Panel title="DEFI" accent="#b388ff">
-          <div style={{textAlign:"center",background:"rgba(0,10,25,0.2)",padding:"8px",border:"1px solid rgba(0,247,255,0.03)"}}>
-            <div style={{fontSize:6,color:"#3a5a6b"}}>TVL</div>
-            <div style={{fontSize:20,color:"#b388ff",fontWeight:"bold"}}>{"$"+a.tvlB+"B"}</div>
-            <div style={{fontSize:7,color:a.tvlWk<-2?"#ff006a":"#3a5a6b"}}>7d: {a.tvlWk}%</div></div></Panel>
-        <Panel title="ANALYSIS">
-          <div style={{fontSize:7,color:"#5a8a9b",lineHeight:1.7}}>
-            {a.fg<=20?"Fear extreme. ":(a.fg>=75?"Greed extreme. ":"")}
-            {a.stMcapB>200?"$"+a.stMcapB+"B sidelined. ":""}
-            {a.btcDom>55?"BTC dominant - risk-off crypto. ":""}</div></Panel>
-      </div>}
-
-      {/* GEO */}
-      {tab==="geo"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="THREAT LEVEL" accent="#ff6b00" glow span={2}>
-          <div style={{display:"flex",gap:8,alignItems:"center",justifyContent:"center"}}>
-            <div style={{textAlign:"center"}}><div style={{fontSize:5.5,color:"#3a5a6b"}}>TOTAL FIRES</div>
-              <div style={{fontSize:20,color:a.totF>1000?"#ff006a":"#ffa040",fontWeight:"bold"}}>{a.totF}</div></div>
-            <div style={{textAlign:"center"}}><div style={{fontSize:5.5,color:"#3a5a6b"}}>HIGH CONF</div>
-              <div style={{fontSize:20,color:a.totH>50?"#ff006a":"#ffa040",fontWeight:"bold"}}>{a.totH}</div></div>
-            <div style={{textAlign:"center"}}><div style={{fontSize:5.5,color:"#3a5a6b"}}>ZONES ACTIVE</div>
-              <div style={{fontSize:20,color:"#b0d4ea",fontWeight:"bold"}}>{a.zones.filter(z=>z.fires>0).length}/{a.zones.length}</div></div>
-          </div>
-        </Panel>
-        <Panel title="FIRMS SATELLITE" accent="#ff6b00" span={2}>
-          <FireMap fires={a.fps} zones={a.zones}/></Panel>
-        <Panel title="ZONES" accent="#ff6b00">
-          {a.zones.map(z=><div key={z.id} style={{display:"flex",alignItems:"center",gap:4,padding:"1.5px 0"}}>
-            <div style={{width:5,height:5,borderRadius:"50%",background:z.fires===0?"#0a1520":z.high>0?"#ff006a":"#ffa040",
-              boxShadow:z.high>0?"0 0 4px #ff006a":"none",animation:z.high>0?"blink 1.5s infinite":"none"}}/>
-            <span style={{flex:1,fontSize:7,color:z.fires===0?"#1a2a3a":"#5a8a9b"}}>{z.name.replace(/_/g," ")}</span>
-            <span style={{fontSize:7,color:z.fires===0?"#0a1520":z.high>0?"#ff006a":"#7a8a4a"}}>{z.fires||"CLR"}{z.high>0&&<span style={{color:"#ff006a"}}> {z.high}H</span>}</span>
-          </div>)}</Panel>
-        <Panel title="PREDICTIONS">
-          {a.poly.map((m,i)=><ProbBar key={i} question={m.question} prob={m.yes_probability}/>)}</Panel>
-        <Panel title="SUPPLY RISK" accent="#ff6b00" span={2}>
-          <div style={{display:"flex",gap:5,justifyContent:"center"}}>
-            {["strait_of_hormuz","red_sea","saudi_oil","libya_oil"].map(id=>{const z=zf(id);
-              return <div key={id} style={{textAlign:"center",padding:"5px 10px",minWidth:65,background:z.fires>100?"rgba(255,0,106,0.05)":"rgba(0,10,25,0.2)",
-                border:"1px solid "+(z.fires>100?"rgba(255,0,106,0.12)":"rgba(0,247,255,0.03)")}}>
-                <div style={{fontSize:6,color:"#3a5a6b",letterSpacing:1}}>{id.replace(/_/g," ").toUpperCase().substring(0,10)}</div>
-                <div style={{fontSize:15,color:z.fires>100?"#ff006a":z.fires>0?"#ffa040":"#0a1520",fontWeight:"bold"}}>{z.fires||"CLR"}</div></div>;})}</div></Panel>
-      </div>}
-
-      {/* LIQUIDITY */}
-      {tab==="liq"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,animation:"fadeIn 0.3s"}}>
-        <Panel title="NET LIQUIDITY" glow span={3}><LiqPipe bs={a.walclB} tga={a.tgaB} rrp={a.rrpB} net={a.netLiq}/></Panel>
-        <Panel title="FED BS">
-          <Stat label="Total" value={a.walclB} prefix="$" suffix="B" dec={0} big/><Stat label="Chg" value={a.bsChg} suffix="M" dec={0}/>
-          <Stat label="Reserves" value={a.reserveBal} prefix="$" suffix="M" dec={0}/>
-          <div style={{fontSize:7,color:a.bsChg<-10000?"#ff006a":"#3a5a6b",marginTop:3}}>{a.bsChg<-10000?"QT active":a.bsChg>10000?"EXPANDING":"Stable"}</div></Panel>
-        <Panel title="TGA" accent="#ffd700">
-          <Stat label="Balance" value={a.tgaB} prefix="$" suffix="B" dec={0} big/><Stat label="Chg" value={a.tgaChg} suffix="M" dec={0}/>
-          <div style={{fontSize:7,color:a.tgaChg<-20000?"#00ff88":"#3a5a6b",marginTop:3}}>{a.tgaChg<-20000?"DRAWDOWN":a.tgaChg>20000?"BUILDING":"Stable"}</div></Panel>
-        <Panel title="MONEY MARKETS">
-          <Stat label="ON RRP" value={a.rrpB} prefix="$" suffix="B" big/><Stat label="SOFR" value={a.sofr} suffix="%" big/>
-          <Stat label="EFFR" value={a.effr} suffix="%"/><Stat label="SOFR-EFFR" value={a.sofrEffr} suffix="%" dec={3}/></Panel>
-        <Panel title="SUPPLY" accent="#b388ff">
-          <Stat label="M2" value={a.m2} prefix="$" suffix="B" dec={1} big/>
-          <Stat label="Unemployment" value={a.unemp} suffix="%"/><Stat label="Mortgage" value={a.mortgage} suffix="%"/></Panel>
-        <Panel title="INTERPRETATION">
-          <div style={{fontSize:7,color:"#5a8a9b",lineHeight:1.7}}>
-            {a.netLiq>5500?"Net liq positive - risk-on. ":a.netLiq>0?"Net liq low. ":"Negative - headwind. "}
-            {a.tgaChg<-20000?"TGA drawdown. ":""}
-            {a.bsChg<-10000?"QT running. ":""}
-            {(a.sofrEffr||0)>0.05?"Funding stress. ":""}</div></Panel>
-      </div>}
-    </div>
-    <style>{["@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}",
-      "@keyframes alertPulse{0%,100%{border-color:rgba(255,0,106,0.1)}50%{border-color:rgba(255,0,106,0.3)}}",
-      "@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}"].join("")}</style>
-  </div>;
-};
-
-// ═══ APP (auto-fetches from API, skips file upload step) ═══
-window.CipherPortal = function CipherPortal() {
-  const [phase,setPhase]=useState("auth");
-  const [analytics,setAnalytics]=useState(null);
-
-  // Auto-load from API data when entering dash phase
-  useEffect(()=>{
-    if(phase==="dash" && !analytics && window.__CIPHER_BRIEFING__) {
-      setAnalytics(compute(window.__CIPHER_BRIEFING__));
-    }
-  },[phase]);
-
-  const handleFile = (e) => {
-    const file=e.target.files[0];if(!file) return;
-    const reader=new FileReader();
-    reader.onload=(ev)=>{try{setAnalytics(compute(JSON.parse(ev.target.result)));}catch(err){console.error(err);}};
-    reader.readAsText(file);
-  };
-
-  if(phase==="auth") return <PwGate onAuth={()=>setPhase("boot")}/>;
-  if(phase==="boot") return <Boot onDone={()=>setPhase("dash")}/>;
-  if(!analytics) return <div style={{position:"fixed",inset:0,background:"#030810",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:12,fontFamily:"monospace"}}>
-    <Bg/><div style={{position:"relative",zIndex:10,textAlign:"center"}}>
-      <div style={{fontSize:12,letterSpacing:4,color:"#00f7ff",marginBottom:5}}>CIPHER</div>
-      <div style={{fontSize:7,color:"#1a4a6a",marginBottom:16}}>Upload briefing JSON</div>
-      <label style={{border:"1px solid rgba(0,247,255,0.1)",padding:"8px 20px",cursor:"pointer",fontSize:7,letterSpacing:2,color:"#00f7ff"}}>
-        LOAD BRIEFING<input type="file" accept=".json" onChange={handleFile} style={{display:"none"}}/></label></div></div>;
-  return <Dash a={analytics}/>;
-};
 </script>
-
 </body>
 </html>
