@@ -129,6 +129,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}
 @media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.span-4,.span-3{grid-column:span 2}}
 @media(max-width:600px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.span-2,.span-3,.span-4{grid-column:span 1}.cipher-header{flex-direction:column;gap:8px;text-align:center}.intel-summary{flex-direction:column}}
+@media(max-width:768px){
+.topbar{padding:4px 8px}
+.cipher-brand .sub{display:none}
+.hud-banners{display:none!important}
+.region-popup{position:fixed!important;right:0!important;bottom:0!important;left:0!important;top:auto!important;transform:none!important;max-width:100%!important;min-width:100%!important;border-radius:12px 12px 0 0!important;max-height:60vh;overflow-y:auto}
+.chat-modal{width:100%!important;max-width:100%!important;height:100%!important;max-height:100%!important;border-radius:0!important}
+.chat-fab{width:44px!important;height:44px!important;bottom:14px!important;right:14px!important;font-size:16px!important}
+.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}
+.span-2,.span-3,.span-4{grid-column:span 1}
+}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 body[data-cipher-state="CALM"]{border-top:2px solid rgba(139,148,158,0.15)}
 body[data-cipher-state="ALERT"]{border-top:2px solid rgba(247,183,49,0.4)}
@@ -161,11 +171,12 @@ body[data-cipher-state="STORM"]{border-top:2px solid rgba(255,34,34,1);box-shado
 .mode-toggle{display:flex;border:1px solid var(--border);border-radius:3px;overflow:hidden}
 .mode-toggle button{background:transparent;border:none;color:var(--text-ghost);padding:5px 14px;font-family:var(--mono);font-size:8px;letter-spacing:2px;cursor:pointer;transition:all .2s}
 .mode-toggle button.active{background:var(--cyan-ghost);color:var(--cyan);border-color:var(--cyan)}
-.chat-btn{background:transparent;border:1px solid var(--border);color:var(--text-ghost);padding:4px 10px;font-family:var(--mono);font-size:9px;cursor:pointer;transition:all .2s;position:relative;border-radius:3px}
-.chat-btn:hover,.chat-btn.open{color:var(--cyan);border-color:rgba(0,180,240,0.2)}
-.chat-btn .badge{position:absolute;top:-4px;right:-4px;background:var(--pink);color:#fff;font-size:7px;padding:1px 4px;border-radius:6px;min-width:14px;text-align:center}
-/* === CHAT PANEL === */
-.chat-panel{width:360px;border-left:1px solid var(--border);background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0}
+/* === CHAT FAB + MODAL === */
+.chat-fab{position:fixed;bottom:20px;right:20px;width:52px;height:52px;border-radius:50%;background:rgba(12,12,18,0.95);border:1px solid var(--border);color:var(--cyan);font-size:20px;cursor:pointer;z-index:40;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:all .2s;font-family:var(--mono)}
+.chat-fab:hover{border-color:rgba(0,180,240,0.3);background:rgba(0,180,240,0.1)}
+.chat-fab .badge{position:absolute;top:-2px;right:-2px;background:var(--pink);color:#fff;font-size:7px;padding:1px 4px;border-radius:6px;min-width:14px;text-align:center}
+.chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:50;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.chat-modal{width:600px;max-width:90%;height:80vh;max-height:80vh;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
 .chat-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border)}
 .chat-header .title{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--cyan)}
 .chat-close{background:none;border:none;color:var(--text-ghost);cursor:pointer;font-size:14px;padding:2px 6px}
@@ -188,16 +199,25 @@ body[data-cipher-state="STORM"]{border-top:2px solid rgba(255,34,34,1);box-shado
 .globe-hud .state-dot{width:8px;height:8px;border-radius:50%}
 .globe-hud .state-name{font-family:var(--mono);font-size:9px;letter-spacing:2px}
 .globe-hud .status-text{font-family:var(--sans);font-size:11px;color:var(--text-dim);font-weight:300;max-width:320px;line-height:1.5}
-.hud-buttons{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:10;display:flex;flex-direction:column;gap:6px}
-.hud-btn{width:42px;height:42px;background:rgba(12,12,18,0.85);border:1px solid var(--border);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px)}
-.hud-btn:hover{border-color:rgba(0,180,240,0.3);background:rgba(12,12,18,0.95)}
-.hud-btn .icon{font-size:14px;line-height:1}
-.hud-btn .lbl{font-family:var(--mono);font-size:5px;letter-spacing:1px;color:var(--text-ghost);margin-top:2px}
-.region-popup{position:absolute;right:80px;top:50%;transform:translateY(-50%);z-index:20;background:rgba(12,12,18,0.95);border:1px solid var(--border);border-radius:6px;padding:16px 20px;min-width:280px;max-width:360px;backdrop-filter:blur(12px)}
+/* === HUD BANNERS === */
+.hud-banners{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:10;display:flex;flex-direction:column;gap:4px}
+.hud-banner{width:110px;padding:7px 10px;background:rgba(12,12,18,0.85);border:1px solid var(--border);border-left:none;border-radius:0 4px 4px 0;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px);font-family:var(--mono);font-size:8px;letter-spacing:1.5px;color:var(--text-ghost);text-transform:uppercase}
+.hud-banner:hover{width:130px;border-color:rgba(0,180,240,0.3);color:var(--cyan);background:rgba(12,12,18,0.95)}
+.region-popup{position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:20;background:rgba(12,12,18,0.95);border:1px solid var(--border);border-radius:6px;padding:16px 20px;min-width:280px;max-width:420px;backdrop-filter:blur(12px);max-height:80vh;overflow-y:auto}
 .region-popup .rp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .region-popup .rp-title{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--cyan)}
 .region-popup .rp-close{background:none;border:none;color:var(--text-ghost);cursor:pointer;font-size:14px}
 .region-popup .rp-close:hover{color:var(--text)}
+/* === GLOBE STYLE TOGGLE === */
+.globe-style-toggle{position:absolute;top:12px;right:16px;z-index:10;display:flex;gap:4px}
+.globe-style-toggle button{font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:4px 8px;background:rgba(12,12,18,0.85);border:1px solid var(--border);color:var(--text-ghost);cursor:pointer;border-radius:3px;backdrop-filter:blur(8px);transition:all .2s}
+.globe-style-toggle button.active{background:rgba(0,180,240,0.15);border-color:rgba(0,180,240,0.3);color:var(--cyan)}
+/* === REGION POPUP TABS === */
+.rp-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:8px;overflow-x:auto}
+.rp-tabs button{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-ghost);padding:5px 10px;font-family:var(--mono);font-size:7px;letter-spacing:1.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.rp-tabs button:hover{color:var(--text-dim)}
+.rp-tabs button.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.rp-body{min-height:60px}
 </style>
 </head>
 <body>
@@ -603,19 +623,54 @@ return<div className="globe-hud">
 {gen2?.identity?.status_line&&<div className="status-text">{gen2.identity.status_line}</div>}
 </div>};
 
-/* ═══ GLOBE: HUDButtons ═══ */
-const HUDButtons=({a,onSelect})=>{
+/* ═══ GLOBE STYLES ═══ */
+const GLOBE_STYLES={
+satellite:{imageUrl:'//unpkg.com/three-globe/example/img/earth-night.jpg',capColor:'rgba(0,180,240,0.04)',strokeColor:'rgba(0,180,240,0.08)',sideColor:'rgba(0,180,240,0.02)',atmosphere:'#00b4f0',atmosphereAlt:0.15},
+cipher:{imageUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAABJRu5ErkJggg==',capColor:'rgba(0,0,0,0)',strokeColor:'rgba(0,180,240,0.35)',sideColor:'rgba(0,180,240,0.06)',atmosphere:'#00b4f0',atmosphereAlt:0.25},
+holo:{imageUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',capColor:'rgba(0,180,240,0.02)',strokeColor:'rgba(78,205,196,0.2)',sideColor:'rgba(78,205,196,0.04)',atmosphere:'#4ecdc4',atmosphereAlt:0.2}
+};
+
+/* ═══ REGION DATA MAP ═══ */
+const REGION_DATA_MAP={
+europe:{label:'EUROPE',assets:['eurusd','gbpusd'],cot:['eurusd','gbpusd'],rates:[{l:'ECB Depo',k:'ecbD'},{l:'ECB Refi',k:'ecbR'},{l:'German 10Y',k:'de10'}],derived:[{l:'US-DE Spread',k:'usDeS'}],intelTerms:['europe','ecb','euro','germany','france']},
+uk:{label:'UNITED KINGDOM',assets:['gbpusd'],cot:['gbpusd'],rates:[{l:'ECB Depo',k:'ecbD'}],derived:[],intelTerms:['uk','britain','gbp','boe']},
+japan:{label:'JAPAN',assets:['usdjpy'],cot:['usdjpy'],rates:[],derived:[],intelTerms:['japan','boj','yen','jpy']},
+china:{label:'CHINA',assets:['cnh'],cot:[],rates:[{l:'PBOC Fix',k:'pboc'}],derived:[{l:'CNH Spread',k:'cnyS'}],intelTerms:['china','pboc','yuan','cny','cnh']},
+usa:{label:'UNITED STATES',assets:['dxy','spx','vix','btc'],cot:['ust_10y','ust_2y','vix'],rates:[{l:'2Y',k:'y2'},{l:'5Y',k:'y5'},{l:'10Y',k:'y10'},{l:'30Y',k:'y30'}],derived:[{l:'2s10s',k:'s2s10'},{l:'Net Liq',k:'netLiq'}],intelTerms:['us','fed','dollar','treasury','america']},
+canada:{label:'CANADA',assets:['usdcad'],cot:['usdcad'],rates:[],derived:[],intelTerms:['canada','cad','boc']},
+australia:{label:'AUSTRALIA',assets:['audusd'],cot:['audusd'],rates:[],derived:[],intelTerms:['australia','aud','rba']},
+switzerland:{label:'SWITZERLAND',assets:['usdchf','gold'],cot:['usdchf','gold'],rates:[],derived:[{l:'Au/Ag',k:'gsR'}],intelTerms:['swiss','snb','chf','gold']},
+mideast:{label:'MIDDLE EAST',assets:['brent','wti'],cot:['brent','wti'],rates:[],derived:[{l:'B-W Spread',k:'bwS'}],intelTerms:['oil','opec','saudi','iran','middle east']},
+russia:{label:'RUSSIA',assets:['natgas'],cot:['natgas'],rates:[],derived:[{l:'Oil/Gas',k:'ogR'}],intelTerms:['russia','gas','pipeline']},
+ukraine:{label:'UKRAINE',assets:['wheat','natgas'],cot:['natgas'],rates:[],derived:[],intelTerms:['ukraine','wheat','conflict']},
+metals:{label:'METALS',assets:['gold','silver','copper'],cot:['gold','silver','copper'],rates:[{l:'Real 10Y',k:'real10'}],derived:[{l:'Au/Ag',k:'gsR'},{l:'Au/Oil',k:'goR'}],intelTerms:['gold','silver','metals','comex']},
+energy:{label:'ENERGY',assets:['brent','wti','natgas'],cot:['brent','wti','natgas'],rates:[],derived:[{l:'B-W Spread',k:'bwS'},{l:'Oil/Gas',k:'ogR'}],intelTerms:['oil','energy','crude','opec']},
+crypto:{label:'CRYPTO',assets:['btc'],cot:[],rates:[],derived:[{l:'Basis',k:'basis'}],intelTerms:['bitcoin','crypto','btc']},
+liquidity:{label:'LIQUIDITY',assets:['dxy','spx'],cot:[],rates:[{l:'SOFR',k:'sofr'},{l:'EFFR',k:'effr'}],derived:[{l:'Net Liq',k:'netLiq'},{l:'SOFR-EFFR',k:'sofrEffr'}],intelTerms:['liquidity','fed','tga','rrp']},
+risk:{label:'RISK',assets:['vix','spx'],cot:['vix'],rates:[],derived:[{l:'HY-IG',k:'hyIg'}],intelTerms:['risk','vix','volatility','equities']},
+seasia:{label:'SE ASIA',assets:['audusd'],cot:['audusd'],rates:[],derived:[],intelTerms:['asia','indonesia','thailand','singapore']},
+easia:{label:'E ASIA',assets:['usdjpy'],cot:['usdjpy'],rates:[],derived:[],intelTerms:['korea','asia']},
+samerica:{label:'S AMERICA',assets:['dxy'],cot:[],rates:[],derived:[],intelTerms:['brazil','argentina','latam']},
+africa:{label:'AFRICA',assets:['brent'],cot:['brent'],rates:[],derived:[],intelTerms:['africa','nigeria','south africa']},
+oceania:{label:'OCEANIA',assets:['audusd'],cot:['audusd'],rates:[],derived:[],intelTerms:['new zealand','nzd','oceania']}
+};
+
+/* ═══ GLOBE: HUDBanners ═══ */
+const HUDBanners=({a,onSelect})=>{
 const btns=[
-{icon:"\u2B21",lbl:"METALS",group:"metals",assets:["gold","silver","copper"],center:{lat:47,lng:8}},
-{icon:"\u26FD",lbl:"ENERGY",group:"energy",assets:["brent","wti","natgas"],center:{lat:25,lng:45}},
-{icon:"\u20BF",lbl:"CRYPTO",group:"crypto",assets:["btc"],center:{lat:39,lng:-98}},
-{icon:"\u25C8",lbl:"LIQUIDITY",group:"liquidity",assets:["dxy","spx"],center:{lat:39,lng:-98}},
-{icon:"\u25C9",lbl:"RISK",group:"risk",assets:["vix","spx"],center:{lat:39,lng:-98}}
+{lbl:"METALS",group:"metals",assets:["gold","silver","copper"],center:{lat:47,lng:8}},
+{lbl:"ENERGY",group:"energy",assets:["brent","wti","natgas"],center:{lat:25,lng:45}},
+{lbl:"CRYPTO",group:"crypto",assets:["btc"],center:{lat:39,lng:-98}},
+{lbl:"LIQUIDITY",group:"liquidity",assets:["dxy","spx"],center:{lat:39,lng:-98}},
+{lbl:"RISK",group:"risk",assets:["vix","spx"],center:{lat:39,lng:-98}}
 ];
-return<div className="hud-buttons">{btns.map(b=><div key={b.lbl} className="hud-btn" onClick={()=>onSelect({group:b.group,label:b.lbl,assets:b.assets,center:b.center})}><span className="icon">{b.icon}</span><span className="lbl">{b.lbl}</span></div>)}</div>};
+return<div className="hud-banners">{btns.map(b=><div key={b.lbl} className="hud-banner" onClick={()=>onSelect({group:b.group,label:b.lbl,assets:b.assets,center:b.center})}>{b.lbl}</div>)}</div>};
 
 /* ═══ GLOBE: RegionPopup ═══ */
-const RegionPopup=({region,a,gen2,token,onClose})=>{
+const RegionPopup=({region,a,gen2,token,intel,onClose})=>{
+const[activeTab,setActiveTab]=useState('PRICE');
+const[chartAsset,setChartAsset]=useState(region.assets?.[0]||null);
+const rd=REGION_DATA_MAP[region.group]||{};
 const assetData={
 gold:{v:a.gold,p:a.goldPct,pfx:"$"},silver:{v:a.silver,p:a.silverPct,pfx:"$"},copper:{v:a.copper,p:a.copperPct,pfx:"$"},
 brent:{v:a.brent,p:a.brentPct,pfx:"$"},wti:{v:a.wti,p:a.wtiPct,pfx:"$"},natgas:{v:a.natgas,p:a.natgasPct,pfx:"$"},
@@ -626,26 +681,54 @@ gbpusd:{v:a.gbpusd,p:a.gbpusdPct,d:4},audusd:{v:a.audusd,p:a.audusdPct,d:4},
 usdcad:{v:a.usdcad,p:a.usdcadPct,d:4},usdchf:{v:a.usdchf,p:a.usdchfPct,d:4},
 wheat:{v:a.wheat,p:a.wheatPct,pfx:"$"},cnh:{v:a.eurusd,p:0}
 };
-const chartAsset=region.assets?.[0];
+const tabs=[];
+if(region.assets?.length)tabs.push('PRICE');
+if(rd.cot?.length)tabs.push('COT');
+if(rd.rates?.length)tabs.push('RATES');
+if(rd.derived?.length)tabs.push('DERIVED');
+if(rd.intelTerms?.length)tabs.push('INTEL');
+if(region.assets?.length)tabs.push('CHART');
+const cotItems=(rd.cot||[]).map(k=>a.cot.find(c=>c.id===k)).filter(Boolean);
+const intelThreads=(intel?.threads||[]).filter(t=>{const s=(t.title+' '+t.summary).toLowerCase();return(rd.intelTerms||[]).some(term=>s.includes(term))});
 return<div className="region-popup">
 <div className="rp-header"><span className="rp-title">{region.label}</span><button className="rp-close" onClick={onClose}>&times;</button></div>
-{region.assets?.map(k=>{const d=assetData[k];if(!d||d.v==null)return null;return<Stat key={k} label={k.toUpperCase()} value={d.v} pct={d.p} prefix={d.pfx||""} dec={d.d!=null?d.d:2} big/>})}
-{chartAsset&&<div style={{marginTop:8}}><CipherChart asset={chartAsset} token={token}/></div>}
+{tabs.length>1&&<div className="rp-tabs">{tabs.map(t=><button key={t} className={activeTab===t?'active':''} onClick={()=>setActiveTab(t)}>{t}</button>)}</div>}
+<div className="rp-body">
+{activeTab==='PRICE'&&region.assets?.map(k=>{const d=assetData[k];if(!d||d.v==null)return null;return<Stat key={k} label={k.toUpperCase()} value={d.v} pct={d.p} prefix={d.pfx||""} dec={d.d!=null?d.d:2} big/>})}
+{activeTab==='COT'&&cotItems.map(c=><CotStack key={c.id} name={c.name} ncL={c.ncL} ncS={c.ncS} pct={c.pct}/>)}
+{activeTab==='COT'&&cotItems.length===0&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",padding:8}}>No COT data</div>}
+{activeTab==='RATES'&&(rd.rates||[]).map(r=>{const v=a[r.k];if(v==null)return null;return<Stat key={r.k} label={r.l} value={v} suffix={typeof v==='number'&&v<20?'%':''} dec={r.k==='pboc'?4:2} big/>})}
+{activeTab==='DERIVED'&&(rd.derived||[]).map(r=>{const v=a[r.k];if(v==null)return null;return<Stat key={r.k} label={r.l} value={v} dec={r.k.includes('Spread')||r.k.includes('spread')?3:1} big/>})}
+{activeTab==='INTEL'&&intelThreads.slice(0,5).map((t,i)=><div key={i} style={{marginBottom:6,padding:"6px 0",borderBottom:"1px solid var(--border)"}}>
+<div style={{fontFamily:"var(--mono)",fontSize:7,color:t.severity==='critical'?'var(--pink)':'var(--gold)',letterSpacing:1,textTransform:'uppercase'}}>{t.severity}</div>
+<div style={{fontFamily:"var(--sans)",fontSize:11,color:"var(--text)",fontWeight:400}}>{t.title}</div>
+<div style={{fontFamily:"var(--sans)",fontSize:10,color:"var(--text-dim)",fontWeight:300,lineHeight:1.5}}>{t.summary?.substring(0,120)}</div>
+</div>)}
+{activeTab==='INTEL'&&intelThreads.length===0&&<div style={{fontFamily:"var(--mono)",fontSize:8,color:"var(--text-ghost)",padding:8}}>No intel threads</div>}
+{activeTab==='CHART'&&<div>
+<div style={{display:'flex',gap:4,marginBottom:6,flexWrap:'wrap'}}>{(region.assets||[]).map(k=><button key={k} onClick={()=>setChartAsset(k)} style={{fontFamily:'var(--mono)',fontSize:7,letterSpacing:1,padding:'3px 8px',background:chartAsset===k?'rgba(0,180,240,0.15)':'transparent',border:'1px solid '+(chartAsset===k?'rgba(0,180,240,0.3)':'var(--border)'),color:chartAsset===k?'var(--cyan)':'var(--text-ghost)',cursor:'pointer',borderRadius:2}}>{k.toUpperCase()}</button>)}</div>
+{chartAsset&&<CipherChart asset={chartAsset} token={token}/>}
+</div>}
+</div>
 </div>};
 
 /* ═══ GLOBE MODE ═══ */
 const GlobeMode=({a,intel,gen2,token})=>{
 const containerRef=useRef(null);
 const globeRef=useRef(null);
+const hoveredPolyRef=useRef(null);
 const[selectedRegion,setSelectedRegion]=useState(null);
+const[globeStyle,setGlobeStyle]=useState('satellite');
+const globeStyleRef=useRef('satellite');
 useEffect(()=>{
 if(!containerRef.current||globeRef.current)return;
+const gs=GLOBE_STYLES[globeStyleRef.current];
 const globe=Globe()(containerRef.current)
-.globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+.globeImageUrl(gs.imageUrl)
 .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
 .showAtmosphere(true)
-.atmosphereColor('#00b4f0')
-.atmosphereAltitude(0.15)
+.atmosphereColor(gs.atmosphere)
+.atmosphereAltitude(gs.atmosphereAlt)
 .width(containerRef.current.clientWidth)
 .height(containerRef.current.clientHeight);
 globe.controls().autoRotate=true;
@@ -656,21 +739,36 @@ fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
 const countries=topojson.feature(topology,topology.objects.countries);
 globe
 .polygonsData(countries.features)
-.polygonCapColor(()=>'rgba(0,180,240,0.04)')
-.polygonSideColor(()=>'rgba(0,180,240,0.02)')
-.polygonStrokeColor(()=>'rgba(0,180,240,0.08)')
+.polygonCapColor((poly)=>{
+const hov=hoveredPolyRef.current;
+if(hov&&(hov.id||hov.properties?.id)===(poly.id||poly.properties?.id)){return'rgba(0,180,240,0.12)'}
+return GLOBE_STYLES[globeStyleRef.current].capColor;
+})
+.polygonSideColor(()=>GLOBE_STYLES[globeStyleRef.current].sideColor)
+.polygonStrokeColor((poly)=>{
+const hov=hoveredPolyRef.current;
+if(hov&&(hov.id||hov.properties?.id)===(poly.id||poly.properties?.id)){return'rgba(0,180,240,0.4)'}
+return GLOBE_STYLES[globeStyleRef.current].strokeColor;
+})
 .polygonAltitude(()=>0.005)
+.onPolygonHover((poly)=>{
+hoveredPolyRef.current=poly;
+globe.polygonsData(globe.polygonsData());
+if(containerRef.current)containerRef.current.style.cursor=poly&&REGION_MAP[String(poly.id||poly.properties?.id)]?'pointer':'default';
+})
 .onPolygonClick((poly)=>handleRegionClick(poly));
 });
 if(a.fps?.length){
 globe.pointsData(a.fps.map(f=>({
 lat:f.lat,lng:f.lon,
-size:(f.conf==='h'||f.conf==='high')?0.3:0.15,
-color:(f.conf==='h'||f.conf==='high')?'rgba(224,86,160,0.8)':'rgba(247,183,49,0.5)'
+size:0.005,
+color:(f.conf==='h'||f.conf==='high')?'rgba(224,86,160,0.8)':'rgba(247,183,49,0.5)',
+zone:f.zone,brightness:f.brightness,frp:f.frp,conf:f.conf
 })))
 .pointAltitude('size')
 .pointColor('color')
-.pointRadius(0.08);
+.pointRadius(0.15)
+.pointLabel(d=>`<div style="font-family:var(--mono);font-size:9px;background:rgba(12,12,18,0.95);border:1px solid rgba(0,180,240,0.15);padding:6px 10px;border-radius:4px;color:#c8d0d8;backdrop-filter:blur(8px)"><div style="color:var(--cyan);font-size:7px;letter-spacing:2px;margin-bottom:3px">${(d.zone||'').replace(/_/g,' ').toUpperCase()}</div><div>Brightness: <span style="color:var(--gold)">${d.brightness||'N/A'}</span></div><div>Confidence: <span style="color:${d.conf==='h'||d.conf==='high'?'var(--pink)':'var(--text-dim)'}">${d.conf||'N/A'}</span></div><div>FRP: <span style="color:var(--teal)">${d.frp||'N/A'}</span></div></div>`);
 }
 globeRef.current=globe;
 const ro=new ResizeObserver(()=>{
@@ -681,11 +779,33 @@ globeRef.current.width(containerRef.current.clientWidth).height(containerRef.cur
 ro.observe(containerRef.current);
 return()=>{ro.disconnect()};
 },[]);
+useEffect(()=>{
+if(!globeRef.current)return;
+const gs=GLOBE_STYLES[globeStyle];
+globeStyleRef.current=globeStyle;
+globeRef.current
+.globeImageUrl(gs.imageUrl)
+.atmosphereColor(gs.atmosphere)
+.atmosphereAltitude(gs.atmosphereAlt);
+globeRef.current.polygonsData(globeRef.current.polygonsData());
+},[globeStyle]);
 const REGION_MAP={
 '250':{group:'europe',label:'EUROPE',assets:['eurusd','gbpusd'],center:{lat:48,lng:10}},
 '276':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
 '380':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
 '724':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'528':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'056':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'040':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'620':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'300':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'246':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'372':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'616':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'203':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'208':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'578':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
+'752':{group:'europe',label:'EUROPE',assets:['eurusd'],center:{lat:48,lng:10}},
 '826':{group:'uk',label:'UNITED KINGDOM',assets:['gbpusd'],center:{lat:54,lng:-2}},
 '392':{group:'japan',label:'JAPAN',assets:['usdjpy'],center:{lat:36,lng:139}},
 '156':{group:'china',label:'CHINA',assets:['cnh'],center:{lat:35,lng:105}},
@@ -696,8 +816,30 @@ const REGION_MAP={
 '682':{group:'mideast',label:'MIDDLE EAST',assets:['brent','wti'],center:{lat:25,lng:45}},
 '364':{group:'mideast',label:'IRAN',assets:['brent'],center:{lat:33,lng:53}},
 '784':{group:'mideast',label:'UAE',assets:['brent'],center:{lat:24,lng:54}},
+'634':{group:'mideast',label:'QATAR',assets:['brent'],center:{lat:25,lng:51}},
+'414':{group:'mideast',label:'KUWAIT',assets:['brent'],center:{lat:29,lng:48}},
+'512':{group:'mideast',label:'OMAN',assets:['brent'],center:{lat:22,lng:57}},
+'048':{group:'mideast',label:'BAHRAIN',assets:['brent'],center:{lat:26,lng:50}},
+'376':{group:'mideast',label:'ISRAEL',assets:['brent'],center:{lat:31,lng:35}},
+'792':{group:'mideast',label:'TURKEY',assets:['brent'],center:{lat:39,lng:35}},
 '643':{group:'russia',label:'RUSSIA',assets:['natgas'],center:{lat:62,lng:105}},
-'804':{group:'ukraine',label:'UKRAINE',assets:['wheat','natgas'],center:{lat:49,lng:32}}
+'804':{group:'ukraine',label:'UKRAINE',assets:['wheat','natgas'],center:{lat:49,lng:32}},
+'554':{group:'oceania',label:'NEW ZEALAND',assets:['audusd'],center:{lat:-41,lng:174}},
+'710':{group:'africa',label:'SOUTH AFRICA',assets:['brent'],center:{lat:-29,lng:24}},
+'566':{group:'africa',label:'NIGERIA',assets:['brent'],center:{lat:10,lng:8}},
+'012':{group:'africa',label:'ALGERIA',assets:['brent'],center:{lat:28,lng:3}},
+'818':{group:'africa',label:'EGYPT',assets:['brent'],center:{lat:27,lng:30}},
+'076':{group:'samerica',label:'BRAZIL',assets:['dxy'],center:{lat:-14,lng:-51}},
+'032':{group:'samerica',label:'ARGENTINA',assets:['dxy'],center:{lat:-38,lng:-63}},
+'152':{group:'samerica',label:'CHILE',assets:['copper'],center:{lat:-35,lng:-71}},
+'360':{group:'seasia',label:'INDONESIA',assets:['audusd'],center:{lat:-5,lng:120}},
+'764':{group:'seasia',label:'THAILAND',assets:['audusd'],center:{lat:15,lng:100}},
+'458':{group:'seasia',label:'MALAYSIA',assets:['audusd'],center:{lat:4,lng:110}},
+'704':{group:'seasia',label:'VIETNAM',assets:['audusd'],center:{lat:16,lng:108}},
+'702':{group:'seasia',label:'SINGAPORE',assets:['audusd'],center:{lat:1,lng:104}},
+'356':{group:'seasia',label:'INDIA',assets:['audusd'],center:{lat:20,lng:77}},
+'410':{group:'easia',label:'SOUTH KOREA',assets:['usdjpy'],center:{lat:36,lng:128}},
+'484':{group:'samerica',label:'MEXICO',assets:['dxy'],center:{lat:23,lng:-102}}
 };
 const handleRegionClick=(poly)=>{
 if(!poly)return;
@@ -711,38 +853,57 @@ setSelectedRegion(mapping);
 return<div style={{position:'relative',width:'100%',height:'100%'}}>
 <div ref={containerRef} style={{width:'100%',height:'100%'}}/>
 <StatusHUD gen2={gen2} a={a}/>
-<HUDButtons a={a} onSelect={setSelectedRegion}/>
-{selectedRegion&&<RegionPopup region={selectedRegion} a={a} gen2={gen2} token={token} onClose={()=>{setSelectedRegion(null);if(globeRef.current)globeRef.current.controls().autoRotate=true}}/>}
+<div className="globe-style-toggle">
+{Object.keys(GLOBE_STYLES).map(k=><button key={k} className={globeStyle===k?'active':''} onClick={()=>setGlobeStyle(k)}>{k.toUpperCase()}</button>)}
+</div>
+<HUDBanners a={a} onSelect={setSelectedRegion}/>
+{selectedRegion&&<RegionPopup region={selectedRegion} a={a} gen2={gen2} token={token} intel={intel} onClose={()=>{setSelectedRegion(null);if(globeRef.current)globeRef.current.controls().autoRotate=true}}/>}
 </div>};
 
-/* ═══ CHAT PANEL ═══ */
-const ChatPanel=({token,user,onUnreadChange})=>{
+/* ═══ CHAT MODAL ═══ */
+const ChatModal=({token,user,open,onClose})=>{
 const[messages,setMessages]=useState([]);
 const[input,setInput]=useState('');
 const[sending,setSending]=useState(false);
+const[hasMore,setHasMore]=useState(false);
+const[loadingHistory,setLoadingHistory]=useState(false);
 const scrollRef=useRef(null);
-const pollMessages=async()=>{
+const loadHistory=async(before)=>{
+setLoadingHistory(true);
 try{
 const headers={'Authorization':'Bearer '+(token||AUTH_TOKEN)};
-const r=await fetch(CIPHER_API+'/api/chat/unread',{headers});
-if(r.ok){const d=await r.json();if(d.messages?.length){setMessages(p=>{const ids=new Set(p.map(m=>m.id||m.timestamp));const newMsgs=d.messages.filter(m=>!ids.has(m.id||m.timestamp));if(newMsgs.length)return[...p,...newMsgs];return p});onUnreadChange(0)}}
-}catch(e){console.error('Chat poll error',e)}
+let url=CIPHER_API+'/api/chat/history?limit=50';
+if(before)url+='&before='+before;
+const r=await fetch(url,{headers});
+if(r.ok){const d=await r.json();
+if(before){setMessages(p=>[...(d.messages||[]).reverse(),...p])}
+else{setMessages((d.messages||[]).reverse())}
+setHasMore(!!d.has_more);
+}
+}catch(e){console.error('Chat history error',e)}
+setLoadingHistory(false);
 };
-useEffect(()=>{pollMessages();const iv=setInterval(pollMessages,30000);return()=>clearInterval(iv)},[]);
-useEffect(()=>{if(scrollRef.current)scrollRef.current.scrollTop=scrollRef.current.scrollHeight},[messages]);
+useEffect(()=>{if(open)loadHistory()},[open]);
+useEffect(()=>{if(scrollRef.current&&!loadingHistory)scrollRef.current.scrollTop=scrollRef.current.scrollHeight},[messages,sending]);
 const send=async()=>{
 if(!input.trim()||sending)return;
 const text=input.trim();setInput('');setSending(true);
 setMessages(p=>[...p,{role:'user',content:text,timestamp:new Date().toISOString()}]);
 try{
-const r=await fetch(CIPHER_API+'/api/chat/send',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||AUTH_TOKEN)},body:JSON.stringify({message:text})});
-if(r.ok){const d=await r.json();if(d.reply)setMessages(p=>[...p,{role:'assistant',content:d.reply,timestamp:new Date().toISOString()}])}
+const r=await fetch(CIPHER_API+'/api/chat/send',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||AUTH_TOKEN)},body:JSON.stringify({content:text})});
+if(r.ok){const d=await r.json();
+if(d.assistant_message)setMessages(p=>[...p,{role:'assistant',content:d.assistant_message.content,timestamp:d.assistant_message.timestamp||new Date().toISOString()}]);
+else if(d.user_message&&d.assistant_message===undefined){}
+}
 }catch(e){setMessages(p=>[...p,{role:'assistant',content:'Connection error.',timestamp:new Date().toISOString()}])}
 setSending(false);
 };
-return<div className="chat-panel">
-<div className="chat-header"><span className="title">{'\u98DE\u8BAF'} DISPATCH</span></div>
+if(!open)return null;
+return<div className="chat-overlay" onClick={(e)=>{if(e.target===e.currentTarget)onClose()}}>
+<div className="chat-modal">
+<div className="chat-header"><span className="title">{'\u98DE\u8BAF'} DISPATCH</span><button className="chat-close" onClick={onClose}>&times;</button></div>
 <div className="chat-messages" ref={scrollRef}>
+{hasMore&&<button onClick={()=>{const first=messages[0];if(first?.id)loadHistory(first.id)}} style={{alignSelf:'center',fontFamily:'var(--mono)',fontSize:7,letterSpacing:1,padding:'4px 12px',background:'transparent',border:'1px solid var(--border)',color:'var(--text-ghost)',cursor:'pointer',borderRadius:2,marginBottom:6}} disabled={loadingHistory}>{loadingHistory?'LOADING...':'LOAD EARLIER'}</button>}
 {messages.map((m,i)=>{
 const cls=m.type&&m.type!=='user'&&m.type!=='assistant'?'proactive':m.role||'assistant';
 return<div key={i} className={"chat-msg "+cls}>
@@ -756,10 +917,11 @@ return<div key={i} className={"chat-msg "+cls}>
 <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} placeholder="Ask Qwen..."/>
 <button onClick={send}>SEND</button>
 </div>
+</div>
 </div>};
 
 /* ═══ TOP BAR ═══ */
-const TopBar=({mode,onModeChange,chatOpen,onChatToggle,user,gen2,a,unreadCount})=>{
+const TopBar=({mode,onModeChange,user,gen2,a})=>{
 const[time,setTime]=useState(new Date());
 useEffect(()=>{const t=setInterval(()=>setTime(new Date()),1000);return()=>clearInterval(t)},[]);
 const stName=gen2?.identity?.state?.name||"CALM";
@@ -774,9 +936,6 @@ return<div className="topbar">
 </div>
 </div>
 <div className="topbar-right">
-<button className={"chat-btn"+(chatOpen?" open":"")} onClick={onChatToggle}>
-{'\u98DE\u8BAF'}{unreadCount>0&&<span className="badge">{unreadCount}</span>}
-</button>
 <div><div className="cipher-clock">{time.toLocaleTimeString("en-US",{hour12:false})}</div>
 <div className="cipher-date">{a?.date||""} {a?.generatedAt?timeAgo(a.generatedAt):""} {a?.pipesOk||0} PIPES</div></div>
 <div className="cipher-pulse" style={{background:stColor,boxShadow:"0 0 6px "+stColor}}/>
@@ -810,20 +969,41 @@ return<div className="cipher-shell">
 
 /* ═══ APP SHELL ═══ */
 const AppShell=({user,token,a,intel,gen2})=>{
-const[mode,setMode]=useState('globe');
+const isMobileInit=typeof window!=='undefined'&&window.innerWidth<=768;
+const[mode,setMode]=useState(isMobileInit?'data':'globe');
 const[chatOpen,setChatOpen]=useState(false);
 const[unreadCount,setUnreadCount]=useState(0);
 const stName=gen2?.identity?.state?.name||'CALM';
 useEffect(()=>{document.body.setAttribute('data-cipher-state',stName)},[stName]);
+useEffect(()=>{
+const handleResize=()=>{if(window.innerWidth<=768&&mode==='globe')setMode('data')};
+window.addEventListener('resize',handleResize);
+return()=>window.removeEventListener('resize',handleResize);
+},[mode]);
+useEffect(()=>{
+const pollUnread=async()=>{
+try{
+const headers={'Authorization':'Bearer '+(token||AUTH_TOKEN)};
+const r=await fetch(CIPHER_API+'/api/chat/unread',{headers});
+if(r.ok){const d=await r.json();setUnreadCount(d.messages?.length||0)}
+}catch(e){}
+};
+pollUnread();
+const iv=setInterval(pollUnread,30000);
+return()=>clearInterval(iv);
+},[token]);
 return<div style={{display:'flex',flexDirection:'column',height:'100vh',background:'var(--bg)'}}>
-<TopBar mode={mode} onModeChange={setMode} chatOpen={chatOpen} onChatToggle={()=>setChatOpen(!chatOpen)} user={user} gen2={gen2} a={a} unreadCount={unreadCount}/>
+<TopBar mode={mode} onModeChange={setMode} user={user} gen2={gen2} a={a}/>
 <div style={{flex:1,display:'flex',overflow:'hidden'}}>
 <div style={{flex:1,overflow:mode==='data'?'auto':'hidden'}}>
 {mode==='globe'&&<GlobeMode a={a} intel={intel} gen2={gen2} token={token}/>}
 {mode==='data'&&<DataMode a={a} intel={intel} gen2={gen2} token={token}/>}
 </div>
-{chatOpen&&<ChatPanel token={token} user={user} onUnreadChange={setUnreadCount}/>}
 </div>
+<button className="chat-fab" onClick={()=>setChatOpen(!chatOpen)}>
+{'\u98DE\u8BAF'}{unreadCount>0&&<span className="badge">{unreadCount}</span>}
+</button>
+<ChatModal token={token} user={user} open={chatOpen} onClose={()=>setChatOpen(false)}/>
 </div>};
 
 /* ═══ APP ROOT ═══ */
