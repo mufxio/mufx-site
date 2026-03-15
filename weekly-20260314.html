@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Review: 9–14 March 2026 — muFX</title>
+<meta name="description" content="muFX Weekly Review — WTI traces a $43 intraweek range, DXY breaks 100, VIX collapses 22.6%. The largest oil supply shock in history was absorbed in five sessions. Q2 thesis: under stress.">
+<meta property="og:title" content="Weekly Review: 9–14 March 2026 — muFX">
+<meta property="og:description" content="Weekly FX review: WTI range $77–$119, DXY breaks 100, VIX collapses from 35 to 27. Q2 thesis under stress but not broken.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mufx.io/weekly-20260314.html">
+<meta property="og:site_name" content="muFX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="muFX Weekly Review — 9–14 Mar 2026">
+<meta name="twitter:description" content="Oil: $77 to $119 and back. Dollar: 100. VIX: 35 → 27. Shock absorbed.">
+<link rel="canonical" href="https://mufx.io/weekly-20260314.html">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="FX, forex, weekly review, dollar, DXY, EUR/USD, gold, XAU/USD, oil, WTI, Brent, silver, VIX, yields, FOMC, Iran, Hormuz, muFX">
+<meta name="google-site-verification" content="SSm7YTqRRbTUd8xSXDc10tGaIXCREDpamdQHvLHr6j4" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Weekly Review: Crude Awakening — 9–14 March 2026",
+  "description": "muFX Weekly FX Review — The largest oil supply shock in history was absorbed in five trading sessions. WTI traced a $43 range. DXY broke 100. Q2 thesis under stress.",
+  "author": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "publisher": {"@type": "Organization", "name": "muFX", "url": "https://mufx.io"},
+  "datePublished": "2026-03-15",
+  "dateModified": "2026-03-15",
+  "mainEntityOfPage": "https://mufx.io/weekly-20260314.html",
+  "keywords": ["FX","weekly review","dollar","DXY","EUR/USD","gold","XAU/USD","oil","WTI","Brent","VIX","silver","yields","FOMC","Iran","Hormuz"]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  .weekly-section { margin: 2.5rem 0 2rem; }
+  .weekly-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0,180,240,0.6);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(0,180,240,0.08);
+  }
+  .weekly-section-title span {
+    color: rgba(200,210,220,0.3);
+    margin-right: 0.5em;
+  }
+  .weekly-scorecard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(0,180,240,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .scorecard-cell {
+    background: rgba(8,12,20,0.95);
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .scorecard-pair {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(200,210,220,0.45);
+    letter-spacing: 0.06em;
+  }
+  .scorecard-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(220,228,240,0.9);
+  }
+  .scorecard-week {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 400;
+  }
+  .scorecard-week.up { color: rgba(78,205,196,0.85); }
+  .scorecard-week.down { color: rgba(224,86,160,0.85); }
+  .scorecard-week.flat { color: rgba(200,210,220,0.4); }
+  .scorecard-range {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: rgba(200,210,220,0.25);
+    margin-top: 0.15rem;
+  }
+  .scorecard-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    color: rgba(200,180,100,0.5);
+    margin-top: 0.1rem;
+  }
+  .week-callout {
+    background: rgba(0,180,240,0.03);
+    border-left: 2px solid rgba(0,180,240,0.2);
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(220,228,240,0.75);
+  }
+  .week-callout strong {
+    color: rgba(220,228,240,0.95);
+  }
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(0,180,240,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .vs-header {
+    background: rgba(8,12,20,0.98);
+    padding: 0.7rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .vs-header.street { color: rgba(224,86,160,0.7); }
+  .vs-header.signal { color: rgba(78,205,196,0.7); }
+  .vs-cell {
+    background: rgba(8,12,20,0.95);
+    padding: 0.85rem 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: rgba(200,210,220,0.65);
+  }
+  .vs-cell .source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem;
+    color: rgba(200,210,220,0.3);
+    display: block;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.04em;
+  }
+  .vs-cell .data-point {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(78,205,196,0.85);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(0,180,240,0.04);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .perf-cell {
+    padding: 0.65rem 0.6rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    align-items: center;
+  }
+  .perf-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(200,210,220,0.4);
+    letter-spacing: 0.04em;
+  }
+  .perf-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+  .perf-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.52rem;
+    color: rgba(200,210,220,0.2);
+  }
+  .next-week-grid {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.4rem 1rem;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+  }
+  .nw-date { color: rgba(200,210,220,0.35); }
+  .nw-event { color: rgba(200,210,220,0.7); }
+  .nw-impact { text-align: right; }
+  .nw-impact.high { color: rgba(224,86,160,0.7); }
+  .nw-impact.medium { color: rgba(200,180,100,0.6); }
+
+  @media (max-width: 600px) {
+    .weekly-scorecard { grid-template-columns: 1fr; }
+    .vs-grid { grid-template-columns: 1fr; }
+    .perf-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body class="research-article">
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
+    <div class="nav-links">
+      <a href="research.html">Research</a>
+      <a href="signals.html">Signals</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">← Back to Research</a>
+  <div class="article-tag tag-weekly" style="background:rgba(0,180,240,0.08);color:rgba(0,180,240,0.85);border:1px solid rgba(0,180,240,0.15);">Weekly Review</div>
+  <h1>Crude Awakening</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>Week of 9–14 Mar 2026</span>
+    <span class="sep">|</span>
+    <span>8 min read</span>
+    <span class="sep">|</span>
+    <a href="verify.html" class="article-hash"><span class="hash-icon"></span><code data-hash-display>computing...</code></a>
+  </div>
+</header>
+
+<article class="article-body" data-hash="">
+
+<p><strong>Two weeks ago, we wrote that the dollar couldn't hold 98 and the thesis was strengthening. This week, DXY broke 100. WTI traced a $43 intraweek range — from $119 to $77 and back to $99 — the widest since the 2020 pandemic crash. VIX peaked at 35 on Monday and closed at 27 on Friday. The largest oil supply shock in history, as the IEA itself described it, was absorbed in five trading sessions. The Q2 thesis is not broken. But it is no longer comfortable.</strong></p>
+
+<div class="weekly-scorecard">
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">DXY</div>
+    <div class="scorecard-price">100.50</div>
+    <div class="scorecard-week up">▲ +1.66% w/w</div>
+    <div class="scorecard-range">Mon open: 98.86 → 8-month high</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">EUR/USD</div>
+    <div class="scorecard-price">1.1423</div>
+    <div class="scorecard-week down">▼ −0.89% w/w</div>
+    <div class="scorecard-range">Range: 1.1390 – 1.1565</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">XAU/USD</div>
+    <div class="scorecard-price">5,062</div>
+    <div class="scorecard-week down">▼ −1.81% w/w</div>
+    <div class="scorecard-range">$5,000 structural floor held</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">WTI CRUDE</div>
+    <div class="scorecard-price">98.71</div>
+    <div class="scorecard-week flat">▸ +0.72% w/w</div>
+    <div class="scorecard-range">Range: 76.73 – 119.48</div>
+    <div class="scorecard-note">$43 intraweek range · 43.6% of Mon open</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">VIX</div>
+    <div class="scorecard-price">27.19</div>
+    <div class="scorecard-week up">▼ −22.6% w/w</div>
+    <div class="scorecard-range">Mon peak: 35.12 → Fri: 27.19</div>
+    <div class="scorecard-note">Fastest crisis decompression since 2023</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">USD/JPY</div>
+    <div class="scorecard-price">159.72</div>
+    <div class="scorecard-week up">▲ +1.41% w/w</div>
+    <div class="scorecard-range">Intervention territory (>160)</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">US 10Y</div>
+    <div class="scorecard-price">4.285%</div>
+    <div class="scorecard-week down">▲ +15bp w/w</div>
+    <div class="scorecard-range">2Y: +19bp · Bear steepening</div>
+  </div>
+  <div class="scorecard-cell">
+    <div class="scorecard-pair">BTC</div>
+    <div class="scorecard-price">70,968</div>
+    <div class="scorecard-week up">▲ +7.58% w/w</div>
+    <div class="scorecard-range">Best-performing major asset</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 01: TWO WEEKS, TWO WORLDS          -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>01</span> Two Weeks, Two Worlds</div>
+</div>
+
+<p>In our February 28 review, we described a dollar trapped below 98.00 — rejected three times in four sessions, with CFTC shorts at five-year extremes and gold grinding toward 5,200. The thesis was strengthening. Every data point confirmed the structural bearish case: tariff uncertainty fading post-SCOTUS, central bank gold accumulation accelerating, and a labor market cooling without breaking.</p>
+
+<p>Ten trading days later, we are in a different universe. Operation Epic Fury's aftermath — the Strait of Hormuz closure, the IEA's emergency declaration, and the synchronized safe-haven bid that followed — pushed the dollar through every resistance level we identified. DXY didn't just break 98. It broke 99. It broke 100. It closed the week at 100.50, the highest print in eight months. Every leg of the Q2 thesis — bearish dollar, long gold, long EUR on dips — was stress-tested simultaneously.</p>
+
+<div class="week-callout">
+  <strong>The bridge:</strong> From 97.77 on February 28 to 100.50 on March 14 — a 273-pip move in ten sessions. Two weeks ago, 98 was a ceiling. This week, 100 is reality. The question that governs Q2: is this a permanent regime change or a geopolitical premium that expires with the crisis?
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 02: OIL — THE $43 ROUND-TRIP       -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>02</span> Oil — The $43 Round-Trip</div>
+</div>
+
+<p>The week's defining chart is WTI. On Monday, as Hormuz closure reports hardened and FIRMS fire data confirmed Gulf facility damage, crude spiked to $119.48 — the highest level since 2014. VIX hit 35. Markets priced the end of the world. Then they didn't. By Tuesday, the IEA's announcement of the largest-ever emergency stockpile release — 400 million barrels — cratered prices to $76.73, a $43 reversal in 36 hours. A false report that the Army had escorted a vessel through the Strait whipsawed Brent by $11 in a single session. Wednesday brought fresh disruption reports from Oman and Iraqi waters, pushing oil back above $95. By Friday, WTI settled at $98.71 — effectively where it started the week.</p>
+
+<div class="visual-panel">
+  <div class="visual-label">WTI Crude — The $43 Round-Trip: Five Days of Maximum Volatility</div>
+  <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Y-axis: $70=260, $125=40. Each $1 = 4px -->
+    <!-- Grid lines -->
+    <line x1="100" y1="260" x2="600" y2="260" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="263" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$70</text>
+    <line x1="100" y1="220" x2="600" y2="220" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="223" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$80</text>
+    <line x1="100" y1="180" x2="600" y2="180" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="183" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$90</text>
+    <line x1="100" y1="140" x2="600" y2="140" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="143" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$100</text>
+    <line x1="100" y1="100" x2="600" y2="100" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="103" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$110</text>
+    <line x1="100" y1="60" x2="600" y2="60" stroke="rgba(0,180,240,0.03)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="63" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="end">$120</text>
+
+    <!-- Monday open reference line -->
+    <line x1="100" y1="148" x2="600" y2="148" stroke="rgba(200,180,100,0.15)" stroke-width="1" stroke-dasharray="6,3"/>
+    <text x="605" y="151" fill="rgba(200,180,100,0.4)" font-family="JetBrains Mono, monospace" font-size="7">MON OPEN $98</text>
+
+    <!-- MONDAY: O=98 H=119.48 L=81.19 C=94.77 (BEARISH) -->
+    <!-- Wick: y=62→215 -->
+    <line x1="150" y1="62" x2="150" y2="215" stroke="rgba(224,86,160,0.5)" stroke-width="1.5"/>
+    <!-- Body: O=148 C=161 -->
+    <rect x="132" y="148" width="36" height="13" fill="rgba(224,86,160,0.45)" rx="2"/>
+    <text x="150" y="285" fill="rgba(200,210,220,0.35)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">Mon 9</text>
+    <!-- High annotation -->
+    <text x="175" y="55" fill="rgba(224,86,160,0.7)" font-family="JetBrains Mono, monospace" font-size="8" font-weight="500">$119.48 ←</text>
+    <text x="175" y="66" fill="rgba(224,86,160,0.4)" font-family="JetBrains Mono, monospace" font-size="7">CRISIS SPIKE</text>
+
+    <!-- TUESDAY: O=92 H=95 L=76.73 C=82 (BEARISH) -->
+    <line x1="260" y1="160" x2="260" y2="233" stroke="rgba(224,86,160,0.5)" stroke-width="1.5"/>
+    <rect x="242" y="172" width="36" height="40" fill="rgba(224,86,160,0.4)" rx="2"/>
+    <text x="260" y="285" fill="rgba(200,210,220,0.35)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">Tue 10</text>
+    <text x="285" y="240" fill="rgba(224,86,160,0.55)" font-family="JetBrains Mono, monospace" font-size="7">$76.73 — IEA RELEASE</text>
+
+    <!-- WEDNESDAY: O=83 H=97 L=82 C=95 (BULLISH) -->
+    <line x1="370" y1="152" x2="370" y2="212" stroke="rgba(78,205,196,0.5)" stroke-width="1.5"/>
+    <rect x="352" y="160" width="36" height="48" fill="rgba(78,205,196,0.35)" rx="2"/>
+    <text x="370" y="285" fill="rgba(200,210,220,0.35)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">Wed 11</text>
+    <text x="395" y="172" fill="rgba(78,205,196,0.4)" font-family="JetBrains Mono, monospace" font-size="7">OMAN BOUNCE</text>
+
+    <!-- THURSDAY: O=96 H=101 L=95 C=100 (BULLISH) -->
+    <line x1="470" y1="136" x2="470" y2="160" stroke="rgba(78,205,196,0.5)" stroke-width="1.5"/>
+    <rect x="452" y="140" width="36" height="16" fill="rgba(78,205,196,0.35)" rx="2"/>
+    <text x="470" y="285" fill="rgba(200,210,220,0.35)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">Thu 12</text>
+
+    <!-- FRIDAY: O=100 H=101 L=97 C=98.71 (BEARISH, small) -->
+    <line x1="560" y1="136" x2="560" y2="152" stroke="rgba(224,86,160,0.35)" stroke-width="1.5"/>
+    <rect x="542" y="140" width="36" height="5" fill="rgba(224,86,160,0.3)" rx="1"/>
+    <text x="560" y="285" fill="rgba(200,210,220,0.35)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle">Fri 13</text>
+
+    <!-- Friday close annotation -->
+    <circle cx="560" cy="145" r="4" fill="#00b4f0" opacity="0.8"/>
+    <text x="585" y="142" fill="#00b4f0" font-family="JetBrains Mono, monospace" font-size="9" font-weight="500">$98.71</text>
+    <text x="585" y="154" fill="rgba(0,180,240,0.5)" font-family="JetBrains Mono, monospace" font-size="7">+0.72% w/w</text>
+
+    <!-- V-shape path connecting closes -->
+    <polyline points="150,161 260,212 370,160 470,140 560,145"
+      fill="none" stroke="rgba(0,180,240,0.25)" stroke-width="1.5" stroke-dasharray="4,3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Range annotation -->
+    <defs><marker id="arrD" markerWidth="5" markerHeight="4" refX="0" refY="2" orient="auto"><polygon points="0 0,5 2,0 4" fill="rgba(200,180,100,0.5)"/></marker>
+    <marker id="arrU" markerWidth="5" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="5 0,0 2,5 4" fill="rgba(200,180,100,0.5)"/></marker></defs>
+    <line x1="625" y1="62" x2="625" y2="233" stroke="rgba(200,180,100,0.2)" stroke-width="1"/>
+    <line x1="620" y1="62" x2="630" y2="62" stroke="rgba(200,180,100,0.3)" stroke-width="1"/>
+    <line x1="620" y1="233" x2="630" y2="233" stroke="rgba(200,180,100,0.3)" stroke-width="1"/>
+    <text x="640" y="145" fill="rgba(200,180,100,0.5)" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle" transform="rotate(90,640,145)">$42.75 RANGE</text>
+  </svg>
+</div>
+
+<div class="week-callout">
+  <strong>The number:</strong> A $42.75 intraweek range on a $98 base — 43.6% of the Monday open. The last time WTI printed a weekly range this wide was March 2020. On that occasion, it took months to stabilize. This time, it round-tripped in five sessions. The market stress-tested the worst-case supply scenario and concluded — for now — that it's priced.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 03: STREET VS. SIGNAL              -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>03</span> Street vs. Signal</div>
+</div>
+
+<p>Every major bank published during the week. They weren't wrong — but the data moved first. By the time institutional research landed on desks Thursday morning, the tape had already told the story. Here's where the consensus and the signal diverged.</p>
+
+<div class="vs-grid">
+  <div class="vs-header street">The Street Said</div>
+  <div class="vs-header signal">The Data Showed</div>
+
+  <div class="vs-cell">
+    <span class="source">ING · Thursday 13 Mar</span>
+    "Cannot see investors wanting to fight this dollar rally." Bracing for a prolonged shock — Hormuz normalization probability fell from 79% to 44% in one week.
+  </div>
+  <div class="vs-cell">
+    <span class="data-point">VIX −22.6% Mon→Fri</span>
+    Fastest crisis decompression in three years. By the time ING published Thursday, VIX had already fallen from 35 to 28. Someone was fighting.
+  </div>
+
+  <div class="vs-cell">
+    <span class="source">Bloomberg · Wednesday 12 Mar</span>
+    Cross-asset stress approaching Liberation Day levels. BofA's volatility index at 0.79, nearing the April 2025 peak of 0.89.
+  </div>
+  <div class="vs-cell">
+    <span class="data-point">BTC +7.58% w/w — best major asset</span>
+    The vol index peaked at 0.79 — it never breached the 0.89 threshold. Risk appetite was already healing. Bitcoin, the risk barometer, led all assets.
+  </div>
+
+  <div class="vs-cell">
+    <span class="source">Goldman Sachs · Mid-week</span>
+    Iran oil shock makes a June Fed cut "hard to justify." Pre-crisis Brent target of $60 rendered irrelevant. Inflation pass-through now the dominant risk.
+  </div>
+  <div class="vs-cell">
+    <span class="data-point">2Y +19bp · repriced Mon–Wed</span>
+    The market front-ran Goldman. The 2-year yield repriced Monday through Wednesday — 19 basis points in three sessions. The move preceded the narrative by 48 hours.
+  </div>
+
+  <div class="vs-cell">
+    <span class="source">Morgan Stanley · Thursday</span>
+    70% probability the conflict lasts only weeks. Oil isn't rallying because the world ran out of barrels — it's pricing geopolitical risk. Insurance premiums tend to expire.
+  </div>
+  <div class="vs-cell">
+    <span class="data-point">WTI +0.72% w/w · round-tripped $43</span>
+    Oil futures agreed before the probability estimate was published. WTI traced a $43 intraweek range and ended within 71 cents of where it started. The market had already priced a short-duration scenario.
+  </div>
+</div>
+
+<p>The pattern is consistent: the tape repriced by Wednesday what the narrative described on Thursday. In a crisis, the lag between data and institutional analysis is where the edge lives.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 04: THE DIVERGENCE                 -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>04</span> The Divergence</div>
+</div>
+
+<p>The metals told a story the headlines missed. Gold fell 1.8% — modest, and it held the $5,000 structural floor that every institutional forecast treats as bedrock (JPM's Q4 target: $5,055; UBS: $6,200 by September; Deutsche Bank: $6,000). But silver crashed 6.6%, a 5:1 underperformance ratio. Copper dropped 1.5%. Meanwhile, Bitcoin surged 7.6%, the week's best-performing major asset.</p>
+
+<p>When silver underperforms gold by this magnitude during a geopolitical shock, the market is pricing recession risk, not just hedging. Silver's industrial component — roughly half its demand — is being repriced for a world where $100 oil persists. Copper confirms the signal. Bitcoin's outperformance is the structural tell: the market increasingly treats digital assets as a monetary hedge, not speculation, when the traditional system is under stress. Gold held, silver broke, Bitcoin led. That's a divergence worth watching.</p>
+
+<div class="visual-panel">
+  <div class="visual-label">The Divergence: Four Paths from Monday Open (% change, Mon → Fri)</div>
+  <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
+    <!-- 0% baseline at y=150. Each 1% = 10px. -->
+    <!-- Grid lines -->
+    <line x1="100" y1="70" x2="590" y2="70" stroke="rgba(0,180,240,0.02)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="73" fill="rgba(200,210,220,0.15)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end">+8%</text>
+    <line x1="100" y1="110" x2="590" y2="110" stroke="rgba(0,180,240,0.02)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="113" fill="rgba(200,210,220,0.15)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end">+4%</text>
+    <line x1="100" y1="150" x2="590" y2="150" stroke="rgba(200,210,220,0.08)" stroke-width="1"/>
+    <text x="90" y="153" fill="rgba(200,210,220,0.25)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end">0%</text>
+    <line x1="100" y1="190" x2="590" y2="190" stroke="rgba(0,180,240,0.02)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="193" fill="rgba(200,210,220,0.15)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end">−4%</text>
+    <line x1="100" y1="220" x2="590" y2="220" stroke="rgba(0,180,240,0.02)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="90" y="223" fill="rgba(200,210,220,0.15)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end">−7%</text>
+
+    <!-- Day labels -->
+    <text x="120" y="260" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Mon</text>
+    <text x="230" y="260" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Tue</text>
+    <text x="340" y="260" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Wed</text>
+    <text x="450" y="260" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Thu</text>
+    <text x="560" y="260" fill="rgba(200,210,220,0.2)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">Fri</text>
+
+    <!-- Starting dot -->
+    <circle cx="120" cy="150" r="4" fill="rgba(200,210,220,0.3)"/>
+    <text x="115" y="142" fill="rgba(200,210,220,0.3)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">0%</text>
+
+    <!-- BTC path: 0 → +1 → +3 → +5 → +7.58 -->
+    <polyline points="120,150 230,140 340,120 450,100 560,74"
+      fill="none" stroke="rgba(247,147,26,0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="560" cy="74" r="4" fill="rgba(247,147,26,0.9)"/>
+    <text x="595" y="70" fill="rgba(247,147,26,0.9)" font-family="JetBrains Mono, monospace" font-size="9" font-weight="500">BTC</text>
+    <text x="595" y="81" fill="rgba(247,147,26,0.6)" font-family="JetBrains Mono, monospace" font-size="8">+7.58%</text>
+
+    <!-- Gold path: 0 → -0.3 → -0.8 → -1.3 → -1.81 -->
+    <polyline points="120,150 230,153 340,158 450,163 560,168"
+      fill="none" stroke="rgba(200,180,100,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="560" cy="168" r="3" fill="rgba(200,180,100,0.8)"/>
+    <text x="595" y="165" fill="rgba(200,180,100,0.7)" font-family="JetBrains Mono, monospace" font-size="9" font-weight="500">GOLD</text>
+    <text x="595" y="176" fill="rgba(200,180,100,0.5)" font-family="JetBrains Mono, monospace" font-size="8">−1.81%</text>
+
+    <!-- Copper path: 0 → -0.2 → -0.5 → -1.0 → -1.5 -->
+    <polyline points="120,150 230,152 340,155 450,160 560,165"
+      fill="none" stroke="rgba(184,115,51,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3"/>
+    <circle cx="560" cy="165" r="2.5" fill="rgba(184,115,51,0.6)"/>
+    <text x="595" y="197" fill="rgba(184,115,51,0.5)" font-family="JetBrains Mono, monospace" font-size="8">Cu −1.5%</text>
+
+    <!-- Silver path: 0 → -1 → -3 → -5 → -6.6 -->
+    <polyline points="120,150 230,160 340,180 450,200 560,216"
+      fill="none" stroke="rgba(180,185,190,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="560" cy="216" r="4" fill="rgba(180,185,190,0.6)"/>
+    <text x="595" y="213" fill="rgba(180,185,190,0.6)" font-family="JetBrains Mono, monospace" font-size="9" font-weight="500">SILVER</text>
+    <text x="595" y="224" fill="rgba(180,185,190,0.4)" font-family="JetBrains Mono, monospace" font-size="8">−6.60%</text>
+
+    <!-- Divergence bracket -->
+    <line x1="575" y1="74" x2="575" y2="216" stroke="rgba(0,180,240,0.1)" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="575" y="248" fill="rgba(0,180,240,0.35)" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle">14.2pp spread</text>
+  </svg>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 05: YIELDS AND INFLATION PIPELINE  -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>05</span> Yields and the Inflation Pipeline</div>
+</div>
+
+<p>The rates market moved with conviction. The 10-year surged 15bp to 4.285% — the largest weekly move since January. The 2-year rose 19bp, creating a bear steepening pattern that signals inflation expectations, not growth optimism. Five-year breakevens widened from 2.53% to 2.63%, confirming the market is pricing oil pass-through into headline CPI over the next two quarters. Real yields at 1.91% remain firmly restrictive. Credit spreads widened: IG OAS moved from 84bp to 91bp. The equity market noticed — SPX closed at 6,632, hovering just above its 200-day moving average.</p>
+
+<div class="week-callout">
+  <strong>The rate repricing was asymmetric across geographies.</strong> US rates moved +25bp. European ESTR repriced +65bp. UK OIS repriced +80bp. The energy-import-dependent economies are absorbing far more inflation risk than the energy-independent United States. This asymmetry is precisely why the dollar strengthened: the move is a relative story, not an absolute one. ING identified the three G10 winners from this dynamic: USD, CAD, and AUD — all energy exporters.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PERFORMANCE HEATMAP                        -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="visual-panel">
+  <div class="visual-label">Weekly Performance Grid — 9–14 March 2026</div>
+</div>
+
+<div class="perf-grid">
+  <!-- Row 1: FX -->
+  <div class="perf-cell" style="background:rgba(78,205,196,0.1);">
+    <span class="perf-label">DXY</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.85);">+1.66%</span>
+    <span class="perf-sub">100.50</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.08);">
+    <span class="perf-label">EUR/USD</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">−0.89%</span>
+    <span class="perf-sub">1.1423</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(78,205,196,0.1);">
+    <span class="perf-label">USD/JPY</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.85);">+1.41%</span>
+    <span class="perf-sub">159.72</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(78,205,196,0.1);">
+    <span class="perf-label">AUD/USD</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.85);">+1.50%</span>
+    <span class="perf-sub">ENERGY EXP.</span>
+  </div>
+
+  <!-- Row 2: Metals & Crypto -->
+  <div class="perf-cell" style="background:rgba(224,86,160,0.12);">
+    <span class="perf-label">GOLD</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">−1.81%</span>
+    <span class="perf-sub">5,062</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.35);">
+    <span class="perf-label">SILVER</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.9);">−6.60%</span>
+    <span class="perf-sub">INDUSTRIAL ↓</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.1);">
+    <span class="perf-label">COPPER</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">−1.50%</span>
+    <span class="perf-sub">RECESSION?</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(78,205,196,0.35);">
+    <span class="perf-label">BTC</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.95);">+7.58%</span>
+    <span class="perf-sub">WEEK LEADER</span>
+  </div>
+
+  <!-- Row 3: Energy & Agriculture -->
+  <div class="perf-cell" style="background:rgba(200,210,220,0.03);">
+    <span class="perf-label">WTI</span>
+    <span class="perf-val" style="color:rgba(200,210,220,0.5);">+0.72%</span>
+    <span class="perf-sub">$43 RANGE!</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.3);">
+    <span class="perf-label">NAT GAS</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.85);">−5.24%</span>
+    <span class="perf-sub">3.131</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(78,205,196,0.2);">
+    <span class="perf-label">CORN</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.85);">+4.47%</span>
+    <span class="perf-sub">SUPPLY CHAIN</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.2);">
+    <span class="perf-label">WHEAT</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.8);">−3.35%</span>
+    <span class="perf-sub">613.75</span>
+  </div>
+
+  <!-- Row 4: Equity, Vol, Rates -->
+  <div class="perf-cell" style="background:rgba(224,86,160,0.08);">
+    <span class="perf-label">SPX</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">−1.01%</span>
+    <span class="perf-sub">6,632</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(78,205,196,0.35);">
+    <span class="perf-label">VIX</span>
+    <span class="perf-val" style="color:rgba(78,205,196,0.95);">−22.6%</span>
+    <span class="perf-sub">35→27 CRUSHED</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.1);">
+    <span class="perf-label">US 10Y</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">+15bp</span>
+    <span class="perf-sub">4.285%</span>
+  </div>
+  <div class="perf-cell" style="background:rgba(224,86,160,0.12);">
+    <span class="perf-label">US 2Y</span>
+    <span class="perf-val" style="color:rgba(224,86,160,0.75);">+19bp</span>
+    <span class="perf-sub">BEAR STEEP</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 06: WHERE THE THESIS STANDS        -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>06</span> Where the Thesis Stands</div>
+</div>
+
+<p>The Q2 thesis — bearish USD, long gold, long EUR on dips — was stress-tested on every leg this week. The dollar broke our expected ceiling. Gold pulled back. EUR/USD slid below 1.15 for the first time since August. Every institutional forecast we track still projects a weaker dollar by year-end: Goldman targets EUR/USD at 1.25, ING at 1.22, Deutsche Bank at 1.25, MUFG at 1.24. Even the most cautious house, Wells Fargo, sees 1.18-1.19. But year-end targets don't help if the position is underwater now.</p>
+
+<p>Here's what we know. The dollar's strength is driven by three factors: safe-haven flows, US energy independence creating a relative advantage over Europe and Asia, and delayed Fed rate cuts. The first factor is temporary — Morgan Stanley assigns 70% probability the conflict lasts only weeks. The second is structural but already reflected in the rate differential. The third depends entirely on whether oil's inflation pass-through is transient or persistent. If Hormuz traffic normalizes in March, the geopolitical premium fades, oil falls below $90, and DXY reverts toward 98-99. If the disruption extends into Q2, the thesis doesn't need patience — it needs revision.</p>
+
+<p>The market's rapid absorption of this week's shock — VIX collapsing 22.6%, WTI round-tripping $43, BTC leading at +7.6% — suggests that participants are pricing the conflict as short-duration. ING's own long-term model, despite the near-term dollar rally, maintains that the dollar's 2026 decline is "more cyclical than structural." The positioning data confirms: CFTC shorts are still near five-year extremes. The crowd hasn't capitulated. They've paused.</p>
+
+<div class="thesis-box">
+  <div class="thesis-label"><span class="dot"></span> Q2 Thesis Status: Under Stress</div>
+  <div class="thesis-text">Structurally bearish USD, long gold, long EUR on dips — under genuine stress for the first time since publication. DXY has broken above 100, driven by safe-haven flows and the energy-independence premium. Gold pulled back but held the $5,000 structural floor. EUR/USD at 1.1423, testing the August lows. <strong>Key test:</strong> if DXY holds above 100 for a second consecutive week, the thesis requires revision, not patience. If oil normalizes and the geopolitical premium fades, the structural bearish case reasserts from a higher base. We do not change direction — but we raise the pain threshold. The next two weeks will determine whether this is a detour or a destination.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- WEEK AHEAD                                 -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="weekly-section">
+  <div class="weekly-section-title"><span>→</span> Week Ahead: 17–21 March 2026</div>
+</div>
+
+<div class="next-week-grid">
+  <span class="nw-date">Mon 17</span>
+  <span class="nw-event">RBA Rate Decision — 70% probability of 25bp hike</span>
+  <span class="nw-impact high">High</span>
+
+  <span class="nw-date">Mon 17</span>
+  <span class="nw-event">US Retail Sales — February</span>
+  <span class="nw-impact medium">Medium</span>
+
+  <span class="nw-date">Wed 19</span>
+  <span class="nw-event">FOMC Rate Decision + Press Conference</span>
+  <span class="nw-impact high">High</span>
+
+  <span class="nw-date">Wed 19</span>
+  <span class="nw-event">BOJ Rate Decision — hold at 0.75% expected</span>
+  <span class="nw-impact high">High</span>
+
+  <span class="nw-date">Thu 20</span>
+  <span class="nw-event">BoE Rate Decision</span>
+  <span class="nw-impact high">High</span>
+
+  <span class="nw-date">Thu 20</span>
+  <span class="nw-event">Initial Jobless Claims</span>
+  <span class="nw-impact medium">Medium</span>
+
+  <span class="nw-date">Fri 21</span>
+  <span class="nw-event">Core PCE — Jan (consensus: 3.1% YoY)</span>
+  <span class="nw-impact high">High</span>
+
+  <span class="nw-date">Ongoing</span>
+  <span class="nw-event">Strait of Hormuz — traffic normalization watch</span>
+  <span class="nw-impact high">High</span>
+</div>
+
+<div class="keywatch-box">
+  <div class="keywatch-label">Key Watch</div>
+  <div class="keywatch-text"><strong>FOMC Wednesday is the week's pivot — and possibly Q2's.</strong> If Powell signals that oil-driven inflation delays cuts and the dot plot shifts hawkish, DXY holds above 100 and EUR/USD tests 1.13. If he frames the oil shock as transient and keeps June on the table, the dollar gives back half the week's gains and the Q2 thesis gets breathing room. The BOJ decision matters for USD/JPY — a hold at 0.75% with dovish guidance sends the pair through 160 into intervention territory. RBA hiking would confirm the energy-exporter-advantage trade. Core PCE at 3.1%+ seals the hawkish case. Four central bank decisions in one week. The thesis lives or dies here.</div>
+</div>
+
+<div class="disclaimer">
+  This material is published for informational purposes only by muFX and does not constitute investment advice, a solicitation, or a recommendation to buy or sell any financial instrument. All views expressed are those of muFX and are subject to change without notice. Past performance is not indicative of future results. Trading foreign exchange carries significant risk of loss.
+</div>
+
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
+    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="research.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+    </div>
+  </div>
+</footer>
+<div class="bottom-line gold"></div>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
+});
+</script>
+
+<script>
+// Hash display
+(function(){
+  var a = document.querySelector('[data-hash]');
+  var d = document.querySelector('[data-hash-display]');
+  if(a && d && a.dataset.hash) {
+    d.textContent = a.dataset.hash.substring(0, 16);
+    d.title = 'SHA-256: ' + a.dataset.hash;
+  }
+})();
+</script>
+
+</body>
+</html>
