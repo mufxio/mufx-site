@@ -3,7 +3,7 @@
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
     <loc>https://mufx.io/</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-03-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -36,8 +36,19 @@
     </news:news>
   </url>
   <url>
+    <loc>https://mufx.io/kayle-20260317.html</loc>
+    <lastmod>2026-03-17</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.9</priority>
+    <news:news>
+      <news:publication><news:name>muFX</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-03-17</news:publication_date>
+      <news:title>Kayle EUR/USD Signal: Cheap — But For a Reason?</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://mufx.io/signals.html</loc>
-    <lastmod>2026-03-16</lastmod>
+    <lastmod>2026-03-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
