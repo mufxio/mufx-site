@@ -243,6 +243,8 @@
     <span>17 Mar 2026</span>
     <span class="sep">|</span>
     <span>8 min read</span>
+    <span class="sep">|</span>
+    <a href="verify.html" class="article-hash"><span class="hash-icon"></span><code data-hash-display>loading...</code></a>
   </div>
   <div class="kayle-subtitle" style="margin-top:8px;">1.1517 · FOMC WED · ECB THU</div>
 </header>
@@ -287,7 +289,7 @@
   </div>
 </div>
 
-<article class="article-body">
+<article class="article-body" data-hash="f36573bafd3a9ac9b5f38db3ad2b1692ae9ceadb85a2b55f0f719eb963f0399a">
 
 <!-- ── 1. THE MODEL'S VIEW ── -->
 <h2>The Model Says Buy</h2>
@@ -736,6 +738,15 @@ window.addEventListener('scroll', () => {
   const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
   document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
 });
+(function(){
+  var el = document.querySelector('[data-hash-display]');
+  var art = document.querySelector('[data-hash]');
+  if (el && art) {
+    var full = art.getAttribute('data-hash');
+    el.textContent = full.substring(0,16);
+    el.title = 'SHA-256: ' + full;
+  }
+})();
 </script>
 
 </body>
