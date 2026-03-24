@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft II — The Composition — muFX</title>
+<meta name="description" content="Draft II — The Composition — Ballad research journal, muFX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span> <span style="font-weight:300;font-size:12px;color:var(--text-ghost);margin-left:8px;letter-spacing:2px;font-style:italic;">ballad</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Journal</a>
+      <a href="archive.html">Archive</a>
+      <a href="cipher.html">Cipher</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">&larr; Back to Journal</a>
+  <div class="article-tag tag-signal">Architecture Draft</div>
+  <h1>Draft II — The Composition</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>March 2026</span>
+    <span class="sep">|</span>
+    <span>24 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+<h1>Draft 2: The Composition</h1>
+<h2>An Intelligence Architecture for EUR/USD</h2>
+<p><em>The market is already playing. Learn to hear the piece.</em></p>
+<hr>
+<h2>Core Premise</h2>
+<p>A musical composition has structure (the score), realization (the performance), and<br>
+interpretation (the listener). These are not metaphors mapped onto markets. They are<br>
+the same phenomenon. A fugue subject enters, develops, inverts, returns. Price does<br>
+the same thing. Both are temporal structures unfolding under constraints, governed by<br>
+tension and resolution, expectation and surprise.</p>
+<p>This system does not analyze the market. It performs alongside it. The trader already<br>
+sight-reads the score at 93%. This system learns to hear what the trader hears, holds<br>
+the parts the trader cannot hold in working memory, and anticipates the next phrase<br>
+before it arrives.</p>
+<p>The architecture IS the edge. It cannot be copied because it is a living performance<br>
+practice, not a strategy.</p>
+<p>Runs on a Mac Mini. No budget. No cloud. The instrument is local.</p>
+<hr>
+<h2>System Overview</h2>
+<pre><code>                        THE COMPOSITION
+    ================================================================
+
+                         +-----------+
+                         | CONDUCTOR |
+                         | (Regime)  |
+                         +-----+-----+
+                               |
+              what piece are we playing?
+                               |
+         +---------------------+---------------------+
+         |                     |                     |
+    +----+----+          +-----+-----+         +-----+-----+
+    |  SCORE  |          | LISTENING |         |  MEMORY   |
+    | (Form)  |&lt;--------&gt;| (Ear)     |&lt;-------&gt;| (Repertoire)
+    +----+----+          +-----+-----+         +-----+-----+
+         |                     |                     |
+         |        what is being played?              |
+         |                     |                     |
+         +----------+----+----+----------+-----------+
+                    |         |          |
+              +-----+---+----+----+-----+-----+
+              | PERFORMANCE  | PLAYING        |
+              | (What IS)    | (What NEXT)    |
+              +--------------+----------------+
+                         |
+                    to the trader
+</code></pre>
+<hr>
+<h2>I. THE CONDUCTOR (Regime Detection)</h2>
+<p>The conductor does not play. The conductor determines WHAT piece is being played. Is<br>
+this a fugue (trending)? A theme and variations (range-bound)? A cadenza (breakout)?<br>
+The conductor sets the key, the tempo, the form — and every other component adjusts.</p>
+<h3>Components</h3>
+<p><strong>The Baton: Kuramoto Phase Transition [6]</strong></p>
+<p>Multiple oscillators (price, volume, volatility, spread, order flow) each have their<br>
+own phase. When they synchronize — when the baton brings them together — a regime<br>
+transition is occurring. The Kuramoto order parameter r measures this:</p>
+<pre><code>  r(t) = |1/N * SUM(e^(i*theta_j(t)))|
+
+  r near 0  --&gt;  desynchronized  --&gt;  range / noise / interlude
+  r near 1  --&gt;  synchronized    --&gt;  trend / breakout / tutti
+
+  Transition zone (0.3 &lt; r &lt; 0.7) = the downbeat is coming
+</code></pre>
+<p>The conductor does not decide the regime. The conductor DETECTS which composition the<br>
+market has already begun playing.</p>
+<p><strong>The Score Selection: Xenakis Game Theory [19]</strong></p>
+<p>The market and the system are adversaries in a stochastic game. Xenakis used game<br>
+theory to compose music where the outcome was probabilistic but structurally bounded.<br>
+The conductor uses this to select which "score" (structural template) best fits what<br>
+the ensemble is currently playing:</p>
+<pre><code>  GAME MATRIX (simplified):
+  -------------------------------------------------------
+  Market State \     | System bets  | System bets  | System
+  System Response    | TREND        | RANGE        | waits
+  -------------------------------------------------------
+  Trending           | +reward      | -loss        | 0
+  Ranging            | -loss        | +reward      | 0
+  Transitioning      | -small loss  | -small loss  | +small
+  -------------------------------------------------------
+
+  Minimax solution: wait during transitions, commit during clarity
+</code></pre>
+<p><strong>Critical Periods [30]</strong></p>
+<p>Not every moment matters equally. The conductor identifies critical periods — windows<br>
+where the system must update its model or miss the regime change entirely. These<br>
+correspond to:<br>
+- Session opens (London, New York)<br>
+- First 15 minutes after news<br>
+- The moment oscillators begin synchronizing (r crosses 0.3)<br>
+- The moment a prolongation structure completes</p>
+<p>Outside critical periods, the system conserves energy. During them, every component<br>
+is fully active.</p>
+<h3>Conductor Data Flow</h3>
+<pre><code>  Oscillator phases ----+
+                        |
+  Volatility regime ----+--&gt; Kuramoto r(t) --&gt; regime probability
+                        |                          |
+  Session clock --------+                          |
+                                                   v
+  Game theory payoff matrix &lt;--- regime prob ---&gt; SCORE SELECTION
+         |                                           |
+         v                                           v
+  optimal response weights              activate correct template
+         |                                           |
+         +----------&gt; CONDUCTOR OUTPUT &lt;-------------+
+                           |
+              +------------+------------+
+              |            |            |
+              v            v            v
+           SCORE       LISTENING     MEMORY
+        (activate     (tune ear    (retrieve
+         template)    to key)      repertoire)
+</code></pre>
+<hr>
+<h2>II. THE SCORE (Structural Template)</h2>
+<p>The score is not what the market IS doing. The score is the structural form the market<br>
+is playing FROM. A sonata has exposition, development, recapitulation. A trend has<br>
+impulse, correction, continuation. These are the same structural phenomenon.</p>
+<h3>Components</h3>
+<p><strong>The Form: Context-Free Recursion [3]</strong></p>
+<p>Musical form is context-free: a phrase contains sub-phrases contains motifs. Market<br>
+structure is identical. An M30 trend contains M5 impulses contains M1 micro-trends.<br>
+Context-free grammar captures this:</p>
+<pre><code>  MARKET GRAMMAR (context-free):
+
+  Movement    --&gt; Exposition Development Recapitulation
+  Exposition  --&gt; Theme1 Bridge Theme2
+  Theme       --&gt; Phrase Phrase'
+  Phrase      --&gt; Motif Motif Motif Cadence
+  Motif       --&gt; Note Note Note
+
+  MAPPED TO PRICE:
+
+  Trend       --&gt; Impulse1 Correction Impulse2
+  Impulse     --&gt; Push Pullback Push'
+  Push        --&gt; Candle Candle Candle Pause
+  Candle      --&gt; OHLC tick
+
+  The grammar is the SAME. Only the terminal symbols differ.
+</code></pre>
+<p><strong>Tree Contains Chain [25]</strong></p>
+<p>Every Markov chain (sequential prediction) is contained within a tree structure. The<br>
+score is a tree. Sequential price action is a chain embedded in that tree. The system<br>
+maintains the tree and uses the chain to locate where in the tree the current<br>
+performance has reached:</p>
+<pre><code>        [Movement: Uptrend]
+           /            \
+    [Exposition]     [Development]
+      /      \          /      \
+  [Theme1] [Theme2] [Var1]  [Var2]
+    /  \      |       |       |
+  [m1] [m2] [m3]   [m4]    [m5]
+   |    |    |       |       |
+   P    P    P       P       P    &lt;-- price is down here (chain)
+                                      tree is up here (structure)
+</code></pre>
+<p><strong>Prolongation [26]</strong></p>
+<p>In Schenkerian analysis, surface notes are prolongations of deeper structural tones.<br>
+In markets, surface price action is a prolongation of deeper structural levels. A<br>
+pullback in an uptrend is a prolongation of the trend — it does not negate the<br>
+structural tone, it decorates it:</p>
+<pre><code>  Structural level (Ursatz):     BUY ========================&gt; SELL
+                                       |                  |
+  Middle ground:                  BUY --+-- pull -- BUY --+-- SELL
+                                        |    back   |
+  Foreground (surface):          b b s s b b b s b b s b b b s s
+                                 ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
+                                 individual candles (noise)
+
+  The trader already sees the structural level.
+  The system tracks which prolongation layer is active.
+</code></pre>
+<p><strong>Path Dependence [27]</strong></p>
+<p>HOW we arrived at this point in the score matters. Two identical prices reached by<br>
+different paths are in different structural positions. The score tracks the path:</p>
+<pre><code>  Path A: 1.0800 -&gt; 1.0850 -&gt; 1.0830 -&gt; 1.0850  (rising, pullback, continuation)
+  Path B: 1.0900 -&gt; 1.0870 -&gt; 1.0850 -&gt; 1.0850  (falling, bounce, stall)
+
+  Same price (1.0850). Completely different position in the score.
+  Path A is in &quot;Theme 2&quot; of an exposition. Path B is in &quot;Development.&quot;
+</code></pre>
+<h3>Score Data Flow</h3>
+<pre><code>  Raw price stream
+        |
+        v
+  Context-Free Parser ----&gt; parse tree (current structure)
+        |                        |
+        v                        v
+  Prolongation Engine      Tree-Chain Locator
+  (which structural            |
+   level is active?)           v
+        |                 &quot;We are HERE in the score&quot;
+        v                      |
+  Path Dependence              |
+  (how did we get here?) ------+
+        |                      |
+        v                      v
+  SCORE OUTPUT: structural position + active level + path context
+        |
+        +-------&gt; LISTENING (what to listen for next)
+        +-------&gt; PLAYING (what the score predicts)
+        +-------&gt; MEMORY (match to past performances)
+</code></pre>
+<hr>
+<h2>III. THE LISTENING (Perceptual Engine)</h2>
+<p>A musician does not hear individual notes. A musician hears phrases, harmonic<br>
+progressions, rhythmic patterns, timbral shifts. The listening engine transforms raw<br>
+market data into musical perception — structured, hierarchical, embodied.</p>
+<h3>Components</h3>
+<p><strong>The Ear: 1/f Cutoff [2]</strong></p>
+<p>Natural hearing has a frequency response. So does market perception. The 1/f cutoff<br>
+separates signal (structured information) from noise (random fluctuation):</p>
+<pre><code>  Power Spectral Density:
+
+  log(Power)
+       |
+       |\
+       | \  &lt;-- 1/f region (structured, meaningful)
+       |  \
+       |   \----------- cutoff frequency
+       |    \
+       |     `-.___     &lt;-- white noise (random, ignore)
+       |           `---___
+       +--------------------&gt; log(frequency)
+
+  Below cutoff: the composition (listen here)
+  Above cutoff: instrument noise (ignore this)
+</code></pre>
+<p><strong>Acoustic Niche Partitioning [8]</strong></p>
+<p>In a rainforest, each species occupies a unique frequency band. In the market,<br>
+different timeframes occupy different structural niches. The listening engine<br>
+separates them so they do not mask each other:</p>
+<pre><code>  FREQUENCY NICHES:
+  +---------------------------------------------------------+
+  | M1  ticks  | high freq  | micro-motifs, note-level      |
+  | M5  bars   | mid-high   | phrases, short sequences      |
+  | M15 bars   | mid        | themes, harmonic progressions |
+  | M30 bars   | mid-low    | sections, formal divisions    |
+  | H1+ bars   | low freq   | movements, structural arcs    |
+  +---------------------------------------------------------+
+
+  Each niche is listened to independently.
+  Cross-niche correlation = structural event (tutti moment).
+</code></pre>
+<p><strong>The Groove: Entrainment is Predictive [20]</strong></p>
+<p>Entrainment is not passive synchronization. It is active prediction. When a drummer<br>
+locks into a groove, they are PREDICTING the next beat and arriving there<br>
+simultaneously. The system entrains to the market's rhythm:</p>
+<pre><code>  Market beat:    X . . X . . X . . X . . X . .
+  System phase:   X . . X . . X . . X . . X . .
+                  ^     ^     ^     ^     ^
+                  synchronized: phase error near zero
+
+  Phase error &gt; threshold --&gt; the groove has changed
+  Phase error = 0         --&gt; perfect entrainment
+  Phase error &lt; 0         --&gt; system is AHEAD (prediction)
+</code></pre>
+<p><strong>Syncopation as Structured Violation [5]</strong></p>
+<p>A syncopation is not random. It is a STRUCTURED violation of the expected beat. In<br>
+markets, a structured violation is a move that breaks the rhythm but stays within the<br>
+form. The system distinguishes structured violations (opportunities) from random<br>
+violations (noise):</p>
+<pre><code>  Expected:     X . . X . . X . . X . .
+  Syncopated:   X . . . X . X . . X . .    &lt;-- structured (tradeable)
+  Random:       X . X . . X . . X X . .    &lt;-- noise (ignore)
+
+  Test: does the violation resolve back to the form?
+  Syncopation resolves. Noise does not.
+</code></pre>
+<p><strong>Interlocking Polyrhythm [14]</strong></p>
+<p>Multiple timeframes create interlocking patterns. The M1 plays in 4/4 while the M5<br>
+plays in 3/4 and the M15 plays in 7/8. The system tracks all rhythms simultaneously<br>
+and detects when they align (downbeat convergence):</p>
+<pre><code>  M1:   | X . . X | . . X . | . X . . | X . . X |  (4-bar)
+  M5:   | X . . . | . X . . | . . X . | . . . X |  (shifted)
+  M15:  | X . . . | . . . X | . . . . | . X . . |  (slow)
+        --------+-----------+---------+-----------
+                 ^                     ^
+           partial align          FULL ALIGN = structural event
+</code></pre>
+<p><strong>The Body Knows: Iowa Gambling Task [24]</strong></p>
+<p>Before the mind knows, the body knows. Somatic markers — gut feelings encoded as<br>
+physiological micro-patterns — precede conscious recognition. The system builds<br>
+somatic markers from micro-statistics that shift before price does:</p>
+<pre><code>  Somatic Marker Pipeline:
+
+  tick-level statistics --&gt; micro-distribution shifts --&gt; &quot;body signal&quot;
+        |                        |                          |
+    spread widening         skew changing              something is
+    tick rate changing      kurtosis rising             about to happen
+    size distribution       autocorrelation                |
+    shifting                flipping                       v
+                                                    ALERT: attend NOW
+                                                    (before price moves)
+</code></pre>
+<h3>Listening Data Flow</h3>
+<pre><code>  Raw market feed (ticks, L2, spread)
+        |
+        v
+  1/f Cutoff Filter ---------&gt; structured signal only
+        |
+        v
+  Acoustic Niche Separator ---&gt; M1 | M5 | M15 | M30 | H1 streams
+        |       |       |
+        v       v       v
+  Entrainment   Polyrhythm    Syncopation
+  (lock to      (cross-TF     (structured
+   groove)       align)        violations)
+        |            |              |
+        v            v              v
+  phase errors  alignment map   violation type
+        |            |              |
+        +------+-----+------+------+
+               |             |
+               v             v
+        Somatic Markers   LISTENING OUTPUT
+        (body-before-     (perceptual field:
+         mind alerts)      what the system &quot;hears&quot;)
+               |                  |
+               v                  v
+           PLAYING            CONDUCTOR
+           (anticipate)       (regime check)
+</code></pre>
+<hr>
+<h2>IV. THE PERFORMANCE (Real-Time State)</h2>
+<p>The performance is what IS happening right now. Not what should happen (the score),<br>
+not what might happen (prediction), but what the market is actually doing in this<br>
+moment. This is the ground truth against which everything else is measured.</p>
+<h3>Components</h3>
+<p><strong>The Body-Parser [4]</strong></p>
+<p>Every tick is parsed into its bodily components — not just OHLC but the microstructure<br>
+of how the candle formed. A candle that opens high and closes low has a different body<br>
+than one that opens low and closes high, even if the final bar looks identical:</p>
+<pre><code>  Body Parse of a Single Candle:
+
+  Formation sequence:  Open -&gt; High -&gt; Low -&gt; Close  (bearish engulf)
+  vs.
+  Formation sequence:  Open -&gt; Low -&gt; High -&gt; Close  (bullish rejection)
+
+  Same OHLC. Different body. Different meaning.
+
+  Body vector: [open_position, wick_ratio_top, wick_ratio_bottom,
+                body_ratio, formation_order, tick_density_profile]
+</code></pre>
+<p><strong>Rough Volatility [28]</strong></p>
+<p>Volatility is not smooth. It is rough — characterized by a Hurst exponent H near 0.1,<br>
+meaning it has jagged, fractal texture. The performance engine tracks this roughness<br>
+because it contains structural information:</p>
+<pre><code>  Smooth vol (H ~ 0.5):  ~~~~~~~~~~~~~~~  (Brownian, no info)
+  Rough vol  (H ~ 0.1):  /\/\|/\./\|\/\  (fractal, structured)
+
+  Roughness signature:
+  - H &lt; 0.15: highly structured vol (listen closely)
+  - H ~ 0.5:  random vol (the ensemble is tuning, not playing)
+  - Sudden H shift: the piece is changing
+</code></pre>
+<p><strong>Persistent Homology [17]</strong></p>
+<p>The topological shape of recent price action. Persistent homology finds features<br>
+(loops, voids, connected components) that persist across scales. These are the<br>
+structural features of the current performance:</p>
+<pre><code>  Price trajectory in delay-embedding space:
+
+       *   *
+      * * * *
+     *       *       &lt;-- a loop (H1 feature) that persists
+      *     *            = price is cycling (range-bound)
+       * * *
+        * *
+
+  Birth-death diagram:
+  death |     .
+        |   .   .    &lt;-- features near diagonal: noise
+        |  .      .
+        | .    X     &lt;-- feature far from diagonal: REAL STRUCTURE
+        +----------
+          birth
+
+  Persistent features = the actual shape of what the market is playing
+</code></pre>
+<p><strong>OPTIC Equivalences [16]</strong></p>
+<p>Two performances can sound different but be structurally equivalent. OPTIC (Octave,<br>
+Permutation, Transposition, Inversion, Cardinality) equivalences detect when the<br>
+market is playing the "same piece" in a different key:</p>
+<pre><code>  OPTIC TRANSFORMS:
+  ---------------------------------------------------------
+  Transform       | Musical                | Market
+  ---------------------------------------------------------
+  Transposition   | Same melody, diff key  | Same pattern, diff price level
+  Inversion       | Melody flipped         | Mirror pattern (H&amp;S -&gt; inv H&amp;S)
+  Retrograde      | Melody backwards       | Reversal pattern
+  Augmentation    | Melody stretched        | Same pattern, slower timeframe
+  Diminution      | Melody compressed       | Same pattern, faster timeframe
+  ---------------------------------------------------------
+
+  Two patterns that are OPTIC-equivalent get the same structural label.
+  This massively compresses the pattern space.
+</code></pre>
+<h3>Performance Data Flow</h3>
+<pre><code>  Live tick stream
+        |
+        v
+  Body-Parser ---------&gt; candle body vectors (formation-aware)
+        |
+        v
+  Rough Volatility -----&gt; H(t), roughness texture
+        |
+        v
+  Persistent Homology --&gt; topological features (loops, voids, components)
+        |
+        v
+  OPTIC Equivalences ---&gt; structural class of current pattern
+        |
+        v
+  PERFORMANCE STATE: {body, roughness, topology, structural_class}
+        |
+        +-------&gt; SCORE (compare to template)
+        +-------&gt; LISTENING (what to attend to)
+        +-------&gt; PLAYING (deviation = prediction error)
+        +-------&gt; MEMORY (match to past performances)
+</code></pre>
+<hr>
+<h2>V. THE MEMORY (Repertoire System)</h2>
+<p>A musician who has played a thousand performances of the same repertoire does not<br>
+memorize each one. They build a compressed, adaptive model of HOW that piece tends to<br>
+go. Memory is not storage. Memory is repertoire — the accumulated wisdom of past<br>
+performances that shapes expectations for the current one.</p>
+<h3>Components</h3>
+<p><strong>Stigmergy [7]</strong></p>
+<p>Ants do not communicate directly. They leave pheromone trails that guide future<br>
+behavior. The memory system uses stigmergy: past performances leave "traces" in the<br>
+system's state space that bias future pattern recognition:</p>
+<pre><code>  State Space with Stigmergic Traces:
+
+       vol
+        ^
+        |   . . .(strong trail: &quot;when here, trend follows&quot;)
+        |  . .
+        | .        * (current state)
+        |             . . .
+        |                . . .(weak trail: &quot;sometimes reversal&quot;)
+        +-------------------------&gt; momentum
+
+  Trail strength decays with time but reinforces with repetition.
+  The system follows strong trails and explores near weak ones.
+</code></pre>
+<p><strong>Whale Song Revolution [9]</strong></p>
+<p>Humpback whale songs evolve: all males in a population sing the same song, but the<br>
+song gradually mutates over years. Sometimes a revolutionary new song appears from<br>
+another population and rapidly replaces the old one. Market regimes do the same.<br>
+Memory tracks both gradual drift and revolutionary replacement:</p>
+<pre><code>  Song evolution timeline:
+
+  2024 Q1:  AABBC AABBC AABBC   (stable regime)
+  2024 Q2:  AABBC AABBD AABBD   (gradual mutation: C -&gt; D)
+  2024 Q3:  AABBD AABBD XXYYZ   (REVOLUTION: new song appears)
+  2024 Q4:  XXYYZ XXYYZ XXYYZ   (new regime dominates)
+
+  Memory stores:
+  - Current song (active regime template)
+  - Mutation rate (how fast is it drifting?)
+  - Revolutionary songs (templates from past regime changes)
+  - Transition signatures (what the moment of revolution felt like)
+</code></pre>
+<p><strong>Convergence-Divergence Oscillation [10]</strong></p>
+<p>Memory is not static. It oscillates between convergence (consolidating patterns into<br>
+compressed representations) and divergence (expanding into new territory when the old<br>
+model breaks down):</p>
+<pre><code>  CONVERGENCE (sleeping / offline):
+  Many experiences --&gt; compress --&gt; fewer, stronger templates
+  &quot;This is how fugues work. This is how sonatas work.&quot;
+
+  DIVERGENCE (waking / online):
+  New data does not fit templates --&gt; expand --&gt; explore
+  &quot;This is unlike anything I have heard before. Listen harder.&quot;
+
+  The oscillation cycle:
+  converge -&gt; perform -&gt; surprise -&gt; diverge -&gt; explore -&gt; converge
+</code></pre>
+<p><strong>Dopamine Two-Phase [22]</strong></p>
+<p>Dopamine has two phases: a phasic burst (unexpected reward) and a tonic baseline<br>
+(expected reward context). Memory uses this for learning:</p>
+<pre><code>  Phase 1 (Phasic): &quot;That was unexpected!&quot;
+  - Prediction error &gt; threshold
+  - Rapid learning, high plasticity
+  - Encode this moment strongly
+
+  Phase 2 (Tonic): &quot;This is the normal reward rate&quot;
+  - Baseline expectation
+  - Slow learning, low plasticity
+  - Maintain current model
+
+  Learning rate = phasic_signal / tonic_baseline
+  High ratio: PAY ATTENTION, UPDATE MODEL
+  Low ratio:  everything is as expected, hold steady
+</code></pre>
+<p><strong>Quadratic Reward Function [1]</strong></p>
+<p>Reward is not linear. Small correct predictions compound quadratically, making<br>
+consistent accuracy dramatically more valuable than occasional big wins:</p>
+<pre><code>  Linear reward:     R = sum(correct_predictions)
+  Quadratic reward:  R = sum(correct_predictions)^2
+
+  10 small correct predictions:
+    Linear:    10
+    Quadratic: 100
+
+  5 big correct + 5 wrong:
+    Linear:    5
+    Quadratic: 25
+
+  THE SYSTEM THAT IS CONSISTENTLY RIGHT COMPOUNDS FASTER.
+  This is why 93% win rate is a superpower. The reward function
+  ensures the system optimizes for consistency, not magnitude.
+</code></pre>
+<h3>Memory Data Flow</h3>
+<pre><code>  Past performance data
+        |
+        v
+  Stigmergic Trails -------&gt; state-space bias map
+        |
+        v
+  Whale Song Tracker -------&gt; regime history + mutation rate
+        |
+        v
+  Conv-Div Oscillator ------&gt; current mode (consolidate vs explore)
+        |
+        v
+  Dopamine Modulator -------&gt; learning rate for this moment
+        |
+        v
+  Quadratic Reward ----------&gt; compounding accuracy score
+        |
+        v
+  MEMORY OUTPUT: {trails, regime_history, learning_mode,
+                  learning_rate, compound_score}
+        |
+        +-------&gt; SCORE (which templates are strongest?)
+        +-------&gt; LISTENING (what did past performances sound like here?)
+        +-------&gt; CONDUCTOR (has the song changed revolutionarily?)
+        +-------&gt; PLAYING (bias toward high-trail predictions)
+</code></pre>
+<hr>
+<h2>VI. THE PLAYING (Predictive Output)</h2>
+<p>The system does not trade. It PLAYS — it generates anticipations of what comes next in<br>
+the composition, the way a musician's fingers move to the next note before consciously<br>
+deciding. The trader makes the final call. The system provides the anticipation.</p>
+<h3>Components</h3>
+<p><strong>Hierarchical Prediction Error [11]</strong></p>
+<p>Prediction errors cascade up the hierarchy. A wrong note at the motif level may not<br>
+matter. A wrong phrase at the section level matters a lot. The system generates<br>
+predictions at every level and tracks where errors occur:</p>
+<pre><code>  PREDICTION HIERARCHY:
+  =====================================================
+  Level          | Prediction        | Error Impact
+  =====================================================
+  Movement (H1+) | trend direction   | CRITICAL (regime)
+  Section  (M30) | impulse/correct   | HIGH (structure)
+  Phrase   (M15) | push/pullback     | MEDIUM (tactics)
+  Motif    (M5)  | micro-pattern     | LOW (noise-adj)
+  Note     (M1)  | next candle       | MINIMAL (solo)
+  =====================================================
+
+  Error at high level --&gt; re-evaluate everything below
+  Error at low level  --&gt; ignore unless it propagates up
+</code></pre>
+<p><strong>Pattern Completion with Inertia [12]</strong></p>
+<p>Once a pattern is recognized, the system completes it with inertia — it assumes the<br>
+pattern will continue unless actively disrupted. This is how musicians read ahead in<br>
+the score:</p>
+<pre><code>  Recognized: A B C D E ...
+  Predicted:  ... F G H (pattern completion)
+  Inertia:    keep predicting F G H until error forces update
+
+  Inertia strength is proportional to:
+  - How many times this pattern completed before (stigmergic trail strength)
+  - How deep in the hierarchy the pattern is (deeper = more inertia)
+  - Current dopamine phase (tonic = high inertia, phasic = low inertia)
+</code></pre>
+<p><strong>Temporal Hierarchy [13]</strong></p>
+<p>Time itself is hierarchical. The system maintains multiple temporal windows and<br>
+generates predictions at each:</p>
+<pre><code>  TEMPORAL WINDOWS:
+  +--------------------------------------------------+
+  | Window    | Horizon     | Update Rate | Weight    |
+  +--------------------------------------------------+
+  | Immediate | 1-5 candles | every tick  | 0.10      |
+  | Short     | 5-20 cndls  | every bar   | 0.25      |
+  | Medium    | 20-100 cndl | every 5 bar | 0.35      |
+  | Long      | 100+ cndls  | every 15bar | 0.30      |
+  +--------------------------------------------------+
+
+  Final prediction = weighted combination across all windows
+  Weights shift based on which temporal level has lowest error
+</code></pre>
+<p><strong>Free Energy = Complexity - Accuracy [18]</strong></p>
+<p>The system minimizes free energy: the gap between model complexity and prediction<br>
+accuracy. Too complex and the model overfits. Too simple and it misses structure. The<br>
+optimal model is the simplest one that explains the performance:</p>
+<pre><code>  Free Energy F = Complexity(model) - Accuracy(predictions)
+
+  MINIMIZE F by:
+  1. Reducing complexity (Occam): simpler templates
+  2. Increasing accuracy: better predictions
+  3. Both simultaneously: find the simplest model that predicts well
+
+  F is high --&gt; model is wrong (too complex or too inaccurate)
+  F is low  --&gt; model fits (simplest adequate explanation)
+  F drops suddenly --&gt; the system just &quot;understood&quot; something
+</code></pre>
+<p><strong>Convergence-Divergence Self-Correction [21]</strong></p>
+<p>The playing engine self-corrects by oscillating between convergence (committing to a<br>
+prediction) and divergence (considering alternatives):</p>
+<pre><code>  PREDICT --&gt; OBSERVE --&gt; ERROR?
+     |                     |
+     |         NO          |         YES
+     v                     v
+  CONVERGE             DIVERGE
+  (strengthen          (weaken current,
+   current             consider alternatives)
+   prediction)              |
+     |                      v
+     |                 GENERATE NEW PREDICTIONS
+     |                      |
+     +----------+-----------+
+                |
+                v
+          NEXT CYCLE
+</code></pre>
+<p><strong>Gamelan Stratified Polyphony [15]</strong></p>
+<p>In Gamelan music, instruments are stratified: the lowest plays the core melody slowly,<br>
+middle instruments elaborate, highest instruments ornament rapidly. The playing system<br>
+stratifies its predictions the same way:</p>
+<pre><code>  STRATIFIED PREDICTION:
+
+  Balungan (core):     BUY -------- HOLD -------- SELL
+  Elaboration:         buy . buy . hold . hold . sell . sell
+  Ornamentation:       b b s b b b h h s h h b s s b s s s
+
+  The trader reads the Balungan (structural direction).
+  The system provides elaboration and ornamentation layers.
+  Each layer has its own confidence and update rate.
+</code></pre>
+<p><strong>Next-Token Prediction Discovers Trees [32]</strong></p>
+<p>The simplest possible learning rule — predict the next token — automatically discovers<br>
+hierarchical tree structure when applied to structured sequences. The system uses this<br>
+as its fundamental learning mechanism:</p>
+<pre><code>  Training signal: predict next candle properties
+  Emergent result: hierarchical structure discovery
+
+  Input:  [candle_1, candle_2, ..., candle_n]
+  Predict: candle_{n+1}
+
+  After sufficient training:
+  - Layer 1 learns: individual candle patterns (notes)
+  - Layer 2 learns: candle sequences (motifs)
+  - Layer 3 learns: sequence groups (phrases)
+  - Layer 4 learns: phrase relationships (sections)
+
+  The tree was never taught. It was discovered by prediction.
+</code></pre>
+<p><strong>Basal Ganglia Mark Boundaries [23]</strong></p>
+<p>The basal ganglia detect boundaries between structural units — the end of a phrase, the<br>
+start of a new section, the moment between movements. The system marks these<br>
+boundaries to segment the continuous stream into structural units:</p>
+<pre><code>  Continuous stream: ...candle candle candle | candle candle | candle...
+                                            ^              ^
+                                      BOUNDARY          BOUNDARY
+
+  Boundary detection signals:
+  - Prediction error spike (something changed)
+  - Volatility regime shift
+  - Entrainment phase reset
+  - Prolongation level change
+
+  Boundaries segment the stream into parseable units.
+  Without boundaries, the system hears noise.
+  With boundaries, it hears phrases.
+</code></pre>
+<p><strong>Behavior Trees [31]</strong></p>
+<p>The playing engine's decision process is a behavior tree — a hierarchical structure of<br>
+conditions and actions that evaluates top-down:</p>
+<pre><code>  ROOT: Generate Anticipation
+    |
+    +-- [SELECTOR] What regime?
+    |     |
+    |     +-- [SEQUENCE] If trending:
+    |     |     +-- check prolongation level
+    |     |     +-- check entrainment phase
+    |     |     +-- predict continuation with inertia
+    |     |
+    |     +-- [SEQUENCE] If ranging:
+    |     |     +-- check boundary proximity
+    |     |     +-- check polyrhythm alignment
+    |     |     +-- predict mean reversion
+    |     |
+    |     +-- [SEQUENCE] If transitioning:
+    |           +-- increase divergence
+    |           +-- widen prediction intervals
+    |           +-- alert: critical period
+    |
+    +-- [DECORATOR] Confidence filter
+          +-- only output if confidence &gt; threshold
+          +-- threshold adapts via quadratic reward feedback
+</code></pre>
+<p><strong>Markov Blanket Contains Tree [29]</strong></p>
+<p>The system's boundary with the world (its Markov blanket) contains the entire tree<br>
+structure. Everything inside the blanket is the system's model. Everything outside is<br>
+the market. The blanket interface is where listening meets playing:</p>
+<pre><code>  OUTSIDE (market):          BLANKET:              INSIDE (model):
+  +-----------------+   +----------------+   +------------------+
+  | raw ticks       |   | sensory input  |   | score templates  |
+  | order flow      |--&gt;| (listening)    |--&gt;| memory trails    |
+  | news events     |   |                |   | predictions      |
+  | other traders   |   | active output  |   | prediction errors|
+  |                 |&lt;--| (playing)      |&lt;--| behavior tree    |
+  +-----------------+   +----------------+   +------------------+
+
+  The Markov blanket ensures:
+  - Inside states only interact with outside through the blanket
+  - The tree structure INSIDE the blanket is the system's world model
+  - The blanket itself is the listening + playing interface
+</code></pre>
+<h3>Playing Data Flow</h3>
+<pre><code>  SCORE (structural position) ------+
+  LISTENING (perceptual field) -----+--&gt; Hierarchical Predictor
+  MEMORY (past patterns) ----------+         |
+  CONDUCTOR (regime) --------------+         v
+                                      Predictions at each level
+                                             |
+                              +--------------+--------------+
+                              |              |              |
+                              v              v              v
+                        Pattern         Temporal        Gamelan
+                        Completion      Hierarchy       Stratification
+                        + Inertia       (multi-window)  (layered output)
+                              |              |              |
+                              +------+-------+------+-------+
+                                     |              |
+                                     v              v
+                              Free Energy      Behavior Tree
+                              Minimization     (decision logic)
+                                     |              |
+                                     v              v
+                              Self-Correction  Boundary Markers
+                              (conv-div)       (phrase segmentation)
+                                     |              |
+                                     +------+-------+
+                                            |
+                                            v
+                                     PLAYING OUTPUT
+                                     to the trader:
+                                     {direction, confidence,
+                                      timeframe, structural_level,
+                                      next_boundary_estimate}
+</code></pre>
+<hr>
+<h2>VII. COMPLETE COMPOSITION: FULL SYSTEM DATA FLOW</h2>
+<pre><code>  ============================================================
+              THE COMPOSITION - FULL ARCHITECTURE
+  ============================================================
+
+                    EUR/USD TICK STREAM
+                           |
+          +----------------+----------------+
+          |                |                |
+          v                v                v
+     PERFORMANCE      LISTENING        CONDUCTOR
+     (what IS)        (how we hear)    (what piece)
+          |                |                |
+     body-parse [4]   1/f cutoff [2]   Kuramoto [6]
+     rough vol [28]   niche part [8]   Xenakis GT [19]
+     persist hom [17] entrain [20]     crit periods [30]
+     OPTIC [16]       syncopation [5]
+                      polyrhythm [14]
+                      Iowa body [24]
+          |                |                |
+          v                v                v
+     current state    perceptual field  regime + key
+          |                |                |
+          +--------+-------+-------+--------+
+                   |               |
+                   v               v
+               THE SCORE        MEMORY
+               (structure)      (repertoire)
+                   |               |
+              CFG recur [3]   stigmergy [7]
+              tree&gt;chain [25] whale song [9]
+              prolong [26]    conv-div osc [10]
+              path dep [27]   dopamine 2p [22]
+                              quad reward [1]
+                   |               |
+                   v               v
+              structural pos   learned bias
+                   |               |
+                   +-------+-------+
+                           |
+                           v
+                      THE PLAYING
+                      (anticipation)
+                           |
+                  hier pred err [11]
+                  pat complete [12]
+                  temp hierarchy [13]
+                  free energy [18]
+                  conv-div self [21]
+                  gamelan strat [15]
+                  next-token [32]
+                  basal gang [23]
+                  behav trees [31]
+                  markov blank [29]
+                           |
+                           v
+               +------------------------+
+               |    ANTICIPATION        |
+               |    OUTPUT TO TRADER    |
+               |                        |
+               |  direction: LONG/SHORT |
+               |  confidence: 0.0-1.0   |
+               |  level: which layer    |
+               |  next boundary: ~when  |
+               |  regime: what piece    |
+               |  groove lock: Y/N      |
+               +------------------------+
+</code></pre>
+<hr>
+<h2>VIII. MECHANIC REGISTRY</h2>
+<p>Complete mapping of all 32 mechanics to their compositional role:</p>
+<pre><code>  =================================================================
+  #   MECHANIC                         SECTION       ROLE
+  =================================================================
+  1   Quadratic reward                 MEMORY        compound accuracy value
+  2   1/f cutoff                       LISTENING     signal/noise boundary
+  3   Context-free recursion           SCORE         hierarchical form grammar
+  4   Body-parser                      PERFORMANCE   candle microstructure
+  5   Syncopation as structured viol.  LISTENING     opportunity vs noise
+  6   Kuramoto phase transition        CONDUCTOR     regime synchronization
+  7   Stigmergy                        MEMORY        trail-based pattern bias
+  8   Acoustic niche partitioning      LISTENING     timeframe separation
+  9   Whale song revolution            MEMORY        regime mutation tracking
+  10  Conv-div oscillation             MEMORY        consolidate vs explore
+  11  Hierarchical prediction error    PLAYING       multi-level error cascade
+  12  Pattern completion + inertia     PLAYING       continuation bias
+  13  Temporal hierarchy               PLAYING       multi-window prediction
+  14  Interlocking polyrhythm          LISTENING     cross-TF alignment
+  15  Gamelan stratified polyphony     PLAYING       layered prediction output
+  16  OPTIC equivalences               PERFORMANCE   pattern equivalence class
+  17  Persistent homology              PERFORMANCE   topological structure
+  18  Free energy = complex - accur    PLAYING       model optimality
+  19  Xenakis game theory              CONDUCTOR     regime game strategy
+  20  Entrainment is predictive        LISTENING     groove lock mechanism
+  21  Conv-div self-correction         PLAYING       prediction self-repair
+  22  Dopamine two-phase               MEMORY        adaptive learning rate
+  23  Basal ganglia mark boundaries    PLAYING       structural segmentation
+  24  Iowa Gambling Task (body&gt;mind)   LISTENING     somatic pre-signals
+  25  Tree contains chain              SCORE         structure &gt; sequence
+  26  Prolongation                     SCORE         deep vs surface action
+  27  Path dependence                  SCORE         arrival context matters
+  28  Rough volatility                 PERFORMANCE   fractal vol texture
+  29  Markov blanket contains tree     PLAYING       system-world boundary
+  30  Critical periods                 CONDUCTOR     high-attention windows
+  31  Behavior trees                   PLAYING       decision hierarchy
+  32  Next-token prediction disc trees PLAYING       emergent structure learning
+  =================================================================
+</code></pre>
+<hr>
+<h2>IX. COMPOUNDING EFFECTS</h2>
+<p>The composition is more than the sum of its parts. Here is how mechanics compound:</p>
+<pre><code>  COMPOUND CHAIN 1: &quot;Learning to Hear the Groove&quot;
+  ================================================
+  1/f cutoff [2] filters noise
+    --&gt; niche partitioning [8] separates timeframes
+      --&gt; entrainment [20] locks to each timeframe's rhythm
+        --&gt; polyrhythm [14] detects cross-TF alignment
+          --&gt; syncopation [5] distinguishes opportunity from noise
+            --&gt; Iowa body [24] fires somatic alert BEFORE conscious recognition
+
+  Result: the system &quot;feels&quot; the groove before it can explain why.
+
+
+  COMPOUND CHAIN 2: &quot;Reading the Score&quot;
+  ================================================
+  Context-free recursion [3] parses hierarchical structure
+    --&gt; tree contains chain [25] locates position in structure
+      --&gt; prolongation [26] identifies which structural level is active
+        --&gt; path dependence [27] contextualizes the arrival
+          --&gt; OPTIC [16] recognizes equivalent patterns across keys
+            --&gt; persistent homology [17] confirms topological shape
+
+  Result: the system knows WHERE in the piece we are, at every level.
+
+
+  COMPOUND CHAIN 3: &quot;Building Repertoire&quot;
+  ================================================
+  Stigmergy [7] accumulates trails from past performances
+    --&gt; whale song [9] tracks regime evolution and revolution
+      --&gt; conv-div oscillation [10] balances consolidation and exploration
+        --&gt; dopamine two-phase [22] modulates learning rate
+          --&gt; quadratic reward [1] compounds consistent accuracy
+
+  Result: the system gets dramatically better with experience,
+          and its improvement compounds quadratically.
+
+
+  COMPOUND CHAIN 4: &quot;Performing the Anticipation&quot;
+  ================================================
+  Hierarchical prediction error [11] generates multi-level predictions
+    --&gt; pattern completion [12] adds inertia to strong patterns
+      --&gt; temporal hierarchy [13] combines across time windows
+        --&gt; free energy [18] keeps the model optimally simple
+          --&gt; gamelan stratification [15] layers output for the trader
+            --&gt; behavior trees [31] structure the decision process
+              --&gt; next-token [32] discovers new structure automatically
+
+  Result: clean, layered anticipation output that the trader can
+          sight-read alongside their own chart reading.
+
+
+  COMPOUND CHAIN 5: &quot;The Meta-Loop&quot;
+  ================================================
+  Kuramoto [6] detects regime via oscillator sync
+    --&gt; Xenakis [19] selects optimal response strategy
+      --&gt; critical periods [30] focus attention on key moments
+        --&gt; basal ganglia [23] mark structural boundaries
+          --&gt; conv-div self-correction [21] repairs errors in real time
+            --&gt; Markov blanket [29] maintains clean system-world boundary
+
+  Result: the system knows when to listen hard, when to coast,
+          when it is wrong, and how to fix itself.
+</code></pre>
+<hr>
+<h2>X. THE TRADER'S INTERFACE</h2>
+<p>What the trader actually sees. The system enhances sight-reading, never replaces it.</p>
+<pre><code>  +------------------------------------------------------------------+
+  |  EUR/USD M5 CHART                                    [LIVE]      |
+  |                                                                  |
+  |  Current Composition: Sonata (trending)                          |
+  |  Movement: Exposition, Theme 2                                   |
+  |  Groove Lock: YES (phase error: 0.02)                            |
+  |                                                                  |
+  |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/\~~~~~~~~~~~~                     |
+  |  ~~~~~~~~~~~/\~~~~~~~~~~~~~~~/ ~~\~~~~~~~~~~                     |
+  |  ~~~~~~~~~~/  \~~~~~~~~~~~~~/    ~\~~~~~~~~~                     |
+  |  ~~~~~~~~~/    \~~~~~~~~~~~/ ~~~~~~\~~~~~~~~                     |
+  |  ~~~~~~~~/      \~~~~~~~~~/        ~~\~~~~~~                     |
+  |  ~~~~~~~/        \~~~~~~~/            \~~~~~                     |
+  |  ~~~~~~/          \~~~~~/              \~~~~                     |
+  |  ~~~~~/            \~~~/                 *  &lt;-- you are here     |
+  |                                                                  |
+  |  Anticipation Layers:                                            |
+  |  ------------------------------------------------------------------
+  |  Balungan (core):     continuation UP    conf: 0.87              |
+  |  Elaboration:         pullback then push conf: 0.72              |
+  |  Ornament:            next candle green  conf: 0.58              |
+  |  ------------------------------------------------------------------
+  |  Next Boundary:       ~12 candles (section end)                  |
+  |  Somatic Alert:       none                                       |
+  |  Regime Stability:    HIGH (Kuramoto r = 0.84)                   |
+  |                                                                  |
+  |  [groove locked]  [no anomaly]  [compound score: 847]            |
+  +------------------------------------------------------------------+
+</code></pre>
+<hr>
+<h2>XI. IMPLEMENTATION ON MAC MINI</h2>
+<pre><code>  MAC MINI RESOURCE ALLOCATION
+  ===========================================================
+  Component        | CPU   | RAM    | Storage | Framework
+  ===========================================================
+  CONDUCTOR        | 5%    | 256MB  | 50MB    | numpy/scipy
+  (Kuramoto, GT,   |       |        |         | custom oscillator
+   critical periods)|      |        |         |
+  -----------------------------------------------------------
+  SCORE            | 10%   | 512MB  | 200MB   | custom CFG parser
+  (CFG, tree/chain,|       |        |         | tree library
+   prolongation,   |       |        |         |
+   path dependence)|       |        |         |
+  -----------------------------------------------------------
+  LISTENING        | 20%   | 1GB    | 100MB   | scipy.signal
+  (1/f, niche,     |       |        |         | custom entrainment
+   entrainment,    |       |        |         | numpy arrays
+   syncopation,    |       |        |         |
+   polyrhythm,     |       |        |         |
+   Iowa/somatic)   |       |        |         |
+  -----------------------------------------------------------
+  PERFORMANCE      | 15%   | 512MB  | 300MB   | ripser (topology)
+  (body-parser,    |       |        |         | numpy
+   rough vol,      |       |        |         | custom parsers
+   persistent hom, |       |        |         |
+   OPTIC)          |       |        |         |
+  -----------------------------------------------------------
+  MEMORY           | 10%   | 1GB    | 2GB     | sqlite + numpy
+  (stigmergy,      |       |        |         | custom trail map
+   whale song,     |       |        |         |
+   conv-div,       |       |        |         |
+   dopamine,       |       |        |         |
+   quadratic rwd)  |       |        |         |
+  -----------------------------------------------------------
+  PLAYING          | 25%   | 2GB    | 500MB   | small transformer
+  (pred error,     |       |        |         | custom behavior tree
+   completion,     |       |        |         | numpy/torch
+   temporal hier,  |       |        |         |
+   free energy,    |       |        |         |
+   self-correct,   |       |        |         |
+   gamelan,        |       |        |         |
+   next-token,     |       |        |         |
+   basal ganglia,  |       |        |         |
+   behavior tree,  |       |        |         |
+   Markov blanket) |       |        |         |
+  -----------------------------------------------------------
+  UI / DISPLAY     | 10%   | 512MB  | 50MB    | terminal / web UI
+  -----------------------------------------------------------
+  HEADROOM         | 5%    | ~2GB   |         | OS + overhead
+  ===========================================================
+  TOTAL            | 100%  | ~8GB   | ~3.2GB  | fits Mac Mini
+  ===========================================================
+</code></pre>
+<h3>Build Order (Movements of the Implementation)</h3>
+<pre><code>  MOVEMENT I: The First Rehearsal (Week 1-2)
+  - Data feed connection (tick stream)
+  - Body-parser [4] (parse candles)
+  - 1/f cutoff [2] (filter noise)
+  - Basic entrainment [20] (lock to rhythm)
+  - Terminal display (raw output)
+
+  MOVEMENT II: Learning the Score (Week 3-4)
+  - Context-free parser [3] (structure grammar)
+  - Tree-chain locator [25] (position tracking)
+  - Prolongation engine [26] (structural levels)
+  - Boundary detection [23] (phrase segmentation)
+
+  MOVEMENT III: Ear Training (Week 5-6)
+  - Acoustic niche separation [8] (timeframe streams)
+  - Polyrhythm detector [14] (cross-TF alignment)
+  - Syncopation classifier [5] (structured violations)
+  - Iowa somatic markers [24] (pre-conscious signals)
+
+  MOVEMENT IV: Building Repertoire (Week 7-8)
+  - Stigmergic memory [7] (trail map)
+  - Rough volatility [28] (fractal texture)
+  - Persistent homology [17] (topological features)
+  - OPTIC equivalences [16] (pattern compression)
+
+  MOVEMENT V: The Conductor Arrives (Week 9-10)
+  - Kuramoto oscillator [6] (synchronization detector)
+  - Xenakis game theory [19] (regime strategy)
+  - Critical periods [30] (attention windows)
+  - Whale song tracker [9] (regime evolution)
+
+  MOVEMENT VI: Full Performance (Week 11-12)
+  - Hierarchical prediction [11] (multi-level)
+  - Pattern completion [12] (inertia)
+  - Temporal hierarchy [13] (multi-window)
+  - Gamelan stratification [15] (layered output)
+  - Next-token learning [32] (structure discovery)
+  - Behavior trees [31] (decision logic)
+  - Free energy [18] (model optimization)
+  - Convergence-divergence [10, 21] (self-correction)
+  - Dopamine modulation [22] (learning rate)
+  - Quadratic reward [1] (compounding)
+  - Path dependence [27] (context)
+  - Markov blanket [29] (boundary)
+  - Full trader UI
+
+  ENCORE: Live Performance (Week 13+)
+  - Paper trading with live data
+  - Calibration against trader's actual calls
+  - Compound score tracking
+  - System learns the trader's sight-reading patterns
+</code></pre>
+<hr>
+<h2>XII. WHY THIS CANNOT BE COPIED</h2>
+<p>The composition is the moat. Here is why:</p>
+<ol>
+<li>
+<p><strong>The score is learned, not designed.</strong> The context-free grammar is discovered by<br>
+   next-token prediction on YOUR data, YOUR timeframes, YOUR patterns. Someone else's<br>
+   grammar would parse a different composition.</p>
+</li>
+<li>
+<p><strong>The stigmergic trails are yours.</strong> Ten thousand hours of YOUR trading build<br>
+   trails that encode YOUR edge. The trails cannot be exported. They are the<br>
+   accumulated pheromone of your specific journey through the market.</p>
+</li>
+<li>
+<p><strong>The groove is personal.</strong> Entrainment locks to the rhythms YOU perceive. Another<br>
+   trader with different timeframes, different session preferences, different<br>
+   intuitions would entrain to a different groove.</p>
+</li>
+<li>
+<p><strong>The quadratic reward compounds YOUR accuracy.</strong> 93% win rate compounds<br>
+   quadratically. Someone with 60% win rate gets a fundamentally different (and much<br>
+   weaker) compounding curve. The system amplifies existing edge; it does not create<br>
+   edge from nothing.</p>
+</li>
+<li>
+<p><strong>The composition is always being performed.</strong> This is not a static system. It is a<br>
+   living performance that evolves with every session. Copying the code gives you the<br>
+   instrument, not the musicianship.</p>
+</li>
+</ol>
+<hr>
+<p><em>The market is already playing. This system learns to hear it.</em><br>
+<em>Draft 2 of 3. Next: Draft 3.</em></p>
+</article>
+
+<div class="divider" style="max-width:760px;"></div>
+
+<footer class="ricercar-footer">
+  <div class="ricercar-footer-text">Ballad &mdash; the search continues</div>
+  <div class="ricercar-footer-copy">&copy; 2026 muFX. All rights reserved.</div>
+</footer>
+<div class="bottom-line"></div>
+
+<script>
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var b = document.body;
+  var st = h.scrollTop || b.scrollTop;
+  var sh = h.scrollHeight || b.scrollHeight;
+  var pct = (st / (sh - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+</script>
+
+</body>
+</html>

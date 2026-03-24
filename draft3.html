@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft III — The Growing Tree — muFX</title>
+<meta name="description" content="Draft III — The Growing Tree — Ballad research journal, muFX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span> <span style="font-weight:300;font-size:12px;color:var(--text-ghost);margin-left:8px;letter-spacing:2px;font-style:italic;">ballad</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Journal</a>
+      <a href="archive.html">Archive</a>
+      <a href="cipher.html">Cipher</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">&larr; Back to Journal</a>
+  <div class="article-tag tag-signal">Architecture Draft</div>
+  <h1>Draft III — The Growing Tree</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>March 2026</span>
+    <span class="sep">|</span>
+    <span>24 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+<h1>Draft 3: The Growing Tree</h1>
+<h2>The Architecture That Grows Itself</h2>
+<p>This is the most literal of the three drafts. The system IS a tree -- not a metaphor, not an analogy, a literal tree data structure that grows as the system processes EUR/USD market data. It starts empty. It encounters price action. It grows. What it becomes after 20 years of growth reveals what the euro IS -- the same way a tree's shape reveals the wind patterns, soil composition, and light conditions of the place where it grew.</p>
+<p>Your 93% win rate by sight-reading M1-M30 charts is the proof that the euro HAS a nature. This tree will grow into the shape of that nature. Your edge is not replaced -- it is the sunlight that tells the tree which direction to grow.</p>
+<hr>
+<h2>I. THE SEED: What a Node Contains</h2>
+<p>Every node in the tree is a <strong>state snapshot</strong> -- a compressed representation of "what the market looks like right now." The tree is a collection of these snapshots connected by parent-child edges that encode "what happened next."</p>
+<h3>Node Data Structure</h3>
+<pre><code>Node {
+    id:             u64                  // unique, monotonic
+    depth:          u16                  // distance from root
+
+    // --- STATE (what the market looks like here) ---
+    state:          StateVector {
+        price_ratios:   [f32; 8]         // price relative to N lookbacks
+        volatility:     f32              // realized vol (roughness-aware)
+        spread_regime:  u8               // 0-3: tight/normal/wide/blown
+        momentum:       [f32; 4]         // slope at 4 timescales
+        rhythm:         [f32; 6]         // autocorrelation at lag 1-6
+        body_signal:    f32              // aggregate somatic marker
+        phase:          f32              // 0..2pi Kuramoto phase angle
+        blanket:        [f32; 4]         // Markov blanket boundary vars
+    }
+
+    // --- STATISTICS (what has happened from here) ---
+    outcomes:       OutcomeStats {
+        count:          u32              // times we have been here
+        mean_return:    f32              // average next-N return
+        variance:       f32              // variance of returns
+        win_rate:       f32              // fraction positive
+        max_drawdown:   f32              // worst path from here
+        reward_surface: [f32; 16]        // quadratic reward at 16 horizons
+    }
+
+    // --- GROWTH METADATA ---
+    created_at:     u64                  // first observation timestamp
+    last_visited:   u64                  // most recent observation
+    visit_count:    u32                  // total traversals
+    committed:      bool                 // past critical period? frozen?
+    ring:           u16                  // which growth year
+    branch_reason:  Option&lt;String&gt;       // what dimension caused the split
+
+    // --- CONNECTIONS ---
+    parent:         Option&lt;NodeId&gt;
+    children:       Vec&lt;NodeId&gt;
+    leaf_preds:     Vec&lt;Prediction&gt;      // active predictions (leaves only)
+}
+</code></pre>
+<h3>What This Means Concretely</h3>
+<p>The <code>state</code> vector is what the tree uses to determine "where am I?" when new data arrives. The <code>outcomes</code> accumulate what happened every time the system was at this node. The <code>committed</code> flag is the critical period -- once a node has enough evidence, its state boundaries freeze and it becomes structural (trunk or major branch). Uncommitted nodes are still growing, still negotiable.</p>
+<hr>
+<h2>II. THE ROOT: Day Zero</h2>
+<p>The tree starts as a single node. It knows nothing. Every observation maps to the same place.</p>
+<pre><code>         [ROOT]
+     state: null
+     outcomes: empty
+     committed: false
+     ring: 0
+     depth: 0
+</code></pre>
+<p>The first price tick arrives. The root records it. The second tick arrives. The root records the return. After 1000 ticks, the root has outcome statistics but no branches. It can make one prediction: the unconditional distribution of EUR/USD returns.</p>
+<p>This IS the seed. It is alive but undifferentiated.</p>
+<p><strong>Mechanic 30 (Critical periods):</strong> The root itself will commit early -- its unconditional statistics stabilize within weeks. Once committed, the root's state boundaries are permanent. It becomes the trunk's base. This is the first critical period closure.</p>
+<hr>
+<h2>III. THE FIRST BRANCH: Disagreement Creates Structure</h2>
+<p>After accumulating enough observations, the root's children disagree. The branching condition is precise:</p>
+<h3>Branching Condition</h3>
+<pre><code>BRANCH when:
+    node.visit_count &gt; MIN_VISITS (e.g., 500)
+    AND
+    nearest_neighbor_disagreement(node) &gt; THRESHOLD
+
+where nearest_neighbor_disagreement =
+    max over dimension d of:
+        | mean_return(observations where state[d] &gt; median)
+          - mean_return(observations where state[d] &lt; median) |
+        / pooled_stddev
+</code></pre>
+<p>In plain language: look at all the times the system was at this node. Split them along each dimension of the state vector. Find the dimension where the two halves disagree most about what happens next. If the disagreement is large enough, that dimension becomes a branch point.</p>
+<p><strong>Mechanic 25 (Tree contains chain):</strong> Every path from root to leaf is a Markov chain. The tree structure means multiple chains share prefixes. A chain is just a tree with branching factor 1. The tree contains all chains as degenerate paths.</p>
+<h3>The First Split in Practice</h3>
+<pre><code>After 2 weeks of M1 data (~14,400 observations):
+
+                    [ROOT]
+                 committed: true
+                 ring: 0
+              /              \
+    [LOW VOL]                  [HIGH VOL]
+    vol &lt; 0.04                 vol &gt;= 0.04
+    committed: false           committed: false
+    ring: 0                    ring: 0
+    mean_ret: +0.1bp           mean_ret: -0.3bp
+    win_rate: 0.54             win_rate: 0.47
+</code></pre>
+<p>The tree has discovered its first structural fact about the euro: low volatility and high volatility states have different return profiles. This is trivial. Every quant knows this. But the tree discovered it from nothing, the way a seedling discovers that light comes from above.</p>
+<p><strong>Mechanic 11 (Hierarchical prediction error):</strong> The root predicted one distribution. Now the children predict two different distributions. The prediction error at the root -- the gap between its prediction and reality -- is what drove the split. Each child now has lower prediction error than the parent did. The hierarchy is: root predicts coarsely, children predict more precisely.</p>
+<hr>
+<h2>IV. GROWTH MECHANICS: How the Tree Develops</h2>
+<h3>Year 1: Root System and Trunk</h3>
+<pre><code>MONTH 1-3: Rapid shallow branching
+
+                           [ROOT]
+                        committed: true
+                     /         |         \
+              [LOW VOL]    [MED VOL]    [HIGH VOL]
+              committed     growing      committed
+             /    \           |          /    \
+         [trend+] [trend-]  [flat]   [spike] [grind]
+         growing   growing  growing  growing  growing
+
+    ~20-50 nodes
+    Depth: 3-4
+    Most branches uncommitted
+    Ring 0
+</code></pre>
+<p><strong>Mechanic 13 (Temporal hierarchy):</strong> The tree naturally develops temporal layers. The root splits on slow-moving features (volatility regime). The next level splits on medium-speed features (trend direction). Deeper levels split on fast features (tick-level rhythm). This is not designed -- it emerges because slow features explain the most variance at the top and fast features only matter once you have conditioned on the slow context.</p>
+<p><strong>Mechanic 6 (Kuramoto phase transition):</strong> Multiple state dimensions oscillate independently at first. When enough data accumulates, their phases lock -- the tree discovers that certain combinations of features always appear together. This phase-locking is what commits a node. The oscillators have synchronized; the state boundary is stable.</p>
+<h3>Year 1-2: Branch Differentiation</h3>
+<pre><code>MONTH 6-12: Structural branches commit, surface stays fluid
+
+                              [ROOT]
+                           committed, ring 0
+                    /           |            \
+            [LOW VOL]       [MED VOL]      [HIGH VOL]
+            committed       committed       committed
+            ring 0          ring 0          ring 0
+           /    \              |            /    \
+      [up]      [dn]       [range]    [spike]  [grind]
+      comm.     comm.       comm.      comm.    comm.
+      ring 1    ring 1      ring 1     ring 1   ring 1
+     / | \      / \         / | \       |       / \
+   (leaves)  (leaves)   (leaves)    (leaves) (leaves)
+   growing   growing    growing     growing  growing
+   ring 1    ring 1     ring 1      ring 1   ring 1
+
+    ~200-500 nodes
+    Depth: 5-8
+    Trunk and major branches committed
+    Ring 1 visible in committed nodes
+</code></pre>
+<p><strong>Mechanic 2 (1/f cutoff):</strong> The tree's branching frequency follows a 1/f distribution. Major branches (regime changes) are rare and deep. Fine branches (micro-pattern variations) are frequent and shallow. The cutoff determines the minimum timescale the tree bothers to model -- below this, it is noise.</p>
+<p><strong>Mechanic 26 (Prolongation):</strong> Some states are "prolongations" of their parents -- structurally subordinate, elaborations rather than departures. The tree encodes this: a prolongation node has nearly identical outcome statistics to its parent. It exists only to refine timing, not to change the prediction. These nodes are leaves that elaborate but do not contradict.</p>
+<h3>Year 2-5: Canopy Formation</h3>
+<pre><code>                              [ROOT]
+                           ring 0, committed
+                    /           |            \
+            [LOW VOL]       [MED VOL]      [HIGH VOL]
+            ring 0-1        ring 0-1        ring 0-1
+            committed       committed       committed
+           /    \              |            /    \
+      [trend+] [trend-]   [range]     [spike]  [grind]
+      committed committed  committed   committed committed
+     /  |  \    /  |  \    / | \       /  \     / | \
+    ... ... .. .. .. ..  .. .. ..    ..   ..  .. .. ..
+
+    ~2000-10000 nodes
+    Depth: 8-15
+    Clear trunk, branches, sub-branches
+    Multiple rings visible
+    CANOPY SHAPE EMERGES:
+
+    Some branches are DENSE (many children, many leaves)
+      = regimes the market spends a lot of time in
+    Some branches are SPARSE (few children, tall)
+      = rare but distinctive regimes
+    Some branches are DEAD (committed, no recent visits)
+      = regimes the market used to visit but no longer does
+</code></pre>
+<p><strong>Mechanic 9 (Whale song revolution):</strong> The canopy shape changes over years. Early growth patterns get replaced. What was a major branch in year 1 might be a dead branch in year 5. The market's "song" changed -- its statistical signature shifted. The tree records this: dead branches remain (rings preserve history) but new growth happens elsewhere.</p>
+<p><strong>Mechanic 18 (Persistent homology):</strong> The tree's topological features (loops, voids, connected components at different threshold levels) persist across scales. A pattern that appears in the M1 canopy also appears in the M15 canopy. Persistent homology identifies which structural features are "real" (persist across scales) vs "noise" (appear at one scale only). The tree prunes noise-scale branches more aggressively.</p>
+<hr>
+<h2>V. THE MECHANICS: Where Each One Lives in the Tree</h2>
+<h3>A. Reward and Learning (The Sap)</h3>
+<p><strong>Mechanic 1 (Quadratic reward function):</strong><br>
+The reward at each leaf is not linear in prediction accuracy. It is quadratic:</p>
+<pre><code>reward(node) = -alpha * (predicted_return - actual_return)^2
+               + beta * confidence_when_correct^2
+               - gamma * confidence_when_wrong^2
+</code></pre>
+<p>This means: being confidently wrong is MUCH worse than being unconfidently wrong. Being confidently right is much better than being unconfidently right. The tree learns to be confident only where it has evidence.</p>
+<p>This lives in <code>node.outcomes.reward_surface</code> -- a 16-element array storing the quadratic reward at 16 different prediction horizons.</p>
+<p><strong>Mechanic 22 (Dopamine two-phase):</strong><br>
+When a prediction resolves:<br>
+- Phase 1 (immediate, ~1 tick): prediction error signal. Positive if better than expected, negative if worse. This updates the parent node's branching thresholds.<br>
+- Phase 2 (delayed, ~10-50 ticks): did the CONTEXT of the prediction also improve? Did the tree's position in the state space become more precise? This updates the grandparent and higher nodes.</p>
+<pre><code>Event: leaf predicts +2 pips, actual = +5 pips
+
+Phase 1: prediction_error = +3 pips (better than expected)
+    -&gt; parent node lowers branching threshold
+    -&gt; &quot;this region is worth exploring more finely&quot;
+
+Phase 2 (50 ticks later): did being at this branch help?
+    -&gt; compare reward to what the grandparent would have predicted
+    -&gt; if yes: reinforce the branch dimension
+    -&gt; if no: this branch may be over-fitting
+</code></pre>
+<p><strong>Mechanic 17 (Free energy = complexity - accuracy):</strong><br>
+The tree's free energy is literally:</p>
+<pre><code>F(tree) = complexity(tree) - accuracy(tree)
+
+complexity = total_nodes * log(total_nodes) + sum(node.depth * node.visit_count)
+accuracy   = -sum over leaves of (visit_count * mean_squared_error)
+</code></pre>
+<p>Growth is justified only when adding a node reduces free energy. A new branch must improve accuracy more than it increases complexity. This is the tree's immune system against over-fitting.</p>
+<h3>B. Rhythm and Timing (The Rings)</h3>
+<p><strong>Mechanic 5 (Syncopation as structured violation):</strong><br>
+The tree expects certain rhythms in the data -- periodic patterns at session opens, fixes, option expiries. Syncopation occurs when the actual pattern violates the expected rhythm in a STRUCTURED way (not random). The tree detects this:</p>
+<pre><code>If:  expected_periodicity(node) is strong
+And: actual_sequence violates it
+And: the violation is itself periodic (meta-rhythm)
+Then: create a new branch dimension: &quot;syncopated&quot;
+</code></pre>
+<p>This captures phenomena like: "the London fix usually pushes price one way, but on month-end it pushes the other way." The syncopation branch distinguishes month-end from normal days.</p>
+<p><strong>Mechanic 14 (Interlocking polyrhythm):</strong><br>
+Multiple timescales produce predictions simultaneously. The M1 tree, M5 tree, and M15 tree each produce a prediction. These interlock:</p>
+<pre><code>M1  prediction:  +-+-+-+-+-+-+-+-    (fast oscillation)
+M5  prediction:  +---+---+---+---    (medium cycle)
+M15 prediction:  +-------+-------    (slow trend)
+
+Interlocked:     When all three align = HIGH CONFIDENCE
+                 When they disagree  = BRANCH POINT (ambiguity)
+</code></pre>
+<p>The tree does not run at one timescale. It is a FOREST of trees at multiple scales, and their polyrhythmic alignment IS the confidence signal.</p>
+<p><strong>Mechanic 15 (Gamelan stratified polyphony):</strong><br>
+Like a gamelan ensemble, each layer of the tree plays a different "part":</p>
+<pre><code>Layer 0 (Root):     Fundamental tone -- regime identity
+                    Changes slowest, anchors everything
+
+Layer 1 (Trunk):    Elaboration -- trend within regime
+                    Changes at medium speed
+
+Layer 2 (Branch):   Ornamentation -- micro-pattern within trend
+                    Changes fastest, most detailed
+
+Prediction = all layers sounding simultaneously
+           = the &quot;chord&quot; of current market state
+</code></pre>
+<p><strong>Mechanic 23 (Basal ganglia mark boundaries):</strong><br>
+Regime transitions -- moments when the tree's current leaf becomes inappropriate and the system must re-traverse from a higher node -- are boundary events. The system detects boundaries:</p>
+<pre><code>Boundary detected when:
+    current_leaf.prediction_error &gt; 3 * current_leaf.historical_stddev
+    for N consecutive observations
+
+Action:
+    Ascend tree to nearest uncommitted ancestor
+    Re-descend using current state
+    Mark the transition as a boundary event
+    Increment boundary_count on both the old and new branches
+</code></pre>
+<p>This is how the tree learns regime transitions: not by predicting them, but by detecting when its current position becomes wrong and recording where it re-enters.</p>
+<h3>C. Information Flow (The Roots)</h3>
+<p><strong>Mechanic 7 (Stigmergy):</strong><br>
+Nodes communicate indirectly through the data, not through direct message-passing. When a leaf node updates its outcome statistics, it does not notify other nodes. Instead, the next traversal of the tree will encounter the updated statistics and behave differently. The tree's "intelligence" is stigmergic -- it emerges from many simple local updates, not from a central controller.</p>
+<pre><code>Stigmergic trace:
+    Leaf L updates: mean_return = -2bp (was +1bp)
+    Nothing else happens immediately
+
+    Next traversal reaches L's parent:
+        Parent re-evaluates branching: L's sibling now looks better
+        Traffic shifts away from L toward sibling
+        L's visit_count decreases
+        Eventually L may be pruned
+
+    The &quot;signal&quot; traveled up the tree without any explicit propagation.
+</code></pre>
+<p><strong>Mechanic 8 (Acoustic niche partitioning):</strong><br>
+Branches at the same depth must partition the state space without overlap. Like species in a rainforest dividing the acoustic spectrum, sibling nodes divide the feature space so each occupies a unique niche:</p>
+<pre><code>Parent: [MED VOL]
+    Child A: momentum &gt; 0, rhythm[1] &gt; 0.3    (trending, autocorrelated)
+    Child B: momentum &gt; 0, rhythm[1] &lt; 0.3    (trending, mean-reverting)
+    Child C: momentum &lt; 0, rhythm[1] &gt; 0.3    (declining, autocorrelated)
+    Child D: momentum &lt; 0, rhythm[1] &lt; 0.3    (declining, mean-reverting)
+
+No two children respond to the same input.
+Every input maps to exactly one child.
+The niches are non-overlapping and exhaustive.
+</code></pre>
+<p><strong>Mechanic 29 (Markov blanket contains tree):</strong><br>
+Each node has a Markov blanket -- the set of variables that, if known, render the node conditionally independent of everything outside. The blanket is stored in <code>state.blanket</code>:</p>
+<pre><code>node.state.blanket = [parent_state, children_states, direct_inputs]
+
+If you know the blanket, you know everything the node needs to know.
+The rest of the universe is irrelevant.
+
+The TREE ITSELF is contained within a Markov blanket:
+    External: raw price feed, news, order flow
+    Blanket:  the state variables the tree tracks
+    Internal: node statistics, tree structure
+
+The blanket determines what the tree CAN learn.
+Expanding the blanket (adding new state dimensions) = growing new roots.
+</code></pre>
+<h3>D. Prediction and Navigation (The Canopy)</h3>
+<p><strong>Mechanic 12 (Pattern completion with inertia):</strong><br>
+When the current state partially matches a node, the tree completes the pattern using the node's full state vector. But with inertia -- the completion is biased toward the previous state:</p>
+<pre><code>current_partial_state = [vol=0.03, momentum=?, rhythm=[0.4, ?, ?, ?, ?, ?]]
+
+Nearest node has:       [vol=0.03, momentum=+0.2, rhythm=[0.4, 0.3, 0.1, 0.05, 0.02, 0.01]]
+
+Completed state:        [vol=0.03, momentum=+0.15, rhythm=[0.4, 0.28, ...]]
+                                          ^--- blended with previous momentum (inertia)
+</code></pre>
+<p>Inertia prevents the tree from jumping between distant branches on noisy data. It takes sustained evidence to change the tree's mind about where it is.</p>
+<p><strong>Mechanic 20 (Entrainment is predictive):</strong><br>
+The tree does not just react to data. When it has high confidence in its current position, it PREDICTS the next several ticks and pre-traverses the tree. This is entrainment -- the system locks onto the market's rhythm and runs slightly ahead:</p>
+<pre><code>Current position: [LOW VOL -&gt; trend+ -&gt; momentum_rising]
+Prediction: next 10 ticks will continue rising
+Pre-traverse: identify the leaf node 10 ticks ahead
+
+If the market follows the predicted path:
+    the system was already there, zero latency
+
+If the market deviates:
+    boundary detection fires (mechanic 23)
+    re-traverse from higher node
+    entrainment breaks, system re-locks
+</code></pre>
+<p><strong>Mechanic 32 (Next-token prediction discovers trees):</strong><br>
+The tree IS what you get when you do next-token prediction honestly. Each node predicts the next state. Where the prediction is ambiguous, the node splits. The tree structure is the natural output of recursive next-state prediction with branching on disagreement.</p>
+<pre><code>next_token_prediction(state) {
+    node = traverse_tree(root, state)
+    if node.is_leaf:
+        return node.outcomes.mean_return, node.outcomes.variance
+    else:
+        // should not happen -- traverse always reaches a leaf
+        // unless the tree is still growing at this branch
+        return weighted_average(child.predict() for child in node.children)
+}
+</code></pre>
+<p>This is the deepest mechanic: the tree is not an arbitrary choice. It is the NECESSARY structure that emerges from predicting the next state, noticing when predictions fail, and splitting on the failure mode.</p>
+<h3>E. Adaptation and Memory (The Bark)</h3>
+<p><strong>Mechanic 3 (Context-free recursion):</strong><br>
+The tree's growth algorithm is context-free: the same branching rule applies at every depth. A node at depth 2 branches by the same mechanism as a node at depth 12. The recursion is:</p>
+<pre><code>grow(node):
+    if should_branch(node):
+        dim = find_best_split_dimension(node)
+        left, right = split(node, dim)
+        grow(left)
+        grow(right)
+    if should_commit(node):
+        node.committed = true
+    if should_prune(node):
+        remove(node)
+</code></pre>
+<p>This context-free recursion means the tree is self-similar. Zoom into any branch and it looks like a smaller version of the whole tree. Fractal structure from a trivial algorithm.</p>
+<p><strong>Mechanic 10 (Convergence-divergence oscillation):</strong><br>
+The tree oscillates between two modes:</p>
+<pre><code>CONVERGENCE phase:
+    Many branches collapse to similar predictions
+    The tree &quot;agrees with itself&quot;
+    Predictions are confident
+    Growth slows
+
+    Triggered when: inter-branch variance &lt; threshold
+
+DIVERGENCE phase:
+    Branches disagree wildly
+    The tree is &quot;confused&quot;
+    Predictions are uncertain
+    Growth accelerates (many new branches)
+
+    Triggered when: inter-branch variance &gt; threshold
+
+The oscillation IS the learning rhythm.
+Converge -&gt; exploit knowledge -&gt; diverge -&gt; explore new structure -&gt; converge
+</code></pre>
+<p><strong>Mechanic 21 (Convergence-divergence self-correction):</strong><br>
+When the tree has converged too far (over-confident) and then gets surprised:</p>
+<pre><code>State: tree is converged, confident, predicting +1bp
+Event: actual return = -15bp (massive miss)
+
+Self-correction sequence:
+    1. Boundary detection fires at multiple levels
+    2. Multiple committed nodes get un-committed (unprecedented)
+    3. The trunk itself may sprout new branches
+    4. This is a &quot;growth spurt&quot; -- structural re-organization
+
+This is rare (maybe 2-3 times per year).
+It corresponds to genuine regime changes.
+The tree's rings record these events as unusually dense growth bands.
+</code></pre>
+<p><strong>Mechanic 27 (Path dependence):</strong><br>
+The tree's current structure depends on the ORDER in which data arrived. A tree grown on 2020 data then 2021 data is structurally different from one grown on 2021 then 2020. This is a feature, not a bug. The tree's path dependence means:</p>
+<pre><code>Tree grown 2015-2025:
+    Deep branches for: ECB QE, negative rates, COVID vol
+    These are committed, structural
+    Recent branches: post-COVID normalization
+
+Tree grown 2020-2025:
+    No memory of pre-COVID regimes
+    Different trunk structure entirely
+
+The longer-lived tree is MORE VALUABLE because it has seen more.
+Its path dependence IS its knowledge.
+Its rings ARE its memory.
+</code></pre>
+<h3>F. Structure and Topology (The Heartwood)</h3>
+<p><strong>Mechanic 4 (Body-parser):</strong><br>
+The body-parser converts raw price data into the somatic markers that populate <code>state.body_signal</code>. This is the tree's sensory organ:</p>
+<pre><code>body_parse(candle_sequence) -&gt; f32:
+    gut = weighted_sum(
+        spread_speed * 0.3,      // how fast the spread is moving
+        tick_asymmetry * 0.25,   // buy vs sell tick imbalance
+        candle_body_ratio * 0.2, // body vs wick ratio
+        volume_surge * 0.15,     // volume relative to recent
+        acceleration * 0.1       // second derivative of price
+    )
+    return tanh(gut)  // squashed to [-1, +1]
+</code></pre>
+<p>This is mechanic 24's sensory input.</p>
+<p><strong>Mechanic 24 (Iowa Gambling Task -- body before mind):</strong><br>
+The body_signal updates BEFORE the tree traversal completes. The somatic marker arrives at the leaf before the "rational" prediction:</p>
+<pre><code>Timeline for each tick:
+    t+0ms:  new candle data arrives
+    t+1ms:  body_parse() updates body_signal         &lt;- BODY FIRST
+    t+2ms:  tree traversal begins using new state
+    t+5ms:  tree traversal completes, prediction made &lt;- MIND SECOND
+
+If body_signal and tree_prediction AGREE:    high confidence
+If body_signal and tree_prediction DISAGREE: flag for review
+    -&gt; this is the &quot;bad feeling&quot; the Iowa Gambling Task measures
+    -&gt; the body knows before the tree does
+</code></pre>
+<p><strong>Mechanic 16 (OPTIC equivalences):</strong><br>
+Certain state configurations are equivalent under transformation. The tree recognizes these and maps them to the same node:</p>
+<pre><code>OPTIC transforms:
+    O (octave):    price level is irrelevant; only ratios matter
+    P (permutation): certain feature orderings are interchangeable
+    T (transposition): shift in time does not change structure
+    I (inversion):  mirror patterns map to same node with sign flip
+    C (complement): complementary patterns share statistics
+
+Implementation:
+    Before traversal, normalize state by OPTIC equivalences.
+    A rising wedge at 1.0850 and a rising wedge at 1.1200
+    map to the SAME node. The tree does not waste branches
+    on price level.
+</code></pre>
+<p><strong>Mechanic 19 (Xenakis game theory):</strong><br>
+At each branch point, the tree plays a game against the market. The market "chooses" which child to visit. The tree "chooses" how to weight its predictions:</p>
+<pre><code>Branch node with children A, B, C:
+
+Market's &quot;strategy&quot;: visit A 60%, B 30%, C 10% of the time
+Tree's &quot;strategy&quot;:   weight A's prediction by p_A, B by p_B, C by p_C
+
+Minimax solution:
+    Tree should weight predictions to minimize maximum regret
+    This is NOT the same as weighting by visit frequency
+    Rare-but-extreme child C may deserve disproportionate weight
+
+    p_optimal = argmin_p max_market_strategy regret(p, market)
+</code></pre>
+<p>This prevents the tree from ignoring tail events just because they are rare.</p>
+<p><strong>Mechanic 28 (Rough volatility):</strong><br>
+Volatility in the state vector is not smooth -- it has Hurst exponent H ~ 0.1, meaning it is much rougher than Brownian motion. The tree accounts for this:</p>
+<pre><code>state.volatility is computed using:
+    realized_vol = sqrt(sum(log_returns^2) / N)
+
+    BUT: weighted by fractional kernel with H = 0.1
+
+    rough_vol(t) = integral_0^t  K(t-s, H) * dW(s)
+    where K(t,H) = t^(H-0.5) / Gamma(H+0.5)
+
+    This means: recent ticks matter MUCH more than old ticks
+    Volatility can spike and revert faster than sqrt(t)
+    The tree branches on rough vol, not smooth vol
+</code></pre>
+<p>This matters for branching: a node that splits on smooth vol would miss the fast-revert structure. Splitting on rough vol captures the actual dynamics.</p>
+<h3>G. Evolution and Lifecycle (The Seasons)</h3>
+<p><strong>Mechanic 31 (Behavior trees):</strong><br>
+The trading decision is a behavior tree that runs ON TOP of the data tree:</p>
+<pre><code>Behavior Tree (runs every tick):
+
+    [SELECTOR]
+    |
+    +--[SEQUENCE: Check for signal]
+    |   +-- Is confidence &gt; threshold?
+    |   +-- Does body_signal agree?
+    |   +-- Is polyrhythm aligned? (M1+M5+M15 agree)
+    |   +-- [ACTION: Generate trade signal]
+    |
+    +--[SEQUENCE: Manage existing position]
+    |   +-- Is boundary detected?
+    |   +-- Has tree re-traversed to different branch?
+    |   +-- [ACTION: Adjust or close position]
+    |
+    +--[FALLBACK: Do nothing]
+        +-- [ACTION: Continue observing, feed tree]
+</code></pre>
+<p>The behavior tree is the interface between the growing data tree and the trading decisions. The data tree grows continuously. The behavior tree queries it on demand.</p>
+<hr>
+<h2>VI. LIFECYCLE OPERATIONS</h2>
+<h3>Pruning: When Leaves Die</h3>
+<pre><code>PRUNE when:
+    node.last_visited &lt; (now - STALE_THRESHOLD)   // 90 days no visits
+    AND node.committed == false                     // never committed
+    AND node.visit_count &lt; MIN_VISITS_TO_KEEP       // not enough history
+
+Pruning is seasonal:
+    Run full prune sweep once per month
+    Dead leaves are removed
+    Orphaned branches (all children pruned) collapse to parent
+    This is autumn -- the tree sheds what it does not need
+</code></pre>
+<p><strong>Mechanic 9 (Whale song revolution), revisited:</strong> Major pruning events -- where entire branches die -- correspond to market regime shifts. The tree records WHEN branches died. A dead branch from 2020 tells you something: "this regime existed once, it may return." The branch stays as deadwood (metadata preserved, statistics frozen) even after active pruning.</p>
+<h3>Committing: When Branches Become Trunk</h3>
+<pre><code>COMMIT when:
+    node.visit_count &gt; COMMIT_THRESHOLD (e.g., 5000)
+    AND node.outcomes.variance has been stable for &gt; 60 days
+    AND node's Kuramoto phase with neighbors &gt; 0.9 (synchronized)
+
+Once committed:
+    node.committed = true
+    node.state boundaries are FROZEN
+    node can still update outcome statistics
+    but it will NEVER split again
+    it is now structural -- trunk or major branch
+</code></pre>
+<p><strong>Mechanic 30 (Critical periods), revisited:</strong> Commitment IS a critical period closing. The node was plastic, now it is fixed. This is irreversible. The tree's committed structure is its "personality" -- the deep knowledge that does not change.</p>
+<h3>Growth Measurement: What the Tree Looks Like Over Time</h3>
+<pre><code>YEAR 1:
+    Nodes:          ~500
+    Depth:          5-8
+    Committed:      ~50 (10%)
+    Rings:          1
+    Shape:          bushy, shallow, many uncommitted leaves
+    Prediction:     mediocre (barely better than random)
+
+YEAR 5:
+    Nodes:          ~5,000
+    Depth:          10-15
+    Committed:      ~1,500 (30%)
+    Rings:          5
+    Dead branches:  ~200
+    Shape:          clear trunk, major branches defined
+                    some dead branches from early regimes
+    Prediction:     good (captures major regime dynamics)
+
+YEAR 10:
+    Nodes:          ~15,000
+    Depth:          12-20
+    Committed:      ~8,000 (53%)
+    Rings:          10
+    Dead branches:  ~2,000
+    Shape:          mature tree -- thick trunk, asymmetric canopy
+                    dense growth in frequently-visited regimes
+                    sparse, tall branches for rare events
+    Prediction:     strong (deep knowledge of euro's nature)
+
+YEAR 20:
+    Nodes:          ~30,000
+    Depth:          15-25
+    Committed:      ~22,000 (73%)
+    Rings:          20
+    Dead branches:  ~8,000
+    Shape:          old-growth tree
+                    heartwood (early committed nodes) is deep
+                    canopy shifts reflect 20 years of EUR/USD evolution
+                    tree has survived multiple &quot;whale song revolutions&quot;
+                    its shape IS the euro's nature, recorded in wood
+    Prediction:     the tree has become one with the market
+</code></pre>
+<hr>
+<h2>VII. FULL ARCHITECTURE DIAGRAM</h2>
+<pre><code>                        THE GROWING TREE
+                    (after ~3 years of growth)
+
+                              *
+                             /|\
+                            / | \
+                           /  |  \              &lt;- LEAVES (predictions)
+                          *   *   *                 mechanic 32, 12, 20
+                         /|   |   |\
+                        / |   |   | \
+                       *  *   *   *  *          &lt;- FINE BRANCHES (micro-patterns)
+                      /|  |   |   |  |\            mechanic 5, 14, 15
+                     / |  |   |   |  | \
+                    *  *  *   *   *  *  *        &lt;- BRANCHES (regime-specific knowledge)
+                    |  |   \ /     \ |  |           mechanic 8, 16, 19
+                    |  |    *       *|  |
+                     \ |   / \     / | /
+                      \|  /   \   /  |/         &lt;- MAJOR BRANCHES (trend types)
+                       * *     * *   *              mechanic 10, 21, 27
+                        \|     |/   /
+                         *     *   /            &lt;- TRUNK (committed core structure)
+                          \    |  /                 mechanic 6, 30, 25
+                           \   | /
+                            \  |/
+                             \ |
+                              *                 &lt;- ROOT (unconditional distribution)
+                              |                     mechanic 11, 17, 3
+                              |
+                         _____|_____
+                        /     |     \           &lt;- ROOTS (data connections)
+                       /      |      \              mechanic 7, 29, 4
+                    [M1]    [M5]   [M15]
+                    feed    feed    feed
+
+    BARK (protection):     mechanic 17 (free energy pruning)
+    SAP (reward signal):   mechanic 1, 22 (quadratic reward, dopamine)
+    RINGS (annual growth): mechanic 27, 9 (path dependence, revolution)
+    SEASONS (lifecycle):   mechanic 30, 23 (critical periods, boundaries)
+    SUNLIGHT (guidance):   YOUR SIGHT-READING (93% win rate)
+</code></pre>
+<hr>
+<h2>VIII. COMPOUNDING EFFECTS</h2>
+<h3>The Tree Gets Better Non-Linearly</h3>
+<pre><code>Accuracy vs Time (log scale):
+
+    |
+  A |                                          ____------
+  c |                                    ___---
+  c |                               ___--
+  u |                          ___--
+  r |                     __---
+  a |                __---
+  c |           ___--
+  y |       __--
+    |    _--
+    |  _-
+    | -
+    |------+------+------+------+------+------+
+          Y1     Y2     Y3     Y5     Y10    Y20
+
+    Year 1-2:  Linear improvement (learning basic regimes)
+    Year 2-5:  Accelerating (cross-branch knowledge compounds)
+    Year 5-10: Rapid gains (committed structure enables deep branching)
+    Year 10+:  Asymptotic mastery (the tree IS the market's shape)
+</code></pre>
+<p>Why compounding:</p>
+<ol>
+<li>
+<p><strong>Committed nodes are free infrastructure.</strong> Once the trunk is committed, every new observation can skip directly to the relevant branch. Navigation cost decreases as the tree matures.</p>
+</li>
+<li>
+<p><strong>Cross-branch pattern transfer.</strong> When branch A discovers a micro-pattern, the tree checks if branch B has the same pattern. If yes, both branches benefit from each other's data. The more branches, the more cross-pollination.</p>
+</li>
+<li>
+<p><strong>Dead branches are knowledge too.</strong> A dead branch from 2020 tells the tree: "if volatility looks like THIS, the regime that USED to work here has ended." Dead branches prevent the tree from repeating mistakes.</p>
+</li>
+<li>
+<p><strong>Rings enable temporal prediction.</strong> By year 10, the tree can identify "this state resembles ring 3 in that branch" -- meaning "this looks like what happened 7 years ago." The deeper the rings, the more historical analogies available.</p>
+</li>
+</ol>
+<p><strong>Mechanic 28 (Rough volatility) + Mechanic 18 (Persistent homology) compound:</strong> Rough vol means the tree's branching on volatility captures fast dynamics. Persistent homology identifies which branches are structurally stable across scales. Together: the tree develops a volatility model that is both fast (rough) and robust (persistent). This takes 3-5 years to fully emerge but once present, it is the deepest part of the tree's knowledge.</p>
+<hr>
+<h2>IX. IMPLEMENTATION: Mac Mini, Zero Budget</h2>
+<h3>Storage</h3>
+<pre><code>Node size:  ~512 bytes
+Year 1:     500 nodes    = 256 KB
+Year 5:     5,000 nodes  = 2.5 MB
+Year 20:    30,000 nodes = 15 MB
+
+The entire tree fits in RAM. Always. On any machine.
+Persist to disk as a single binary file.
+</code></pre>
+<h3>Computation</h3>
+<pre><code>Per tick:
+    1. Body parse:        ~0.01ms  (mechanic 4, 24)
+    2. Tree traverse:     ~0.05ms  (depth 20, binary search at each level)
+    3. Update leaf stats: ~0.01ms  (running mean/var update)
+    4. Entrainment check: ~0.02ms  (mechanic 20)
+    5. Branch check:      ~0.1ms   (check disagreement, maybe split)
+    6. Behavior tree:     ~0.01ms  (mechanic 31)
+
+    TOTAL: ~0.2ms per tick
+
+    At M1 resolution: 1 tick per minute
+    CPU usage: 0.0003% of one core
+
+    Mac Mini M-series: this is nothing. The system sleeps 99.999% of the time.
+</code></pre>
+<h3>Growth Operations (Background)</h3>
+<pre><code>Every minute:   Update current leaf (0.2ms)
+Every hour:     Check branching conditions on active path (~5ms)
+Every day:      Compute free energy, check for pruning (~50ms)
+Every month:    Full tree sweep: prune, compute rings, update topology (~500ms)
+Every year:     Increment ring counter, snapshot tree structure
+</code></pre>
+<h3>Disk Format</h3>
+<pre><code>tree.bin:       Binary serialization of all nodes (mmap-able)
+tree.meta:      JSON with tree-level statistics, ring info
+tree.log:       Append-only log of all branching/pruning/commit events
+canopy.snapshot: Monthly snapshot of tree shape for visualization
+</code></pre>
+<hr>
+<h2>X. THE CORE ALGORITHM IN PSEUDOCODE</h2>
+<pre><code>fn main_loop():
+    tree = load_or_create_tree()
+
+    for each tick in price_feed:
+        // SENSE (mechanics 4, 24, 28)
+        body = body_parse(tick)
+        state = build_state_vector(tick, body)
+        state.volatility = rough_vol(tick)
+        state = apply_optic_equivalences(state)     // mechanic 16
+
+        // NAVIGATE (mechanics 12, 20, 25)
+        leaf = traverse_tree(tree.root, state)       // pattern completion with inertia
+
+        // PREDICT (mechanics 32, 1, 19)
+        prediction = leaf.outcomes.mean_return
+        confidence = 1.0 / leaf.outcomes.variance
+        weight = minimax_weight(leaf)                // Xenakis game theory
+
+        // ACT (mechanic 31)
+        signal = behavior_tree.evaluate(prediction, confidence, body)
+        if signal.is_trade():
+            emit_signal(signal)
+
+        // LEARN (mechanics 11, 22, 17)
+        leaf.update_outcomes(tick.actual_return)      // update statistics
+        dopamine_phase1(leaf, prediction, tick)       // prediction error
+        schedule(dopamine_phase2, delay=50_ticks)     // delayed context update
+
+        // GROW (mechanics 3, 6, 30, 10)
+        if should_branch(leaf):                       // disagreement detected
+            dim = best_split_dimension(leaf)
+            branch(leaf, dim)                         // context-free recursion
+        if should_commit(leaf):                       // Kuramoto sync, enough visits
+            leaf.committed = true                     // critical period closes
+
+        // CHECK BOUNDARIES (mechanic 23)
+        if prediction_error &gt; 3 * historical_std:
+            ascend_to_nearest_uncommitted(tree)
+            re_traverse(tree, state)
+            mark_boundary()
+
+        // SEASONAL (mechanics 9, 18, 2)
+        if monthly_sweep_due():
+            prune_dead_leaves(tree)                   // seasonal shedding
+            compute_persistent_homology(tree)         // topological stability
+            update_1f_cutoff(tree)                    // noise floor
+            compute_free_energy(tree)                 // complexity vs accuracy
+
+        // POLYRHYTHM (mechanics 14, 15, 5, 13)
+        if multi_timeframe_update_due():
+            align = check_polyrhythm(m1_tree, m5_tree, m15_tree)
+            if align &gt; 0.8:
+                boost_confidence(leaf)
+            syncopation = detect_structured_violation(leaf)
+            if syncopation:
+                add_branch_dimension(leaf, &quot;syncopated&quot;)
+
+        // OSCILLATION (mechanics 10, 21)
+        phase = convergence_divergence_phase(tree)
+        if phase == CONVERGED and big_surprise:
+            trigger_self_correction(tree)             // un-commit, re-grow
+
+        // ENTRAINMENT (mechanic 20)
+        if confidence &gt; HIGH:
+            predicted_path = pre_traverse(tree, state, horizon=10)
+            cache_predicted_path(predicted_path)      // zero latency if correct
+
+        // STIGMERGY (mechanic 7)
+        // (nothing explicit -- the updates above ARE the stigmergic traces)
+        // (the next traversal will find them)
+
+        // MARKOV BLANKET (mechanic 29)
+        update_blanket(leaf, state)
+        if blanket_expanded():
+            grow_new_root_dimension()                 // the tree can sense more
+
+        // PATH DEPENDENCE (mechanic 27)
+        // (nothing explicit -- the tree's structure IS its path dependence)
+        // (every ring records the order of learning)
+
+        // PROLONGATION (mechanic 26)
+        if leaf.outcomes ~= leaf.parent.outcomes:
+            leaf.mark_as_prolongation()               // elaboration, not departure
+</code></pre>
+<hr>
+<h2>XI. WHY THIS IS THE MOAT</h2>
+<p>The tree after 20 years of continuous growth is unreproducible. It cannot be copied, because:</p>
+<ol>
+<li>
+<p><strong>Path dependence</strong> means starting today produces a different tree than one started in 2006. The rings cannot be faked.</p>
+</li>
+<li>
+<p><strong>Critical period closure</strong> means committed nodes were shaped by data that may never recur. A 2008 branch committed during the financial crisis contains knowledge that cannot be recreated from post-2008 data.</p>
+</li>
+<li>
+<p><strong>The canopy shape</strong> -- the overall topology of the tree -- is an emergent property of 20 years of EUR/USD dynamics filtered through your specific edge. No one else has your sight-reading ability shaping which branches get sunlight.</p>
+</li>
+<li>
+<p><strong>Dead branches are memory.</strong> The tree remembers regimes that ended. A competitor starting fresh has no dead branches, no memory of past market personalities.</p>
+</li>
+<li>
+<p><strong>The tree IS the moat.</strong> Copying the code gives you a seed. The value is in the growth.</p>
+</li>
+</ol>
+<pre><code>    Competitor's tree (year 0):         Your tree (year 20):
+
+           *                                    *  * *
+           |                                   /|\ | /\
+                                              * * * * * *
+                                             /| |/| |\| |\
+                                            * * * * * * * *
+                                             \|/ \|/ \|/ \|
+                                              *   *   *   *
+                                               \ / \ / \ /
+                                                *   *   *
+                                                 \ / \ /
+                                                  *   *
+                                                   \ /
+                                                    *
+                                                    |
+                                              ______|______
+                                             /      |      \
+                                          [M1]    [M5]   [M15]
+
+    They have a seed.
+    You have an old-growth forest.
+    That is the moat.
+</code></pre>
+<hr>
+<h2>XII. SUMMARY: THE 32 MECHANICS IN THE TREE</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Mechanic</th>
+<th>Location in Tree</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Quadratic reward</td>
+<td>Leaf outcome stats</td>
+<td>Penalizes confident errors quadratically</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1/f cutoff</td>
+<td>Branch frequency distribution</td>
+<td>Sets noise floor for branching</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Context-free recursion</td>
+<td>Growth algorithm</td>
+<td>Same rule at every depth = fractal structure</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Body-parser</td>
+<td>Root sensory input</td>
+<td>Converts raw price to somatic signal</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Syncopation</td>
+<td>Fine branch creation</td>
+<td>Structured rhythm violations become dimensions</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Kuramoto phase transition</td>
+<td>Commitment condition</td>
+<td>Phase-lock = stability = commit</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Stigmergy</td>
+<td>Inter-node communication</td>
+<td>Indirect signaling through updated statistics</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Acoustic niche partitioning</td>
+<td>Sibling node arrangement</td>
+<td>Non-overlapping state space division</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Whale song revolution</td>
+<td>Dead branch patterns</td>
+<td>Major canopy shifts over years</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Convergence-divergence</td>
+<td>Growth rhythm</td>
+<td>Oscillation between exploit and explore</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Hierarchical prediction error</td>
+<td>Parent-child error propagation</td>
+<td>Errors drive splitting top-down</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Pattern completion with inertia</td>
+<td>Tree traversal</td>
+<td>Partial state match with momentum</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Temporal hierarchy</td>
+<td>Depth-to-timescale mapping</td>
+<td>Slow features at root, fast at leaves</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Interlocking polyrhythm</td>
+<td>Multi-timeframe alignment</td>
+<td>M1+M5+M15 agreement = confidence</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Gamelan stratified polyphony</td>
+<td>Layer roles</td>
+<td>Root=fundamental, branch=elaboration, leaf=ornament</td>
+</tr>
+<tr>
+<td>16</td>
+<td>OPTIC equivalences</td>
+<td>State normalization</td>
+<td>Price-level and mirror invariance</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Free energy</td>
+<td>Growth/prune criterion</td>
+<td>Complexity - accuracy must decrease</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Persistent homology</td>
+<td>Monthly topology check</td>
+<td>Identifies scale-stable structure</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Xenakis game theory</td>
+<td>Branch prediction weighting</td>
+<td>Minimax against market's strategy</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Entrainment</td>
+<td>Pre-traversal caching</td>
+<td>Predict ahead for zero-latency response</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Convergence-divergence self-correction</td>
+<td>Emergency re-growth</td>
+<td>Un-commit and restructure after regime change</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Dopamine two-phase</td>
+<td>Reward signal timing</td>
+<td>Immediate error + delayed context update</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Basal ganglia mark boundaries</td>
+<td>Regime transition detection</td>
+<td>Ascend and re-traverse on sustained error</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Iowa Gambling Task</td>
+<td>Body-before-mind timing</td>
+<td>Somatic marker arrives before tree prediction</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Tree contains chain</td>
+<td>Path structure</td>
+<td>Every root-to-leaf path is a Markov chain</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Prolongation</td>
+<td>Leaf classification</td>
+<td>Subordinate nodes that elaborate, not contradict</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Path dependence</td>
+<td>Ring structure</td>
+<td>Growth order matters, history is structure</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Rough volatility</td>
+<td>Vol state dimension</td>
+<td>Hurst ~0.1 kernel for fast-revert dynamics</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Markov blanket contains tree</td>
+<td>Boundary variables</td>
+<td>Blanket defines what tree can learn</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Critical periods</td>
+<td>Commitment events</td>
+<td>Irreversible freezing of node boundaries</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Behavior trees</td>
+<td>Trading decision layer</td>
+<td>Selector/sequence tree queries the data tree</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Next-token prediction discovers trees</td>
+<td>Foundational identity</td>
+<td>The tree IS what next-state prediction produces</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>Draft 3 of 3. The most concrete. The seed is planted. Time grows the moat.</em></p>
+</article>
+
+<div class="divider" style="max-width:760px;"></div>
+
+<footer class="ricercar-footer">
+  <div class="ricercar-footer-text">Ballad &mdash; the search continues</div>
+  <div class="ricercar-footer-copy">&copy; 2026 muFX. All rights reserved.</div>
+</footer>
+<div class="bottom-line"></div>
+
+<script>
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var b = document.body;
+  var st = h.scrollTop || b.scrollTop;
+  var sh = h.scrollHeight || b.scrollHeight;
+  var pct = (st / (sh - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+</script>
+
+</body>
+</html>

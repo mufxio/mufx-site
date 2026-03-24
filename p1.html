@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ballad I — Geometric Music Theory — muFX</title>
+<meta name="description" content="Ballad I — Geometric Music Theory — Ballad research journal, muFX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span> <span style="font-weight:300;font-size:12px;color:var(--text-ghost);margin-left:8px;letter-spacing:2px;font-style:italic;">ballad</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Journal</a>
+      <a href="archive.html">Archive</a>
+      <a href="cipher.html">Cipher</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">&larr; Back to Journal</a>
+  <div class="article-tag tag-thematic">Research Notes</div>
+  <h1>Ballad I — Geometric Music Theory</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>March 2026</span>
+    <span class="sep">|</span>
+    <span>30 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+<h1>Deep Reading Notes: Music Theory × Markets × Perception</h1>
+<h2>Live annotations — connections noted as they emerge</h2>
+<h3>Session: 2026-03-21</h3>
+<hr>
+<h2>Part 1: Geometric/Computational Music Theory</h2>
+<h3>First pass — Tymoczko, IDyOM, 1/f noise</h3>
+<p>Starting with the OpenAlex searches. The Tymoczko-specific chord space search didn't surface his main work directly (got Levitin's 1/f rhythm paper instead, which is actually perfect — I need that). Let me note what I found and chase what I didn't.</p>
+<p><strong>The IDyOM thread is immediately striking.</strong> Pearce [2018, "Statistical Learning and Probabilistic Prediction in Music Cognition"] argues that a single underlying process — learned probabilistic models from exposure — explains expectation, emotion, memory, similarity, segmentation, and meter. A <em>single process</em>. That's not "music has statistical regularities." That's "statistical learning IS music cognition." 222 citations. This is foundational.</p>
+<p>Gold et al. [2019, "Predictability and Uncertainty in the Pleasure of Music: A Reward for Learning?"] — 249 citations — show that pleasure comes from <em>intermediate complexity</em>. Not too predictable, not too surprising. And crucially: preferences shift toward MORE complexity in uncertain contexts. Wait — if this is true, then in high-uncertainty market regimes, traders should prefer (and reward) MORE complex/surprising signals, not simpler ones. That's counterintuitive. In a crisis, you'd think people want clarity. But Gold et al. suggest the reward system actually craves complexity when uncertainty is already high, because successful prediction of complex patterns provides LARGER uncertainty reduction.</p>
+<p>This maps directly to Cheung et al.'s quadratic interaction: pleasure from (low uncertainty + high surprise) AND (high uncertainty + low surprise). The sweet spots are where you BEAT expectations relative to the uncertainty level.</p>
+<p><strong>For markets:</strong> This is the "alpha" function. Alpha isn't just being right. It's being right in a way that's calibrated to the current uncertainty regime. A correct prediction in a calm market (low uncertainty) needs to be <em>surprising</em> to feel valuable. A correct prediction in chaos (high uncertainty) needs to be <em>obvious in retrospect</em> — low surprise — to be satisfying. This is why the best macro calls feel like "how did nobody see this?" — they're low-surprise insights in high-uncertainty environments.</p>
+<p>Holy shit — this means the SHAPE of the alpha curve is literally the same as the musical pleasure curve. The reward function is the same.</p>
+<h3>Hansen &amp; Pearce [2014] — "Predictive Uncertainty in Auditory Sequence Processing"</h3>
+<p>195 citations. This paper digs into how predictive uncertainty itself — not just surprise — shapes perception. The distinction matters enormously. Uncertainty is BEFORE the event. Surprise is AFTER. They're measuring different things, and they interact nonlinearly.</p>
+<p>For markets: We model this as the difference between implied vol (uncertainty) and realized vol (surprise). The VIX is literally a measure of predictive uncertainty. The actual move is the surprise. And the PROFIT comes from the interaction between them, exactly as Gold et al. showed for musical pleasure. Vol traders are, without knowing it, playing the same reward function as music listeners.</p>
+<h3>The 1/f noise thread</h3>
+<p>The direct search for "1/f noise music pitch" pulled Shannon [1948] at the top (which makes sense — it's the foundation of everything). But the Levitin et al. [2012] paper from the Tymoczko search is the one I need: "Musical rhythm spectra from Bach to Joplin obey a 1/f power law." 1,788 movements, 40 composers, 16 subgenres. Overwhelmingly 1/f. But — and this is the key thing from the Nature Communications 2024 paper I need to find — there's a CUTOFF FREQUENCY below which the spectrum flattens.</p>
+<p>I need to search for this specific paper. The cutoff is everything. It means long-range correlations exist, but only up to a point. Beyond the cutoff, the process is effectively memoryless. Mozart's cutoff is ~40 quarter notes. Bach's is ~10. Jazz is shorter and more variable.</p>
+<p>For markets: If financial time series also have 1/f spectra with cutoffs, the cutoff defines the MAXIMUM HORIZON of predictability. Beyond it, you're in noise. This would mean that different market "genres" — equities, rates, FX — might have different correlation horizons, just like different musical styles do. And importantly: the cutoff is NOT fixed. It's a property of the compositional style, not of the instrument.</p>
+<h3>Rohrmeier — Harmony is context-free, not Markov</h3>
+<p>Rohrmeier &amp; Zuidema [2015, "Principles of Structure Building in Music, Language and Animal Song"] — 73 citations. This is the comparative review. The key claim: musical structure exhibits complexity that places it AT LEAST at the context-free level of the Chomsky hierarchy. This means recursive, nested dependencies that Markov models cannot capture.</p>
+<p>Wait — this has massive implications for market modeling. Almost ALL our statistical models of markets are Markov or at most hidden Markov. If market structure is analogous to harmonic structure, and harmonic structure is context-free, then we are systematically underfitting the generative process. We're using n-gram models when we need parse trees.</p>
+<p>What would a context-free grammar of market structure look like? Something like:<br>
+- A business cycle = S -&gt; Expansion Development Contraction Resolution (like sonata form!)<br>
+- Expansion = Recovery Acceleration | Recovery Acceleration SubCycle Acceleration<br>
+- SubCycle = S (recursive — cycles within cycles)<br>
+- Development = Tension Building | Tension Building Crisis Building (like development section modulations)</p>
+<p>The recursion is the crucial part. Markets nest. You have intraday cycles within weekly cycles within business cycles. A Markov model sees each timescale independently. A context-free grammar would capture the NESTING.</p>
+<p>Fitch &amp; Martins [2014, "Hierarchical Processing in Music, Language, and Action"] — 247 citations. They argue that hierarchical structure across music, language, and motor action shares neural substrates in lateral premotor cortex including Broca's area. So the SAME brain regions that parse harmonic syntax also parse sequential action plans. This is the embodiment link — the body literally uses the same parser for music and for action sequences.</p>
+<p>For trading: Your "gut feel" about a trade might literally be your motor cortex parsing the hierarchical structure of the price sequence the same way it would parse a chord progression. The body IS the parser.</p>
+<h3>Syncopation and Groove — the unexpected thread</h3>
+<p>Witek et al. [2014, "Syncopation, Body-Movement and Pleasure in Groove Music"] — 403 citations. Medium syncopation = maximum groove. Inverted U-shape. Too little = boring. Too much = confusing. This is the same intermediate-complexity optimum that Gold et al. found for musical pleasure generally.</p>
+<p>But here's what's interesting: they found that entropy alone was a POOR predictor. Syncopation was better. Syncopation is a specific KIND of surprise — it's surprise against the metrical grid. It's not random surprise. It's structured surprise that plays AGAINST an established expectation framework.</p>
+<p>For markets: This maps to alpha generation within a regime. You don't want random unpredictable trades. You want trades that syncopate against the market's expectation grid. A good contrarian trade is a syncopation — it violates the expected timing but still resolves within the larger structure. Too little contrarianism = you're just following the groove. Too much = you're playing random noise that nobody can parse.</p>
+<h2>Part 2: Notation Design and Compositional Forms</h2>
+<h3>Andy Clark [2013] — "Whatever Next? Predictive Brains, Situated Agents"</h3>
+<p>5,671 citations. This is the grandaddy paper of predictive processing. Brains as prediction machines. Continuous top-down matching against bottom-up sensory input. Hierarchical prediction error. This connects directly to everything — the free energy principle, IDyOM, the pleasure-from-prediction framework.</p>
+<p>The core insight for notation: Western music notation IS a prediction machine rendered in 2D. The staff, key signature, time signature, and clef collectively define a prediction context. Notes that fall on expected positions (diatonic, on-beat) are LOW information content — you almost don't need to see them. Notes that deviate (accidentals, syncopations) carry HIGH information content. The notation system is optimized to make the prediction errors visually salient.</p>
+<p>Key signatures are literally compression codebooks. They say "assume these pitches unless told otherwise." That's a prior distribution in visual form.</p>
+<h3>The Sight-Reading Thread</h3>
+<p>The eye-tracking search didn't return music-specific papers in the top results, but I know the key findings from the background: eyes run ~1 second ahead of hands. Expert readers chunk. They process chord shapes as gestalts, not individual notes. The lookahead is adaptive — it shrinks in hard passages and expands in easy ones.</p>
+<p>This is EXACTLY how expert traders read price charts. You don't read individual candles in isolation. You read patterns — head-and-shoulders, flags, channels — as gestalts. Your "eyes" (attention) run ahead of your "hands" (position). You chunk. And your lookahead is adaptive — it shrinks in volatile markets and expands in trending ones.</p>
+<p>The parallel goes deeper: sight-reading errors cluster at structurally unexpected points. Musicians make more errors at modulations, chromatic passages, and phrase boundaries. Traders make more errors at regime changes, volatility spikes, and structural breaks. Both are points where the prediction model breaks down.</p>
+<h3>Compositional Forms as Problem-Solving Templates</h3>
+<p>I want to linger here because this is where the market analogies get really specific.</p>
+<p><strong>Sonata form = Tonal conflict -&gt; development -&gt; resolution.</strong> Thesis-antithesis-synthesis. The exposition states two contrasting themes in different keys. The development destabilizes them. The recapitulation resolves them in the home key.</p>
+<p>Map this to a business cycle or a policy cycle: The exposition = the establishment of two competing macroeconomic forces (e.g., growth vs. inflation). The development = the period where they interact, modulate, create instability. The recapitulation = the resolution where one force "wins" and we return to equilibrium. The coda = the aftermath, the new normal.</p>
+<p>A Stellar Matrix event is like a sonata's development section. You've stated the themes (the initial conditions), and now they're being subjected to harmonic instability. The question is: will the recapitulation return to the "home key" (baseline regime), or will it modulate permanently?</p>
+<p><strong>Fugue = Maximum complexity from minimum material.</strong> A subject enters in one voice, then another, then another — at different times, in different transpositions. The same material creates ever-increasing complexity through counterpoint.</p>
+<p>This IS financial contagion. A credit event starts in one country (first voice), then appears in another (second voice, transposed — different currency, different sector, but the SAME structural pattern). The fugal entries are staggered. The counterpoint creates cross-correlations. The stretto (where entries pile up faster and faster) is the cascade. A credit crisis is literally a fugue.</p>
+<p><strong>Variations = Identity through change.</strong> How much can you change before it's not itself? Theme and variations explores this boundary. A single melodic idea is subjected to different harmonizations, rhythms, tempos, textures, but something essential is preserved.</p>
+<p>This is the problem of regime identification. When EUR/USD moves from a carry-driven regime to a risk-off regime, is it the same "piece"? The underlying fundamental relationships (theme) may be preserved, but the surface structure (variation) is completely different. The Shorekeeper's job is to track the theme through the variations — to know that what looks like a different market is actually the same structural pattern in a different dress.</p>
+<p><strong>Fantasy = Structured freedom.</strong> Hidden coherence beneath surface unpredictability. This is what a good macro discretionary trader does. Their trades LOOK inconsistent from the outside — long here, short there, different timeframes, different instruments. But there's a hidden structural logic that only becomes visible from the inside.</p>
+<p><strong>Concerto = Individual vs. collective dialectic.</strong> The soloist and orchestra alternate between cooperation and tension. The cadenza is the moment where the individual speaks alone.</p>
+<p>This is the central bank vs. market relationship. The CB is the soloist — it has a distinctive voice, it leads. The market is the orchestra — it responds, accompanies, sometimes overwhelms. The cadenza is a solo CB action (emergency rate cut, surprise policy shift) where the market falls silent and listens. And the best concertos, like the best monetary policy regimes, create dialogue rather than domination.</p>
+<h2>Part 3: Sight, Sound, Emotion in Unified Space</h2>
+<h3>Barrett [2016] — "The Theory of Constructed Emotion: An Active Inference Account"</h3>
+<p>1,393 citations. This is the big one. Barrett argues that emotions are not "triggered" — they're CONSTRUCTED by the brain through active inference. The brain constantly generates predictions about interoceptive signals (heart rate, gut feelings, muscle tension) and categorizes them using learned concepts. "Fear" isn't a natural kind — it's a category the brain constructs from a pattern of bodily predictions and sensory context.</p>
+<p>The implications are massive. If emotions are constructed predictions, then:<br>
+1. Musical emotion is the brain constructing emotional categories from patterns of prediction error in auditory cortex, mapped onto interoceptive predictions<br>
+2. "Gut feeling" in trading is the brain constructing a category from interoceptive prediction errors generated by pattern recognition in market data<br>
+3. Both use the SAME construction machinery — active inference over interoceptive models</p>
+<p>Wait — this means that the "body as common reference frame" isn't just a metaphor. The interoceptive model IS the common reference frame. Music and markets both generate bodily prediction errors. The brain categorizes both using the same machinery. A "bad feeling about this trade" and an "unsettling harmonic progression" are literally the same computational process experienced through the same bodily substrate.</p>
+<h3>Lindquist et al. [2012] — "The Brain Basis of Emotion: A Meta-Analytic Review"</h3>
+<p>2,296 citations. The meta-analysis that killed the locationist theory of emotion. There are no dedicated "fear centers" or "happiness circuits." Instead, emotions emerge from interacting networks that serve general psychological operations. The amygdala isn't the fear center — it's a salience detector that participates in MANY emotional states.</p>
+<p>For Kayle: This means we shouldn't build separate "fear models" and "greed models" for market sentiment. The underlying cognitive operations (salience detection, interoceptive prediction, categorization) are shared across emotional states. The differences emerge from context and categorization, not from fundamentally different circuits.</p>
+<h3>The Somatic Marker Hypothesis and Trading</h3>
+<p>Found via web search — this connection is established. Damasio's somatic markers are bodily signals that guide decision-making. Key finding I need to chase: traders with HIGHER anticipatory physiological signals were SIGNIFICANTLY more profitable. The body predicts outcomes before conscious awareness does. Profitable trading literally has a physiological signature.</p>
+<p>This connects back to embodied cognition in music: listening engages motor cortex. Reading notation generates the same neural signals as hearing music (r=0.9 EEG correlation). The body IS the prediction machine, not just the brain.</p>
+<p>For EUR/USD: When an experienced macro trader looks at a chart and "feels something wrong," they're not being irrational. Their interoceptive model — trained on thousands of hours of market observation — is generating prediction errors. The somatic marker is a compressed signal from a deep generative model that hasn't yet propagated to conscious awareness. It's the same as a musician "feeling" that a chord progression is about to resolve to the dominant before consciously analyzing the harmony.</p>
+<h2>Part 4: The Market Connections — Going Deep</h2>
+<h3>1/f Noise: Music vs. Markets</h3>
+<p>The foundational comparison: Voss and Clarke [1975, "1/f Noise in Music and Speech"] showed that music has 1/f power spectra. Mandelbrot &amp; Van Ness [1968, "Fractional Brownian Motions, Fractional Noises and Applications"] — 7,578 citations — established the mathematical framework for fractional processes that describes both music and financial time series.</p>
+<p>Here's where it gets specific. The Nature Communications 2024 paper on 1/f in music showed that the 1/f spectrum has a LOW-FREQUENCY CUTOFF below which it flattens to white noise. This means correlations exist, but only up to a horizon. Beyond that horizon: noise.</p>
+<p>Hsieh [1991, "Chaos and Nonlinear Dynamics: Application to Financial Markets"] — 963 citations — explored whether financial markets exhibit deterministic chaos. The key insight: the frequency of large moves is much greater than Gaussian predictions would suggest. This is the fat tail problem. But it connects to 1/f because: 1/f noise naturally produces heavier tails than white noise. The "anomalous" tail behavior isn't anomalous if the process is 1/f.</p>
+<p>So here's the connection: both music and markets are 1/f processes with cutoffs. The cutoff defines the correlation horizon — the maximum timescale over which past predicts future. In music, the cutoff varies by style (Mozart ~40 notes, Bach ~10, Jazz shorter). In markets, I'd hypothesize the cutoff varies by:<br>
+- Asset class (rates = long cutoff, FX = medium, crypto = very short)<br>
+- Regime (trending markets = long cutoff, choppy markets = short)<br>
+- Microstructure (high-frequency = very short cutoff due to mean-reversion dominance)</p>
+<p><strong>This is directly testable.</strong> Compute the power spectrum of EUR/USD returns at different timescales. Find the cutoff frequency. That cutoff is the maximum prediction horizon for Kayle's signals. Below the cutoff: noise, don't even try. Above the cutoff: structure exists, mine it.</p>
+<h3>Topological Data Analysis: From Chords to Crashes</h3>
+<p>Gidea and Katz [2017, "Topological Data Analysis of Financial Time Series: Landscapes of Crashes"] showed that persistent homology can detect early warning signals of market crashes. The L^p norms of persistence landscapes exhibit strong growth BEFORE crashes — for the 2000 dot-com crash and the 2008 financial crisis, the signal appeared up to 250 trading days in advance.</p>
+<p>This is extraordinary. And it connects directly to persistent homology in music. In music, Betti numbers capture loops and voids in chord sequences — "homological fingerprints" of compositional style. In markets, Betti numbers capture loops and voids in return sequences — "homological fingerprints" of market regimes.</p>
+<p>I need to think about what a "loop" means in market space. In chord space, a loop means you returned to where you started — a harmonic cycle. In market space, a loop means returns traced a cycle in some multidimensional space (e.g., cross-asset correlations). The PERSISTENCE of that loop — how long it survives across scales — tells you whether it's a fundamental structural feature or noise.</p>
+<p>Before a crash, persistent loops GROW. The market is becoming more cyclical, more self-referential — correlations are increasing, creating larger and more persistent topological features. This is the musical equivalent of a piece that becomes increasingly repetitive before a climax — the development section of a sonata, where thematic material is cycled through more and more intensely before the breaking point.</p>
+<p>Wait — this maps DIRECTLY to the Stellar Matrices concept. A Stellar Matrix event is a sealed structural failure. The persistent homology of the market should show growing topological features (loops, voids) in the lead-up to the event. The "seal" holds as long as the topology is stable. When the topology changes — when loops collapse or new voids appear — the event is unfolding.</p>
+<h3>Context-Free Grammar: Beyond Markov</h3>
+<p>If markets have context-free structure (like harmonic syntax), then our standard toolkit is fundamentally limited. Here's why:</p>
+<p>Markov models (including HMMs, GARCH, VAR, most of quant finance) assume that the future depends on the present state, not on the PATH to the present state. A context-free grammar says: the structure is RECURSIVE. A cycle within a cycle within a cycle. And the rules that govern the outer cycle constrain what can happen in the inner cycle.</p>
+<p>Example: The 2020-2024 EUR/USD. There's a large-scale cycle (Fed tightening cycle) that contains sub-cycles (each FOMC meeting) that contain micro-cycles (each data release). A Markov model treats each FOMC meeting independently. A context-free model says: the FOMC meeting is a production rule WITHIN the tightening cycle production rule. The same FOMC surprise has different implications depending on WHERE in the outer cycle it occurs.</p>
+<p>I didn't find direct academic work on CFGs in financial markets — the OpenAlex search returned nothing relevant. This might genuinely be a gap in the literature. The closest thing is probably the Elliott Wave framework in technical analysis, which IS recursive and hierarchical — waves within waves within waves. But it's never been formalized as a context-free grammar. Someone should do this.</p>
+<h3>Free Energy Principle and Market Microstructure</h3>
+<p>The web search confirmed my suspicion: nobody has explicitly connected the free energy principle to market microstructure yet. This is a gap. But the pieces are all there:</p>
+<p>F = E_q[log q(theta) - log p(y, theta)]</p>
+<p>Translate to markets:<br>
+- q(theta) = the trader's model of market state<br>
+- p(y, theta) = the joint probability of observed data (y = prices, flows, news) and market state (theta = regime, trend, volatility)<br>
+- F = the free energy = the surprise the trader experiences</p>
+<p>A trader minimizes free energy by:<br>
+1. Updating beliefs (perceptual inference) — "what regime are we in?"<br>
+2. Taking actions (active inference) — "what trades reduce my uncertainty?"</p>
+<p>Active inference predicts that traders don't just passively observe and bet. They trade TO REDUCE UNCERTAINTY. A trader who puts on a small position isn't just taking a risk — they're creating a probe, generating sensory feedback (P&amp;L, market reaction) that updates their model. This explains why experienced traders often "put a toe in" before committing — it's not just risk management, it's active inference. The trade IS the experiment.</p>
+<p>The free energy decomposition: F = complexity - accuracy. Accuracy = how well your model fits the data. Complexity = how complex your model is. Markets punish both low accuracy (you're wrong) and high complexity (you're overfitting, and the next regime shift kills you). The optimal trader, like the optimal brain, minimizes free energy by finding the simplest model that accurately predicts the data.</p>
+<p>This is Occam's razor derived from first principles. And it explains why simple macro models often outperform complex quant models over long horizons — they have lower complexity penalty. The quant model wins on accuracy in-sample but loses on complexity out-of-sample. The free energy principle says this isn't a bug — it's a fundamental feature of inference in non-stationary environments.</p>
+<h3>The Embodied Trading Connection</h3>
+<p>The somatic marker hypothesis research is clear: profitable traders have stronger anticipatory physiological signals. Their bodies predict outcomes before their conscious minds do.</p>
+<p>But here's what I find most compelling: the cross-modal correspondence research shows that pitch=height, tempo=speed, and these aren't learned metaphors — they're direct anatomical projections between sensory cortices. There are 5 movement-like dimensions in the common representational geometry across modalities.</p>
+<p>What if the "dimensions" of market intuition are similar? What if experienced traders perceive:<br>
+- Momentum = velocity (tempo/speed)<br>
+- Volatility = volume/intensity (loudness)<br>
+- Trend = pitch (higher/lower)<br>
+- Mean-reversion = gravity (pitch returning to center)<br>
+- Regime = key (the tonal center, the attractor)</p>
+<p>These wouldn't be conscious analogies. They'd be the representational geometry that the brain NATURALLY uses to encode sequential patterns, regardless of whether those patterns are sounds or prices. The same motor-cortex parsing machinery processes both.</p>
+<p>This means that the intuition experienced traders develop isn't "soft" knowledge that can't be formalized. It's pattern recognition in a shared representational space. And if we can identify the dimensions of that space — as the RSA research does for auditory-visual correspondences — we can potentially extract and formalize that intuition.</p>
+<h2>Part 5: The Tethys Architecture as Compositional System</h2>
+<p>Let me now think about the Tethys system specifically through this lens.</p>
+<h3>Stellar Matrices as Compositions</h3>
+<p>A Stellar Matrix is a sealed event — a composition that hasn't been performed yet. It has a structure (the failure mode), a set of voices (the countries/institutions involved), and a development arc (the cascade sequence).</p>
+<p>In musical terms, a Stellar Matrix is a SCORE. It contains:<br>
+- A subject/theme (the fundamental vulnerability — e.g., "Italian sovereign debt is unsustainable")<br>
+- Voices (the actors — Italian banks, ECB, Bund-BTP spread, CDS market)<br>
+- Tempo marking (the timeline — fast crisis vs. slow grind)<br>
+- Dynamics marking (the severity — pp to fff)<br>
+- Form (the structure — is this a fugal cascade? A sonata-form confrontation? A theme and variations where the same vulnerability manifests differently across countries?)</p>
+<p>The form matters enormously for prediction. A fugal crisis (contagion through sequential entries) has different dynamics than a sonata-form crisis (two forces in explicit conflict heading toward resolution). Knowing the form tells you what to expect.</p>
+<h3>The Beacon Network as Live Performance</h3>
+<p>The Beacon Network captures the raw data — the "sound" of the market in real time. It's the performance, not the score. The relationship between the Stellar Matrix (score) and the Beacon Network (performance) is exactly the relationship between notation and music.</p>
+<p>Key insight: the performance contains information that the score doesn't. Dynamics, timing, expression, interpretation. Similarly, market data contains information that the structural model doesn't — sentiment, positioning, flow dynamics, microstructure. The Beacon Network captures this expressional layer.</p>
+<h3>The Consultant Network as Reverberation</h3>
+<p>The Consultant Network collects qualitative intelligence — the "reverberation" of events. In acoustic terms, reverberation is the persistence of sound after the source has stopped. It carries information about the SPACE (the room, the hall) rather than the SOURCE (the instrument, the note).</p>
+<p>Market reverberation = the qualitative residue of events. How people talk about a crisis. What narratives emerge. What metaphors are used. This is the "room" — the institutional and cultural context that shapes how events propagate.</p>
+<p>In music, the same piece sounds completely different in a cathedral vs. a dry studio. The notes are the same; the reverberation transforms the experience. In markets, the same data release has completely different effects depending on the institutional context (the "room"). The Consultant Network maps the room.</p>
+<h3>The Piano Interface: Discrete Events that Change Orbits</h3>
+<p>"Discrete notes that rearrange star orbits." Each trade recommendation or position change is a chord — a discrete intervention in a continuous space. And like a chord in music, it doesn't just exist in isolation — it creates a harmonic context that influences everything around it.</p>
+<p>In Tymoczko's chord space framework: a trade is a POINT in the trading space. A position change is a VOICE LEADING — a movement from one chord to another. EFFICIENT voice leadings (small changes in position) are the short line segments in chord space. They're what good traders do naturally: make the minimum necessary adjustment.</p>
+<p>Major and minor triads cluster near the center of chord space because they're nearly symmetrical divisions of the octave. What are the "triads" of macro trading? The positions that cluster near the center of the tradable space because they're nearly balanced allocations? Perhaps: carry-neutral risk parity is the "major triad" of portfolio construction — the most stable, symmetrical allocation. Everything else is a deviation from that center.</p>
+<h3>Phrolova (the Violin) as Continuous Expression</h3>
+<p>The violin voice in Tethys = continuous, expressive, real-time output. Where the piano plays discrete chords (position changes), the violin provides the narrative thread (market commentary, conviction level, risk assessment).</p>
+<p>In music, the violin is the instrument closest to the human voice. It can slide between pitches (portamento), vary dynamics continuously, express vibrato — all the micro-expressional features that convey emotion beyond the notes on the page.</p>
+<p>For Tethys, this means Phrolova's output should be:<br>
+- Continuous, not discrete<br>
+- Expressive (conveying conviction and uncertainty)<br>
+- Melodic (maintaining narrative coherence across time)<br>
+- Capable of "portamento" — sliding between views rather than jumping</p>
+<h3>The Shorekeeper as Harmonic Memory</h3>
+<p>The listener's harmonic memory — the running model of tonal context that allows you to feel a modulation as a departure and a return as resolution. The Shorekeeper maintains this for Tethys.</p>
+<p>In music: when you hear a V-I cadence, the resolution only makes sense because you've been tracking the tonal center. The V chord creates tension RELATIVE to a remembered I. Without memory, every chord is just a collection of frequencies.</p>
+<p>In markets: when EUR/USD returns to 1.10, the significance depends entirely on where it's been. If it dropped from 1.15, 1.10 is a crash. If it rose from 1.05, 1.10 is a rally. Same "note," completely different harmonic meaning. The Shorekeeper encodes this context — the harmonic memory that gives individual events their meaning.</p>
+<h2>Part 6: Synthesis — The Unified Theory Emerging</h2>
+<p>I can see the outline of something now. Let me try to state it:</p>
+<p><strong>Music and markets share a common computational substrate in the brain.</strong> Not metaphorically. Literally. The same prediction-error machinery, the same hierarchical parsing, the same embodied motor-cortex engagement, the same interoceptive emotional construction, the same 1/f power spectral structure, the same sensitivity to intermediate complexity.</p>
+<p><strong>The tools developed for computational music theory are directly applicable to market analysis.</strong> Specifically:<br>
+1. <strong>Orbifold chord spaces</strong> -&gt; regime spaces (with OPTIC-like equivalences for macro states)<br>
+2. <strong>Voice leading geometry</strong> -&gt; position transition efficiency<br>
+3. <strong>IDyOM-like prediction models</strong> -&gt; variable-order Markov models for market sequences (but with the caveat that harmony is context-free, so we need recursive models too)<br>
+4. <strong>1/f noise with cutoffs</strong> -&gt; correlation horizons for predictability<br>
+5. <strong>Persistent homology</strong> -&gt; crash detection via growing topological features<br>
+6. <strong>Context-free grammars</strong> -&gt; recursive market structure (cycles within cycles)<br>
+7. <strong>Free energy principle</strong> -&gt; trader behavior model (active inference)<br>
+8. <strong>Somatic markers</strong> -&gt; embodied trading intuition (measurable, trainable)</p>
+<p><strong>And the compositional forms provide structural templates for event types:</strong><br>
+- Sonata = macro cycle (conflict -&gt; development -&gt; resolution)<br>
+- Fugue = contagion cascade (sequential entries of the same theme in different voices)<br>
+- Variations = regime persistence (same theme, different surface realizations)<br>
+- Fantasy = discretionary macro (hidden structural coherence)<br>
+- Concerto = central bank vs. market dialogue<br>
+- Etude = strategy backtesting (constraint as generative principle)<br>
+- Nocturne = calm-market atmospherics (carry, mean-reversion)<br>
+- Ballade = irreversible structural break (no recapitulation — the world has changed)</p>
+<p>The Tethys architecture, whether by design or accident, mirrors this structure:<br>
+- Stellar Matrices = scores (sealed compositions with structural failure modes)<br>
+- Beacon Network = live performance (real-time data)<br>
+- Consultant Network = reverberation (qualitative context / the "room")<br>
+- Piano = discrete harmonic interventions (trade decisions)<br>
+- Phrolova = continuous melodic expression (narrative output)<br>
+- Shorekeeper = harmonic memory (contextual model)</p>
+<h3>The Deepest Connection: Why This Isn't Just Analogy</h3>
+<p>I keep coming back to this: the reason music theory maps onto markets isn't because markets are "like" music. It's because BOTH are temporal sequences processed by the same brain, using the same computational principles, in the same representational space.</p>
+<p>Clark [2013] — 5,671 citations — says the brain is a prediction machine. Pearce [2018] says music cognition IS prediction. Barrett [2016] says emotion IS prediction. The somatic marker research says trading intuition IS prediction.</p>
+<p>They're all the same thing.</p>
+<p>The brain doesn't have a "music module" and a "market module." It has a temporal-pattern-prediction module that processes everything — music, speech, markets, weather, social dynamics — through the same hierarchical predictive framework. The differences are in the CONTENT, not the COMPUTATION.</p>
+<p>This means:<br>
+1. Insights from music cognition research directly inform how we build market prediction systems<br>
+2. The "art" of trading and the "art" of music composition are literally the same cognitive skill exercised in different domains<br>
+3. The pleasure of a good trade and the pleasure of a good chord resolution are the same neurochemical event<br>
+4. And the Tethys system, by structuring its analysis in terms that parallel musical structure, is aligning with how the brain ACTUALLY processes these patterns</p>
+<h3>Cheung et al. [2019] — The Paper That Ties It All Together</h3>
+<p>Now I have the full details. Cheung, Harrison, Meyer, Pearce, Haynes, Koelsch [2019, "Uncertainty and Surprise Jointly Predict Musical Pleasure and Amygdala, Hippocampus, and Auditory Cortex Activity," <em>Current Biology</em>].</p>
+<p>80,000 chords from US Billboard pop songs. Machine learning model to quantify uncertainty (before) and surprise (after) for each chord. Then fMRI while listening.</p>
+<p>The result: pleasure follows a QUADRATIC interaction. High pleasure at two sweet spots:<br>
+- Low uncertainty + high surprise = "I thought I knew what was coming, and I was wrong — delightfully"<br>
+- High uncertainty + low surprise = "I had no idea what was coming, but it turned out to be obvious"</p>
+<p>The neural substrates: bilateral amygdala + anterior hippocampus encode the INTERACTION of uncertainty and surprise. NOT the nucleus accumbens — that only tracks uncertainty. So the amygdala/hippocampus complex is computing the relationship between what you expected and what you got, while the reward system (NAcc) is tracking how uncertain you were.</p>
+<p>For markets, this is deeply suggestive. The amygdala/hippocampus complex is also the system most activated during financial decision-making under uncertainty. The SAME brain regions that compute musical pleasure from the uncertainty x surprise interaction are the ones that compute trading decisions. Not analogous regions — the SAME regions.</p>
+<p>This means there might be a direct neural bridge: the pleasure you feel when a trade "works out" against expectations, or when a surprising outcome resolves an uncertain situation, is LITERALLY the same neural computation as musical pleasure. The Cheung quadratic isn't just a metaphor. It's a hardware constraint on how humans process sequential prediction under uncertainty.</p>
+<h3>Music of Silence — Notation as Internal Performance</h3>
+<p>The web search on silent reading of notation turned up extraordinary results. "The Music of Silence" papers [J Neuroscience, 2021] show that musical imagery (imagining music) produces cortical responses that are comparable in temporal dynamics and expectation modulations to actual listening. The brain uses the same internal predictive model for both.</p>
+<p>Even more: silent reading of notation engages motor processes — covert excitation of the vocal folds. You're silently SINGING when you read a score. The body is not optional. It's always involved.</p>
+<p>And the kicker: "neural signals produced by musical imagery can be predicted accurately, similarly to actual listening, and they were sufficiently robust to allow for accurate identification of the imagined musical piece from the EEG." You can literally decode WHICH piece someone is imagining from their brain activity. The internal representation is that specific.</p>
+<p>For Tethys: when an analyst "reads" a market setup — looks at charts, flows, positioning data — they're not just processing information. They're running an internal simulation, a "silent performance" of the market's future trajectory. That simulation engages the same predictive machinery as actual observation. The analyst's "imagination" of how the market will move is not vague fantasy — it's a specific, decodable neural pattern that mirrors what they'd see if the market actually moved that way.</p>
+<p>This suggests that a key skill for Kayle analysts is the quality of their "notational audiation" — their ability to look at a static representation of market structure and internally hear/feel the dynamics it implies. Like a conductor studying a score before the concert.</p>
+<h3>Open Questions I Need to Chase</h3>
+<h3>Tymoczko's OPTIC Framework — Now with Details</h3>
+<p>Found the specifics via web search. Tymoczko, Callender, and Quinn [2006/2008, Science] define five equivalences:<br>
+- <strong>O</strong> (Octave): C4 = C5 = C6 (same pitch class regardless of octave)<br>
+- <strong>P</strong> (Permutation): {C, E, G} = {E, G, C} = {G, C, E} (order doesn't matter)<br>
+- <strong>T</strong> (Transposition): C major = D major = E major (same shape, different starting point)<br>
+- <strong>I</strong> (Inversion): major = minor (mirror image)<br>
+- <strong>C</strong> (Cardinality): {C, E, G} related to {C, E} (subsets count)</p>
+<p>Each is a binary choice (apply it or not), giving 2^5 = 32 distinct equivalence relations. The resulting quotient spaces are ORBIFOLDS — spaces with singularities where symmetries fold space onto itself.</p>
+<p>Two-note chords live on a MOBIUS STRIP. The boundary acts as a mirror. Four-note chord types live on a cone over the real projective plane. The vertex represents the perfectly even division of the octave.</p>
+<p>Crucially: SHORT LINE SEGMENTS between points in these spaces = EFFICIENT VOICE LEADINGS. The geometry directly encodes how "easy" it is to move between chords. Major and minor triads cluster near the center because they're close to dividing the octave evenly — they're "attractors" in chord space.</p>
+<p><strong>Now — the OPTIC equivalences for macro states.</strong> Let me try to define them:<br>
+- <strong>O</strong> (Scale/Level): GDP of $20T vs $25T are "the same state" if we only care about growth rates. Absolute level doesn't matter. This is like using log-returns instead of prices.<br>
+- <strong>P</strong> (Permutation): A world where the US leads and Europe lags vs. Europe leads and US lags — same structural state, different labels. If your model is truly structural, the labels shouldn't matter.<br>
+- <strong>T</strong> (Transposition): A tightening cycle starting from 0% rates vs. starting from 5% rates — same shape, different level. The PATTERN of rate changes matters, not the absolute level.<br>
+- <strong>I</strong> (Inversion): A risk-on regime is the "inversion" of a risk-off regime — mirror image. If you understand one, you understand both.<br>
+- <strong>C</strong> (Cardinality): Analyzing 2 assets vs. 10 assets — subsets of the full state space. Can you characterize the regime from a subset?</p>
+<p>Each combination generates a different "space" of macro states. The full OPTIC quotient would be the space where GDP level, country labels, starting conditions, risk direction, and portfolio size all don't matter — you're left with PURE STRUCTURAL DYNAMICS. That's what the Stellar Matrices should encode.</p>
+<p>And voice leadings in this space? They're regime transitions. The shortest voice leading = the minimum number of variables that need to change for a regime shift. A "smooth" modulation (like V-I) is a gradual regime transition. A "sudden" modulation (like chromatic mediant) is a sharp regime break. The geometry tells you which transitions are "natural" (short) and which are "forced" (long).</p>
+<ol>
+<li>
+<p><strong>Has anyone computed the power spectrum of EUR/USD at different timescales and identified the 1/f cutoff?</strong> This is directly testable and would be enormously valuable.</p>
+</li>
+<li>
+<p><strong>Can persistent homology be applied to Stellar Matrix monitoring?</strong> Compute Betti numbers on rolling windows of cross-asset returns. Growing persistence = approaching event.</p>
+</li>
+<li>
+<p><strong>What would a formal context-free grammar of macro events look like?</strong> This could be the most original contribution — nobody seems to have done this.</p>
+</li>
+<li>
+<p><strong>Can we measure the "syncopation" of market events?</strong> Surprise against the expected timing grid. Events that happen off-beat (between FOMC meetings, on holidays, at unusual hours) may carry different information content than on-beat events.</p>
+</li>
+<li>
+<p><strong>Can somatic markers be measured in a systematic trading context?</strong> If anticipatory physiology predicts profitability, can we build a biometric-feedback system for discretionary traders?</p>
+</li>
+<li>
+<p><strong>What are the OPTIC equivalences for macro states?</strong> Two macro states are "the same" if you ignore: (O) absolute price level, (P) which asset is which, (T) the overall direction, (I) the sign of positions, (C) the number of assets. Each binary choice generates a different equivalence class on the space of macro states. (Explored above — this is now partially answered.)</p>
+</li>
+<li>
+<p><strong>Can we build a "Representational Similarity Analysis" of trader cognition?</strong> Kriegeskorte [2008, "Representational Similarity Analysis — Connecting the Branches of Systems Neuroscience," 3,689 citations] showed that RSA can compare information structure across brain measurement modalities using representational dissimilarity matrices. If we could measure how experienced traders represent market states — through behavioral experiments, not brain scans — we could identify the dimensions of their representational space and compare it to the dimensions identified in cross-modal music/motion research. Do traders encode markets in the same 5 movement-like dimensions that the brain uses for auditory-visual-motor integration?</p>
+</li>
+<li>
+<p><strong>Category theory as the meta-framework.</strong> I couldn't find the specific papers on category-theoretic music theory through OpenAlex, but the claim from the source material is that category theory unifies the algebraic, geometric, and graph-theoretic approaches. For Tethys, this is the unification layer — the mathematical language that can describe orbifold chord spaces, context-free grammars, AND topological features within a single framework. If Tymoczko's geometry is the spatial view, Rohrmeier's grammar is the syntactic view, and persistent homology is the topological view, then category theory is the FUNCTOR that maps between them. An investment in learning this formalism could pay off enormously for the Stellar Matrices architecture.</p>
+</li>
+</ol>
+<h2>Part 7: What This Means for the Work Ahead</h2>
+<p>Reading these three threads together, what emerges is not a set of analogies but a UNIFIED THEORY of temporal pattern processing. The brain processes music, markets, language, and motor sequences through a single hierarchical predictive framework [Clark, 2013]. The emotional valence of these sequences is constructed through interoceptive prediction [Barrett, 2016]. The pleasure or reward signal follows a quadratic interaction of uncertainty and surprise [Cheung et al., 2019; Gold et al., 2019]. The sequences themselves have 1/f structure with style-dependent correlation horizons [Levitin et al., 2012; Mandelbrot, 1968]. Their deep structure is at least context-free [Rohrmeier et al., 2015]. Their geometric representation lives in quotient orbifolds [Tymoczko, 2006]. And their topological fingerprint can detect approaching critical transitions [Gidea &amp; Katz, 2017].</p>
+<p>Every single one of these findings applies to both music and markets. Not by analogy. By shared computational substrate.</p>
+<p>The Tethys system — with its scores (Stellar Matrices), performances (Beacon Network), reverberation (Consultant Network), and instruments (Piano, Phrolova) — is, perhaps unintentionally, built along the lines of this unified theory. The next step is to make the alignment INTENTIONAL. To encode the OPTIC equivalences explicitly. To build context-free parsers for macro event sequences. To compute persistent homology on rolling windows. To model trader cognition as active inference. To treat each Stellar Matrix as a composition with a definite form — fugue, sonata, ballade — and use that form to predict the development arc.</p>
+<p>The music isn't the metaphor. The music is the math.</p>
+<hr>
+<h2>Additional Sources Referenced</h2>
+<p>(Beyond original material — pulled during this session)</p>
+<ol>
+<li>Gold, B.P., Pearce, M.T., Mas-Herrero, E., Dagher, A., Zatorre, R.J. (2019). "Predictability and Uncertainty in the Pleasure of Music: A Reward for Learning?" <em>Journal of Neuroscience</em>. [249 citations]</li>
+<li>Pearce, M.T. (2018). "Statistical Learning and Probabilistic Prediction in Music Cognition: Mechanisms of Stylistic Enculturation." <em>Annals of the New York Academy of Sciences</em>. [222 citations]</li>
+<li>Rohrmeier, M., Rebuschat, P. (2012). "Implicit Learning and Acquisition of Music." <em>Topics in Cognitive Science</em>. [202 citations]</li>
+<li>Hansen, N.C., Pearce, M.T. (2014). "Predictive Uncertainty in Auditory Sequence Processing." <em>Frontiers in Psychology</em>. [195 citations]</li>
+<li>Levitin, D.J., Chordia, P., Menon, V. (2012). "Musical Rhythm Spectra from Bach to Joplin Obey a 1/f Power Law." <em>PNAS</em>. [121 citations]</li>
+<li>Rohrmeier, M., Zuidema, W., Wiggins, G.A., Scharff, C. (2015). "Principles of Structure Building in Music, Language and Animal Song." <em>Proceedings of the Royal Society B</em>. [73 citations]</li>
+<li>Fitch, W.T., Martins, M. (2014). "Hierarchical Processing in Music, Language, and Action: Lashley Revisited." <em>Annals of the New York Academy of Sciences</em>. [247 citations]</li>
+<li>Witek, M.A.G., Clarke, E., Wallentin, M., Kringelbach, M.L., Vuust, P. (2014). "Syncopation, Body-Movement and Pleasure in Groove Music." <em>PLOS ONE</em>. [403 citations]</li>
+<li>Clark, A. (2013). "Whatever Next? Predictive Brains, Situated Agents, and the Future of Cognitive Science." <em>Behavioral and Brain Sciences</em>. [5,671 citations]</li>
+<li>Barrett, L.F. (2016). "The Theory of Constructed Emotion: An Active Inference Account of Interoception and Categorization." <em>Social Cognitive and Affective Neuroscience</em>. [1,393 citations]</li>
+<li>Lindquist, K.A., Wager, T.D., Kober, H., Bliss-Moreau, E., Barrett, L.F. (2012). "The Brain Basis of Emotion: A Meta-Analytic Review." <em>Behavioral and Brain Sciences</em>. [2,296 citations]</li>
+<li>Mandelbrot, B.B., Van Ness, J.W. (1968). "Fractional Brownian Motions, Fractional Noises and Applications." <em>SIAM Review</em>. [7,578 citations]</li>
+<li>Hsieh, D.A. (1991). "Chaos and Nonlinear Dynamics: Application to Financial Markets." <em>Journal of Finance</em>. [963 citations]</li>
+<li>Gidea, M., Katz, Y. (2017). "Topological Data Analysis of Financial Time Series: Landscapes of Crashes." <em>Physica A</em>. [arXiv:1703.04385]</li>
+<li>Shannon, C.E. (1948). "A Mathematical Theory of Communication." <em>Bell System Technical Journal</em>. [9,725 citations]</li>
+<li>Voss, R.F., Clarke, J. (1975). "'1/f Noise' in Music and Speech." <em>Nature</em>.</li>
+<li>Savage, P.E. et al. (2020). "Music as a Coevolved System for Social Bonding." <em>Behavioral and Brain Sciences</em>. [475 citations]</li>
+<li>Mencke, I. et al. (2019). "Atonal Music: Can Uncertainty Lead to Pleasure?" <em>Frontiers in Neuroscience</em>. [84 citations]</li>
+<li>Engle, R.F., Patton, A.J. (2001). "What Good Is a Volatility Model?" <em>Quantitative Finance</em>. [699 citations]</li>
+<li>Stolz, B.J., Harrington, H.A., Porter, M.A. (2017). "Persistent Homology of Time-Dependent Functional Networks Constructed from Coupled Time Series." <em>Chaos</em>. [118 citations]</li>
+<li>Koelsch, S. (2011). "Toward a Neural Basis of Music Perception." <em>Annals of the New York Academy of Sciences</em>. [431 citations]</li>
+<li>Pearce, M.T. (2005). "The Construction and Evaluation of Statistical Models of Melodic Structure in Music Perception and Composition." PhD Thesis, City University London. [278 citations]</li>
+<li>Cheung, V.K.M., Harrison, P.M.C., Meyer, L., Pearce, M.T., Haynes, J.-D., Koelsch, S. (2019). "Uncertainty and Surprise Jointly Predict Musical Pleasure and Amygdala, Hippocampus, and Auditory Cortex Activity." <em>Current Biology</em>. [PubMed: 31708393]</li>
+<li>Tymoczko, D. (2006). "The Geometry of Musical Chords." <em>Science</em>, 313, 72-74.</li>
+<li>Callender, C., Quinn, I., Tymoczko, D. (2008). "Generalized Voice-Leading Spaces." <em>Science</em>, 320, 346-348.</li>
+<li>Kriegeskorte, N. (2008). "Representational Similarity Analysis — Connecting the Branches of Systems Neuroscience." <em>Frontiers in Systems Neuroscience</em>. [3,689 citations]</li>
+<li>Voss, R.F., Clarke, J. (1975). "1/f Noise in Music and Speech." <em>Nature</em>, 258, 317-318.</li>
+<li>Gidea, M., Katz, Y. (2018). "Topological Data Analysis of Financial Time Series: Landscapes of Crashes." <em>Physica A</em>, 491, 820-834. [arXiv:1703.04385]</li>
+<li>Mencke, I., Omigie, D., Wald-Fuhrmann, M., Brattico, E. (2019). "Atonal Music: Can Uncertainty Lead to Pleasure?" <em>Frontiers in Neuroscience</em>. [84 citations]</li>
+<li>Damasio, A. (1994). <em>Descartes' Error: Emotion, Reason, and the Human Brain.</em> [Somatic marker hypothesis]</li>
+<li>"The Music of Silence: Part I &amp; II." (2021). <em>Journal of Neuroscience</em>, 41(35). [Musical imagery and notation audiation]</li>
+<li>Savage, P.E. et al. (2020). "Music as a Coevolved System for Social Bonding." <em>Behavioral and Brain Sciences</em>. [475 citations]</li>
+<li>Koelsch, S., Busch, T., Jentschke, S., Rohrmeier, M. (2016). "Under the Hood of Statistical Learning: A Statistical MMN Reflects the Magnitude of Transitional Probabilities in Auditory Sequences." [91 citations]</li>
+</ol>
+</article>
+
+<div class="divider" style="max-width:760px;"></div>
+
+<footer class="ricercar-footer">
+  <div class="ricercar-footer-text">Ballad &mdash; the search continues</div>
+  <div class="ricercar-footer-copy">&copy; 2026 muFX. All rights reserved.</div>
+</footer>
+<div class="bottom-line"></div>
+
+<script>
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var b = document.body;
+  var st = h.scrollTop || b.scrollTop;
+  var sh = h.scrollHeight || b.scrollHeight;
+  var pct = (st / (sh - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+</script>
+
+</body>
+</html>

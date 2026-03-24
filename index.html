@@ -3,180 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>muFX — Independent Quantitative FX Research</title>
-<meta name="description" content="muFX delivers institutional-grade foreign exchange research, macro analysis, and quantitative strategy for the global currency markets.">
-<meta property="og:title" content="muFX — Institutional-Grade FX Research">
-<meta property="og:description" content="Daily signal checks and quarterly macro research on DXY, EUR/USD, gold, and USD/JPY. AI-augmented FX intelligence.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mufx.io">
-<meta property="og:site_name" content="muFX">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="muFX — FX Research">
-<meta name="twitter:description" content="Daily signal checks and quarterly outlook. DXY, EUR/USD, gold, USD/JPY.">
-<link rel="canonical" href="https://mufx.io">
-<meta name="robots" content="index, follow">
-<meta name="keywords" content="forex research, FX analysis, DXY, EUR/USD, gold price, XAU/USD, USD/JPY, macro research, tariffs, SCOTUS, muFX">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "muFX",
-  "url": "https://mufx.io",
-  "description": "Institutional-grade FX research. Daily signal checks and quarterly macro outlooks.",
-  "publisher": {"@type": "Organization", "name": "muFX"}
-}
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,200;9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="mufx.css">
+<title>ballad</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
-<meta name="google-site-verification" content="SSm7YTqRRbTUd8xSXDc10tGaIXCREDpamdQHvLHr6j4" />
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0a0a; color:#888; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:300; line-height:2; padding:80px 24px 60px; max-width:640px; margin:0 auto; }
+::selection { background:rgba(196,149,106,0.25); color:#ccc; }
+a { color:#888; text-decoration:none; transition:color 0.3s; }
+a:hover { color:#c4956a; }
+
+.title { font-size:13px; font-weight:300; color:#888; margin-bottom:48px; letter-spacing:1px; }
+
+.nav { margin-bottom:80px; font-size:11px; color:#555; }
+.nav a { color:#555; margin-right:16px; }
+.nav a:hover { color:#c4956a; }
+.nav a.active { color:#888; }
+
+.section-label { font-size:11px; color:#444; margin-top:48px; margin-bottom:16px; }
+.section-label::before { content:'— '; }
+
+.entry { display:block; padding:6px 0; color:#888; }
+.entry:hover { color:#c4956a; }
+.entry .num { color:#555; margin-right:12px; }
+.entry .desc { display:block; color:#555; font-size:11px; margin-left:0; padding-left:0; }
+
+.spacer { height:32px; }
+
+.footer { margin-top:80px; font-size:11px; color:#333; }
+</style>
 </head>
-<body class="with-grid">
+<body>
 
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Research</a>
-      <a href="signals.html">Signals</a>
-      <a href="about.html">About</a>
-      <a href="mailto:research@mufx.io">Contact</a>
-      <a href="#"><span class="pulse"></span></a>
-    </div>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-wash"></div>
-  <div class="hero-ticker t1">EUR/USD 1.1502 &nbsp;&nbsp;&nbsp; GBP/USD 1.3353 &nbsp;&nbsp;&nbsp; USD/JPY 159.72 &nbsp;&nbsp;&nbsp; AUD/USD 0.6981 &nbsp;&nbsp;&nbsp; DXY 99.07 &nbsp;&nbsp;&nbsp; GOLD 5011 &nbsp;&nbsp;&nbsp; US10Y 4.27 &nbsp;&nbsp;&nbsp; FED 3.50-3.75 &nbsp;&nbsp;&nbsp; ECB 2.00 &nbsp;&nbsp;&nbsp; BOJ 0.75 &nbsp;&nbsp;&nbsp; EUR/USD 1.1502 &nbsp;&nbsp;&nbsp; GBP/USD 1.3353 &nbsp;&nbsp;&nbsp; USD/JPY 159.72 &nbsp;&nbsp;&nbsp; AUD/USD 0.6981 &nbsp;&nbsp;&nbsp; DXY 99.07 &nbsp;&nbsp;&nbsp; GOLD 5011 &nbsp;&nbsp;&nbsp; US10Y 4.27 &nbsp;&nbsp;&nbsp; FED 3.50-3.75 &nbsp;&nbsp;&nbsp; ECB 2.00 &nbsp;&nbsp;&nbsp; BOJ 0.75</div>
-  <div class="hero-ticker t2">CFTC NET EUR +10.0K &nbsp;&nbsp;&nbsp; NET JPY -29.1K &nbsp;&nbsp;&nbsp; NET GBP +44.8K &nbsp;&nbsp;&nbsp; SOFR 3.68 &nbsp;&nbsp;&nbsp; EURIBOR 3.862 &nbsp;&nbsp;&nbsp; JP10Y 2.019 &nbsp;&nbsp;&nbsp; DE10Y 2.807 &nbsp;&nbsp;&nbsp; CFTC NET EUR +10.0K &nbsp;&nbsp;&nbsp; NET JPY -29.1K &nbsp;&nbsp;&nbsp; NET GBP +44.8K &nbsp;&nbsp;&nbsp; SOFR 3.68 &nbsp;&nbsp;&nbsp; EURIBOR 3.862 &nbsp;&nbsp;&nbsp; JP10Y 2.019 &nbsp;&nbsp;&nbsp; DE10Y 2.807</div>
-  <div class="hero-ticker t3">USD/CNH 6.906 &nbsp;&nbsp;&nbsp; USD/KRW 1328 &nbsp;&nbsp;&nbsp; BRENT 101.84 &nbsp;&nbsp;&nbsp; WTI 95.06 &nbsp;&nbsp;&nbsp; SPX 6699 &nbsp;&nbsp;&nbsp; NKY 53820 &nbsp;&nbsp;&nbsp; USD/CNH 6.906 &nbsp;&nbsp;&nbsp; USD/KRW 1328 &nbsp;&nbsp;&nbsp; BRENT 101.84 &nbsp;&nbsp;&nbsp; WTI 95.06 &nbsp;&nbsp;&nbsp; SPX 6699 &nbsp;&nbsp;&nbsp; NKY 53820</div>
-  <div class="hero-ticker t4">US-ISRAEL STRIKE IRAN FEB 28 &nbsp;&nbsp;&nbsp; OPERATION EPIC FURY &nbsp;&nbsp;&nbsp; SECTION 122 15% SURCHARGE &nbsp;&nbsp;&nbsp; WARSH NOMINATION JAN 30 &nbsp;&nbsp;&nbsp; POWELL TERM EXPIRES MAY 15 &nbsp;&nbsp;&nbsp; STRAIT OF HORMUZ CLOSURE REPORTED &nbsp;&nbsp;&nbsp; US-ISRAEL STRIKE IRAN FEB 28 &nbsp;&nbsp;&nbsp; OPERATION EPIC FURY &nbsp;&nbsp;&nbsp; SECTION 122 15% SURCHARGE &nbsp;&nbsp;&nbsp; WARSH NOMINATION JAN 30 &nbsp;&nbsp;&nbsp; POWELL TERM EXPIRES MAY 15 &nbsp;&nbsp;&nbsp; STRAIT OF HORMUZ CLOSURE REPORTED</div>
-  <div class="hero-ticker t5">CORE PCE 2.8% &nbsp;&nbsp;&nbsp; EZ HICP 1.9% &nbsp;&nbsp;&nbsp; UK CPI 3.4% &nbsp;&nbsp;&nbsp; GOLD ATH 5595 JAN 29 &nbsp;&nbsp;&nbsp; CB BUYING 863T &nbsp;&nbsp;&nbsp; VIX 23.51 &nbsp;&nbsp;&nbsp; BTC 74711 &nbsp;&nbsp;&nbsp; CORE PCE 2.8% &nbsp;&nbsp;&nbsp; EZ HICP 1.9% &nbsp;&nbsp;&nbsp; UK CPI 3.4% &nbsp;&nbsp;&nbsp; GOLD ATH 5595 JAN 29 &nbsp;&nbsp;&nbsp; CB BUYING 863T &nbsp;&nbsp;&nbsp; VIX 23.51 &nbsp;&nbsp;&nbsp; BTC 74711</div>
-  <div class="bracket bracket-tl"></div>
-  <div class="bracket bracket-tr"></div>
-  <div class="bracket bracket-bl"></div>
-  <div class="bracket bracket-br"></div>
-  <div class="eye-outer"></div>
-  <div class="eye-inner"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Global FX &amp; Macro Intelligence</div>
-    <h1 class="hero-title"><span class="mu">mu</span>FX</h1>
-    <p class="hero-sub">Independent Quantitative FX Research</p>
-    <a href="q2-2026-outlook.html" class="hero-cta">Read Latest Research <span class="arrow">→</span></a>
-  </div>
-</section>
-
-<div class="divider"></div>
-<div class="status-bar">
-  <div class="status-bar-inner">
-  <div class="status-item">DXY<span class="val">99.07</span></div>
-  <div class="status-item">EUR/USD<span class="val">1.1502</span></div>
-  <div class="status-item">USD/JPY<span class="val">159.72</span></div>
-  <div class="status-item">GOLD<span class="val">5,011</span></div>
-  <div class="status-item">FED<span class="val">3.50-3.75%</span></div>
-  <div class="status-item">AS OF<span class="val">17 MAR 2026</span></div>
-  <div class="status-item">DXY<span class="val">99.07</span></div>
-  <div class="status-item">EUR/USD<span class="val">1.1502</span></div>
-  <div class="status-item">USD/JPY<span class="val">159.72</span></div>
-  <div class="status-item">GOLD<span class="val">5,011</span></div>
-  <div class="status-item">FED<span class="val">3.50-3.75%</span></div>
-  <div class="status-item">AS OF<span class="val">17 MAR 2026</span></div>
-  </div>
+<div class="nav">
+  <a href="index.html" class="active">journal</a>
+  <a href="archive.html">archive</a>
+  <a href="cipher.html">cipher</a>
+  <a href="mailto:research@mufx.io">contact</a>
 </div>
-<div class="divider"></div>
 
-<section class="section">
-  <div class="section-header">
-    <h2 class="section-title">Latest Research</h2>
-  </div>
-  <a href="q2-2026-outlook.html" class="article-card featured">
-    <div class="card-meta">
-      <span class="card-tag tag-quarterly">Quarterly Outlook</span>
-      <span class="card-date">February 2026</span>
-    </div>
-    <h3 class="card-title">Q2 2026: The Post-Tariff Dollar and What Comes Next</h3>
-    <p class="card-excerpt">The dollar enters Q2 2026 structurally weaker than at any point since 2021, but not broken. DXY has traded a 96–100 range for eight months, and positioning against the greenback is the most extreme in fourteen years. The Supreme Court's ruling striking down IEEPA tariffs removes a key source of trade policy uncertainty but introduces fiscal ambiguity.</p>
-    <div class="card-read">Read Full Report <span>→</span></div>
-  </a>
+<div class="title">ballad</div>
 
-  <a href="weekly-20260314.html" class="article-card">
-    <div class="card-meta">
-      <span class="card-tag tag-weekly">Weekly Review</span>
-      <span class="card-date">Week of 9–14 Mar 2026</span>
-    </div>
-    <h3 class="card-title">Crude Awakening</h3>
-    <p class="card-excerpt">WTI traces a $43 intraweek range — $119 to $77 and back to $99. DXY breaks 100. VIX collapses from 35 to 27. Silver −6.6%, BTC +7.6%. The largest oil shock in history, absorbed in five sessions.</p>
-    <div class="card-read">Read Weekly Review <span>→</span></div>
-  </a>
-</section>
+<div class="section-label">research notes</div>
 
-<div class="divider"></div>
+<a href="p1.html" class="entry">
+  <span class="num">i.</span> geometric & computational music theory
+  <span class="desc">orbifold chord spaces, idyom, 1/f noise, context-free grammars, predictive processing.</span>
+</a>
 
-<section class="section">
-  <div class="section-header">
-    <h2 class="section-title">Daily Signal</h2>
-  </div>
-  <a href="kayle-20260317.html" class="article-card">
-    <div class="card-meta">
-      <span class="card-tag" style="background:rgba(240,144,48,0.15);color:#f09030;border:1px solid rgba(240,144,48,0.3);">Kayle · EUR/USD</span>
-      <span class="card-date">17 March 2026</span>
-    </div>
-    <h3 class="card-title">Cheap — But For a Reason?</h3>
-    <p class="card-excerpt">FV model −2.16σ. Specs net short 105K. Six signals say buy EUR. Two say wait for the catalyst. ECB Thursday.</p>
-    <div class="card-read">Read EUR/USD Signal <span>→</span></div>
-  </a>
-  <a href="signal-20260316.html" class="article-card" style="opacity:0.6;">
-    <div class="card-meta">
-      <span class="card-tag tag-signal">Signal Check</span>
-      <span class="card-date">16 March 2026</span>
-    </div>
-    <h3 class="card-title">Three Flips and a Flatline</h3>
-    <p class="card-excerpt">Three correlations inverted. DXY at 0.02σ despite a war. Oil 5.37σ but VIX fell 13.5%. Grains falling.</p>
-    <div class="card-read">Read Signal Check <span>→</span></div>
-  </a>
-  <a href="signal-20260302.html" class="article-card" style="opacity:0.4;">
-    <div class="card-meta">
-      <span class="card-tag tag-signal">Signal Check</span>
-      <span class="card-date">2 March 2026</span>
-    </div>
-    <h3 class="card-title">Epic Fury Spike — DXY Fails at SMA200, Gold 5,336</h3>
-    <p class="card-excerpt">DXY +0.98% to 98.57 on war bid — rejected at 200-day SMA. Gold +2.0% to 5,336. Brent +7.1% on Hormuz closure.</p>
-    <div class="card-read">Read Signal Check <span>→</span></div>
-  </a>
-</section>
+<a href="p2.html" class="entry">
+  <span class="num">ii.</span> music in nature, music in society
+  <span class="desc">whale song revolutions, acoustic niche hypothesis, kuramoto phase transitions, stigmergy.</span>
+</a>
 
-<div class="divider"></div>
-<section class="about-strip">
-  <div class="about-block">
-    <div class="about-label">Mission</div>
-    <p class="about-text">Institutional-grade FX research, built from zero with AI-augmented intelligence systems.</p>
-  </div>
-  <div class="about-block">
-    <div class="about-label">Coverage</div>
-    <p class="about-text">G10 &amp; EM currencies, central bank policy, gold, positioning data, and the macro-structural forces driving FX markets.</p>
-  </div>
-  <div class="about-block">
-    <div class="about-label">Contact</div>
-    <p class="about-text"><a href="mailto:research@mufx.io">research@mufx.io</a><br>mufx.io</p>
-  </div>
-</section>
+<a href="p3.html" class="entry">
+  <span class="num">iii.</span> the brain's pattern machinery
+  <span class="desc">motor cortex as temporal prediction engine, cerebellum timing, basal ganglia chunking, embodied cognition.</span>
+</a>
 
-<div class="divider"></div>
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo"><span class="mu">mu</span><span class="fx">FX</span></div>
-    <span class="footer-text">© 2026 muFX. All rights reserved.</span>
-    <div class="footer-links">
-      <a href="research.html">Research</a>
-      <a href="about.html">About</a>
-      <a href="mailto:research@mufx.io">Contact</a>
-    </div>
-  </div>
-</footer>
-<div class="bottom-line"></div>
+<a href="p4.html" class="entry">
+  <span class="num">iv.</span> markov vs trees
+  <span class="desc">schenker, chomsky, transformers, rough volatility, and why the tree is how any autonomous entity should work.</span>
+</a>
+
+<div class="section-label">architecture drafts</div>
+
+<a href="draft1.html" class="entry">
+  <span class="num">i.</span> the organism
+  <span class="desc">the system as a living thing that breathes price and metabolizes uncertainty.</span>
+</a>
+
+<a href="draft2.html" class="entry">
+  <span class="num">ii.</span> the composition
+  <span class="desc">the market is already playing. this system learns to hear the piece and perform alongside it.</span>
+</a>
+
+<a href="draft3.html" class="entry">
+  <span class="num">iii.</span> the growing tree
+  <span class="desc">a literal tree data structure that starts empty. what it becomes after 20 years reveals what the euro is.</span>
+</a>
+
+<div class="section-label">archive</div>
+
+<a href="archive.html" class="entry">previous mufx research and signals</a>
+
+<div class="footer">ballad — the search continues</div>
 
 </body>
 </html>

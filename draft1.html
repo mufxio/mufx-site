@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft I — The Organism — muFX</title>
+<meta name="description" content="Draft I — The Organism — Ballad research journal, muFX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mufx.css">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">mu</span><span class="fx">FX</span> <span style="font-weight:300;font-size:12px;color:var(--text-ghost);margin-left:8px;letter-spacing:2px;font-style:italic;">ballad</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Journal</a>
+      <a href="archive.html">Archive</a>
+      <a href="cipher.html">Cipher</a>
+      <a href="mailto:research@mufx.io">Contact</a>
+      <a href="#"><span class="pulse"></span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header class="article-header">
+  <a href="index.html" class="article-back">&larr; Back to Journal</a>
+  <div class="article-tag tag-signal">Architecture Draft</div>
+  <h1>Draft I — The Organism</h1>
+  <div class="article-meta">
+    <span>muFX Research</span>
+    <span class="sep">|</span>
+    <span>March 2026</span>
+    <span class="sep">|</span>
+    <span>22 min read</span>
+  </div>
+</header>
+
+<article class="article-body">
+<h1>Draft 1: The Organism</h1>
+<h2>Premise</h2>
+<p>The system is not a tool that analyzes the market. The system IS an organism<br>
+that lives inside the market's ecology. It breathes price, metabolizes<br>
+uncertainty, and excretes predictions. The trader's 93% sight-reading edge<br>
+is the organism's consciousness — this architecture builds the autonomic<br>
+nervous system underneath it.</p>
+<p>Everything runs on a single Mac Mini. No cloud. No budget. The constraint<br>
+is the feature: a lean organism survives where bloated ones starve.</p>
+<hr>
+<h2>Top-Level Anatomy</h2>
+<pre><code>                        +-----------------------+
+                        |                       |
+                        |   C O N S C I O U S   |
+                        |      (the trader)     |
+                        |   sight-reads M1-M30  |
+                        |                       |
+                        +----------+------------+
+                                   |
+                          somatic signals [24]
+                          boundary alerts [23]
+                          pleasure pulses [1]
+                                   |
+                                   v
++--------------------------------------------------------------------------+
+|                                                                          |
+|                    T H E   O R G A N I S M                               |
+|                                                                          |
+|  +------------------+    +------------------+    +------------------+    |
+|  |                  |    |                  |    |                  |    |
+|  |    SENSORY       |---&gt;|    VISCERAL      |---&gt;|    MOTOR         |    |
+|  |    CORTEX        |    |    CORE          |    |    CORTEX        |    |
+|  |                  |    |                  |    |                  |    |
+|  | (perceive)       |    | (evaluate)       |    | (prepare)        |    |
+|  +------------------+    +------------------+    +------------------+    |
+|         ^                       ^                       |               |
+|         |                       |                       |               |
+|         +------------- feedback loop -------------------+               |
+|                                                                          |
+|  +------------------+    +------------------+    +------------------+    |
+|  |                  |    |                  |    |                  |    |
+|  |    IMMUNE        |    |    ENDOCRINE     |    |    SKELETAL      |    |
+|  |    SYSTEM        |    |    SYSTEM        |    |    STRUCTURE     |    |
+|  |                  |    |                  |    |                  |    |
+|  | (protect)        |    | (regulate)       |    | (support)        |    |
+|  +------------------+    +------------------+    +------------------+    |
+|                                                                          |
++--------------------------------------------------------------------------+
+                                   |
+                          stigmergic trace [7]
+                                   |
+                                   v
+                        +-----------------------+
+                        |                       |
+                        |   E N V I R O N M E N T  |
+                        |   (the EUR/USD market)|
+                        |   price = pheromone   |
+                        |                       |
+                        +-----------------------+
+</code></pre>
+<hr>
+<h2>Organ Systems</h2>
+<h3>I. SENSORY CORTEX — Perceive</h3>
+<p>The organism's interface with raw market data. It never passes raw data<br>
+upward. Each layer processes a different timescale and passes only<br>
+summaries and errors.</p>
+<pre><code>RAW TICK DATA (EUR/USD)
+    |
+    v
++---------------------------------------------------------------+
+|  TEMPORAL HIERARCHY [13]                                      |
+|                                                               |
+|  Layer 0: tick-level     (&lt; 1 min)   ----+                   |
+|  Layer 1: M1 structure   (1-5 min)   ----|--- summaries up   |
+|  Layer 2: M5 structure   (5-15 min)  ----|--- errors up      |
+|  Layer 3: M15 structure  (15-60 min) ----|                   |
+|  Layer 4: M30 structure  (30 min-4h) ----+                   |
+|  Layer 5: H4/D1 context  (4h-1 day)                          |
+|  Layer 6: Weekly/Monthly (macro)                              |
+|                                                               |
+|  Each layer ONLY receives summaries from below [13]           |
+|  Each layer generates PREDICTIONS of the layer below [11]     |
+|  Only PREDICTION ERRORS propagate upward [11]                 |
+|                                                               |
+|  First-order error: &quot;what happened that I didn't expect?&quot;     |
+|  Second-order error: &quot;how wrong was my confidence?&quot; [11]      |
++---------------------------------------------------------------+
+    |                        |
+    |  prediction errors     |  confidence errors
+    v                        v
++---------------------------------------------------------------+
+|  ACOUSTIC NICHE MONITOR [8]                                   |
+|                                                               |
+|  Each timescale layer = one frequency band in the ecosystem   |
+|                                                               |
+|  Band     | Occupant         | Healthy signature              |
+|  ---------|------------------|-------------------------------  |
+|  &lt; 1s     | HFT              | dense, noisy, high entropy     |
+|  1s-1m    | scalpers         | rhythmic bursts                |
+|  1m-15m   | day traders (you)| structured, parseable          |
+|  15m-4h   | swing traders    | trend-following patterns       |
+|  4h-1w    | position traders | momentum signatures            |
+|  1w-1m    | macro/CB         | regime-level shifts            |
+|                                                               |
+|  GAP DETECTION: empty band = degraded ecosystem [8]           |
+|  Gap in YOUR band = opportunity or danger                     |
+|  Gap in adjacent band = regime change brewing                 |
++---------------------------------------------------------------+
+    |
+    v
++---------------------------------------------------------------+
+|  1/f SPECTRAL ANALYZER [2]                                    |
+|                                                               |
+|  Power spectrum of price returns:                             |
+|                                                               |
+|  log(P) |\.                                                   |
+|         | \.        1/f regime                                |
+|         |  \.       (predictable structure)                   |
+|         |   \.                                                |
+|         |    \______ &lt;-- CUTOFF FREQUENCY                     |
+|         |           \_______  white noise                     |
+|         |                    (unpredictable)                  |
+|         +----------------------------&gt; log(f)                 |
+|                                                               |
+|  cutoff_freq --&gt; max_prediction_horizon                       |
+|  cutoff SHIFTS with regime [2]                                |
+|  trending regime: cutoff moves left (longer horizon)          |
+|  choppy regime: cutoff moves right (shorter horizon)          |
+|                                                               |
+|  COMPOUND [2 x 8]: niche gaps correlate with cutoff shifts.   |
+|  When a timescale band empties, the 1/f slope breaks at       |
+|  that frequency. The organism detects regime change by         |
+|  seeing BOTH the niche gap AND the spectral break.            |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [13] Temporal hierarchy: layers 0-6<br>
+- [11] Hierarchical prediction error: inter-layer error signals<br>
+- [8] Acoustic niche partitioning: band occupancy monitor<br>
+- [2] 1/f cutoff: spectral analyzer, prediction horizon</p>
+<hr>
+<h3>II. VISCERAL CORE — Evaluate</h3>
+<p>The organism's gut. Produces feelings, not thoughts. Fast, cheap,<br>
+low-dimensional signals that reach the trader before analysis can explain<br>
+why.</p>
+<pre><code>               prediction errors from Sensory Cortex
+                              |
+                              v
++---------------------------------------------------------------+
+|  DOPAMINE ENGINE [22]                                         |
+|                                                               |
+|  PHASE 1 (fast, ~50ms equivalent):                           |
+|    Any salient stimulus triggers detection burst              |
+|    &quot;Something happened&quot; — no valence yet                      |
+|    Feeds BODY-PARSER for immediate motor prep [4]             |
+|                                                               |
+|  PHASE 2 (slow, ~200ms equivalent):                           |
+|    Evaluate actual value against prediction                   |
+|    Compute reward prediction error                            |
+|    Feed into QUADRATIC REWARD [1]                             |
+|                                                               |
+|  COMPOUND [22 x 4]: fast phase triggers motor preparation     |
+|  BEFORE slow phase finishes evaluation. The organism's body   |
+|  begins to act before its mind finishes thinking.             |
++---------------------------------------------------------------+
+    |                        |
+    v                        v
++---------------------------+-------------------------------+
+|  QUADRATIC REWARD [1]     |  IOWA GAMBLING BODY [24]      |
+|                           |                               |
+|  pleasure = f(U x S)     |  Somatic marker accumulator   |
+|                           |                               |
+|  where U = uncertainty    |  Cheap low-dimensional        |
+|        S = surprise       |  signals from:                |
+|                           |  - reward history             |
+|  Peak A: low U, high S   |  - prediction error variance  |
+|  &quot;found gold in calm&quot;    |  - niche health [8]           |
+|                           |  - spectral stability [2]     |
+|  Peak B: high U, low S   |                               |
+|  &quot;calm in the storm&quot;     |  Body &quot;knows&quot; before mind:    |
+|                           |  elevated marker = DANGER     |
+|  Valley: high U, high S  |  even when no conscious       |
+|  &quot;chaos&quot; --&gt; STOP         |  reason is available          |
+|                           |                               |
+|  Valley: low U, low S    |  COMPOUND [24 x 1]: somatic   |
+|  &quot;boredom&quot; --&gt; WAIT       |  markers weight the reward    |
+|                           |  function. A &quot;bad feeling&quot;    |
+|  COMPOUND [1 x 11]:      |  flattens the reward peaks,   |
+|  Second-order prediction  |  making the organism less     |
+|  error IS the uncertainty |  eager to act even when       |
+|  term. First-order error  |  surprise is high.            |
+|  IS surprise. The reward  |                               |
+|  function computes itself |                               |
+|  from the error signal.   |                               |
++---------------------------+-------------------------------+
+    |                        |
+    v                        v
++---------------------------------------------------------------+
+|  BASAL GANGLIA BOUNDARY DETECTOR [23]                         |
+|                                                               |
+|  Does NOT track content of price movement.                    |
+|  Fires ONLY at boundaries:                                    |
+|                                                               |
+|    - start of a new chunk (consolidation begins)              |
+|    - end of a chunk (breakout)                                |
+|    - transition between regimes                               |
+|    - shift in volatility level                                |
+|                                                               |
+|  The transition IS the signal. [23]                           |
+|                                                               |
+|  Output: boundary markers with timestamps                     |
+|  These become the PUNCTUATION of the organism's experience    |
+|                                                               |
+|  COMPOUND [23 x 13]: boundaries at different timescale layers |
+|  create a HIERARCHY of boundaries. A tick-level boundary      |
+|  inside an M5-level boundary inside an M30-level boundary     |
+|  = triple-nested transition = high structural significance.   |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [22] Dopamine two-phase: fast detect, slow evaluate<br>
+- [1] Quadratic reward: pleasure from uncertainty x surprise<br>
+- [24] Iowa Gambling Task: body knows before mind<br>
+- [23] Basal ganglia: boundary detection, not content<br>
+- [4] Body-parser: motor preparation before awareness</p>
+<hr>
+<h3>III. MOTOR CORTEX — Prepare</h3>
+<p>The organism does not trade. The TRADER trades. The organism prepares<br>
+the trader's body for action. It outputs signals that enhance the<br>
+trader's sight-reading, not replace it.</p>
+<pre><code>+---------------------------------------------------------------+
+|  BODY-PARSER [4]                                              |
+|                                                               |
+|  Parses hierarchical sequences regardless of domain [4]       |
+|  Input: boundary stream [23] + prediction errors [11]         |
+|  Output: CHUNKED STRUCTURE ready for the trader               |
+|                                                               |
+|  chunk_size = f(expertise) [4]                                |
+|  Novice sees individual candles                               |
+|  Expert sees entire consolidation-breakout patterns as        |
+|  single perceptual units                                      |
+|                                                               |
+|  MOTOR PREPARATION fires BEFORE conscious awareness [4]       |
+|  The trader's hands begin to move toward the keyboard         |
+|  before they can explain why                                  |
+|                                                               |
+|  Output signals to trader:                                    |
+|  - haptic pulse: &quot;attend now&quot; (boundary detected)             |
+|  - color shift: regime context                                |
+|  - rhythm: entrainment pulse (see below)                      |
++---------------------------------------------------------------+
+    |
+    v
++---------------------------------------------------------------+
+|  ENTRAINMENT ENGINE [20]                                      |
+|                                                               |
+|  Motor system LEADS stimulus by milliseconds [20]             |
+|  The organism does not REACT to the market.                   |
+|  It ANTICIPATES the market's next beat.                       |
+|                                                               |
+|  Implementation:                                              |
+|  - Track dominant periodicity at trader's timescale           |
+|  - Generate anticipatory pulse slightly AHEAD of expected     |
+|    structural event                                           |
+|  - Trader's attention entrains to the organism's rhythm       |
+|  - Rhythm = forward-looking, not reactive [20]                |
+|                                                               |
+|  COMPOUND [20 x 5]: the entrainment pulse follows the         |
+|  EXPECTED grid. When the market VIOLATES the grid but         |
+|  remains parseable (syncopation [5]), the organism signals    |
+|  &quot;structured violation&quot; — this is where the trader's 93%     |
+|  edge lives. Syncopation = the boundary between alpha         |
+|  and randomness. [5]                                          |
+|                                                               |
+|  COMPOUND [20 x 14 x 15]: the entrainment engine tracks      |
+|  MULTIPLE periodicities at once (polyrhythm [14]).            |
+|  Gamelan stratification [15]: same structure at 1x, 2x,      |
+|  4x, 8x. The trader perceives the composite rhythm that      |
+|  no single timescale produces alone [14].                     |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [4] Body-parser: hierarchical sequence parsing, motor prep<br>
+- [20] Entrainment: predictive, forward-looking motor anticipation<br>
+- [5] Syncopation: structured violation of expected grid<br>
+- [14] Interlocking polyrhythm: composite multi-timescale rhythm<br>
+- [15] Gamelan stratified polyphony: fractal texture at all timescales</p>
+<hr>
+<h3>IV. IMMUNE SYSTEM — Protect</h3>
+<p>The organism must defend itself against two threats: regime change it<br>
+hasn't detected, and its own overfitting.</p>
+<pre><code>+---------------------------------------------------------------+
+|  FREE ENERGY MINIMIZER [18]                                   |
+|                                                               |
+|  free_energy = complexity - accuracy [18]                     |
+|                                                               |
+|  The organism constantly asks: &quot;Am I too complex for the      |
+|  accuracy I'm getting?&quot;                                       |
+|                                                               |
+|  If complexity rises without accuracy gain --&gt; PRUNE          |
+|  If accuracy drops without complexity change --&gt; REGIME SHIFT |
+|                                                               |
+|  This IS Occam's razor from physics. The simplest model       |
+|  that still works wins. [18]                                  |
+|                                                               |
+|  COMPOUND [18 x 11]: free energy computed FROM prediction     |
+|  error. Rising free energy = the organism's model is          |
+|  drifting from reality. This triggers the immune response.    |
++---------------------------------------------------------------+
+    |
+    v
++---------------------------------------------------------------+
+|  PERSISTENT HOMOLOGY SCANNER [17]                             |
+|                                                               |
+|  Compute Betti numbers on rolling windows of return space     |
+|                                                               |
+|  Betti_0: connected components (fragmentation)               |
+|  Betti_1: loops (self-referentiality)                         |
+|  Betti_2: voids (structural hollowing)                        |
+|                                                               |
+|  RISING Betti numbers = growing topological complexity        |
+|  This precedes crashes by up to 250 days [17]                 |
+|                                                               |
+|  The immune system interprets rising Betti as:                |
+|  &quot;The market is becoming self-referential&quot;                    |
+|  &quot;Participants are trading each other, not fundamentals&quot;      |
+|  &quot;The structure is hollow&quot; --&gt; raise defensive posture        |
+|                                                               |
+|  COMPOUND [17 x 28]: rough volatility (H ~ 0.1) means the   |
+|  entire vol history influences current vol [28]. Persistent   |
+|  homology captures the TOPOLOGICAL shape of that long-memory  |
+|  structure. Rising loops in Betti_1 + declining Hurst =       |
+|  structural instability. Both see the past; together they     |
+|  triangulate the future.                                      |
++---------------------------------------------------------------+
+    |
+    v
++---------------------------------------------------------------+
+|  WHALE SONG REVOLUTION DETECTOR [9]                           |
+|                                                               |
+|  Monitor for wholesale replacement of market narrative [9]    |
+|  Not drift. REVOLUTION. Stable equilibrium replaced           |
+|  within 2-3 months. [9]                                       |
+|                                                               |
+|  Detection method:                                            |
+|  - Track &quot;narrative fingerprint&quot; (correlation structure       |
+|    across timescales)                                          |
+|  - When fingerprint changes &gt; threshold in &lt; 3 months:       |
+|    REVOLUTION detected                                        |
+|  - Organism enters CRITICAL PERIOD [30]: old model is         |
+|    discarded, new model must be learned from scratch           |
+|                                                               |
+|  COMPOUND [9 x 30 x 10]: revolution [9] triggers a critical  |
+|  period [30] where the organism temporarily reopens           |
+|  plasticity. But convergence-divergence [10] ensures this     |
+|  can't last forever: too much divergence (open plasticity)    |
+|  breeds convergence (new commitments). The organism must      |
+|  COMMIT to new branches to build higher levels. [30]          |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [18] Free energy: complexity vs accuracy, Occam's razor<br>
+- [17] Persistent homology: Betti numbers, crash early warning<br>
+- [28] Rough volatility: H~0.1, long memory in vol<br>
+- [9] Whale song revolution: narrative phase transitions<br>
+- [30] Critical periods: plasticity windows, epigenetic commitment<br>
+- [10] Convergence-divergence: self-correcting vol cycle</p>
+<hr>
+<h3>V. ENDOCRINE SYSTEM — Regulate</h3>
+<p>Slow, global signals that modulate every other system. The organism's<br>
+mood.</p>
+<pre><code>+---------------------------------------------------------------+
+|  KURAMOTO SYNCHRONIZATION MONITOR [6]                         |
+|                                                               |
+|  Model market participants as N coupled oscillators [6]       |
+|  Each has natural frequency (their timescale)                 |
+|  Coupling strength K = current herding/correlation            |
+|                                                               |
+|  K &lt; Kc: incoherent (choppy, range-bound)                    |
+|  K &gt; Kc: synchronized (trending, directional)                |
+|  Kc depends on frequency DIVERSITY [6]                        |
+|                                                               |
+|  Measure: order parameter r(t) from price return              |
+|  cross-correlations across timescales                         |
+|                                                               |
+|        r(t)                                                   |
+|     1 |          ____                                         |
+|       |         /    \         synchronized                   |
+|       |        /      \        (trending)                     |
+|   Kc -|-------/--------\----- phase transition                |
+|       |      /          \      (breakout zone)                |
+|       |     /            \                                    |
+|     0 |____/              \___ incoherent                     |
+|       +------------------------&gt; time                         |
+|                                                               |
+|  COMPOUND [6 x 8 x 10]: synchronization [6] is MEASURED      |
+|  through niche occupancy [8]. When all niches pulse           |
+|  together = high K = trend. When niches diverge = low K =    |
+|  range. Convergence-divergence [10] is the endogenous         |
+|  mechanism: synchronized markets breed contrarians,           |
+|  contrarians breed new trends. The vol cycle is               |
+|  self-correcting at BOTH extremes. [10, 21]                  |
++---------------------------------------------------------------+
+    |
+    | global coupling signal modulates:
+    |   - reward sensitivity [1]
+    |   - prediction horizon [2]
+    |   - chunk size [4]
+    |   - entrainment strength [20]
+    |
+    v
++---------------------------------------------------------------+
+|  XENAKIS GAME ENGINE [19]                                     |
+|                                                               |
+|  Two players: TREND and MEAN-REVERSION [19]                   |
+|  Payoff matrix shifts with Kuramoto order parameter            |
+|                                                               |
+|                    Mean-Reversion                              |
+|                   strong    weak                               |
+|  Trend  strong | (-1,-1) | (3,-1) |                           |
+|         weak   | (-1, 3) | (1, 1) |                           |
+|                                                               |
+|  Nash equilibrium = &quot;tonal center&quot; of current regime [19]     |
+|  Deviation from Nash = tension = opportunity                  |
+|                                                               |
+|  COMPOUND [19 x 6]: Nash equilibrium shifts as Kuramoto       |
+|  order parameter changes. High synchronization rewards        |
+|  trend-following. Low synchronization rewards                  |
+|  mean-reversion. The game's CENTER moves.                     |
+|                                                               |
+|  COMPOUND [19 x 5]: syncopation [5] = deviation from Nash    |
+|  that remains within the grammar. The &quot;structured violation&quot;  |
+|  is a player choosing off-equilibrium but within the          |
+|  game-theoretic boundary. This is where alpha lives.          |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [6] Kuramoto phase transition: synchronization monitor<br>
+- [10, 21] Convergence-divergence: self-correcting feedback<br>
+- [19] Xenakis game theory: Nash equilibrium as regime center</p>
+<hr>
+<h3>VI. SKELETAL STRUCTURE — Support</h3>
+<p>The deep grammar that everything else hangs on. This is not a subsystem<br>
+— it is the architecture's spine.</p>
+<pre><code>+---------------------------------------------------------------+
+|  THE TREE [25, 26, 29, 31, 32]                                |
+|                                                               |
+|  The market looks like a chain (tick, tick, tick).             |
+|  But underneath the chain is a TREE. [25]                     |
+|  Seeing the tree behind the chain IS expertise. [25]          |
+|                                                               |
+|  Markov = degenerate tree with branching factor 1. [25]       |
+|  The tree is richer. Same surface event, different             |
+|  structural meaning depending on tree position. [26, 31]      |
+|                                                               |
+|              [ROOT: current regime]                            |
+|              /         |          \                            |
+|         [trending]  [ranging]  [transitioning]                |
+|          /    \       / \          |                           |
+|     [impulse] [     [   ]    [breakout]                       |
+|      /    \   correct]                / \                      |
+|  [strong][weak]               [real]  [false]                 |
+|     |      |                    |        |                    |
+|   candle  candle             candle   candle                  |
+|                                                               |
+|  Same candle. Different tree position.                        |
+|  Different meaning. [26, 31]                                  |
+|                                                               |
+|  PROLONGATION [26]: one structural node (e.g., &quot;trending&quot;)    |
+|  governs many surface events. You don't trade candles.        |
+|  You trade the structural node that GOVERNS the candles.      |
+|                                                               |
+|  CONTEXT-FREE RECURSION [3]: the production rules call        |
+|  themselves. A consolidation inside a consolidation inside    |
+|  a trend uses the SAME rule at different parse depths.        |
+|  Same terminal symbol, different parse tree position,          |
+|  different meaning. [3]                                       |
+|                                                               |
+|  Production rules:                                             |
+|    Regime  --&gt; Trend | Range | Transition                     |
+|    Trend   --&gt; Impulse Correction Trend | Impulse             |
+|    Range   --&gt; Test_High Test_Low Range | Breakout            |
+|    Impulse --&gt; Strong | Weak                                  |
+|    (these rules call themselves = recursion) [3]              |
+|                                                               |
+|  BEHAVIOR TREE [31]: position in tree determines meaning.     |
+|  A &quot;strong impulse&quot; under &quot;Trend &gt; Impulse&quot; = continuation.  |
+|  A &quot;strong impulse&quot; under &quot;Range &gt; Breakout&quot; = initiation.   |
+|  Same action, different parent, different meaning. [31]       |
+|                                                               |
+|  MARKOV BLANKET [29]: the tree grows INSIDE a Markov          |
+|  blanket. The boundary (what the organism exchanges with      |
+|  the environment) is Markov. The interior is non-Markov.      |
+|  The organism is an autonomous entity: tree-structured        |
+|  processing wrapped in a Markov-membraned skin. [29]          |
+|                                                               |
+|  NEXT-TOKEN PREDICTION [32]: if the data is tree-structured   |
+|  (and it is), a powerful enough learner discovers the tree    |
+|  from sequential exposure alone. [32] The organism learns     |
+|  the tree not by being told the grammar, but by predicting    |
+|  the next tick, over and over, until the tree emerges.        |
+|                                                               |
+|  COMPOUND [32 x 3 x 25]: next-token prediction [32]          |
+|  discovers context-free recursive structure [3] that          |
+|  reveals the tree behind the chain [25]. This is the          |
+|  organism's fundamental learning mechanism. It stares at      |
+|  a stream of ticks and grows a tree.                          |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [25] Tree contains chain: Markov is degenerate tree<br>
+- [26] Prolongation: structural nodes govern surface events<br>
+- [3] Context-free recursion: self-calling production rules<br>
+- [31] Behavior trees: position determines meaning<br>
+- [29] Markov blanket: tree inside Markov boundary<br>
+- [32] Next-token prediction: discovers tree from sequence</p>
+<hr>
+<h3>VII. STIGMERGIC MEMBRANE — The Boundary</h3>
+<p>The organism does not observe the market from outside. It lives IN the<br>
+market. Its observations modify the environment, and the modified<br>
+environment feeds back.</p>
+<pre><code>+---------------------------------------------------------------+
+|  STIGMERGIC INTERFACE [7]                                     |
+|                                                               |
+|  Price IS the pheromone trail. [7]                             |
+|                                                               |
+|  Every market participant modifies the price.                  |
+|  Every other participant reads the modified price.             |
+|  No direct communication. Only indirect, through the           |
+|  environment. [7]                                              |
+|                                                               |
+|  The organism's trades (when the trader acts) are              |
+|  themselves pheromone deposits. The market reads them.         |
+|  This creates a feedback loop:                                 |
+|                                                               |
+|  organism --&gt; trade --&gt; price change --&gt; organism reads        |
+|       ^                                        |              |
+|       +----------------------------------------+              |
+|                                                               |
+|  PATH DEPENDENCE [27]: the pheromone trail has memory.         |
+|  Four lock-in mechanisms:                                      |
+|    1. Increasing returns: support/resistance levels            |
+|       strengthen with each test                                |
+|    2. Learning effects: participants learn the level,          |
+|       making it more real                                      |
+|    3. Coordination effects: everyone watches the same          |
+|       levels, creating self-fulfilling prophecy                |
+|    4. Adaptive expectations: expectations adapt to past        |
+|       behavior, reinforcing it                                 |
+|  The transition matrix DEPENDS ON THE PATH. [27]              |
+|                                                               |
+|  COMPOUND [7 x 27 x 12]: stigmergic traces [7] create        |
+|  path-dependent [27] pattern completion [12]. The organism    |
+|  encounters a partial price pattern and the hippocampus       |
+|  completes it to the NEAREST STORED PATTERN [12]. But         |
+|  which pattern is &quot;nearest&quot; depends on the path taken to      |
+|  get here [27]. Pattern completion is biased toward            |
+|  familiar patterns (inertia [12]). Error accumulates           |
+|  until SNAP to new pattern. [12] This snap IS the             |
+|  boundary event detected by the basal ganglia. [23]           |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [7] Stigmergy: price as pheromone, indirect communication<br>
+- [27] Path dependence: four lock-in mechanisms<br>
+- [12] Pattern completion with inertia: hippocampal snap</p>
+<hr>
+<h2>OPTIC Equivalences — The Organism's Algebra [16]</h2>
+<p>Before any processing, raw market signals pass through five binary<br>
+transformations that strip away surface differences and expose pure<br>
+structural dynamics.</p>
+<pre><code>+---------------------------------------------------------------+
+|  OPTIC TRANSFORMS [16]                                        |
+|                                                               |
+|  5 binary choices, each strips one dimension of difference:   |
+|                                                               |
+|  O: Original / Retrograde (forward / time-reversed)           |
+|  P: Prime / Inverted (as-is / price-inverted)                 |
+|  T: Transposed / Original (shifted in price level)            |
+|  I: Inverted / Original (flipped about axis)                  |
+|  C: Compressed / Expanded (time-scaled)                       |
+|                                                               |
+|  Apply all 5 = 2^5 = 32 equivalent views of the same         |
+|  structural event. [16]                                        |
+|                                                               |
+|  A rising wedge and a falling wedge are OPTIC-equivalent.     |
+|  A breakout at 1.0850 and a breakout at 1.1200 are            |
+|  OPTIC-equivalent. Same structure, different surface. [16]    |
+|                                                               |
+|  COMPOUND [16 x 3 x 26]: OPTIC equivalences [16] reveal      |
+|  that context-free recursion [3] produces the SAME terminal   |
+|  symbol in OPTIC-equivalent positions. Prolongation [26]      |
+|  becomes visible: one structural node governs many surface    |
+|  events that LOOK different but are OPTIC-equivalent.         |
+|  The tree's branching structure is invariant under OPTIC.     |
++---------------------------------------------------------------+
+</code></pre>
+<p><strong>Mechanic map:</strong><br>
+- [16] OPTIC equivalences: 5 binary transforms to pure structure</p>
+<hr>
+<h2>Compound Interactions: Full Wiring Diagram</h2>
+<pre><code>+-------+     +-------+     +-------+
+|  [2]  |----&gt;|  [8]  |----&gt;|  [6]  |
+| 1/f   |     | niche |     |Kuramot|
+|cutoff |     | gaps  |     | sync  |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [13]  |----&gt;| [11]  |----&gt;| [18]  |
+|tempor |     | pred  |     | free  |
+|hierarc|     | error |     |energy |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [15]  |----&gt;| [14]  |----&gt;| [10]  |
+|gamelan|     | poly  |     |conv-  |
+|strat  |     |rhythm |     |diverg |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [16]  |----&gt;|  [3]  |----&gt;| [25]  |
+| OPTIC |     |contxt |     | tree  |
+|equiv  |     |free   |     |&gt;chain |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [26]  |----&gt;| [31]  |----&gt;| [32]  |
+|prolon |     |behav  |     | next  |
+|gation |     |tree   |     |token  |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [29]  |----&gt;| [12]  |----&gt;| [27]  |
+|Markov |     |pattrn |     | path  |
+|blanket|     |compl  |     |depend |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+|  [7]  |----&gt;|  [5]  |----&gt;| [20]  |
+|stigmr |     |syncop |     |entrai |
+|gy     |     |ation  |     |nment  |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+|  [4]  |----&gt;| [23]  |----&gt;| [22]  |
+|body   |     |basal  |     |dopamn |
+|parser |     |gangli |     |2phase |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+|  [1]  |----&gt;| [24]  |----&gt;|  [9]  |
+|quad   |     | Iowa  |     |whale  |
+|reward |     |gamble |     |song   |
++---+---+     +---+---+     +---+---+
+    |             |              |
+    v             v              v
++-------+     +-------+     +-------+
+| [17]  |----&gt;| [28]  |----&gt;| [30]  |
+|persist|     |rough  |     |critcl |
+|homolg |     |vol    |     |period |
++---+---+     +---+---+     +---+---+
+                  |
+                  v
+              +-------+
+              | [19]  |
+              |Xenakis|
+              | game  |
+              +-------+
+</code></pre>
+<hr>
+<h2>Key Compound Interactions Summary</h2>
+<p>These are the interactions where two or more mechanics produce something<br>
+neither produces alone:</p>
+<table>
+<thead>
+<tr>
+<th>Compound</th>
+<th>Mechanics</th>
+<th>Emergent Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regime horizon</td>
+<td>[2] x [8]</td>
+<td>Spectral break at niche gap = regime change detected two ways simultaneously</td>
+</tr>
+<tr>
+<td>Felt urgency</td>
+<td>[22] x [4]</td>
+<td>Motor preparation fires before evaluation completes; the trader's body moves first</td>
+</tr>
+<tr>
+<td>Self-computing reward</td>
+<td>[1] x [11]</td>
+<td>Uncertainty IS second-order error; surprise IS first-order error; reward computes itself</td>
+</tr>
+<tr>
+<td>Gut override</td>
+<td>[24] x [1]</td>
+<td>Somatic markers flatten reward peaks; bad feeling suppresses action even when signal is strong</td>
+</tr>
+<tr>
+<td>Nested boundaries</td>
+<td>[23] x [13]</td>
+<td>Boundaries at multiple timescale layers = structural significance proportional to nesting depth</td>
+</tr>
+<tr>
+<td>Syncopated alpha</td>
+<td>[20] x [5]</td>
+<td>Violation of expected grid that remains parseable = the exact boundary where the trader's edge lives</td>
+</tr>
+<tr>
+<td>Composite rhythm</td>
+<td>[20] x [14] x [15]</td>
+<td>Entrainment to a rhythm that exists at all timescales but no single timescale produces</td>
+</tr>
+<tr>
+<td>Structural equivalence</td>
+<td>[16] x [3] x [26]</td>
+<td>OPTIC transforms reveal same recursive rule operating at different surface manifestations</td>
+</tr>
+<tr>
+<td>Tree discovery</td>
+<td>[32] x [3] x [25]</td>
+<td>Sequential prediction discovers recursive grammar, revealing tree behind chain</td>
+</tr>
+<tr>
+<td>Path-biased completion</td>
+<td>[7] x [27] x [12]</td>
+<td>Stigmergic traces create path-dependent pattern completion; which pattern completes depends on how you got here</td>
+</tr>
+<tr>
+<td>Topological early warning</td>
+<td>[17] x [28]</td>
+<td>Betti loops in long-memory vol space = structural instability preceding crash</td>
+</tr>
+<tr>
+<td>Regime revolution</td>
+<td>[9] x [30] x [10]</td>
+<td>Narrative revolution triggers critical period; convergence-divergence ensures new commitment</td>
+</tr>
+<tr>
+<td>Game center shift</td>
+<td>[19] x [6]</td>
+<td>Nash equilibrium moves with Kuramoto order parameter; the game's center is not fixed</td>
+</tr>
+<tr>
+<td>Structured deviance</td>
+<td>[19] x [5]</td>
+<td>Off-Nash play within grammatical bounds = syncopation in game-theoretic terms</td>
+</tr>
+<tr>
+<td>Immune alarm</td>
+<td>[18] x [11]</td>
+<td>Rising free energy (from prediction error) triggers immune response before the organism "knows" why</td>
+</tr>
+<tr>
+<td>Autonomous boundary</td>
+<td>[29] x [25]</td>
+<td>Tree grows inside Markov blanket; boundary is memoryless, interior is structured</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Data Flow: One Tick Through the Organism</h2>
+<pre><code>1. TICK ARRIVES (EUR/USD price update)
+   |
+   v
+2. OPTIC TRANSFORM [16]
+   Generate 32 equivalent views. Discard surface; keep structure.
+   |
+   v
+3. TEMPORAL HIERARCHY [13] ingests at Layer 0
+   Each layer predicts the one below [11]
+   Prediction errors propagate UP
+   Summaries propagate UP
+   Raw data never leaves Layer 0
+   |
+   v
+4. 1/f ANALYZER [2] updates power spectrum
+   Cutoff frequency recalculated
+   Max prediction horizon updated
+   |
+   v
+5. NICHE MONITOR [8] checks band occupancy
+   Any gaps? Which bands active?
+   |
+   v
+6. KURAMOTO [6] updates order parameter r(t)
+   Coupling strength estimated from cross-correlations
+   Regime classification: coherent / incoherent / transitioning
+   |
+   v
+7. TREE PARSER [25, 3, 31, 26] determines position in parse tree
+   Context-free grammar applied recursively [3]
+   Prolongation identified: which structural node governs? [26]
+   Behavior tree position determines meaning [31]
+   |
+   v
+8. PATTERN COMPLETER [12] fires
+   Partial cue -&gt; nearest stored pattern
+   Bias toward familiar (inertia)
+   Path-dependent completion [27]
+   |
+   v
+9. DOPAMINE PHASE 1 [22]: fast detect
+   &quot;Something salient&quot; -- no valence yet
+   |
+   +---&gt; BODY-PARSER [4]: motor preparation begins
+   |     Chunk structure prepared for trader
+   |     Entrainment pulse generated [20]
+   |
+   v
+10. DOPAMINE PHASE 2 [22]: slow evaluate
+    Compute prediction error value
+    |
+    v
+11. QUADRATIC REWARD [1] computes pleasure
+    U = second-order prediction error [11]
+    S = first-order prediction error [11]
+    pleasure = f(U x S)
+    |
+    v
+12. IOWA BODY [24] modulates
+    Somatic markers weight the reward signal
+    Bad feeling? Flatten the peaks.
+    |
+    v
+13. BASAL GANGLIA [23] checks: is this a boundary?
+    If yes: fire boundary marker
+    Boundary + reward = signal to trader
+    |
+    v
+14. FREE ENERGY [18] check: is the model drifting?
+    PERSISTENT HOMOLOGY [17] check: growing loops?
+    ROUGH VOL [28] check: Hurst exponent stable?
+    If alarm: flag for immune response
+    |
+    v
+15. WHALE SONG [9] check: narrative revolution?
+    If revolution: trigger CRITICAL PERIOD [30]
+    Organism reopens plasticity
+    Convergence-divergence [10] governs duration
+    |
+    v
+16. STIGMERGIC TRACE [7] updates
+    Organism's state changes are pheromone deposits
+    Path dependence [27] deepens
+    |
+    v
+17. XENAKIS GAME [19] updates Nash equilibrium
+    Regime center shifts with Kuramoto [6]
+    Deviation from Nash = tension = opportunity
+    |
+    v
+18. OUTPUT TO TRADER:
+    - Entrainment pulse (timing) [20]
+    - Boundary alert (transitions) [23]
+    - Somatic signal (gut feeling) [24]
+    - Reward pulse (confidence) [1]
+    - Regime context (background color) [6]
+    - Syncopation flag (structured violation) [5]
+    - Next-token prediction (anticipation) [32]
+
+    The trader sight-reads the chart.
+    The organism provides the autonomic context.
+    The trader's 93% edge is ENHANCED, not replaced.
+</code></pre>
+<hr>
+<h2>Implementation on Mac Mini (No Budget)</h2>
+<pre><code>HARDWARE: Mac Mini (M-series chip)
+  - Apple Neural Engine for inference
+  - Unified memory = no GPU memory bottleneck
+  - SSD for tick storage
+
+SOFTWARE STACK:
+  - Python core (numpy, scipy for spectral/topological analysis)
+  - Lightweight next-token predictor [32]:
+    small transformer or state-space model
+    trained on EUR/USD tick data
+    runs locally on Neural Engine
+  - giotto-tda for persistent homology [17]
+  - Custom Kuramoto solver [6] (&lt; 100 lines)
+  - Custom 1/f analyzer [2] (FFT + regression)
+  - Production rule parser [3] (recursive descent, &lt; 500 lines)
+  - WebSocket feed for live tick data (free feeds available)
+
+RESOURCE BUDGET:
+  - Tick ingestion: ~1% CPU
+  - Spectral analysis: ~5% CPU (batched every 10s)
+  - Topological scanner: ~10% CPU (batched every 60s)
+  - Tree parser: ~3% CPU (per tick)
+  - Next-token predictor: ~15% CPU via Neural Engine
+  - Kuramoto/game theory: ~2% CPU (batched every 10s)
+  - UI overlay: ~5% CPU
+  - TOTAL: ~41% CPU = the organism breathes easy
+
+OUTPUT INTERFACE:
+  - Transparent overlay on trading charts
+  - Subtle color/pulse/rhythm signals
+  - No clutter. No dashboards. No numbers.
+  - The organism whispers. The trader listens.
+</code></pre>
+<hr>
+<h2>Why This Architecture IS the Moat</h2>
+<p>The moat is not any single mechanic. The moat is the WIRING.</p>
+<ol>
+<li>
+<p><strong>32 mechanics that compound</strong> — removing any one degrades the whole.<br>
+   The value is in the interactions, not the parts.</p>
+</li>
+<li>
+<p><strong>Organism, not tool</strong> — it cannot be described as a feature list.<br>
+   Competitors cannot replicate it by copying features because the<br>
+   features are meaningless outside the wiring.</p>
+</li>
+<li>
+<p><strong>Fitted to one trader</strong> — the tree grammar [3], the chunk sizes [4],<br>
+   the entrainment rhythms [20] are all calibrated to YOUR pattern<br>
+   recognition. This organism is grown, not built.</p>
+</li>
+<li>
+<p><strong>Runs on commodity hardware</strong> — no cloud dependency, no API costs,<br>
+   no vendor lock-in. The organism lives on your desk.</p>
+</li>
+<li>
+<p><strong>Learns the euro's nature</strong> — it does not model the euro. It BECOMES<br>
+   a model of the euro's ecology, through stigmergic coupling [7],<br>
+   next-token prediction [32], and path-dependent pattern completion<br>
+   [12, 27]. It learns the way nature learns: by living in the<br>
+   environment and adapting.</p>
+</li>
+</ol>
+<hr>
+<h2>Mechanic Index (all 32 verified present)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Mechanic</th>
+<th>Location in Organism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Quadratic reward</td>
+<td>Visceral Core</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1/f cutoff</td>
+<td>Sensory Cortex</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Context-free recursion</td>
+<td>Skeletal Structure</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Body-parser</td>
+<td>Motor Cortex</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Syncopation</td>
+<td>Motor Cortex (entrainment)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Kuramoto phase transition</td>
+<td>Endocrine System</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Stigmergy</td>
+<td>Stigmergic Membrane</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Acoustic niche partitioning</td>
+<td>Sensory Cortex</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Whale song revolution</td>
+<td>Immune System</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Convergence-divergence</td>
+<td>Endocrine System / Immune System</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Hierarchical prediction error</td>
+<td>Sensory Cortex</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Pattern completion with inertia</td>
+<td>Stigmergic Membrane</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Temporal hierarchy</td>
+<td>Sensory Cortex</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Interlocking polyrhythm</td>
+<td>Motor Cortex</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Gamelan stratified polyphony</td>
+<td>Motor Cortex</td>
+</tr>
+<tr>
+<td>16</td>
+<td>OPTIC equivalences</td>
+<td>Pre-processing (algebra)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Persistent homology</td>
+<td>Immune System</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Free energy</td>
+<td>Immune System</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Xenakis game theory</td>
+<td>Endocrine System</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Entrainment</td>
+<td>Motor Cortex</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Convergence-divergence self-correcting</td>
+<td>Endocrine System</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Dopamine two-phase</td>
+<td>Visceral Core</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Basal ganglia boundaries</td>
+<td>Visceral Core</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Iowa Gambling Task</td>
+<td>Visceral Core</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Tree contains chain</td>
+<td>Skeletal Structure</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Prolongation</td>
+<td>Skeletal Structure</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Path dependence</td>
+<td>Stigmergic Membrane</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Rough volatility</td>
+<td>Immune System</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Markov blanket</td>
+<td>Skeletal Structure</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Critical periods</td>
+<td>Immune System</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Behavior trees</td>
+<td>Skeletal Structure</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Next-token prediction</td>
+<td>Skeletal Structure</td>
+</tr>
+</tbody>
+</table>
+</article>
+
+<div class="divider" style="max-width:760px;"></div>
+
+<footer class="ricercar-footer">
+  <div class="ricercar-footer-text">Ballad &mdash; the search continues</div>
+  <div class="ricercar-footer-copy">&copy; 2026 muFX. All rights reserved.</div>
+</footer>
+<div class="bottom-line"></div>
+
+<script>
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var b = document.body;
+  var st = h.scrollTop || b.scrollTop;
+  var sh = h.scrollHeight || b.scrollHeight;
+  var pct = (st / (sh - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+</script>
+
+</body>
+</html>
