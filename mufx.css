@@ -110,63 +110,48 @@ nav {
   background: rgba(10,10,10,0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(160,160,160,0.06);
 }
 .nav-inner {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 48px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
 }
 .nav-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
-  letter-spacing: 2px;
-  color: var(--text-bright);
+  letter-spacing: 4px;
+  color: #ccc;
 }
 .nav-logo .mu {
-  color: var(--accent);
-  font-weight: 500;
+  color: #c4956a;
 }
 .nav-logo .fx {
-  color: var(--text-bright);
-  font-weight: 300;
+  color: #ccc;
 }
 .nav-links {
   display: flex;
   align-items: center;
   gap: 24px;
 }
-.nav-links a {
-  color: var(--text-dim);
-  text-decoration: none;
+.nav-links {
+  display: flex;
+  gap: 20px;
   font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: lowercase;
-  transition: color 0.3s, transform 0.3s;
-  position: relative;
+  letter-spacing: 1px;
+}
+.nav-links a {
+  color: rgba(160,160,160,0.3);
+  text-decoration: none;
+  transition: color 0.3s;
 }
 .nav-links a:hover {
-  color: var(--text-bright);
-  transform: translateX(2px);
-  animation: none;
+  color: #c4956a;
 }
 .nav-links a.active {
-  color: var(--accent);
-}
-.nav-links a.active::before {
-  content: '>';
-  position: absolute;
-  left: -12px;
-  color: var(--accent);
-  opacity: 0.5;
+  color: #888;
 }
 
 /* Pulse dot — alive indicator */
@@ -271,23 +256,18 @@ footer {
    ═══════════════════════════════════════════════════════════ */
 .progress-bar {
   position: fixed;
-  top: 48px;
+  top: 50px;
   left: 0; right: 0;
-  height: 1px;
-  background: rgba(196,149,106,0.05);
+  height: 2px;
+  background: rgba(196,149,106,0.03);
   z-index: 499;
 }
 .progress-fill {
   height: 100%;
   width: 0%;
-  background: var(--accent);
+  background: #e8b882;
+  box-shadow: 0 0 4px #c4956a, 0 0 12px rgba(196,149,106,0.8), 0 0 30px rgba(196,149,106,0.5), 0 0 60px rgba(196,149,106,0.25);
   transition: width 0.1s linear;
-}
-body.research-article .progress-fill {
-  background: var(--accent);
-}
-body.research-article .progress-bar {
-  background: rgba(196,149,106,0.05);
 }
 
 /* ═══════════════════════════════════════════════════════════

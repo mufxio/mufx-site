@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>project: blakcat - floor36</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg-code: #111111;
+  --bg-card: #0e0e0e;
+  --text: #a0a0a0;
+  --text-bright: #c0c0c0;
+  --text-dim: rgba(160,160,160,0.5);
+  --text-ghost: rgba(160,160,160,0.25);
+  --accent: #c4956a;
+  --accent-dim: rgba(196,149,106,0.15);
+  --accent-ghost: rgba(196,149,106,0.06);
+  --teal: #4ecdc4;
+  --pink: #e056a0;
+  --border: rgba(160,160,160,0.08);
+  --mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--mono); font-size:14px; font-weight:300; line-height:2; animation:pageLoad .4s ease-out; }
+@keyframes pageLoad { from{opacity:0} to{opacity:1} }
+::selection { background:var(--accent-dim); color:var(--text-bright); }
+a { color:var(--accent); text-decoration:none; transition:color .3s; }
+a:hover { text-shadow:0 0 4px rgba(196,149,106,0.2), 0 0 12px rgba(196,149,106,0.1); }
+strong { color:var(--text-bright); font-weight:500; }
+em { color:var(--text-dim); }
+
+/* Nav */
+nav { position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+.nav-inner { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; }
+.nav-logo { font-size:13px; letter-spacing:4px; font-weight:400; color:var(--text-bright); text-decoration:none; }
+.nav-logo .mu { color:var(--accent); }
+.nav-links { display:flex; gap:20px; font-size:11px; letter-spacing:1px; }
+.nav-links a { color:var(--text-ghost); text-decoration:none; }
+.nav-links a:hover { color:var(--accent); text-shadow:none; }
+.nav-links a.active { color:var(--text); }
+.pulse { display:inline-block; width:4px; height:4px; border-radius:50%; background:var(--accent); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.progress { position:fixed; top:50px; left:0; right:0; height:2px; z-index:49; background:rgba(196,149,106,0.03); }
+.progress-fill { height:100%; width:0%; background:#e8b882; box-shadow:0 0 4px #c4956a, 0 0 12px rgba(196,149,106,0.8), 0 0 30px rgba(196,149,106,0.5), 0 0 60px rgba(196,149,106,0.25); transition:width .1s; }
+
+/* Article */
+.article { max-width:680px; margin:0 auto; padding:0 24px 60px; }
+
+/* Hero */
+.hero { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:120px 24px 80px; }
+.cat-hero { font-size:13px; line-height:1.35; color:var(--text-ghost); margin-bottom:48px; white-space:pre; }
+.cat-hero .eyes { color:var(--accent); animation:catBlink 4s infinite; }
+.cat-hero .mouth { color:var(--text-dim); }
+@keyframes catBlink { 0%,42%,46%,100%{opacity:1} 44%{opacity:0} }
+.hero h1 { font-size:clamp(20px,4vw,28px); font-weight:500; color:var(--text-bright); letter-spacing:2px; margin-bottom:12px; }
+.hero .subtitle { font-size:12px; color:var(--text-dim); letter-spacing:1px; font-weight:300; max-width:480px; }
+.hero .scroll-hint { margin-top:60px; font-size:10px; color:var(--text-ghost); letter-spacing:2px; animation:float 2s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+/* Sections */
+h2 { font-size:16px; font-weight:500; color:var(--text-bright); margin:64px 0 24px; letter-spacing:1px; line-height:1.4; }
+h2::before { content:'\00a7 '; color:var(--text-ghost); }
+h3 { font-size:14px; font-weight:400; color:var(--text-bright); margin:32px 0 12px; letter-spacing:.5px; }
+h3::before { content:'# '; color:var(--text-ghost); }
+p { margin-bottom:20px; }
+.highlight { color:var(--accent); }
+blockquote { border-left:2px solid var(--accent); padding-left:16px; margin:20px 0; font-size:13px; font-style:italic; color:var(--text-dim); }
+pre { background:var(--bg-code); border:1px solid var(--border); padding:16px 20px; border-radius:4px; font-size:12px; line-height:1.8; overflow-x:auto; margin:20px 0; }
+code { font-family:var(--mono); }
+.diff-add { color:var(--teal); }
+.diff-rem { color:var(--pink); }
+ul { list-style:none; padding:0; }
+li { padding:4px 0; font-size:12px; color:var(--text-dim); }
+li::before { content:'- '; color:var(--text-ghost); }
+
+/* Hyp Cards */
+.hyp-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:24px 0 32px; }
+.hyp-card { background:var(--bg-card); border:1px solid var(--border); padding:20px; border-radius:4px; border-left:2px solid transparent; transition:border-color .3s; }
+.hyp-card:hover { border-left-color:var(--accent); }
+.hyp-num { font-size:10px; color:var(--text-ghost); letter-spacing:2px; margin-bottom:8px; }
+.hyp-title { font-size:13px; font-weight:500; color:var(--text-bright); margin-bottom:8px; }
+.hyp-desc { font-size:11px; color:var(--text-dim); line-height:1.8; }
+
+/* State Grid */
+.state-grid { display:grid; grid-template-columns:auto repeat(3,1fr); gap:2px; margin:24px 0; }
+.state-cell { padding:10px 8px; text-align:center; border-radius:2px; font-size:10px; letter-spacing:.5px; transition:transform .2s; }
+.state-cell:hover { transform:scale(1.08); }
+.state-label { padding:10px 8px; text-align:right; font-size:9px; color:var(--text-ghost); letter-spacing:1px; display:flex; align-items:center; justify-content:flex-end; }
+.state-header { padding:8px; text-align:center; font-size:9px; color:var(--text-ghost); letter-spacing:1px; }
+
+/* Stat Cards */
+.stat-row-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:24px 0; }
+.stat-card { background:var(--bg-card); border:1px solid var(--border); padding:16px; text-align:center; border-radius:4px; }
+.stat-card .n { font-size:22px; font-weight:500; }
+.stat-card .n.accent { color:var(--accent); }
+.stat-card .n.teal { color:var(--teal); }
+.stat-card .l { font-size:8px; letter-spacing:2px; color:var(--text-ghost); margin-top:4px; }
+
+/* Compare */
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:0; margin:24px 0; border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+.compare-col { padding:20px; }
+.compare-col:first-child { border-right:1px solid var(--border); }
+.compare-col h4 { font-size:11px; letter-spacing:2px; font-weight:400; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.compare-col h4::before { content:none; }
+.compare-col.cat h4 { color:var(--accent); }
+.compare-col.rand h4 { color:var(--text-ghost); }
+.compare-stat { display:flex; justify-content:space-between; padding:4px 0; font-size:11px; }
+.compare-stat .label { color:var(--text-ghost); }
+.compare-stat .val { color:var(--text-bright); font-weight:400; }
+.compare-col.rand .compare-stat .val { color:var(--text-dim); }
+
+/* Chart */
+.chart-container { margin:32px 0; }
+.chart-container svg { width:100%; height:auto; }
+.chart-label { font-size:9px; letter-spacing:2px; color:var(--text-ghost); margin-bottom:8px; display:block; }
+.chart-legend { display:flex; gap:16px; margin-top:8px; font-size:10px; }
+.chart-legend .dot { display:inline-block; width:8px; height:2px; margin-right:4px; vertical-align:middle; }
+
+/* Behavior */
+.behavior { margin:32px 0; padding:24px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; border-left:2px solid var(--accent); }
+.behavior-title { font-size:13px; font-weight:500; color:var(--text-bright); margin-bottom:12px; }
+.behavior-title::before { content:none; }
+.behavior p { font-size:12px; color:var(--text-dim); line-height:1.8; margin-bottom:12px; }
+.behavior p:last-child { margin-bottom:0; }
+
+/* Two Cats */
+.two-cats { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:20px 0; text-align:center; }
+.cat-box { padding:16px; }
+.cat-ascii { font-size:12px; line-height:1.3; white-space:pre; margin-bottom:12px; }
+.cat-label { font-size:10px; letter-spacing:2px; color:var(--text-ghost); margin-bottom:8px; }
+.hunger-bar { height:4px; background:var(--border); border-radius:2px; margin:8px auto; width:80%; overflow:hidden; }
+.hunger-fill { height:100%; border-radius:2px; }
+
+/* Q-Table */
+.qtable-visual { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+.qtable-box { padding:16px; background:var(--bg-code); border:1px solid var(--border); border-radius:4px; }
+.qtable-box .title { font-size:9px; letter-spacing:2px; color:var(--text-ghost); margin-bottom:12px; }
+.q-row { display:flex; align-items:center; gap:8px; margin:3px 0; font-size:9px; }
+.q-state { width:36px; color:var(--text-ghost); text-align:right; }
+.q-bar-bg { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.q-bar { height:100%; border-radius:3px; }
+.q-val { width:36px; color:var(--text-dim); text-align:right; }
+
+/* Tamagotchi */
+.tama { background:var(--bg-card); border:1px solid var(--border); border-radius:4px; padding:24px; margin:32px 0; text-align:center; }
+.tama-cat { font-size:13px; line-height:1.3; white-space:pre; margin-bottom:16px; color:var(--text-ghost); transition:all .3s; }
+.tama-bars { display:flex; gap:16px; justify-content:center; margin:12px 0; }
+.tama-bar-wrap { text-align:center; }
+.tama-bar-label { font-size:8px; letter-spacing:2px; color:var(--text-ghost); margin-bottom:4px; }
+.tama-bar-outer { width:100px; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.tama-bar-inner { height:100%; border-radius:3px; transition:width .5s; }
+.tama-btns { display:flex; gap:8px; justify-content:center; margin-top:16px; }
+.tama-btn { background:none; border:1px solid var(--border); color:var(--text-dim); padding:6px 16px; font-family:var(--mono); font-size:9px; letter-spacing:1px; cursor:pointer; border-radius:3px; transition:all .2s; }
+.tama-btn:hover { border-color:var(--accent); color:var(--accent); }
+.tama-status { font-size:10px; color:var(--text-ghost); margin-top:12px; min-height:16px; }
+.tama-q { font-size:9px; color:var(--text-ghost); margin-top:8px; letter-spacing:.5px; }
+
+/* Pyramid */
+.pyramid { display:flex; flex-direction:column; align-items:center; margin:32px 0; gap:4px; }
+.pyramid-level { text-align:center; padding:12px; font-size:10px; letter-spacing:1px; border:1px solid var(--border); transition:all .3s; }
+.pyramid-level.active { border-color:var(--accent); background:var(--accent-ghost); color:var(--accent); }
+.pyramid-level.locked { color:var(--text-ghost); border-style:dashed; }
+
+/* Columns */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:24px 0; }
+.col-title { font-size:11px; letter-spacing:2px; color:var(--text-ghost); margin-bottom:12px; }
+.col-title.green { color:var(--teal); }
+.col-title.red { color:var(--pink); }
+
+/* Wave */
+.wave-container { margin:16px 0; overflow:hidden; height:40px; position:relative; }
+.wave-line { position:absolute; top:0; left:0; width:200%; height:100%; animation:waveScroll 4s linear infinite; }
+@keyframes waveScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* Footer */
+.footer { text-align:center; padding:48px 24px; border-top:1px solid var(--border); margin-top:64px; }
+.footer-text { font-size:13px; font-style:italic; color:var(--text-ghost); font-weight:300; }
+.footer-meta { font-size:10px; letter-spacing:2px; color:rgba(160,160,160,0.15); margin-top:12px; }
+
+/* Fade */
+.fade-in { opacity:0; transform:translateY(12px); transition:opacity .6s ease-out, transform .6s ease-out; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+
+/* Ref */
+.ref { font-size:11px; color:var(--text-ghost); line-height:2; margin:4px 0; }
+.ref a { color:var(--text-dim); }
+
+/* Responsive */
+@media(max-width:600px) {
+  .hyp-grid,.compare,.two-cats,.qtable-visual,.two-col,.stat-row-grid { grid-template-columns:1fr; }
+  .compare-col:first-child { border-right:none; border-bottom:1px solid var(--border); }
+  .hero { min-height:80vh; padding:100px 16px 60px; }
+  .article { padding:0 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="mu">floor</span>36</a>
+    <div class="nav-links">
+      <a href="index.html">journal</a>
+      <a href="street-cat.html" class="active">blakcat</a>
+      <a href="mailto:research@mufx.io">contact</a>
+      <span class="pulse"></span>
+    </div>
+  </div>
+</nav>
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="cat-hero">    /\_/\
+   ( <span class="eyes">O.O</span> )
+    &gt; <span class="mouth">w</span> &lt;
+   /|   |\
+  (_|   |_)</div>
+  <h1>project: blakcat</h1>
+  <p class="subtitle">a biologically inspired approach to artificial architectural intelligence</p>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- ARTICLE -->
+<div class="article">
+
+<section class="fade-in">
+<h2>The Thesis</h2>
+<p>
+This is a living experiment. An organism that lives inside a market simulation and learns to survive through <span class="highlight">necessity</span>. It starts with nothing but hunger and the ability to buy. Everything else, it has to earn.
+</p>
+<p>
+The organism is a street cat. It trades EUR/USD on 1-minute bars. It has a Q-table with <span class="highlight">18 states</span>, a hunger drive, and a threshold for action. No indicators, no features from financial theory, no reward function designed to maximize Sharpe ratios.
+</p>
+<p>
+I call this <strong>Artificial Architectural Intelligence</strong>. The intelligence is real. The biology is artificial. The architecture is the innovation, not the scale.
+</p>
+</section>
+
+<section class="fade-in">
+<h2>The Hypotheses</h2>
+<div class="hyp-grid">
+  <div class="hyp-card">
+    <div class="hyp-num">01</div>
+    <div class="hyp-title">Trading as a Game</div>
+    <div class="hyp-desc">Like TFT, you don't predict the shop. You adapt. Position management over price prediction. Control the controllables.</div>
+  </div>
+  <div class="hyp-card">
+    <div class="hyp-num">02</div>
+    <div class="hyp-title">Bayesian by Nature</div>
+    <div class="hyp-desc">Dip your toes before jumping. Focus on lived experience, not theoretical probabilities that need millions of samples.</div>
+  </div>
+  <div class="hyp-card">
+    <div class="hyp-num">03</div>
+    <div class="hyp-title">Markets as Music</div>
+    <div class="hyp-desc">Price moves in rhythms. Synchronization over prediction. Feel the shift, don't forecast the note.</div>
+  </div>
+  <div class="hyp-card">
+    <div class="hyp-num">04</div>
+    <div class="hyp-title">Architecture Over Scale</div>
+    <div class="hyp-desc">You don't need trillions of data points. You need the right architecture and patience for emergence.</div>
+  </div>
+</div>
+</section>
+
+<section class="fade-in">
+<h2>The Organism</h2>
+<p>
+The cat perceives two things: <strong>momentum</strong> (how many of the last 5 bars closed up) and <strong>volatility</strong> (percent change over 5 bars). That gives 18 states.
+</p>
+
+<div class="state-grid">
+  <div class="state-header"></div>
+  <div class="state-header">quiet</div>
+  <div class="state-header">normal</div>
+  <div class="state-header">wild</div>
+  <div class="state-label">5 up</div>
+  <div class="state-cell" style="background:rgba(196,149,106,0.04);">(5,0)</div>
+  <div class="state-cell" style="background:rgba(224,86,160,0.12);">(5,1)</div>
+  <div class="state-cell" style="background:rgba(196,149,106,0.06);">(5,2)</div>
+  <div class="state-label">4 up</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.12);">(4,0)</div>
+  <div class="state-cell" style="background:rgba(224,86,160,0.08);">(4,1)</div>
+  <div class="state-cell" style="background:rgba(224,86,160,0.08);">(4,2)</div>
+  <div class="state-label">3 up</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.12);">(3,0)</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.06);">(3,1)</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.10);">(3,2)</div>
+  <div class="state-label">2 up</div>
+  <div class="state-cell" style="background:rgba(196,149,106,0.04);">(2,0)</div>
+  <div class="state-cell" style="background:rgba(224,86,160,0.06);">(2,1)</div>
+  <div class="state-cell" style="background:rgba(196,149,106,0.06);">(2,2)</div>
+  <div class="state-label">1 up</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.06);">(1,0)</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.08);">(1,1)</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.08);">(1,2)</div>
+  <div class="state-label">0 up</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.10);">(0,0)</div>
+  <div class="state-cell" style="background:rgba(196,149,106,0.04);">(0,1)</div>
+  <div class="state-cell" style="background:rgba(78,205,196,0.06);">(0,2)</div>
+</div>
+<p style="font-size:11px;color:var(--text-ghost);text-align:center;margin-top:-12px;">
+  <span style="color:var(--teal);">teal</span> = above breakeven.
+  <span style="color:var(--pink);">pink</span> = below.
+  the cat learned this, not us.
+</p>
+
+<p>
+It has one drive: <strong>hunger</strong>. The hungrier the cat, the lower the threshold for action. A starving cat trades anything. A fed cat demands conviction.
+</p>
+
+<p>Abilities unlock through survival:</p>
+<div style="margin:24px 0;padding-left:20px;border-left:1px solid var(--border);">
+  <div style="margin:8px 0;font-size:12px;"><span style="color:var(--teal);">+$0</span> <span style="color:var(--text-ghost);margin:0 8px;">|</span> BUY</div>
+  <div style="margin:8px 0;font-size:12px;"><span style="color:var(--teal);">+$5</span> <span style="color:var(--text-ghost);margin:0 8px;">|</span> CLOSE</div>
+  <div style="margin:8px 0;font-size:12px;"><span style="color:var(--teal);">+$15</span> <span style="color:var(--text-ghost);margin:0 8px;">|</span> SELL</div>
+  <div style="margin:8px 0;font-size:12px;"><span style="color:var(--text-ghost);">+$30</span> <span style="color:var(--text-ghost);margin:0 8px;">|</span> <span style="color:var(--text-ghost);">SIZE</span></div>
+  <div style="margin:8px 0;font-size:12px;"><span style="color:var(--text-ghost);">+$50</span> <span style="color:var(--text-ghost);margin:0 8px;">|</span> <span style="color:var(--text-ghost);">TP/SL</span></div>
+</div>
+
+<p>Q-values are floored at zero. The cat can forget, but it can't fear. Not yet.</p>
+</section>
+
+<!-- TAMAGOTCHI -->
+<section class="fade-in">
+<h3>Try It Yourself</h3>
+<p>Feed the cat or starve it. Watch how hunger changes its body and its willingness to trade.</p>
+
+<div class="tama" id="tama">
+  <div class="tama-cat" id="tamaCat"></div>
+  <div class="tama-bars">
+    <div class="tama-bar-wrap">
+      <div class="tama-bar-label">HUNGER</div>
+      <div class="tama-bar-outer"><div class="tama-bar-inner" id="tamaHunger" style="width:100%;background:var(--accent);"></div></div>
+    </div>
+    <div class="tama-bar-wrap">
+      <div class="tama-bar-label">THRESHOLD</div>
+      <div class="tama-bar-outer"><div class="tama-bar-inner" id="tamaThresh" style="width:0%;background:var(--teal);"></div></div>
+    </div>
+  </div>
+  <div class="tama-btns">
+    <button class="tama-btn" onclick="tamaFeed()">feed</button>
+    <button class="tama-btn" onclick="tamaStarve()">starve</button>
+    <button class="tama-btn" onclick="tamaTrade()">trade</button>
+  </div>
+  <div class="tama-status" id="tamaStatus"></div>
+  <div class="tama-q" id="tamaQ"></div>
+</div>
+</section>
+
+<!-- RESULTS -->
+<section class="fade-in">
+<h2>Results</h2>
+<p>We ran the cat alongside a random baseline. Same market, same spread, same TP/SL, same rules. Over ~130,000 bars of EUR/USD M1:</p>
+
+<div class="stat-row-grid">
+  <div class="stat-card"><div class="n accent">34%</div><div class="l">CAT WIN RATE</div></div>
+  <div class="stat-card"><div class="n" style="color:var(--text-ghost);">30%</div><div class="l">RANDOM WIN RATE</div></div>
+  <div class="stat-card"><div class="n teal">+$0.06</div><div class="l">EDGE PER TRADE</div></div>
+</div>
+
+<div class="compare">
+  <div class="compare-col cat">
+    <h4>Street Cat</h4>
+    <div class="compare-stat"><span class="label">trades</span><span class="val">924</span></div>
+    <div class="compare-stat"><span class="label">win rate</span><span class="val" style="color:var(--accent);">34%</span></div>
+    <div class="compare-stat"><span class="label">expectancy</span><span class="val" style="color:var(--teal);">+$0.015</span></div>
+    <div class="compare-stat"><span class="label">net p&l</span><span class="val" style="color:var(--teal);">+$13.50</span></div>
+    <div class="compare-stat"><span class="label">total equity</span><span class="val">$1,013</span></div>
+    <div class="compare-stat"><span class="label">withdrawn</span><span class="val">$900</span></div>
+  </div>
+  <div class="compare-col rand">
+    <h4>Random</h4>
+    <div class="compare-stat"><span class="label">trades</span><span class="val">1,875</span></div>
+    <div class="compare-stat"><span class="label">win rate</span><span class="val">30%</span></div>
+    <div class="compare-stat"><span class="label">expectancy</span><span class="val" style="color:var(--pink);">-$0.044</span></div>
+    <div class="compare-stat"><span class="label">net p&l</span><span class="val" style="color:var(--pink);">-$82.50</span></div>
+    <div class="compare-stat"><span class="label">total equity</span><span class="val">$917</span></div>
+    <div class="compare-stat"><span class="label">withdrawn</span><span class="val">$800</span></div>
+  </div>
+</div>
+
+<p>The edge comes from <strong>selective inaction</strong>. The cat trades half as often as random.</p>
+
+<div class="chart-container fade-in">
+  <span class="chart-label">EQUITY CURVE</span>
+  <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="catGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(196,149,106,0.15)"/><stop offset="100%" stop-color="rgba(196,149,106,0)"/></linearGradient></defs>
+    <line x1="0" y1="100" x2="680" y2="100" stroke="rgba(160,160,160,0.06)" stroke-width="0.5"/>
+    <text x="4" y="97" fill="rgba(160,160,160,0.2)" font-family="JetBrains Mono" font-size="8">$0</text>
+    <text x="4" y="47" fill="rgba(160,160,160,0.2)" font-family="JetBrains Mono" font-size="8">+$20</text>
+    <text x="4" y="147" fill="rgba(160,160,160,0.2)" font-family="JetBrains Mono" font-size="8">-$20</text>
+    <polyline fill="none" stroke="rgba(160,160,160,0.2)" stroke-width="1" points="0,95 40,98 80,102 120,98 160,105 200,110 240,108 280,115 320,112 360,118 400,125 440,130 480,128 520,138 560,142 600,148 640,155 680,162"/>
+    <path d="M0,105 Q40,108 80,112 T160,115 T240,108 T320,118 T400,112 T480,105 T560,108 T640,95 T680,85" fill="url(#catGrad)" stroke="none"/>
+    <path d="M0,105 Q40,108 80,112 T160,115 T240,108 T320,118 T400,112 T480,105 T560,108 T640,95 T680,85" fill="none" stroke="#c4956a" stroke-width="1.5"/>
+  </svg>
+  <div class="chart-legend">
+    <span><span class="dot" style="background:var(--accent);"></span> Street Cat</span>
+    <span><span class="dot" style="background:rgba(160,160,160,0.3);"></span> Random</span>
+  </div>
+</div>
+</section>
+
+<!-- EMERGENT BEHAVIORS -->
+<section class="fade-in">
+<h2>Emergent Behaviors</h2>
+<p>None of the following were programmed. They fell out of the interaction between hunger, a Q-table, and 18 states.</p>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">Desperation-Driven Uniform Trading</div>
+  <p>When hungry and Q-values are low, the cat trades from any state with equal probability. Hunger erases preference. In behavioral science, stress narrows decision-making to pure reactivity. Nobody coded this.</p>
+</div>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">Spawn Camping</div>
+  <p>A bug caused learning to hit the wrong state. The cat developed 0.79 conviction about its worst state (23% WR, -$37.50 over 240 trades) because winning trades mechanically ended there. Like an animal returning obsessively to where it found food once.</p>
+  <div class="qtable-visual">
+    <div class="qtable-box">
+      <div class="title">BEFORE FIX (INVERTED)</div>
+      <div class="q-row"><span class="q-state">(0,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:1%;background:var(--accent);"></div></div><span class="q-val">0.00</span></div>
+      <div class="q-row"><span class="q-state">(1,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:1%;background:var(--accent);"></div></div><span class="q-val">0.00</span></div>
+      <div class="q-row"><span class="q-state">(3,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:49%;background:var(--accent);"></div></div><span class="q-val">0.39</span></div>
+      <div class="q-row"><span class="q-state">(4,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:100%;background:var(--pink);"></div></div><span class="q-val" style="color:var(--pink);">0.80</span></div>
+      <div class="q-row"><span class="q-state">(5,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:44%;background:var(--accent);"></div></div><span class="q-val">0.35</span></div>
+    </div>
+    <div class="qtable-box">
+      <div class="title">AFTER FIX (ALIGNED)</div>
+      <div class="q-row"><span class="q-state">(0,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:8%;background:var(--teal);"></div></div><span class="q-val">0.05</span></div>
+      <div class="q-row"><span class="q-state">(1,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:23%;background:var(--teal);"></div></div><span class="q-val">0.15</span></div>
+      <div class="q-row"><span class="q-state">(3,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:10%;background:var(--teal);"></div></div><span class="q-val">0.06</span></div>
+      <div class="q-row"><span class="q-state">(4,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:9%;background:var(--teal);"></div></div><span class="q-val">0.05</span></div>
+      <div class="q-row"><span class="q-state">(5,1)</span><div class="q-bar-bg"><div class="q-bar" style="width:1%;background:var(--teal);"></div></div><span class="q-val">0.00</span></div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--text-ghost);text-align:center;">one line fix. completely different organism.</p>
+</div>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">Awareness Is Metabolically Expensive</div>
+  <div class="two-cats">
+    <div class="cat-box">
+      <div class="cat-label">BROKEN CAT</div>
+      <div class="cat-ascii" style="color:var(--text-ghost);">  /\_/\
+ ( <span style="color:var(--teal);">-.-</span> )
+  &gt; <span style="color:var(--text-dim);">w</span> &lt;
+  /| |\
+  (_|_)</div>
+      <div style="font-size:10px;color:var(--text-dim);">confidently wrong</div>
+      <div style="font-size:10px;color:var(--text-ghost);margin-top:4px;">avg hunger: 0.56</div>
+      <div class="hunger-bar"><div class="hunger-fill" style="width:56%;background:var(--teal);"></div></div>
+    </div>
+    <div class="cat-box">
+      <div class="cat-label">FIXED CAT</div>
+      <div class="cat-ascii" style="color:var(--text-ghost);">  /\_/\
+ ( <span style="color:var(--accent);">O.O</span> )
+  &gt; <span style="color:var(--text-dim);">~</span> &lt;
+   |_|
+   (_)</div>
+      <div style="font-size:10px;color:var(--text-dim);">accurately uncertain</div>
+      <div style="font-size:10px;color:var(--text-ghost);margin-top:4px;">avg hunger: 0.80</div>
+      <div class="hunger-bar"><div class="hunger-fill" style="width:80%;background:var(--accent);"></div></div>
+    </div>
+  </div>
+  <p>Intelligence has a metabolic cost. The fixed cat feels its losses. Doubt leads to fewer trades, fewer wins, less food, more hunger.</p>
+</div>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">Early Childhood Bias</div>
+  <p>Two runs, identical code, identical data. Different Q-table hierarchies from random choices when all Q-values were zero. Both converged on the same general insight but the specific favorite differed. Early experience shapes adult preference.</p>
+</div>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">Natural Trading Rhythm</div>
+  <p>The cat develops burst-and-rest cycles. The hunger-threshold feedback loop creates an oscillator. Nobody programmed periodicity.</p>
+  <div class="wave-container">
+    <svg class="wave-line" viewBox="0 0 1360 40" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,20 Q85,2 170,20 T340,20 T510,20 T680,20 T850,20 T1020,20 T1190,20 T1360,20" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.8"/>
+    </svg>
+  </div>
+</div>
+
+<div class="behavior fade-in">
+  <div class="behavior-title">The Cat Learned Not to Chase</div>
+  <p>Across every run, the cat converged on the same insight: low-to-mid momentum states produce better buy entries than high momentum. It figured out mean reversion from hunger and a Q-table.</p>
+</div>
+</section>
+
+<!-- PERCEPTION BUG -->
+<section class="fade-in">
+<h2>The Perception Bug</h2>
+<p>The most important discovery was a mistake. The Q-update was supposed to hit the <strong>entry state</strong>. Instead, <code>last_state</code> was overwritten every bar while holding.</p>
+<pre><code><span class="diff-rem">- cat.last_state = current_state  # updated every bar</span>
+<span class="diff-add">+ # freeze at entry only</span>
+<span class="diff-add">+ cat.last_state = current_state  # inside open_position block</span></code></pre>
+<p>One line. Q-values dropped from 0.79 to 0.09. Trade distribution restructured completely.</p>
+<blockquote>In emergent systems, broken perception produces confidently wrong behavior that looks like learning. You need independent validation of belief vs. reality.</blockquote>
+</section>
+
+<!-- LIMITATIONS -->
+<section class="fade-in">
+<h2>Limitations</h2>
+<div class="two-col">
+  <div>
+    <div class="col-title green">CAN CLAIM</div>
+    <ul>
+      <li>Emergent patterns from minimal architecture</li>
+      <li>Outperforms random through selective inaction</li>
+      <li>Perception quality > learning algorithm</li>
+      <li>Hunger-threshold creates natural oscillation</li>
+    </ul>
+  </div>
+  <div>
+    <div class="col-title red">CANNOT CLAIM</div>
+    <ul>
+      <li>Genuine intelligence vs. state-dependent randomness</li>
+      <li>Generalization beyond EUR/USD M1</li>
+      <li>Biological parallels beyond suggestive analogy</li>
+      <li>Superiority over traditional RL</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- RELATED WORK -->
+<section class="fade-in">
+<h2>Related Work</h2>
+<div class="ref">Yang (2023). <a href="https://arxiv.org/abs/2302.13132">Hierarchical Needs-Driven Agent Learning Systems</a>. Maslow-mapped deep RL. Top-down reward engineering, no actual drive states.</div>
+<div class="ref">Moyo (2024). <a href="https://arxiv.org/abs/2412.00044">Creating Hierarchical Dispositions of Needs</a>. Dual-agent reward hierarchy. Needs as abstract thresholds, not physiology.</div>
+<div class="ref">Capone & Paolucci (2024). <a href="https://doi.org/10.1038/s41598-024-65631-y">Biologically plausible RL with dreaming</a>. Spiking networks + offline replay. Complementary substrate work.</div>
+<div class="ref">Liu et al. (2025). <a href="https://arxiv.org/abs/2505.07634">Neural Brain</a>. Grand neuroscience-inspired survey. We're the opposite: minimal implementation, maximum emergence.</div>
+</section>
+
+<!-- WHAT'S NEXT -->
+<section class="fade-in">
+<h2>What's Next</h2>
+<p>Follow Maslow's hierarchy upward.</p>
+<div class="pyramid">
+  <div class="pyramid-level locked" style="width:40%;">Deep Thinking</div>
+  <div class="pyramid-level locked" style="width:50%;">Memory</div>
+  <div class="pyramid-level locked" style="width:60%;">Emotion</div>
+  <div class="pyramid-level locked" style="width:70%;">Self-Perception</div>
+  <div class="pyramid-level locked" style="width:80%;">Fear / Safety</div>
+  <div class="pyramid-level active" style="width:90%;">Hunger / Survival</div>
+</div>
+<p>Next: lift the Q-floor to allow negative values. That's <strong>fear</strong>. A hungry cat near a dog will still hesitate. Right now it can't.</p>
+<p>Then self-perception. Then emotion. Then memory modeled on neuroscience. Then deep analytical thinking through tree structures.</p>
+<p>And eventually: a house cat raised on treats alongside the street cat raised on hunger. Same architecture, different upbringing. Same genetics, different personality.</p>
+<p>This is a street cat with 18 states and hunger. Imagine what happens when it can feel fear.</p>
+</section>
+
+<div class="footer">
+  <div class="footer-text">this is an ongoing experiment</div>
+  <div class="footer-meta">BALLAD 2026</div>
+</div>
+</div>
+
+<script>
+// Progress
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('progressFill').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+});
+// Fade
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+// === TAMAGOTCHI ===
+let tamaH = 1.0;
+const tamaQ = 0.12;
+
+function getCatArt(hunger) {
+  let eyes, mouth;
+  if (hunger > 0.8) { eyes = 'O.O'; mouth = '~'; }
+  else if (hunger > 0.5) { eyes = '._.'; mouth = '_'; }
+  else if (hunger > 0.2) { eyes = '^.^'; mouth = 'w'; }
+  else { eyes = '-.-'; mouth = 'w'; }
+
+  const ec = hunger > 0.5 ? 'var(--accent)' : 'var(--teal)';
+
+  if (hunger > 0.7) {
+    // Skinny
+    return `  /\\_/\\
+ ( <span style="color:${ec}">${eyes}</span> )
+  > <span style="color:var(--text-dim)">${mouth}</span> <
+   |_|
+   (_)`;
+  } else if (hunger > 0.35) {
+    // Normal
+    return `  /\\_/\\
+ ( <span style="color:${ec}">${eyes}</span> )
+  > <span style="color:var(--text-dim)">${mouth}</span> <
+  /| |\\
+  (_|_)`;
+  } else {
+    // Chonky
+    return `  /\\_/\\
+ ( <span style="color:${ec}">${eyes}</span> )
+  > <span style="color:var(--text-dim)">${mouth}</span> <
+ /|   |\\
+(_|   |_)`;
+  }
+}
+
+function tamaUpdate() {
+  const thr = (1 - tamaH) * 0.8;
+  document.getElementById('tamaHunger').style.width = (tamaH * 100) + '%';
+  document.getElementById('tamaThresh').style.width = (thr * 100) + '%';
+  document.getElementById('tamaHunger').style.background = tamaH > 0.7 ? 'var(--accent)' : tamaH > 0.4 ? 'var(--text-dim)' : 'var(--teal)';
+  const wouldTrade = tamaQ > thr || tamaH > 0.5;
+  document.getElementById('tamaQ').textContent = `Q = ${tamaQ.toFixed(2)} \u00b7 threshold = ${thr.toFixed(2)} \u00b7 would trade: ${wouldTrade ? 'yes' : 'no'}`;
+  document.getElementById('tamaCat').innerHTML = getCatArt(tamaH);
+
+  let status;
+  if (tamaH > 0.8) status = 'the cat is starving. it will trade anything.';
+  else if (tamaH > 0.5) status = 'hungry. looking for opportunities.';
+  else if (tamaH > 0.2) status = 'content. only trading high-conviction states.';
+  else status = 'full. sleeping. nothing clears the threshold.';
+  document.getElementById('tamaStatus').textContent = status;
+}
+
+function tamaFeed() { tamaH = Math.max(0, tamaH - 0.2); tamaUpdate(); }
+function tamaStarve() { tamaH = Math.min(1, tamaH + 0.15); tamaUpdate(); }
+function tamaTrade() {
+  const thr = (1 - tamaH) * 0.8;
+  if (tamaQ > thr || tamaH > 0.5) {
+    if (Math.random() < 0.33) {
+      tamaH = Math.max(0, tamaH - 0.15);
+      document.getElementById('tamaStatus').textContent = 'caught prey! +$1.00. fed.';
+    } else {
+      tamaH = Math.min(1, tamaH + 0.04);
+      document.getElementById('tamaStatus').textContent = 'missed. -$0.50. hungrier.';
+    }
+    tamaUpdate();
+  } else {
+    document.getElementById('tamaStatus').textContent = 'too full to bother. threshold too high.';
+  }
+}
+tamaUpdate();
+</script>
+</body>
+</html>

@@ -3,91 +3,861 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ballad</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<title>floor36</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-body { background:#0a0a0a; color:#888; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:300; line-height:2; padding:80px 24px 60px; max-width:640px; margin:0 auto; }
+body { background:#0a0a0a; color:#888; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:300; line-height:2; overflow-x:hidden; transition:background 1s; }
 ::selection { background:rgba(196,149,106,0.25); color:#ccc; }
-a { color:#888; text-decoration:none; transition:color 0.3s; }
+a { color:#888; text-decoration:none; transition:all 0.3s; }
 a:hover { color:#c4956a; }
 
-.title { font-size:13px; font-weight:300; color:#888; margin-bottom:48px; letter-spacing:1px; }
+/* Weather particles */
+.weather-layer { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:1; overflow:hidden; }
 
-.nav { margin-bottom:80px; font-size:11px; color:#555; }
-.nav a { color:#555; margin-right:16px; }
-.nav a:hover { color:#c4956a; }
-.nav a.active { color:#888; }
+/* Rain - slanted */
+.drop { position:absolute; width:1px; background:linear-gradient(180deg, transparent, rgba(160,180,220,0.3)); }
+.drop.slant { animation:fallSlant linear infinite; }
+.drop.slant-hard { animation:fallSlantHard linear infinite; }
+@keyframes fallSlant { 0%{transform:translate(0,-20px)} 100%{transform:translate(30px,100vh)} }
+@keyframes fallSlantHard { 0%{transform:translate(0,-20px)} 100%{transform:translate(60px,100vh)} }
 
-.section-label { font-size:11px; color:#444; margin-top:48px; margin-bottom:16px; }
-.section-label::before { content:'— '; }
+/* Lightning flash */
+.lightning { position:fixed; inset:0; background:rgba(200,210,230,0.06); pointer-events:none; z-index:3; opacity:0; }
+.lightning.flash { animation:lightningFlash 0.15s ease-out; }
+@keyframes lightningFlash { 0%{opacity:1} 100%{opacity:0} }
 
-.entry { display:block; padding:6px 0; color:#888; }
-.entry:hover { color:#c4956a; }
-.entry .num { color:#555; margin-right:12px; }
-.entry .desc { display:block; color:#555; font-size:11px; margin-left:0; padding-left:0; }
+/* Sun rays */
+.ray { position:absolute; top:-50px; width:1px; height:120vh; background:linear-gradient(180deg, rgba(196,149,106,0.03), transparent 60%); transform-origin:top center; }
 
-.spacer { height:32px; }
+/* Shiver animation */
+@keyframes shiver { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-1px)} 75%{transform:translateX(1px)} }
+.shiver { animation:shiver 0.15s infinite; }
 
-.footer { margin-top:80px; font-size:11px; color:#333; }
+/* Nav */
+.nav { position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(160,160,160,0.06); }
+.nav-inner { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; }
+.nav-logo { font-size:13px; letter-spacing:4px; font-weight:400; color:#ccc; }
+.nav-logo .f { color:#c4956a; }
+.nav-links { display:flex; gap:20px; font-size:11px; letter-spacing:1px; }
+.nav-links a { color:rgba(160,160,160,0.3); }
+.nav-links a:hover { color:#c4956a; }
+.nav-links a.active { color:#888; }
+.pulse { display:inline-block; width:4px; height:4px; border-radius:50%; background:#c4956a; animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* Weather buttons + click me */
+.weather-bar { position:fixed; top:64px; left:24px; z-index:40; display:flex; gap:6px; align-items:center; }
+.weather-btn { background:none; border:1px solid rgba(160,160,160,0.08); color:rgba(160,160,160,0.25); padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:1px; cursor:pointer; border-radius:2px; transition:all 0.3s; }
+.weather-btn:hover { border-color:rgba(196,149,106,0.2); color:rgba(160,160,160,0.5); }
+.weather-btn.active { border-color:rgba(196,149,106,0.3); color:#c4956a; }
+.sound-btn { position:fixed; top:64px; right:24px; z-index:40; }
+.sound-citation { position:absolute; top:90px; right:24px; z-index:40; display:none; max-width:260px; background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15); border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7; color:rgba(160,160,160,0.5); backdrop-filter:blur(8px); }
+.sound-citation .src { display:block; font-size:8px; color:rgba(196,149,106,0.4); margin-top:8px; letter-spacing:0.5px; }
+/* Sticky side notes */
+.sticky-note {
+  position:absolute; width:260px;
+  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
+  border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7;
+  color:rgba(160,160,160,0.5); z-index:30;
+  display:none; backdrop-filter:blur(8px);
+}
+.sticky-note.open { display:block; animation:fadeNote 0.3s ease-out; }
+@keyframes fadeNote { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.sticky-note:hover { border-color:rgba(196,149,106,0.25); color:rgba(160,160,160,0.5); }
+.sticky-note .src { display:block; font-size:7px; color:rgba(196,149,106,0.3); margin-top:6px; letter-spacing:0.5px; }
+.sticky-note .src-link { font-size:7px; margin-top:4px; padding:1px 6px; }
+/* Clickable labels */
+.eai-clickable { cursor:pointer; transition:all 0.3s; }
+.eai-clickable:hover { color:#c4956a; }
+.eai-clickable.active { color:#c4956a; }
+
+@media(max-width:900px) {
+  .sticky-note { display:none !important; }
+  .sn-connector { display:none !important; }
+}
+
+/* Rain citation */
+.rain-citation { position:absolute; top:90px; left:24px; z-index:40; background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15); border-radius:4px; padding:14px 18px; max-width:260px; font-size:10px; line-height:1.7; color:rgba(160,160,160,0.5); display:none; backdrop-filter:blur(8px); }
+.rain-citation .src { display:block; margin-top:8px; font-size:8px; color:rgba(196,149,106,0.5); letter-spacing:0.5px; }
+.popup-x { position:absolute; top:6px; right:10px; cursor:pointer; color:rgba(160,160,160,0.25); font-size:14px; transition:color 0.2s; z-index:2; }
+.popup-x:hover { color:rgba(160,160,160,0.6); }
+.src-link { display:inline-block; color:rgba(196,149,106,0.5); border:1px solid rgba(196,149,106,0.15); padding:2px 8px; border-radius:2px; transition:all 0.3s; font-size:8px; letter-spacing:1px; margin-top:8px; }
+.src-link:hover { border-color:rgba(196,149,106,0.4); color:#c4956a; background:rgba(196,149,106,0.06); }
+
+/* Layout */
+.page { max-width:640px; margin:0 auto; padding:100px 24px 60px; position:relative; z-index:2; }
+
+/* Hero */
+.hero-cat { text-align:center; margin:40px 0 20px; white-space:pre; font-size:12px; line-height:1.3; color:rgba(160,160,160,0.2); min-height:70px; transition:color 0.5s; }
+.hero-cat .eyes { color:#c4956a; animation:catBlink 4s infinite; }
+@keyframes catBlink { 0%,42%,46%,100%{opacity:1} 44%{opacity:0} }
+/* Cat reactions */
+.cat-reaction { text-align:center; font-size:11px; color:rgba(196,149,106,0.5); min-height:20px; margin-bottom:4px; transition:all 0.3s; }
+.cat-reaction.pop { animation:popUp 0.4s ease-out; }
+@keyframes popUp { 0%{opacity:0;transform:translateY(8px)} 50%{opacity:1;transform:translateY(-4px)} 100%{opacity:1;transform:translateY(0)} }
+.pat-hint { text-align:center; font-size:8px; color:rgba(160,160,160,0.2); letter-spacing:1px; margin-top:-12px; margin-bottom:12px; transition:opacity 0.3s; }
+
+.hero-title {
+  text-align:center; font-size:15px; font-weight:400; color:#ccc; letter-spacing:4px; margin-bottom:4px;
+  transition:all 0.3s;
+}
+.hero-title:hover { color:#c4956a; }
+.fish-row { display:flex; justify-content:center; gap:10px; margin-bottom:4px; }
+.fish { font-size:11px; color:rgba(160,160,160,0.15); cursor:pointer; transition:all 0.3s; letter-spacing:1px; }
+.fish:hover { color:rgba(160,160,160,0.4); }
+.fish.lit { color:#c4956a; text-shadow:0 0 6px rgba(196,149,106,0.3); }
+.floor-note {
+  position:absolute; top:360px; right:24px; z-index:40;
+  display:none; max-width:260px;
+  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
+  border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7;
+  color:rgba(160,160,160,0.5); backdrop-filter:blur(8px);
+}
+.floor-note-text { font-style:italic; margin-bottom:10px; color:rgba(160,160,160,0.4); }
+.floor-note-quote { font-size:9px; color:rgba(160,160,160,0.35); border-left:1px solid rgba(196,149,106,0.2); padding-left:10px; margin:8px 0; }
+.floor-note .src { display:block; font-size:8px; color:rgba(196,149,106,0.4); margin-top:8px; letter-spacing:0.5px; }
+.hero-sub { text-align:center; font-size:10px; color:rgba(160,160,160,0.3); letter-spacing:2px; margin-bottom:60px; }
+
+/* Project Card */
+.project-card {
+  display:block; margin:0 0 32px;
+  background:transparent;
+  border:none;
+  padding:20px 24px; position:relative;
+  transition:all 0.3s; color:#888;
+}
+.project-card:hover { color:#c4956a; padding-left:28px; }
+.project-card:hover .project-title { color:#c4956a; }
+.project-card:hover .project-sub { color:rgba(160,160,160,0.5); }
+.project-card:hover .mini-cat.dim { color:rgba(160,160,160,0.18); }
+.project-card:hover .mini-cat.lit { color:rgba(196,149,106,0.45); }
+
+/* Three cats - face only */
+.three-cats { display:flex; justify-content:center; gap:40px; margin-bottom:16px; align-items:center; }
+.mini-cat { text-align:center; font-size:11px; line-height:1.35; transition:all 0.3s; position:relative; }
+.mc-ear, .mc-face, .mc-mouth { white-space:pre; }
+.mini-cat.dim { color:rgba(160,160,160,0.12); }
+.mini-cat.lit { color:rgba(160,160,160,0.35); }
+.mini-cat.lit .mc-eyes { color:#c4956a; }
+.mini-cat-label { font-size:7px; letter-spacing:2px; color:rgba(160,160,160,0.2); margin-top:6px; }
+.mini-cat.lit .mini-cat-label { color:rgba(196,149,106,0.4); }
+
+.project-title { font-size:14px; font-weight:500; color:#ccc; letter-spacing:1px; margin-bottom:4px; text-align:center; }
+.project-sub { font-size:10px; color:rgba(160,160,160,0.4); text-align:center; letter-spacing:1px; }
+
+/* EAI Tree - vertical */
+.eai-tree { margin:24px 0 32px; position:relative; padding-left:32px; }
+.eai-tree::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:1px; background:linear-gradient(180deg, rgba(196,149,106,0.3), rgba(196,149,106,0.15), rgba(196,149,106,0.05)); }
+.eai-root { position:relative; margin-bottom:32px; }
+.eai-root::before { content:''; position:absolute; left:-28px; top:6px; width:9px; height:9px; background:#c4956a; border-radius:50%; box-shadow:0 0 8px rgba(196,149,106,0.3); }
+.eai-root-label { font-size:14px; font-weight:500; color:#c4956a; letter-spacing:3px; }
+.eai-root-sub { font-size:9px; color:rgba(160,160,160,0.25); letter-spacing:1px; margin-top:4px; }
+.eai-trunk { display:none; }
+.eai-branches { display:flex; flex-direction:column; gap:0; }
+.eai-branches::before { display:none; }
+.eai-branch { position:relative; margin-bottom:24px; padding-left:0; }
+.eai-branch::before { content:''; position:absolute; left:-28px; top:6px; width:9px; height:9px; background:#0a0a0a; border:1.5px solid rgba(196,149,106,0.25); border-radius:50%; transition:all 0.3s; z-index:2; }
+.eai-branch:hover::before { background:rgba(196,149,106,0.3); border-color:#c4956a; box-shadow:0 0 6px rgba(196,149,106,0.2); }
+.eai-branch-connector { display:none; }
+.eai-branch-label {
+  font-size:12px; font-weight:500; letter-spacing:4px; margin-bottom:2px;
+  color:rgba(160,160,160,0.4); transition:all 0.4s; cursor:pointer;
+}
+.eai-branch:hover .eai-branch-label { color:#c4956a; }
+.eai-branch-sub { font-size:9px; color:rgba(160,160,160,0.2); letter-spacing:1px; margin-bottom:8px; transition:all 0.3s; }
+.eai-branch:hover .eai-branch-sub { color:rgba(160,160,160,0.35); }
+.eai-leaves { display:flex; flex-direction:column; gap:0; padding-left:16px; border-left:1px solid rgba(160,160,160,0.04); }
+.eai-leaf {
+  display:block; padding:4px 10px; font-size:10px; color:rgba(160,160,160,0.25);
+  transition:all 0.3s; border-radius:3px; border:1px solid transparent;
+}
+.eai-leaf:hover { color:#c4956a; background:rgba(196,149,106,0.04); border-color:rgba(196,149,106,0.1); padding-left:14px; }
+.eai-leaf-num { font-size:8px; color:rgba(160,160,160,0.15); letter-spacing:1px; margin-right:4px; }
+.eai-leaf:hover .eai-leaf-num { color:rgba(196,149,106,0.4); }
+.eai-leaf-title { font-size:10px; }
+.eai-leaf-desc {
+  display:block; font-size:8px; color:rgba(160,160,160,0.0); line-height:1.6;
+  max-height:0; overflow:hidden; transition:all 0.4s; margin-top:0;
+}
+.eai-leaf:hover .eai-leaf-desc { color:rgba(160,160,160,0.3); max-height:40px; margin-top:4px; }
+
+/* Flow line */
+.flow { position:relative; padding-left:32px; }
+.flow::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:1px; background:linear-gradient(180deg, rgba(196,149,106,0.3), rgba(196,149,106,0.08), rgba(160,160,160,0.04)); }
+
+/* Gem */
+.gem { position:relative; margin-bottom:32px; display:block; color:#888; transition:all 0.3s; }
+.gem:hover { color:#c4956a; padding-left:4px; }
+.gem::before { content:''; position:absolute; left:-28px; top:12px; width:9px; height:9px; background:#0a0a0a; border:1.5px solid rgba(196,149,106,0.3); border-radius:50%; transition:all 0.3s; z-index:2; }
+.gem:hover::before { background:#c4956a; border-color:#c4956a; box-shadow:0 0 8px rgba(196,149,106,0.3); }
+.gem-num { font-size:9px; color:rgba(160,160,160,0.25); letter-spacing:2px; margin-bottom:2px; }
+.gem-title { font-size:13px; font-weight:400; color:inherit; line-height:1.6; }
+.gem-line { font-size:11px; color:rgba(160,160,160,0.35); line-height:1.8; margin-top:2px; }
+.gem:hover .gem-line { color:rgba(160,160,160,0.5); }
+
+/* Section Label */
+.section-label { font-size:9px; color:rgba(160,160,160,0.2); letter-spacing:3px; margin:48px 0 24px; position:relative; }
+.section-label::before { content:''; position:absolute; left:-28px; top:4px; width:9px; height:9px; background:rgba(196,149,106,0.15); border-radius:50%; }
+
+/* Footer */
+.footer { margin-top:80px; padding-top:24px; border-top:1px solid rgba(160,160,160,0.04); text-align:center; }
+.footer-text { font-size:11px; font-style:italic; color:rgba(160,160,160,0.15); }
+.footer-copy { font-size:9px; color:rgba(160,160,160,0.08); letter-spacing:2px; margin-top:8px; }
+
+@media(max-width:600px) {
+  .weather-bar { left:12px; }
+  .three-cats { gap:20px; }
+  .mini-cat { font-size:9px; }
+  .nav-inner { padding:14px 16px; }
+}
 </style>
 </head>
 <body>
 
 <div class="nav">
-  <a href="index.html" class="active">journal</a>
-  <a href="archive.html">archive</a>
-  <a href="cipher.html">cipher</a>
-  <a href="mailto:research@mufx.io">contact</a>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="f">floor</span>36</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">journal</a>
+      <a href="street-cat.html">blakcat</a>
+      <a href="mailto:research@mufx.io">contact</a>
+      <span class="pulse"></span>
+    </div>
+  </div>
 </div>
 
-<div class="title">ballad</div>
+<div class="weather-bar">
+  <button class="weather-btn" onclick="setWeather('sunny')" id="btn-sunny">sunny</button>
+  <button class="weather-btn" onclick="setWeather('drizzle')" id="btn-drizzle">drizzle</button>
+  <button class="weather-btn" onclick="setWeather('storm')" id="btn-storm">storm</button>
+</div>
+<button class="weather-btn sound-btn" onclick="toggleSound()" id="btn-sound">sound</button>
+<div class="sound-citation" id="soundCitation">
+  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('soundCitation',false)">&times;</span>
+  when a plate is vibrated at specific frequencies, standing wave patterns form. particles migrate to nodal lines, creating geometric patterns unique to each frequency. change the frequency, change the pattern. same frequency, same boundary conditions, same pattern, every time.
+  <span class="src">Chladni plate experiments (18th c.) / Hans Jenny, cymatics (1960s)</span>
+  <a href="p2.html" class="src-link">research ii</a>
+</div>
 
-<div class="section-label">research notes</div>
+<div class="floor-note" id="floorNote">
+  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('floorNote',false)">&times;</span>
+  <div class="floor-note-text">i had a dream one time that i was going up to the 36th floor in the airport to reconvene with my wife.</div>
+  <div class="floor-note-quote">"dreams are not replays of waking experience. recent experiences are not replayed in their original form. instead, dreams intermingle fragments of recent experience with other content, creating novel scenarios. the dream is a creative recombination, not a recording."</div>
+  <span class="src">Wamsley & Stickgold (2011)</span>
+  <a href="p3.html" class="src-link">research iii</a>
+</div>
 
-<a href="p1.html" class="entry">
-  <span class="num">i.</span> geometric & computational music theory
-  <span class="desc">orbifold chord spaces, idyom, 1/f noise, context-free grammars, predictive processing.</span>
+<div class="weather-layer" id="weatherLayer"></div>
+<div class="lightning" id="lightning"></div>
+
+<div class="rain-citation" id="rainCitation">
+  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('rainCitation',false)">&times;</span>
+  individual raindrops are unpredictable. but the rain itself has structure. musical rhythms obey a 1/f power law with a cutoff frequency: long-range correlations exist, but only up to a point. beyond the cutoff, it's noise. the cutoff defines the maximum horizon of predictability.
+  <span class="src">Levitin et al. (2012) "Musical rhythm spectra from Bach to Joplin obey a 1/f power law"</span>
+  <a href="p1.html" class="src-link">research i</a>
+</div>
+
+<div class="page">
+
+<!-- Hero -->
+<div class="cat-reaction" id="catReaction"></div>
+<div class="hero-cat" id="heroCat" style="cursor:pointer;"></div>
+<div class="hero-title" onclick="toggleFloorNote()" style="cursor:pointer;"><span style="color:#c4956a;">floor</span>36</div>
+<div class="hero-sub">research journal</div>
+<div style="text-align:center;margin-top:16px;">
+  <button class="weather-btn" id="btn-yarn" onclick="toggleYarn()" style="font-size:9px;letter-spacing:2px;padding:4px 14px;margin-bottom:8px;">show yarn</button>
+  <div class="fish-row" id="fishRow">
+    <span class="fish" id="fish-rainCitation" onclick="toggleFish('rainCitation')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-soundCitation" onclick="toggleFish('soundCitation')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-floorNote" onclick="toggleFish('floorNote')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-note-eai" onclick="toggleFish('note-eai')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-note-body" onclick="toggleFish('note-body')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-note-mind" onclick="toggleFish('note-mind')">&gt;&lt;&gt;</span>
+    <span class="fish" id="fish-note-soul" onclick="toggleFish('note-soul')">&gt;&lt;&gt;</span>
+  </div>
+</div>
+
+<!-- Flow -->
+<div class="flow">
+
+<!-- PROJECT: BLAKCAT (TOP) -->
+<div class="section-label">PROJECTS</div>
+
+<a href="street-cat.html" class="project-card" id="projectCard">
+  <div class="three-cats">
+    <div class="mini-cat lit">
+      <div class="mc-ear">/\_/\</div>
+      <div class="mc-face">( <span class="mc-eyes">O.O</span> )</div>
+      <div class="mc-mouth">> ~ <</div>
+      <div class="mini-cat-label">STREET</div>
+    </div>
+    <div class="mini-cat dim">
+      <div class="mc-ear">/\_/\</div>
+      <div class="mc-face">( -.- )</div>
+      <div class="mc-mouth">> w <</div>
+      <div class="mini-cat-label">HOUSE</div>
+    </div>
+    <div class="mini-cat lit">
+      <div class="mc-ear">/\_/\</div>
+      <div class="mc-face">( <span class="mc-eyes">?&omega;?</span> )</div>
+      <div class="mc-mouth">> _ <</div>
+      <div class="mini-cat-label">RANDOM</div>
+    </div>
+  </div>
+  <div class="project-title">project: blakcat</div>
+  <div class="project-sub">biologically inspired artificial architectural intelligence</div>
 </a>
 
-<a href="p2.html" class="entry">
-  <span class="num">ii.</span> music in nature, music in society
-  <span class="desc">whale song revolutions, acoustic niche hypothesis, kuramoto phase transitions, stigmergy.</span>
-</a>
+<div class="section-label">RESEARCH</div>
 
-<a href="p3.html" class="entry">
-  <span class="num">iii.</span> the brain's pattern machinery
-  <span class="desc">motor cortex as temporal prediction engine, cerebellum timing, basal ganglia chunking, embodied cognition.</span>
-</a>
+<!-- EAI TREE -->
+<div class="eai-tree" style="position:relative;">
+  <!-- Root -->
+  <div class="eai-root">
+    <div class="eai-root-label eai-clickable" data-note="note-eai" data-side="left" onclick="toggleNote('note-eai')">emergent architectural intelligence</div>
+    <div class="eai-root-sub">intelligence emerges from architecture, not from scale</div>
+  </div>
 
-<a href="p4.html" class="entry">
-  <span class="num">iv.</span> markov vs trees
-  <span class="desc">schenker, chomsky, transformers, rough volatility, and why the tree is how any autonomous entity should work.</span>
-</a>
+  <div class="eai-trunk"></div>
 
-<div class="section-label">architecture drafts</div>
+  <!-- Three branches -->
+  <div class="eai-branches">
+    <!-- BODY -->
+    <div class="eai-branch">
+      <div class="eai-branch-connector"></div>
+      <div class="eai-branch-label eai-clickable" data-note="note-body" data-side="left" onclick="toggleNote('note-body')">BODY</div>
+      <div class="eai-branch-sub">what it perceives</div>
+      <div class="eai-leaves">
+        <a href="p1.html" class="eai-leaf">
+          <span class="eai-leaf-num">i</span>
+          <span class="eai-leaf-title">music theory</span>
+          <span class="eai-leaf-desc">pleasure from prediction, alpha from calibrated surprise</span>
+        </a>
+        <a href="p2.html" class="eai-leaf">
+          <span class="eai-leaf-num">ii</span>
+          <span class="eai-leaf-title">coupled oscillators</span>
+          <span class="eai-leaf-desc">kuramoto tells you when the sync snaps</span>
+        </a>
+        <a href="p3.html" class="eai-leaf">
+          <span class="eai-leaf-num">iii</span>
+          <span class="eai-leaf-title">the brain</span>
+          <span class="eai-leaf-desc">the cerebellum predicts milliseconds ahead</span>
+        </a>
+      </div>
+    </div>
 
-<a href="draft1.html" class="entry">
-  <span class="num">i.</span> the organism
-  <span class="desc">the system as a living thing that breathes price and metabolizes uncertainty.</span>
-</a>
+    <!-- MIND -->
+    <div class="eai-branch">
+      <div class="eai-branch-connector"></div>
+      <div class="eai-branch-label eai-clickable" data-note="note-mind" data-side="right" onclick="toggleNote('note-mind')">MIND</div>
+      <div class="eai-branch-sub">how it thinks</div>
+      <div class="eai-leaves">
+        <a href="p4.html" class="eai-leaf">
+          <span class="eai-leaf-num">iv</span>
+          <span class="eai-leaf-title">markov vs trees</span>
+          <span class="eai-leaf-desc">markets have grammar, not just statistics</span>
+        </a>
+        <a href="p5.html" class="eai-leaf">
+          <span class="eai-leaf-num">v</span>
+          <span class="eai-leaf-title">nature solved it</span>
+          <span class="eai-leaf-desc">architecture beats volume. corvids proved it</span>
+        </a>
+      </div>
+    </div>
 
-<a href="draft2.html" class="entry">
-  <span class="num">ii.</span> the composition
-  <span class="desc">the market is already playing. this system learns to hear the piece and perform alongside it.</span>
-</a>
+    <!-- SOUL -->
+    <div class="eai-branch">
+      <div class="eai-branch-connector"></div>
+      <div class="eai-branch-label eai-clickable" data-note="note-soul" data-side="right" onclick="toggleNote('note-soul')">SOUL</div>
+      <div class="eai-branch-sub">is it real?</div>
+      <div class="eai-leaves">
+        <a href="p6.html" class="eai-leaf">
+          <span class="eai-leaf-num">vi</span>
+          <span class="eai-leaf-title">reinventing wheels?</span>
+          <span class="eai-leaf-desc">the synthesis doesn't exist. yet</span>
+        </a>
+        <a href="p7.html" class="eai-leaf">
+          <span class="eai-leaf-num">vii</span>
+          <span class="eai-leaf-title">the honest audit</span>
+          <span class="eai-leaf-desc">what's elegant but wrong, and what's next</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
-<a href="draft3.html" class="entry">
-  <span class="num">iii.</span> the growing tree
-  <span class="desc">a literal tree data structure that starts empty. what it becomes after 20 years reveals what the euro is.</span>
-</a>
+</div><!-- /flow -->
 
-<div class="section-label">archive</div>
+<div class="footer">
+  <div class="footer-text">the search continues</div>
+  <div class="footer-copy">FLOOR36 2026</div>
+</div>
 
-<a href="archive.html" class="entry">previous mufx research and signals</a>
+</div><!-- /page -->
 
-<div class="footer">ballad — the search continues</div>
+<!-- Sticky Notes (fixed position, toggled by JS) -->
+<div class="sticky-note" id="note-eai">
+  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-eai')">&times;</span>
+  untrained architectures produce brain-like representations. architecture alone, before any training, already encodes useful structure about the world.
+  <span class="src">Bonner et al. (2025, Nature Machine Intelligence)</span>
+  <a href="p6.html" class="src-link">research vi</a>
+</div>
+<div class="sticky-note" id="note-body">
+  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-body')">&times;</span>
+  beat synchronization shares genetic architecture with biological rhythms: walking pace, breathing rate, circadian chronotype. rhythm is a manifestation of the body's fundamental temporal organization.
+  <span class="src">Part iii, genetic architecture of rhythm</span>
+  <a href="p3.html" class="src-link">research iii</a>
+</div>
+<div class="sticky-note" id="note-mind">
+  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-mind')">&times;</span>
+  two passages can have identical chord sequences but different structural meanings. the markov chain sees the same state. schenker sees two entirely different functions.
+  <span class="src">Schenker / Lerdahl & Jackendoff (GTTM)</span>
+  <a href="p4.html" class="src-link">research iv</a>
+</div>
+<div class="sticky-note" id="note-soul">
+  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-soul')">&times;</span>
+  interpretability of individual components doesn't guarantee interpretability of the whole. emergence is more than the sum of parts. you might understand each oscillator and still not understand the synchronized collective.
+  <span class="src">Dr. Yuki Tanaka, AI Safety, Anthropik Council</span>
+  <a href="p7.html" class="src-link">research vii</a>
+</div>
+
+<script>
+// === WEATHER SYSTEM ===
+const catStates = {
+  sunny: `     /\\_/\\
+    ( <span class="eyes">-&#x03C9;-</span> )
+     (_____)`,
+  drizzle: `     /\\_/\\
+    ( <span class="eyes">o.o</span> )
+     (  _  )
+      ~~~ `,
+  storm: `  _______________
+ /                 \\
+|                   |
+|_______/ <span class="eyes">&gt;.&lt;</span> \\_______|`
+};
+
+let currentWeather = null;
+let lightningInterval = null;
+const layer = document.getElementById('weatherLayer');
+const heroCat = document.getElementById('heroCat');
+const rainCit = document.getElementById('rainCitation');
+const lightningEl = document.getElementById('lightning');
+
+function clearWeather() {
+  layer.innerHTML = '';
+  rainCit.style.display = 'none';
+  syncFish('rainCitation', false);
+  heroCat.classList.remove('shiver');
+  if (lightningInterval) { clearInterval(lightningInterval); lightningInterval = null; }
+  document.querySelectorAll('.weather-btn:not(.sound-btn)').forEach(b => b.classList.remove('active'));
+}
+
+function setWeather(w) {
+  clearWeather();
+  currentWeather = w;
+  document.getElementById('btn-' + w).classList.add('active');
+  heroCat.innerHTML = catStates[w];
+
+  if (w === 'sunny') {
+    for (let i = 0; i < 5; i++) {
+      const ray = document.createElement('div');
+      ray.className = 'ray';
+      ray.style.left = (15 + i * 18) + '%';
+      ray.style.transform = 'rotate(' + (-10 + i * 5) + 'deg)';
+      ray.style.opacity = 0.4 + Math.random() * 0.3;
+      layer.appendChild(ray);
+    }
+    document.body.style.background = '#0c0a08';
+  }
+  else if (w === 'drizzle') {
+    heroCat.classList.add('shiver');
+    for (let i = 0; i < 35; i++) {
+      const d = document.createElement('div');
+      d.className = 'drop slant';
+      d.style.left = (Math.random() * 110 - 10) + '%';
+      d.style.height = 10 + Math.random() * 14 + 'px';
+      d.style.animationDuration = 1.2 + Math.random() * 0.8 + 's';
+      d.style.animationDelay = Math.random() * 2 + 's';
+      d.style.opacity = 0.15 + Math.random() * 0.25;
+      layer.appendChild(d);
+    }
+    rainCit.style.display = 'block'; syncFish('rainCitation', true);
+    document.body.style.background = '#08090a';
+  }
+  else if (w === 'storm') {
+    heroCat.classList.add('shiver');
+    for (let i = 0; i < 100; i++) {
+      const d = document.createElement('div');
+      d.className = 'drop slant-hard';
+      d.style.left = (Math.random() * 120 - 20) + '%';
+      d.style.height = 14 + Math.random() * 22 + 'px';
+      d.style.animationDuration = 0.3 + Math.random() * 0.4 + 's';
+      d.style.animationDelay = Math.random() * 1 + 's';
+      d.style.opacity = 0.2 + Math.random() * 0.4;
+      d.style.background = 'linear-gradient(180deg, transparent, rgba(140,160,200,0.5))';
+      layer.appendChild(d);
+    }
+    rainCit.style.display = 'block'; syncFish('rainCitation', true);
+    document.body.style.background = '#060708';
+    // Lightning
+    lightningInterval = setInterval(() => {
+      if (currentWeather === 'storm' && Math.random() < 0.3) {
+        lightningEl.classList.add('flash');
+        setTimeout(() => lightningEl.classList.remove('flash'), 150);
+      }
+    }, 1500);
+  }
+}
+
+// === STICKY NOTE TOGGLES ===
+
+function closeNote(noteId) {
+  const note = document.getElementById(noteId);
+  note.classList.remove('open');
+  note.style.display = 'none';
+  const label = document.querySelector('[data-note="' + noteId + '"]');
+  if (label) label.classList.remove('active');
+  syncFish(noteId, false);
+}
+
+
+// Fixed positions for each note - never change
+const notePositions = {
+  'note-eai':  { left: '20px', right: 'auto', top: '620px' },
+  'note-body': { left: '20px', right: 'auto', top: '840px' },
+  'note-mind': { left: 'auto', right: '20px', top: '750px' },
+  'note-soul': { left: 'auto', right: '20px', top: '970px' },
+};
+
+function positionNote(el, note, side) {
+  const pos = notePositions[note.id];
+  if (!pos) return;
+  note.style.left = pos.left;
+  note.style.right = pos.right;
+  note.style.top = pos.top;
+}
+
+function toggleNote(noteId) {
+  const note = document.getElementById(noteId);
+  const label = document.querySelector('[data-note="' + noteId + '"]');
+  const isOpen = getComputedStyle(note).display !== 'none';
+  if (isOpen) {
+    note.style.display = 'none';
+    note.classList.remove('open');
+    if (label) label.classList.remove('active');
+    syncFish(noteId, false);
+  } else {
+    note.style.display = 'block';
+    note.classList.add('open');
+    if (label) { label.classList.add('active'); positionNote(label, note, label.dataset.side); }
+    syncFish(noteId, true);
+  }
+}
+
+function updateConnectors() {} // no-op, lines removed
+
+let yarnOpen = false;
+function toggleYarn() {
+  yarnOpen = !yarnOpen;
+  const btn = document.getElementById('btn-yarn');
+  // Tree sticky notes
+  const treeNotes = ['note-eai','note-body','note-mind','note-soul'];
+  if (yarnOpen) {
+    btn.textContent = 'hide yarn';
+    btn.classList.add('active');
+    // Open tree notes
+    treeNotes.forEach(id => {
+      const note = document.getElementById(id);
+      const label = document.querySelector('[data-note="' + id + '"]');
+      if (note) {
+        note.classList.add('open');
+        note.style.display = 'block';
+      }
+      if (label) {
+        label.classList.add('active');
+        positionNote(label, note, label.dataset.side);
+      }
+    });
+    // Open floor36, rain, sound
+    document.getElementById('floorNote').style.display = 'block';
+    document.getElementById('rainCitation').style.display = 'block';
+    document.getElementById('soundCitation').style.display = 'block';
+    // Light all fish
+    document.querySelectorAll('.fish').forEach(f => f.classList.add('lit'));
+  } else {
+    btn.textContent = 'show yarn';
+    btn.classList.remove('active');
+    treeNotes.forEach(id => {
+      const note = document.getElementById(id);
+      const label = document.querySelector('[data-note="' + id + '"]');
+      if (note) { note.classList.remove('open'); note.style.display = 'none'; }
+      if (label) label.classList.remove('active');
+    });
+    document.getElementById('floorNote').style.display = 'none';
+    document.getElementById('rainCitation').style.display = 'none';
+    document.getElementById('soundCitation').style.display = 'none';
+    // Dim all fish
+    document.querySelectorAll('.fish').forEach(f => f.classList.remove('lit'));
+  }
+  updateConnectors();
+}
+
+function syncFish(noteId, isOpen) {
+  const fish = document.getElementById('fish-' + noteId);
+  if (fish) { isOpen ? fish.classList.add('lit') : fish.classList.remove('lit'); }
+}
+
+function toggleFish(noteId) {
+  const treeNotes = ['note-eai','note-body','note-mind','note-soul'];
+  if (treeNotes.includes(noteId)) {
+    toggleNote(noteId);
+  } else {
+    const el = document.getElementById(noteId);
+    const isOpen = getComputedStyle(el).display !== 'none';
+    el.style.display = isOpen ? 'none' : 'block';
+    syncFish(noteId, !isOpen);
+  }
+}
+
+function toggleFloorNote() {
+  const n = document.getElementById('floorNote');
+  const opening = n.style.display === 'none' || !n.style.display;
+  n.style.display = opening ? 'block' : 'none';
+  syncFish('floorNote', opening);
+}
+
+
+// === CAT INTERACTIONS ===
+const catReaction = document.getElementById('catReaction');
+let interactionTimeout = null;
+
+const catInteracted = {
+  sunny: `     /\\_/\\
+    ( <span class="eyes">O.O</span> )
+     (_____)`,
+  drizzle: `     /\\_/\\
+    ( <span class="eyes">^.^</span> )
+     (  _  )
+      ~~~ `,
+  storm: `  _______________
+ /                 \\
+|                   |
+|_______/___\\_______|`
+};
+
+heroCat.addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!currentWeather) return;
+
+  if (currentWeather === 'sunny') {
+    heroCat.innerHTML = catInteracted.sunny;
+    catReaction.textContent = '?';
+    catReaction.className = 'cat-reaction pop';
+    clearTimeout(interactionTimeout);
+    interactionTimeout = setTimeout(() => {
+      heroCat.innerHTML = catStates.sunny;
+      catReaction.textContent = '';
+      catReaction.className = 'cat-reaction';
+    }, 1500);
+  }
+  else if (currentWeather === 'drizzle') {
+    heroCat.classList.remove('shiver');
+    heroCat.innerHTML = catInteracted.drizzle;
+    catReaction.textContent = '~ meow';
+    catReaction.className = 'cat-reaction pop';
+    clearTimeout(interactionTimeout);
+    interactionTimeout = setTimeout(() => {
+      heroCat.innerHTML = catStates.drizzle;
+      heroCat.classList.add('shiver');
+      catReaction.textContent = '';
+      catReaction.className = 'cat-reaction';
+    }, 2500);
+  }
+  else if (currentWeather === 'storm') {
+    heroCat.innerHTML = catInteracted.storm;
+    catReaction.textContent = '...';
+    catReaction.className = 'cat-reaction pop';
+    clearTimeout(interactionTimeout);
+    interactionTimeout = setTimeout(() => {
+      heroCat.innerHTML = catStates.storm;
+      catReaction.textContent = '';
+      catReaction.className = 'cat-reaction';
+    }, 2000);
+  }
+});
+
+// === AMBIENT SOUND ===
+let audioCtx = null;
+let soundOn = false;
+let ambientNodes = [];
+
+function createAmbient(weather) {
+  stopAmbient();
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  if (weather === 'sunny') {
+    // Warm pad: two detuned sine waves with slow LFO
+    const g = audioCtx.createGain();
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 2);
+    g.connect(audioCtx.destination);
+
+    [174.61, 220.00, 261.63].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.detune.value = (i - 1) * 3;
+      const og = audioCtx.createGain();
+      og.gain.value = 0.4;
+      osc.connect(og);
+      og.connect(g);
+      osc.start();
+      ambientNodes.push(osc);
+    });
+
+    // Slow LFO on volume
+    const lfo = audioCtx.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.08;
+    const lfoGain = audioCtx.createGain();
+    lfoGain.gain.value = 0.015;
+    lfo.connect(lfoGain);
+    lfoGain.connect(g.gain);
+    lfo.start();
+    ambientNodes.push(lfo);
+    ambientNodes.push(g);
+  }
+  else if (weather === 'drizzle') {
+    // Filtered noise (rain) + soft low drone
+    const bufSize = audioCtx.sampleRate * 2;
+    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buf;
+    noise.loop = true;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 800;
+    filter.Q.value = 0.5;
+
+    const ng = audioCtx.createGain();
+    ng.gain.value = 0;
+    ng.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 2);
+
+    noise.connect(filter);
+    filter.connect(ng);
+    ng.connect(audioCtx.destination);
+    noise.start();
+
+    // Low drone
+    const drone = audioCtx.createOscillator();
+    drone.type = 'sine';
+    drone.frequency.value = 65.41;
+    const dg = audioCtx.createGain();
+    dg.gain.value = 0;
+    dg.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 3);
+    drone.connect(dg);
+    dg.connect(audioCtx.destination);
+    drone.start();
+
+    ambientNodes.push(noise, drone, ng, dg);
+  }
+  else if (weather === 'storm') {
+    // Heavy noise + sub bass rumble + occasional crackle
+    const bufSize = audioCtx.sampleRate * 2;
+    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buf;
+    noise.loop = true;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 1200;
+    filter.Q.value = 0.3;
+
+    const ng = audioCtx.createGain();
+    ng.gain.value = 0;
+    ng.gain.linearRampToValueAtTime(0.07, audioCtx.currentTime + 2);
+
+    noise.connect(filter);
+    filter.connect(ng);
+    ng.connect(audioCtx.destination);
+    noise.start();
+
+    // Sub rumble
+    const sub = audioCtx.createOscillator();
+    sub.type = 'sine';
+    sub.frequency.value = 40;
+    const sg = audioCtx.createGain();
+    sg.gain.value = 0;
+    sg.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2);
+    sub.connect(sg);
+    sg.connect(audioCtx.destination);
+    sub.start();
+
+    // Rumble LFO
+    const lfo = audioCtx.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.15;
+    const lfoG = audioCtx.createGain();
+    lfoG.gain.value = 0.02;
+    lfo.connect(lfoG);
+    lfoG.connect(ng.gain);
+    lfo.start();
+
+    ambientNodes.push(noise, sub, lfo, ng, sg);
+  }
+}
+
+function stopAmbient() {
+  ambientNodes.forEach(n => {
+    try {
+      if (n.stop) n.stop();
+      else if (n.disconnect) n.disconnect();
+    } catch(e) {}
+  });
+  ambientNodes = [];
+}
+
+
+function toggleSound() {
+  soundOn = !soundOn;
+  const btn = document.getElementById('btn-sound');
+  if (soundOn) {
+    btn.classList.add('active');
+    document.getElementById('soundCitation').style.display = 'block';
+    syncFish('soundCitation', true);
+    createAmbient(currentWeather);
+  } else {
+    btn.classList.remove('active');
+    document.getElementById('soundCitation').style.display = 'none';
+    syncFish('soundCitation', false);
+    stopAmbient();
+  }
+}
+
+// Re-trigger ambient when weather changes (if sound is on)
+const origSetWeather = setWeather;
+setWeather = function(w) {
+  origSetWeather(w);
+  if (soundOn) createAmbient(w);
+};
+
+
+// Random weather on load
+setWeather('sunny');
+</script>
 
 </body>
 </html>
