@@ -265,8 +265,8 @@ footer {
 .progress-fill {
   height: 100%;
   width: 0%;
-  background: #e8b882;
-  box-shadow: 0 0 4px #c4956a, 0 0 12px rgba(196,149,106,0.8), 0 0 30px rgba(196,149,106,0.5), 0 0 60px rgba(196,149,106,0.25);
+  background: #c4956a;
+  box-shadow: 0 0 4px rgba(196,149,106,0.5), 0 0 10px rgba(196,149,106,0.3);
   transition: width 0.1s linear;
 }
 
@@ -1522,9 +1522,9 @@ body.research-article .article-hash .hash-icon::before {
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .nav-inner { padding: 0 16px; }
-  .nav-links { gap: 14px; }
-  .nav-links a { font-size: 9px; letter-spacing: 1px; }
+  .nav-inner { padding: 14px 16px; }
+  .nav-links { gap: 16px; }
+  .nav-links a { font-size: 11px; letter-spacing: 1px; }
   .nav-links a.active::before { display: none; }
   .article-header { padding: 90px 16px 24px; }
   .article-body { padding: 24px 16px 48px; }
@@ -1587,7 +1587,7 @@ body.research-article .article-hash .hash-icon::before {
   .regime-strip { flex-wrap: wrap; }
   .positioning-row { flex-wrap: wrap; }
   .positioning-bar-track { width: 100%; }
-  .nav-links a { font-size: 8px; letter-spacing: 1px; }
+  .nav-links a { font-size: 10px; letter-spacing: 1px; }
   /* Homepage */
   .hero-sub { font-size: 10px; letter-spacing: 2px; }
   .card-title { font-size: 14px; }
