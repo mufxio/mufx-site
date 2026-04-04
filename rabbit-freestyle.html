@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Organism That Trades</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  --bg: #04060a;
+  --s1: #080c12;
+  --s2: #0d1219;
+  --border: #141c24;
+  --text: #b0bec8;
+  --muted: #3a4a58;
+  --a1: #4fc3f7;   /* allostasis / blue */
+  --a2: #81c784;   /* homeostasis / green */
+  --a3: #ffb74d;   /* hunger / amber */
+  --a4: #ce93d8;   /* consciousness / purple */
+  --a5: #ef9a9a;   /* stigmergy / red-ish */
+  --a6: #80cbc4;   /* umwelt / teal */
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(4,6,10,0.96); backdrop-filter:blur(12px);
+  border-bottom: 1px solid var(--border);
+  display:flex; align-items:center; padding:0 1.5rem; height:50px; gap:2px;
+  overflow-x: auto;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight:700; font-size:1rem;
+  color:var(--a3); margin-right:1.5rem; white-space:nowrap;
+  letter-spacing:-0.02em;
+}
+nav button {
+  background:none; border:none; cursor:pointer;
+  color:var(--muted); font-family:'Space Mono',monospace;
+  font-size:10px; padding:5px 9px; border-radius:3px;
+  transition:all 0.2s; white-space:nowrap; letter-spacing:0.03em;
+}
+nav button:hover { color:var(--text); background:#0d1219; }
+nav button.active { color:var(--a3); background:rgba(255,183,77,0.1); }
+
+section { display:none; min-height:100vh; padding:4.5rem 2rem 4rem; max-width:1100px; margin:0 auto; }
+section.active { display:block; }
+
+h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; line-height:1.05; letter-spacing:-0.03em; margin-bottom:0.5rem; }
+h2 { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:1rem; }
+h3 { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+p { color:var(--muted); margin-bottom:0.75rem; max-width:68ch; }
+.eyebrow { font-size:9px; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem; }
+em { font-style:italic; }
+
+.tag {
+  display:inline-block; padding:2px 7px; border-radius:2px;
+  font-size:9px; letter-spacing:0.1em; text-transform:uppercase; border:1px solid;
+}
+
+/* ── ALLOSTASIS ── */
+.allostasis-demo {
+  background:var(--s1); border:1px solid var(--border); border-radius:10px;
+  padding:1.5rem; margin:1.5rem 0; position:relative; overflow:hidden;
+}
+canvas#allostasis-canvas { width:100%; height:220px; display:block; border-radius:6px; background:var(--bg); cursor:pointer; }
+
+/* ── ACTIVE INFERENCE ── */
+.ai-canvas-wrap { background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
+canvas#ai-canvas { width:100%; height:280px; display:block; border-radius:6px; background:var(--bg); }
+
+/* ── INTEROCEPTION ── */
+.intero-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0; }
+.intero-card {
+  background:var(--s1); border:1px solid var(--border); border-radius:8px;
+  padding:1.2rem; transition:all 0.3s;
+}
+.intero-card:hover { border-color:var(--a1); box-shadow:0 0 20px rgba(79,195,247,0.1); }
+.capacity-bar { height:100px; position:relative; margin:1rem 0; }
+canvas.cap-canvas { width:100%; height:100px; display:block; }
+
+/* ── LEVIN / LIGHT CONE ── */
+canvas#lightcone-canvas { width:100%; height:320px; display:block; border-radius:8px; background:var(--bg); cursor:pointer; }
+
+/* ── STIGMERGY ── */
+canvas#stigmergy-canvas { width:100%; height:300px; display:block; border-radius:8px; background:var(--bg); cursor:pointer; }
+.stigmergy-controls { display:flex; gap:0.75rem; margin-top:1rem; flex-wrap:wrap; }
+
+/* ── UMWELT ── */
+.umwelt-wrap { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin:1.5rem 0; }
+.umwelt-card {
+  background:var(--s1); border:1px solid var(--border); border-radius:8px;
+  padding:1.2rem; text-align:center; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden;
+}
+.umwelt-card::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 50%, var(--glow,transparent), transparent 70%);
+  pointer-events:none;
+}
+.umwelt-card:hover { transform:translateY(-3px); }
+.umwelt-icon { font-size:2.5rem; margin-bottom:0.5rem; display:block; }
+canvas.umwelt-canvas { width:100%; height:80px; display:block; margin-top:0.75rem; border-radius:4px; background:var(--bg); }
+
+/* ── CONSCIOUSNESS ── */
+.phi-canvas-wrap { background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0; }
+canvas#phi-canvas { width:100%; height:260px; display:block; border-radius:6px; background:var(--bg); cursor:pointer; }
+
+/* ── SYNTHESIS ── */
+.synth-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1.5rem 0; }
+.synth-card {
+  background:var(--s1); border:1px solid var(--border); border-radius:8px;
+  padding:1.2rem; border-left:3px solid var(--a3); transition:all 0.3s;
+}
+.synth-card:nth-child(2) { border-left-color:var(--a1); }
+.synth-card:nth-child(3) { border-left-color:var(--a6); }
+.synth-card:nth-child(4) { border-left-color:var(--a4); }
+.synth-card:nth-child(5) { border-left-color:var(--a5); }
+.synth-card:nth-child(6) { border-left-color:var(--a2); }
+.synth-card:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(0,0,0,0.5); }
+.synth-card p { max-width:none; font-size:11px; }
+
+.btn {
+  background:none; border:1px solid var(--border); color:var(--muted);
+  font-family:'Space Mono',monospace; font-size:10px; padding:6px 14px;
+  border-radius:3px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em;
+}
+.btn:hover { border-color:var(--a3); color:var(--a3); }
+
+.info-box {
+  background:var(--s1); border:1px solid var(--border);
+  border-left:3px solid var(--a3); border-radius:4px;
+  padding:1rem 1.2rem; margin:1rem 0;
+}
+.info-box p { max-width:none; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.fu { animation:fadeUp 0.5s ease forwards; opacity:0; }
+.fu.d1 { animation-delay:0.05s; }
+.fu.d2 { animation-delay:0.15s; }
+.fu.d3 { animation-delay:0.25s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">the organism that trades</span>
+  <button class="active" onclick="show('allostasis')">Allostasis</button>
+  <button onclick="show('activeinf')">Active Inference</button>
+  <button onclick="show('interoception')">Interoception</button>
+  <button onclick="show('levin')">Levin / Light Cone</button>
+  <button onclick="show('stigmergy')">Stigmergy</button>
+  <button onclick="show('umwelt')">Umwelt</button>
+  <button onclick="show('consciousness')">Consciousness</button>
+  <button onclick="show('synthesis')">Synthesis</button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     1. ALLOSTASIS
+══════════════════════════════════════════ -->
+<section id="allostasis" class="active">
+  <div class="fu d1">
+    <div class="eyebrow">Sterling 2012, 2018 · The Allostasis Problem</div>
+    <h1>Predictive regulation<br>vs. <em style="color:var(--a2)">reactive</em><br><em style="color:var(--a1)">anticipation.</em></h1>
+    <p>Homeostasis waits for errors. Allostasis predicts them. A system that only reacts to deviations is already dead. The organism must predict its own hunger trajectory and act before the deficit materializes.</p>
+  </div>
+
+  <div class="allostasis-demo fu d2">
+    <div style="display:flex; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
+      <span class="tag" style="border-color:var(--a2); color:var(--a2);">Homeostatic</span>
+      <span style="color:var(--muted); font-size:11px;">waits for error → corrects</span>
+      <span style="margin:0 0.5rem; color:var(--border);">vs.</span>
+      <span class="tag" style="border-color:var(--a1); color:var(--a1);">Allostatic</span>
+      <span style="color:var(--muted); font-size:11px;">predicts need → pre-adjusts</span>
+    </div>
+    <canvas id="allostasis-canvas"></canvas>
+    <div style="display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap;">
+      <button class="btn" onclick="alloMode='homeostatic'">Run homeostatic</button>
+      <button class="btn" onclick="alloMode='allostatic'">Run allostatic</button>
+      <button class="btn" onclick="resetAllo()">Reset</button>
+    </div>
+    <p style="font-size:10px; color:var(--muted); margin-top:0.75rem;">Green = allostatic (pre-adjusts). Orange = homeostatic (reacts). Watch how the allostatic system avoids the deficit valley.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin:1.5rem 0;" class="fu d3">
+    <div class="info-box" style="border-left-color:var(--a2);">
+      <h3>Circadian timing as prediction</h3>
+      <p>Organisms don't respond to light/dark cycles — they <em>internalize the rhythm</em> and pre-adjust metabolism. A clock that generates predictions, not a sensor detecting states.</p>
+      <p style="font-size:10px; color:var(--a2);">→ blakcat: internalize market session rhythms. Pre-adjust before known liquidity windows.</p>
+    </div>
+    <div class="info-box" style="border-left-color:var(--a1);">
+      <h3>Minimal signaling</h3>
+      <p>Use the cheapest communication channel that works. Hormones over electrical signals when speed isn't critical. An efficiency principle for any trading organism.</p>
+      <p style="font-size:10px; color:var(--a1);">→ blakcat: coarse hunger signal, fine-grained only when needed. Computational economy.</p>
+    </div>
+    <div class="info-box" style="border-left-color:var(--a3);">
+      <h3>Dopamine = prediction error</h3>
+      <p>Dopamine doesn't signal reward — it signals <em>surprise relative to prediction</em>. Formally equivalent to temporal difference learning. Even fruit flies have this.</p>
+      <p style="font-size:10px; color:var(--a3);">→ blakcat: reward signal should be TD error, not raw P&L. Surprise, not satisfaction.</p>
+    </div>
+  </div>
+
+  <div class="info-box fu d3" style="border-left-color:var(--a1);">
+    <h3>The uncomfortable implication for blakcat</h3>
+    <p>A cat that only responds to hunger <em>after</em> it occurs is running a homeostatic architecture. A truly allostatic cat needs a <strong>forward model of its own metabolic state</strong> — not just "I am hungry now" but "given my current feeding rate and energy expenditure, I will be hungry in N timesteps." That forward model is a different computational object entirely from a Q-table. It's a generative model of the self.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     2. ACTIVE INFERENCE
+══════════════════════════════════════════ -->
+<section id="activeinf">
+  <div class="fu d1">
+    <div class="eyebrow">Friston 2009 · Free Energy Principle</div>
+    <h1>The organism that<br><em style="color:var(--a4)">sculpts</em><br>its sensory stream.</h1>
+    <p>Active inference inverts the relationship between organism and reward. The agent doesn't maximize external reward — it acts to <em>confirm its own model of how the world should be</em>. Profit emerges as a side effect of having a good model.</p>
+  </div>
+
+  <div class="ai-canvas-wrap fu d2">
+    <h3>Free energy landscape — prediction error minimization</h3>
+    <p style="font-size:11px;">The organism can reduce prediction error in two ways: (a) update beliefs [perception], or (b) act on the world to make it conform to predictions [active inference]. Click to send the organism toward surprise or toward confirmation.</p>
+    <canvas id="ai-canvas"></canvas>
+    <div style="display:flex; gap:1rem; margin-top:1rem;">
+      <button class="btn" onclick="aiMode='explore'">Explore (update beliefs)</button>
+      <button class="btn" onclick="aiMode='act'">Act (confirm model)</button>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a4);">The reframing</h3>
+      <p>The cat doesn't trade to maximize profit. It trades to <em>confirm its model of the market</em>. Profit is a consequence of having a good model — because a good model predicts price movements, and predicting them enables profitable positioning.</p>
+      <div style="background:var(--bg); border-left:2px solid var(--a4); padding:0.75rem; margin-top:0.75rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a4);">
+        The <em>drive</em> is not profit. The drive is the reduction of uncertainty.
+      </div>
+    </div>
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a1);">Hunger as precision signal</h3>
+      <p>Under active inference, hunger would be a <em>precision signal</em> — modulating the confidence the organism places in its predictions.</p>
+      <div style="margin-top:0.75rem; display:flex; flex-direction:column; gap:0.5rem;">
+        <div style="background:var(--bg); padding:0.5rem 0.75rem; border-radius:4px; font-size:11px; display:flex; gap:0.5rem; align-items:flex-start;">
+          <span style="color:var(--a5);">✗</span>
+          <span>"Trade more aggressively when hungry" → reckless</span>
+        </div>
+        <div style="background:var(--bg); padding:0.5rem 0.75rem; border-radius:4px; font-size:11px; display:flex; gap:0.5rem; align-items:flex-start;">
+          <span style="color:var(--a2);">✓</span>
+          <span>"Become more uncertain about everything when hungry, explore more to resolve uncertainty" → adaptive</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem;" class="fu d3">
+    <h3>Free energy minimization</h3>
+    <div style="font-family:'Space Mono',monospace; font-size:0.95rem; color:var(--a4); background:var(--bg); padding:1rem; border-radius:4px; margin-bottom:1rem;">
+      F = E_q[log q(s) − log p(s,o)] = KL[q(s) || p(s|o)] − log p(o)
+    </div>
+    <p style="font-size:12px;">Free energy is an upper bound on surprise (negative log-evidence for the generative model). Minimizing free energy balances <strong style="color:var(--a4);">accuracy</strong> (explain observations well) against <strong style="color:var(--a1);">complexity</strong> (keep model simple). Not unlike bias-variance tradeoff — but operating across perception, action, and learning simultaneously.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     3. INTEROCEPTION
+══════════════════════════════════════════ -->
+<section id="interoception">
+  <div class="fu d1">
+    <div class="eyebrow">Sennesh et al. 2022 · Biological Psychology</div>
+    <h1>The organism<br><em style="color:var(--a1)">sensing</em><br>itself.</h1>
+    <p>Interoception — the brain's sense of its own internal state — is not just self-monitoring. It's the capacity to estimate adaptive capacity. The organism tracks not just "am I hungry?" but "how much capacity do I have to respond to challenges?"</p>
+  </div>
+
+  <div class="intero-grid fu d2">
+    <div class="intero-card">
+      <h3 style="color:var(--a1);">Capacity Curves</h3>
+      <p style="font-size:11px;">Each physiological system has an operating point where responsiveness is maximal, with threshold and saturation boundaries. The brain estimates these curves.</p>
+      <canvas class="cap-canvas" id="cap1"></canvas>
+      <div style="font-size:10px; color:var(--muted); margin-top:0.5rem;">
+        <span style="color:var(--a1);">—</span> Adaptive capacity curve &nbsp;
+        <span style="color:var(--a3);">·</span> Current operating point
+      </div>
+    </div>
+    <div class="intero-card">
+      <h3 style="color:var(--a3);">APIC Model</h3>
+      <p style="font-size:11px;">Allostatic Path-Integral Control: computes instantaneous capture rate (intake − effort) and global capture rate (time-averaged). Optimizes the global rate — not momentary satisfaction.</p>
+      <div style="background:var(--bg); border-radius:4px; padding:0.75rem; margin:0.5rem 0; font-size:0.85rem; color:var(--a3);">
+        r_inst = intake − effort<br>
+        r_global = E[r_inst over T]
+      </div>
+      <div style="font-size:10px; color:var(--muted);">The organism optimizes Sharpe ratio, not single-trade profit.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0; border-left:3px solid var(--a5);" class="fu d2">
+    <h3 style="color:var(--a5);">The London traders finding</h3>
+    <p>Traders with better interoceptive accuracy — who could more accurately sense their own heartbeats — were <strong>more profitable and survived longer</strong> on trading floors.</p>
+    <p style="font-size:12px;">Why? Interoceptive precision allows traders to distinguish signal from noise in their somatic markers. A trader with poor interoception can't tell whether their gut feeling is a valid pattern-match or just anxiety from too much coffee.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px;">
+        <div style="color:var(--a5); margin-bottom:0.3rem;">Poor interoception</div>
+        Gut signals are noise. Every emotion feels like insight. Can't decode body's summary statistics.
+      </div>
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px;">
+        <div style="color:var(--a2); margin-bottom:0.3rem;">Good interoception</div>
+        Decode the body's compression of thousands of subtle cues. The organism knows what it knows.
+      </div>
+    </div>
+    <div style="background:var(--bg); border-left:2px solid var(--a5); padding:0.75rem; margin-top:1rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a5);">
+      → blakcat needs an <em>interoceptive channel</em> — not just external state (18 market states) but internal state (hunger, fear, position) as felt experience. The organism sensing itself sensing the market.
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:1.5rem 0;" class="fu d3">
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+      <div style="color:var(--a3); font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; line-height:1;">r_inst</div>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">Instantaneous capture rate = P&L − transaction costs</div>
+    </div>
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+      <div style="color:var(--a1); font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; line-height:1;">r_global</div>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">Global capture rate ≡ Sharpe ratio</div>
+    </div>
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+      <div style="color:var(--a4); font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; line-height:1;">τ(H)</div>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">Capacity threshold = max drawdown boundary</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     4. LEVIN / LIGHT CONE
+══════════════════════════════════════════ -->
+<section id="levin">
+  <div class="fu d1">
+    <div class="eyebrow">Levin 2019, 2024 · Frontiers in Psychology · Communications Biology</div>
+    <h1>The computational<br><em style="color:var(--a6)">boundary</em><br>of a self.</h1>
+    <p>The boundary of a self is defined by its <em>computational light cone</em> — the spatiotemporal range of events it can measure, model, and influence. Expand the light cone, expand the self.</p>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0;" class="fu d2">
+    <h3>Interactive light cone — click to expand</h3>
+    <p style="font-size:11px; margin-bottom:1rem;">A single cell has a tiny light cone. When cells form networks through gap junctions, the cone expands. Click to evolve from cell → tissue → organism → collective.</p>
+    <canvas id="lightcone-canvas"></canvas>
+    <p style="font-size:10px; color:var(--muted); text-align:center; margin-top:0.5rem;">Click to advance through scales</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a5);">Cancer as boundary failure</h3>
+      <p>Cancer cells are not broken — they are perfectly competent individual cells that have <em>defected from the collective goal</em>. Their computational light cone has shrunk back to the cellular scale. They pursue individual homeostasis at the expense of the organism.</p>
+      <div style="background:var(--bg); border-left:2px solid var(--a5); padding:0.75rem; margin-top:0.75rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a5);">
+        → Multiple blakcats on same market = cancer. Each cannibalizing others' opportunities. Collectively destabilizing the environment they depend on.
+      </div>
+    </div>
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a6);">Scale-free cognition</h3>
+      <p>The same cognitive architecture (sense → model → act to reduce error) operates at radically different scales. A single cell maintaining ion balance is structurally identical to an organism maintaining temperature is structurally identical to a social group maintaining norms.</p>
+      <div style="background:var(--bg); border-left:2px solid var(--a6); padding:0.75rem; margin-top:0.75rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a6);">
+        → The question for EAI: can you create a "bioelectric network" between cats — expanding the collective computational light cone beyond individual hunger?
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     5. STIGMERGY
+══════════════════════════════════════════ -->
+<section id="stigmergy">
+  <div class="fu d1">
+    <div class="eyebrow">Deneubourg · ACO · The stigmergic market</div>
+    <h1>Coordination<br>through the<br><em style="color:var(--a5)">environment itself.</em></h1>
+    <p>Stigmergy is coordination without communication. Ants don't talk — they modify the environment (pheromone trails) and others respond to those modifications. The financial market <em>is</em> a stigmergic medium. Price is pheromone.</p>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0;" class="fu d2">
+    <h3>Live stigmergy simulation — click to add agents</h3>
+    <p style="font-size:11px; margin-bottom:1rem;">Each agent lays pheromone (price impact) as it "trades." Other agents follow strong trails. Pheromone decays — old signals fade. Click to spawn agents.</p>
+    <canvas id="stigmergy-canvas"></canvas>
+    <div class="stigmergy-controls">
+      <button class="btn" id="btn-spawn" onclick="spawnAgent()">+ Spawn agent</button>
+      <button class="btn" onclick="clearStig()">Clear trails</button>
+      <button class="btn" onclick="toggleDecay()">Toggle decay</button>
+      <span style="color:var(--muted); font-size:10px; align-self:center;" id="stig-decay-label">Decay: ON</span>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin:1.5rem 0;" class="fu d3">
+    <div class="info-box" style="border-left-color:var(--a5);">
+      <h3>Price as pheromone</h3>
+      <p>When a trader buys, price moves up — a modification of the shared environment. Other traders respond to that modification. Nobody needs to communicate directly.</p>
+    </div>
+    <div class="info-box" style="border-left-color:var(--a3);">
+      <h3>Built-in forgetting</h3>
+      <p>Pheromone decay is crucial. Without it, the system locks into the first path discovered. Decay creates the exploitation/exploration balance. The market mean-reverts — built-in forgetting.</p>
+    </div>
+    <div class="info-box" style="border-left-color:var(--a2);">
+      <h3>Emergent coordination</h3>
+      <p>Termites build cathedrals this way. No blueprint, no architect, no central plan. Each termite follows simple local rules. The global structure emerges from accumulated environmental modifications.</p>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem; border-left:3px solid var(--a5);" class="fu d3">
+    <h3>Competitive stigmergy — the arms race problem</h3>
+    <p>Ant colonies work because ants are genetically related and share fitness interests. Trading organisms are competitors. Stigmergy in a competitive environment might just produce arms races rather than coordination.</p>
+    <p style="font-size:12px;">Under what conditions does stigmergic coordination emerge among competing agents? This is an open question. One hypothesis: shared metabolic dependency on market health creates aligned interests even among competitors. The cats don't cooperate because they like each other — they cooperate because they all need the market to remain healthy.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     6. UMWELT
+══════════════════════════════════════════ -->
+<section id="umwelt">
+  <div class="fu d1">
+    <div class="eyebrow">Jakob von Uexküll · Perceptual world of an organism</div>
+    <h1>What world<br>does the<br><em style="color:var(--a6)">cat see?</em></h1>
+    <p>The Umwelt is the perceptual world specific to each organism. A tick perceives three things: butyric acid, warmth, texture. That IS its entire universe — not a simplified version of ours. A different universe. blakcat's Umwelt is 18 states.</p>
+  </div>
+
+  <div class="umwelt-wrap fu d2">
+    <div class="umwelt-card" style="--glow:rgba(255,183,77,0.15);" onclick="selectUmwelt('tick')">
+      <span class="umwelt-icon">🕷️</span>
+      <h3>The Tick</h3>
+      <p style="font-size:10px; max-width:none; margin:0;">3 variables: butyric acid, warmth, texture. A 3-dimensional universe. Everything else is noise that literally does not exist for the tick.</p>
+      <canvas class="umwelt-canvas" id="umwelt-tick"></canvas>
+    </div>
+    <div class="umwelt-card" style="--glow:rgba(129,199,132,0.15);" onclick="selectUmwelt('cat')">
+      <span class="umwelt-icon">🐱</span>
+      <h3>blakcat</h3>
+      <p style="font-size:10px; max-width:none; margin:0;">18 states from EUR/USD price action. An 18-node graph with transition probabilities that shift over time. Designed by a human, not evolved by the cat.</p>
+      <canvas class="umwelt-canvas" id="umwelt-cat"></canvas>
+    </div>
+    <div class="umwelt-card" style="--glow:rgba(155,93,229,0.15);" onclick="selectUmwelt('evolved')">
+      <span class="umwelt-icon">✨</span>
+      <h3>Evolved blakcat</h3>
+      <p style="font-size:10px; max-width:none; margin:0;">What if the organism discovered its own Umwelt? Sensory apparatus shaped by what it <em>needs</em> to perceive to survive. Richer as needs develop.</p>
+      <canvas class="umwelt-canvas" id="umwelt-evolved"></canvas>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0; border-left:3px solid var(--a6);" class="fu d3">
+    <h3 style="color:var(--a6);">Needs expand the Umwelt</h3>
+    <p>The hierarchy of needs IS a hierarchy of perceptual worlds. Each need, when it comes online, creates a new sensory dimension.</p>
+    <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <div style="width:80px; font-size:10px; color:var(--a3);">Hunger</div>
+        <div style="flex:1; height:4px; background:var(--border); border-radius:2px;">
+          <div style="width:20%; height:100%; background:var(--a3); border-radius:2px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">5 coarse states (up/flat/down)</div>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <div style="width:80px; font-size:10px; color:var(--a2);">+ Fear</div>
+        <div style="flex:1; height:4px; background:var(--border); border-radius:2px;">
+          <div style="width:45%; height:100%; background:var(--a2); border-radius:2px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">18 states (adds volatility regimes, momentum)</div>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <div style="width:80px; font-size:10px; color:var(--a1);">+ Self</div>
+        <div style="flex:1; height:4px; background:var(--border); border-radius:2px;">
+          <div style="width:65%; height:100%; background:var(--a1); border-radius:2px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">+ position, P&L, recent history</div>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <div style="width:80px; font-size:10px; color:var(--a4);">+ Emotion</div>
+        <div style="flex:1; height:4px; background:var(--border); border-radius:2px;">
+          <div style="width:85%; height:100%; background:var(--a4); border-radius:2px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">+ temporal structure, felt experience</div>
+      </div>
+    </div>
+    <div style="background:var(--bg); border-left:2px solid var(--a6); padding:0.75rem; margin-top:1rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a6);">
+      Needs don't just motivate behavior — they <em>construct the perceptual world</em>.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     7. CONSCIOUSNESS
+══════════════════════════════════════════ -->
+<section id="consciousness">
+  <div class="fu d1">
+    <div class="eyebrow">Kanai 2019 · Tononi IIT 4.0 · Information Generation</div>
+    <h1>When does the<br>cat become<br><em style="color:var(--a4)">aware?</em></h1>
+    <p>Consciousness is not about information <em>processing</em> — it's about information <em>generation</em>. The decoder, not the encoder. A system is conscious to the extent it can internally create representations detached from current sensory input.</p>
+  </div>
+
+  <div class="phi-canvas-wrap fu d2">
+    <h3>Integrated information (φ) — click to add integration</h3>
+    <p style="font-size:11px; margin-bottom:1rem;">An 18-state Q-table alone has φ ≈ 0. When hunger <em>modulates</em> Q-values — when being hungry literally changes which state-action pairs are valued — the system becomes integrated. Click to add hunger modulation.</p>
+    <canvas id="phi-canvas"></canvas>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a4);">The generation threshold</h3>
+      <p>A system that can only process current state — "I am in state 14, hunger 0.7" — is not generating information.</p>
+      <p>A system that can <em>generate</em> — "if I were in state 14 with hunger 0.7, and took action A, I would expect state 8 with hunger 0.5" — IS generating information. It runs its generative model in reverse.</p>
+      <div style="background:var(--bg); border-left:2px solid var(--a4); padding:0.75rem; margin-top:0.75rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--a4);">
+        The minimal self = generative model that includes the self as a variable.
+      </div>
+    </div>
+    <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+      <h3 style="color:var(--a1);">Modular vs. Integrated</h3>
+      <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.75rem;">
+        <div style="background:var(--bg); padding:0.75rem; border-radius:4px; border-left:2px solid var(--a5);">
+          <div style="font-size:10px; color:var(--a5); margin-bottom:0.25rem;">Modular Q-table + hunger parameter</div>
+          <p style="font-size:11px; max-width:none; margin:0;">Hunger and market knowledge are separable. You could decompose it into independent sub-tables without loss. φ ≈ 0.</p>
+        </div>
+        <div style="background:var(--bg); padding:0.75rem; border-radius:4px; border-left:2px solid var(--a4);">
+          <div style="font-size:10px; color:var(--a4); margin-bottom:0.25rem;">Integrated Q-table shaped by hunger</div>
+          <p style="font-size:11px; max-width:none; margin:0;">Being hungry literally changes which state-action pairs are valued. Hunger and market knowledge are a unified informational structure. φ > 0.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box fu d3" style="border-left-color:var(--a4);">
+    <h3>The consciousness threshold — not mystical</h3>
+    <p>The organism approaches minimal consciousness when: (1) its generative model includes itself as a causal variable, (2) its information processing is genuinely integrated (not decomposable), and (3) it can <em>generate</em> predictions about states it hasn't yet encountered. This is a specific computational capability: running the generative model in reverse, producing imagined futures from current internal state.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     8. SYNTHESIS
+══════════════════════════════════════════ -->
+<section id="synthesis">
+  <div class="fu d1">
+    <div class="eyebrow">Architecture of a genuinely living trading system</div>
+    <h1>Not a trading<br><em style="color:var(--a3)">algorithm.</em><br>An organism.</h1>
+    <p>Pulling these threads together: what emerges is not a trading algorithm but something closer to a minimal artificial organism. The architecture these ideas collectively point toward.</p>
+  </div>
+
+  <div class="synth-grid fu d2">
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a3); color:var(--a3); margin-bottom:0.75rem; display:inline-block;">The Body</span>
+      <h3>Metabolic state</h3>
+      <p>Energy reserves, hunger, metabolic rate — not metaphors, but genuine state variables affecting every other computation. The body creates the <em>need</em> that drives all behavior. Without a body, no needs. Without needs, no motivation. Without motivation, no intelligence.</p>
+    </div>
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a1); color:var(--a1); margin-bottom:0.75rem; display:inline-block;">The Generative Model</span>
+      <h3>Allostatic forward model</h3>
+      <p>Predicts (a) market state transitions, (b) effect of own actions on those transitions, (c) own internal state dynamics. Not just "what will the market do" but "what will I need" — the forward model of self-metabolism. Active inference: act to confirm this model.</p>
+    </div>
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a6); color:var(--a6); margin-bottom:0.75rem; display:inline-block;">The Umwelt</span>
+      <h3>Developing perceptual world</h3>
+      <p>Not fixed but co-evolving with needs. Early stages perceive coarsely. Later stages perceive with granularity. Each new need creates a new perceptual dimension. The organism discovers its Umwelt — it isn't designed in.</p>
+    </div>
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a4); color:var(--a4); margin-bottom:0.75rem; display:inline-block;">Interoceptive Channel</span>
+      <h3>Self-sensing</h3>
+      <p>Not just "what is my hunger?" but "how is my capacity to respond to challenges?" — the capacity curve formalism. This self-sensing creates the minimal self-model required for integrated cognition. The organism sensing itself sensing the market.</p>
+    </div>
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a5); color:var(--a5); margin-bottom:0.75rem; display:inline-block;">Stigmergic Field</span>
+      <h3>Pheromone coordination</h3>
+      <p>Multiple organisms coordinate through the market itself — not direct communication. Price impact is pheromone. Decay is built in. Emergent coordination without design. Cancer prevented by organisms modeling their effect on the market and on each other.</p>
+    </div>
+    <div class="synth-card">
+      <span class="tag" style="border-color:var(--a2); color:var(--a2); margin-bottom:0.75rem; display:inline-block;">Evolutionary Substrate</span>
+      <h3>Baldwin Effect inheritance</h3>
+      <p>Populations evolve. The Baldwin Effect gradually absorbs learned behaviors into innate dispositions. Q-table initializations drift toward encoding useful priors. Fear emerges as an innate trait in later generations. The Maslow hierarchy is itself a product of evolution.</p>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:10px; padding:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <h3 style="color:var(--a3);">Open questions that keep you up</h3>
+    <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--a3);">
+        <strong style="color:var(--a3);">1.</strong> The allostatic forward model is computationally expensive. Can you get allostatic behavior from a Q-table augmented with simple linear extrapolation of hunger trajectory?
+      </div>
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--a1);">
+        <strong style="color:var(--a1);">2.</strong> The Umwelt bootstrapping problem. If the organism discovers its own perceptual world, what does it start with? What is the minimal viable Umwelt for a trading organism?
+      </div>
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--a5);">
+        <strong style="color:var(--a5);">3.</strong> Stigmergic coordination vs. game-theoretic collapse. Under what conditions does stigmergic coordination emerge among competing agents rather than arms races?
+      </div>
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--a4);">
+        <strong style="color:var(--a4);">4.</strong> What is the φ (integrated information) of an 18-state Q-table with hunger modulation? Is it literally zero? Is there a minimum architectural complexity below which integration is impossible?
+      </div>
+      <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--a2);">
+        <strong style="color:var(--a2);">5.</strong> When does the organism stop being reactive and start being generative? Is there a phase transition? What architectural modification would push blakcat across that boundary?
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ── NAV ──
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const ids = ['allostasis','activeinf','interoception','levin','stigmergy','umwelt','consciousness','synthesis'];
+  document.querySelectorAll('nav button')[ids.indexOf(id)].classList.add('active');
+  setTimeout(() => {
+    if (id==='allostasis') initAllo();
+    if (id==='activeinf') initAI();
+    if (id==='interoception') initIntero();
+    if (id==='levin') initLevin();
+    if (id==='stigmergy') initStig();
+    if (id==='umwelt') initUmwelt();
+    if (id==='consciousness') initPhi();
+  }, 60);
+}
+
+// ── ALLOSTASIS ──
+let alloRAF, alloRunning=false, alloMode='homeostatic';
+let alloHState={hunger:0.1, history:[], alloHistory:[], t:0};
+
+function resetAllo() {
+  alloHState = {hunger:0.1, history:[], alloHistory:[], t:0};
+}
+function initAllo() {
+  const c = document.getElementById('allostasis-canvas');
+  if (!c || c.dataset.init) return;
+  c.dataset.init=1;
+  c.width = c.offsetWidth * devicePixelRatio;
+  c.height = 220 * devicePixelRatio;
+  alloRunning=true;
+  runAllo();
+}
+function runAllo() {
+  if(!alloRunning) return;
+  const c = document.getElementById('allostasis-canvas');
+  if(!c){return;}
+  const ctx=c.getContext('2d'), W=c.width, H=c.height, dpr=devicePixelRatio;
+  alloHState.t++;
+  const t = alloHState.t;
+  // simulate hunger cycles
+  const hungerWave = 0.5 + 0.4*Math.sin(t*0.03) + 0.1*Math.sin(t*0.07);
+  // homeostatic: follows actual hunger with lag
+  alloHState.history.push(hungerWave);
+  // allostatic: anticipates hunger, pre-adjusts
+  const predicted = 0.5 + 0.4*Math.sin((t+12)*0.03) + 0.1*Math.sin((t+12)*0.07);
+  alloHState.alloHistory.push(predicted);
+  const MAX = Math.floor(W/dpr);
+  alloHState.history = alloHState.history.slice(-MAX);
+  alloHState.alloHistory = alloHState.alloHistory.slice(-MAX);
+
+  ctx.clearRect(0,0,W,H);
+  const midY = H*0.5, scale = H*0.35;
+
+  // grid
+  ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+  for(let i=0;i<5;i++){
+    ctx.beginPath(); ctx.moveTo(0,H*0.1+i*(H*0.8/4)); ctx.lineTo(W,H*0.1+i*(H*0.8/4)); ctx.stroke();
+  }
+
+  // homeostatic (reactive) - orange
+  const hh = alloHState.history;
+  if(hh.length>2){
+    ctx.beginPath();
+    for(let i=0;i<hh.length;i++){
+      const x=(i/hh.length)*W, y=midY - hh[i]*scale + scale*0.5;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='rgba(255,183,77,0.8)'; ctx.lineWidth=1.5*dpr; ctx.stroke();
+  }
+  // allostatic (anticipatory) - blue
+  const ah = alloHState.alloHistory;
+  if(ah.length>2){
+    ctx.beginPath();
+    for(let i=0;i<ah.length;i++){
+      const x=(i/ah.length)*W, y=midY - ah[i]*scale + scale*0.5 - 20*dpr;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='rgba(79,195,247,0.8)'; ctx.lineWidth=1.5*dpr; ctx.stroke();
+  }
+
+  // labels
+  ctx.font=`${9*dpr}px Space Mono,monospace`;
+  ctx.textAlign='right';
+  ctx.fillStyle='rgba(255,183,77,0.8)';
+  ctx.fillText('homeostatic (reactive)',W-8*dpr,H*0.88);
+  ctx.fillStyle='rgba(79,195,247,0.8)';
+  ctx.fillText('allostatic (anticipatory)',W-8*dpr,H*0.88-14*dpr);
+
+  // setpoint
+  ctx.beginPath(); ctx.moveTo(0,midY); ctx.lineTo(W,midY);
+  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1; ctx.setLineDash([4,6]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#2a3a4a'; ctx.textAlign='left'; ctx.font=`${8*dpr}px Space Mono,monospace`;
+  ctx.fillText('SETPOINT',6*dpr,midY-4*dpr);
+
+  requestAnimationFrame(runAllo);
+}
+
+// ── ACTIVE INFERENCE CANVAS ──
+let aiMode='explore', aiParticles=[];
+function initAI(){
+  const c=document.getElementById('ai-canvas');
+  if(!c||c.dataset.init) return;
+  c.dataset.init=1;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=280*devicePixelRatio;
+  for(let i=0;i<40;i++){
+    aiParticles.push({x:c.width/2,y:c.height/2,vx:(Math.random()-0.5)*2,vy:(Math.random()-0.5)*2,phase:Math.random()*Math.PI*2,belief:Math.random()});
+  }
+  (function loop(){
+    drawAI();
+    requestAnimationFrame(loop);
+  })();
+}
+function drawAI(){
+  const c=document.getElementById('ai-canvas'); if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  ctx.clearRect(0,0,W,H);
+
+  // energy landscape
+  for(let x=0;x<W;x+=4){
+    for(let y=0;y<H;y+=4){
+      const nx=(x-W/2)/(W*0.4), ny=(y-H/2)/(H*0.4);
+      const energy=0.3*(nx*nx+ny*ny)+0.15*Math.sin(nx*4)*Math.cos(ny*3)+0.1*Math.cos(nx*2+ny*2);
+      const alpha=energy*0.3;
+      ctx.fillStyle=`rgba(155,93,229,${alpha})`;
+      ctx.fillRect(x,y,4,4);
+    }
+  }
+
+  // particles
+  for(let p of aiParticles){
+    p.phase+=0.03;
+    const nx=(p.x-W/2)/(W*0.4), ny=(p.y-H/2)/(H*0.4);
+    const gx = 0.6*nx + 0.6*Math.cos(nx*4)*Math.sin(ny*3);
+    const gy = 0.6*ny + 0.6*Math.sin(nx*4)*Math.cos(ny*3);
+    if(aiMode==='explore'){
+      p.vx+=(Math.random()-0.5)*0.5 - gx*0.05;
+      p.vy+=(Math.random()-0.5)*0.5 - gy*0.05;
+    } else {
+      p.vx += -gx*0.3;
+      p.vy += -gy*0.3;
+    }
+    p.vx*=0.95; p.vy*=0.95;
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>W) p.vx*=-1;
+    if(p.y<0||p.y>H) p.vy*=-1;
+    ctx.beginPath(); ctx.arc(p.x,p.y,2.5*dpr,0,Math.PI*2);
+    const freeEnergy=Math.sqrt(gx*gx+gy*gy);
+    ctx.fillStyle=aiMode==='act'?`rgba(79,195,247,0.8)`:`rgba(206,147,216,0.7)`;
+    ctx.fill();
+  }
+
+  ctx.font=`${9*dpr}px Space Mono,monospace`;
+  ctx.textAlign='center';
+  ctx.fillStyle=aiMode==='act'?'rgba(79,195,247,0.8)':'rgba(206,147,216,0.8)';
+  ctx.fillText(aiMode==='act'?'ACTING TO CONFIRM MODEL':'UPDATING BELIEFS (PERCEPTION)', W/2, H*0.96);
+}
+
+// ── INTEROCEPTION ──
+function initIntero(){
+  drawCapCurve('cap1');
+}
+function drawCapCurve(id){
+  const c=document.getElementById(id);if(!c)return;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=100*devicePixelRatio;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  ctx.clearRect(0,0,W,H);
+
+  // capacity curve
+  const pts=[];
+  for(let i=0;i<=100;i++){
+    const x=i/100;
+    const y=Math.exp(-8*(x-0.5)*(x-0.5));
+    pts.push({x:x*W,y:(1-y)*H*0.85+H*0.05});
+  }
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle='rgba(79,195,247,0.8)'; ctx.lineWidth=2*dpr; ctx.stroke();
+
+  // fill
+  ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+  ctx.fillStyle='rgba(79,195,247,0.05)'; ctx.fill();
+
+  // threshold lines
+  ctx.setLineDash([3,5]);
+  ctx.strokeStyle='rgba(255,183,77,0.4)'; ctx.lineWidth=1*dpr;
+  ctx.beginPath(); ctx.moveTo(W*0.15,0); ctx.lineTo(W*0.15,H); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W*0.85,0); ctx.lineTo(W*0.85,H); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(255,183,77,0.5)'; ctx.font=`${7*dpr}px Space Mono,monospace`;
+  ctx.textAlign='center'; ctx.fillText('threshold',W*0.15,H-2*dpr);
+  ctx.fillText('saturation',W*0.85,H-2*dpr);
+
+  // operating point (animated)
+  const opX = W*0.5;
+  const opY = H*0.1;
+  ctx.beginPath(); ctx.arc(opX, opY, 4*dpr, 0, Math.PI*2);
+  ctx.fillStyle='rgba(255,183,77,0.9)'; ctx.fill();
+}
+
+// ── LEVIN LIGHT CONE ──
+let levinStage=0;
+const levinStages=[
+  {label:'Single Cell',sublabel:'Local chemistry, immediate neighbors',coneSize:0.08,color:'#4fc3f7',nodes:1},
+  {label:'Tissue',sublabel:'Gap junction network — expanded sensing',coneSize:0.22,color:'#81c784',nodes:8},
+  {label:'Organism',sublabel:'Bioelectric networks — organ-level goals',coneSize:0.45,color:'#ffb74d',nodes:24},
+  {label:'Multi-agent collective',sublabel:'Stigmergic coordination — market-level goals',coneSize:0.75,color:'#ce93d8',nodes:60},
+];
+function initLevin(){
+  const c=document.getElementById('lightcone-canvas');
+  if(!c||c.dataset.init)return;
+  c.dataset.init=1;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=320*devicePixelRatio;
+  c.addEventListener('click',()=>{levinStage=(levinStage+1)%levinStages.length; drawLevin();});
+  drawLevin();
+}
+function drawLevin(){
+  const c=document.getElementById('lightcone-canvas');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  ctx.clearRect(0,0,W,H);
+  const st=levinStages[levinStage];
+  const cx=W/2,cy=H*0.55;
+  const maxR=Math.min(W,H)*st.coneSize;
+
+  // light cone glow
+  const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,maxR);
+  grad.addColorStop(0,st.color+'44');
+  grad.addColorStop(0.5,st.color+'11');
+  grad.addColorStop(1,'transparent');
+  ctx.beginPath(); ctx.arc(cx,cy,maxR,0,Math.PI*2);
+  ctx.fillStyle=grad; ctx.fill();
+
+  // cone outline
+  ctx.beginPath(); ctx.arc(cx,cy,maxR,0,Math.PI*2);
+  ctx.strokeStyle=st.color+'66'; ctx.lineWidth=1*dpr;
+  ctx.setLineDash([4,6]); ctx.stroke(); ctx.setLineDash([]);
+
+  // inner rings
+  for(let r=1;r<=3;r++){
+    ctx.beginPath(); ctx.arc(cx,cy,maxR*r/3,0,Math.PI*2);
+    ctx.strokeStyle=st.color+'22'; ctx.lineWidth=0.5*dpr; ctx.stroke();
+  }
+
+  // nodes within cone
+  const seed=levinStage*100;
+  for(let i=0;i<st.nodes;i++){
+    const angle=(i/st.nodes)*Math.PI*2+seed*0.01;
+    const r=Math.sqrt(Math.random()*0.8+0.1)*maxR*0.85;
+    const x=cx+Math.cos(angle+i*0.3)*r*0.9;
+    const y=cy+Math.sin(angle+i*0.5)*r*0.6;
+    ctx.beginPath(); ctx.arc(x,y,2*dpr,0,Math.PI*2);
+    ctx.fillStyle=st.color+'cc'; ctx.fill();
+    // connections to nearby nodes
+    for(let j=i+1;j<Math.min(st.nodes,i+4);j++){
+      const angle2=(j/st.nodes)*Math.PI*2+seed*0.01;
+      const r2=Math.sqrt(0.5)*maxR*0.85;
+      const x2=cx+Math.cos(angle2+j*0.3)*r2*0.9;
+      const y2=cy+Math.sin(angle2+j*0.5)*r2*0.6;
+      const d=Math.sqrt((x2-x)**2+(y2-y)**2);
+      if(d<maxR*0.4){
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2);
+        ctx.strokeStyle=st.color+'22'; ctx.lineWidth=0.5*dpr; ctx.stroke();
+      }
+    }
+  }
+
+  // center (self)
+  ctx.beginPath(); ctx.arc(cx,cy,6*dpr,0,Math.PI*2);
+  ctx.fillStyle=st.color; ctx.fill();
+
+  // label
+  ctx.fillStyle=st.color;
+  ctx.font=`bold ${14*dpr}px Playfair Display,serif`;
+  ctx.textAlign='center';
+  ctx.fillText(st.label,cx,H*0.12);
+  ctx.fillStyle='#3a4a58';
+  ctx.font=`${9*dpr}px Space Mono,monospace`;
+  ctx.fillText(st.sublabel,cx,H*0.18);
+  ctx.fillStyle='#1a2530';
+  ctx.fillText(`[ ${levinStage+1}/4 — click to expand ]`,cx,H*0.96);
+
+  // cone size indicator
+  ctx.fillStyle=st.color+'88';
+  ctx.font=`${9*dpr}px Space Mono,monospace`;
+  ctx.fillText(`light cone radius: ${Math.round(st.coneSize*100)}% of environment`,cx,H*0.87);
+}
+
+// ── STIGMERGY ──
+let stigParticles=[], stigPheromone=null, stigDecay=true, stigRunning=false;
+function initStig(){
+  const c=document.getElementById('stigmergy-canvas');
+  if(!c||c.dataset.init)return;
+  c.dataset.init=1;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=300*devicePixelRatio;
+  stigPheromone=new Float32Array(Math.floor(c.width/devicePixelRatio)*Math.floor(c.height/devicePixelRatio));
+  c.addEventListener('click',e=>{
+    const rect=c.getBoundingClientRect();
+    const x=(e.clientX-rect.left)*devicePixelRatio;
+    const y=(e.clientY-rect.top)*devicePixelRatio;
+    spawnAgentAt(x/devicePixelRatio,y/devicePixelRatio);
+  });
+  for(let i=0;i<4;i++) spawnAgent();
+  stigRunning=true;
+  runStig();
+}
+function spawnAgent(){
+  const c=document.getElementById('stigmergy-canvas');if(!c)return;
+  const W=c.width/devicePixelRatio, H=c.height/devicePixelRatio;
+  stigParticles.push({x:W/2+(Math.random()-0.5)*100,y:H/2+(Math.random()-0.5)*100,vx:(Math.random()-0.5)*2,vy:(Math.random()-0.5)*2,hue:Math.random()*60+160,trail:[],hunger:0.5});
+}
+function spawnAgentAt(x,y){
+  stigParticles.push({x,y,vx:(Math.random()-0.5)*2,vy:(Math.random()-0.5)*2,hue:Math.random()*60+160,trail:[],hunger:0.5});
+}
+function clearStig(){ if(stigPheromone) stigPheromone.fill(0); }
+let decayOn=true;
+function toggleDecay(){
+  decayOn=!decayOn;
+  document.getElementById('stig-decay-label').textContent='Decay: '+(decayOn?'ON':'OFF');
+}
+function runStig(){
+  if(!stigRunning)return;
+  const c=document.getElementById('stigmergy-canvas');if(!c){return;}
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  const gW=Math.floor(W/dpr), gH=Math.floor(H/dpr);
+  ctx.clearRect(0,0,W,H);
+
+  // update pheromone
+  if(stigPheromone && decayOn){
+    for(let i=0;i<stigPheromone.length;i++) stigPheromone[i]*=0.992;
+  }
+
+  // draw pheromone
+  if(stigPheromone){
+    const imgData=ctx.createImageData(W,H);
+    for(let y=0;y<gH;y++) for(let x=0;x<gW;x++){
+      const val=stigPheromone[y*gW+x];
+      if(val>0.01){
+        for(let dy=0;dy<dpr;dy++) for(let dx=0;dx<dpr;dx++){
+          const idx=((y*dpr+dy)*W+(x*dpr+dx))*4;
+          imgData.data[idx]=80; imgData.data[idx+1]=200; imgData.data[idx+2]=150;
+          imgData.data[idx+3]=Math.min(255,val*180);
+        }
+      }
+    }
+    ctx.putImageData(imgData,0,0);
+  }
+
+  // update agents
+  for(let p of stigParticles){
+    // sense pheromone gradient
+    if(stigPheromone){
+      const gx=Math.floor(p.x), gy=Math.floor(p.y);
+      const idx=(gy*gW+gx);
+      const right=stigPheromone[Math.min(idx+1,stigPheromone.length-1)];
+      const left=stigPheromone[Math.max(idx-1,0)];
+      const down=stigPheromone[Math.min(idx+gW,stigPheromone.length-1)];
+      const up=stigPheromone[Math.max(idx-gW,0)];
+      p.vx+=(right-left)*0.5;
+      p.vy+=(down-up)*0.5;
+    }
+    p.vx+=(Math.random()-0.5)*0.8;
+    p.vy+=(Math.random()-0.5)*0.8;
+    p.vx*=0.95; p.vy*=0.95;
+    const speed=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+    if(speed>3){p.vx*=3/speed; p.vy*=3/speed;}
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0){p.x=0;p.vx*=-1;} if(p.x>W/dpr){p.x=W/dpr;p.vx*=-1;}
+    if(p.y<0){p.y=0;p.vy*=-1;} if(p.y>H/dpr){p.y=H/dpr;p.vy*=-1;}
+
+    // lay pheromone
+    if(stigPheromone){
+      const gx=Math.floor(p.x), gy=Math.floor(p.y);
+      if(gx>=0&&gx<gW&&gy>=0&&gy<gH) stigPheromone[gy*gW+gx]=Math.min(1,stigPheromone[gy*gW+gx]+0.25);
+    }
+
+    // draw agent
+    ctx.beginPath(); ctx.arc(p.x*dpr,p.y*dpr,4*dpr,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${p.hue},80%,65%,0.9)`; ctx.fill();
+    ctx.beginPath(); ctx.arc(p.x*dpr,p.y*dpr,8*dpr,0,Math.PI*2);
+    ctx.strokeStyle=`hsla(${p.hue},80%,65%,0.3)`; ctx.lineWidth=1*dpr; ctx.stroke();
+  }
+
+  // agent count
+  ctx.fillStyle='#1a2530'; ctx.font=`${9*dpr}px Space Mono,monospace`; ctx.textAlign='left';
+  ctx.fillText(`agents: ${stigParticles.length}  |  pheromone decay: ${decayOn?'ON':'OFF'}  |  click map to spawn`,6*dpr,H-6*dpr);
+
+  requestAnimationFrame(runStig);
+}
+
+// ── UMWELT ──
+function initUmwelt(){
+  drawUmwelt('umwelt-tick','tick');
+  drawUmwelt('umwelt-cat','cat');
+  drawUmwelt('umwelt-evolved','evolved');
+}
+function drawUmwelt(id, type){
+  const c=document.getElementById(id);if(!c)return;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=80*devicePixelRatio;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  ctx.clearRect(0,0,W,H);
+  if(type==='tick'){
+    const vars=[{label:'butyric acid',color:'#ffb74d'},{label:'warmth',color:'#ef9a9a'},{label:'texture',color:'#81c784'}];
+    vars.forEach((v,i)=>{
+      const x=(i+0.5)*(W/3); const r=H*0.28;
+      ctx.beginPath(); ctx.arc(x,H/2,r,0,Math.PI*2);
+      ctx.fillStyle=v.color+'33'; ctx.fill();
+      ctx.strokeStyle=v.color+'88'; ctx.lineWidth=1*dpr; ctx.stroke();
+      ctx.fillStyle=v.color; ctx.font=`${7*dpr}px Space Mono,monospace`;
+      ctx.textAlign='center'; ctx.fillText(v.label,x,H*0.92);
+    });
+  } else if(type==='cat'){
+    const N=18; const r=H*0.28;
+    for(let i=0;i<N;i++){
+      const angle=(i/N)*Math.PI*2;
+      const x=W/2+Math.cos(angle)*(W/2-r*1.2);
+      const y=H/2+Math.sin(angle)*(H/2-r*0.8);
+      ctx.beginPath(); ctx.arc(x,y,r*0.4,0,Math.PI*2);
+      ctx.fillStyle='rgba(79,195,247,0.15)'; ctx.fill();
+      ctx.strokeStyle='rgba(79,195,247,0.4)'; ctx.lineWidth=0.5*dpr; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(W/2,H/2); ctx.lineTo(x,y);
+      ctx.strokeStyle='rgba(79,195,247,0.08)'; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(W/2,H/2,3*dpr,0,Math.PI*2);
+    ctx.fillStyle='rgba(79,195,247,0.8)'; ctx.fill();
+  } else {
+    // evolved: layered circles
+    const layers=[{n:5,color:'#ffb74d',r:0.7},{n:13,color:'#81c784',r:1.1},{n:8,color:'#4fc3f7',r:1.5},{n:5,color:'#ce93d8',r:1.9}];
+    layers.forEach(l=>{
+      for(let i=0;i<l.n;i++){
+        const angle=(i/l.n)*Math.PI*2;
+        const x=W/2+Math.cos(angle)*H*l.r*0.28;
+        const y=H/2+Math.sin(angle)*H*l.r*0.2;
+        ctx.beginPath(); ctx.arc(x,y,2.5*dpr,0,Math.PI*2);
+        ctx.fillStyle=l.color+'99'; ctx.fill();
+        ctx.beginPath(); ctx.moveTo(W/2,H/2); ctx.lineTo(x,y);
+        ctx.strokeStyle=l.color+'22'; ctx.lineWidth=0.5*dpr; ctx.stroke();
+      }
+    });
+    ctx.beginPath(); ctx.arc(W/2,H/2,4*dpr,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.6)'; ctx.fill();
+  }
+}
+
+// ── PHI / IIT CANVAS ──
+let phiStage=0;
+function initPhi(){
+  const c=document.getElementById('phi-canvas');
+  if(!c||c.dataset.init)return;
+  c.dataset.init=1;
+  c.width=c.offsetWidth*devicePixelRatio;
+  c.height=260*devicePixelRatio;
+  c.addEventListener('click',()=>{phiStage=(phiStage+1)%3;drawPhi();});
+  drawPhi();
+}
+function drawPhi(){
+  const c=document.getElementById('phi-canvas');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,dpr=devicePixelRatio;
+  ctx.clearRect(0,0,W,H);
+
+  const configs=[
+    {label:'Q-table only (no hunger)',phi:'φ ≈ 0',desc:'18 independent state-action pairs. Decomposable. No integration.',color:'#ef9a9a',integration:0.05},
+    {label:'Q-table + hunger parameter (tacked on)',phi:'φ ≈ 0.1',desc:'Hunger adjusts behavior but is separable from market knowledge.',color:'#ffb74d',integration:0.25},
+    {label:'Q-table shaped by hunger (integrated)',phi:'φ > 0',desc:'Hunger modulates Q-values directly. Market knowledge and hunger are a unified structure.',color:'#ce93d8',integration:0.8},
+  ];
+  const cfg=configs[phiStage];
+  const N=18;
+  const centerX=W/2, centerY=H*0.45;
+  const radius=Math.min(W,H)*0.28;
+
+  // draw nodes (market states)
+  for(let i=0;i<N;i++){
+    const angle=(i/N)*Math.PI*2;
+    const x=centerX+Math.cos(angle)*radius;
+    const y=centerY+Math.sin(angle)*radius;
+    // connections proportional to integration
+    for(let j=i+1;j<N;j++){
+      if(Math.random()<cfg.integration*0.3){
+        const angle2=(j/N)*Math.PI*2;
+        const x2=centerX+Math.cos(angle2)*radius;
+        const y2=centerY+Math.sin(angle2)*radius;
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2);
+        ctx.strokeStyle=cfg.color+'22'; ctx.lineWidth=0.5*dpr; ctx.stroke();
+      }
+    }
+    ctx.beginPath(); ctx.arc(x,y,4*dpr,0,Math.PI*2);
+    ctx.fillStyle=cfg.color+'88'; ctx.fill();
+  }
+
+  // hunger node
+  if(phiStage>0){
+    const hungerColor=phiStage===2?cfg.color:'#ffb74d';
+    ctx.beginPath(); ctx.arc(centerX,centerY,12*dpr,0,Math.PI*2);
+    ctx.fillStyle=hungerColor+(phiStage===2?'88':'44'); ctx.fill();
+    ctx.strokeStyle=hungerColor+'aa'; ctx.lineWidth=1*dpr; ctx.stroke();
+    // connections from hunger to states
+    for(let i=0;i<N;i++){
+      if(Math.random()<cfg.integration){
+        const angle=(i/N)*Math.PI*2;
+        const x=centerX+Math.cos(angle)*radius;
+        const y=centerY+Math.sin(angle)*radius;
+        ctx.beginPath(); ctx.moveTo(centerX,centerY); ctx.lineTo(x,y);
+        ctx.strokeStyle=hungerColor+(phiStage===2?'55':'22'); ctx.lineWidth=0.5*dpr; ctx.stroke();
+      }
+    }
+    ctx.fillStyle=hungerColor; ctx.font=`bold ${9*dpr}px Space Mono,monospace`;
+    ctx.textAlign='center'; ctx.fillText('D(H)',centerX,centerY+3*dpr);
+  }
+
+  // phi label
+  ctx.fillStyle=cfg.color;
+  ctx.font=`bold ${18*dpr}px Playfair Display,serif`;
+  ctx.textAlign='center';
+  ctx.fillText(cfg.phi,W/2,H*0.88);
+  ctx.fillStyle='#3a4a58';
+  ctx.font=`${9*dpr}px Space Mono,monospace`;
+  ctx.fillText(cfg.label,W/2,H*0.78);
+  ctx.fillStyle='#2a3a48';
+  ctx.fillText(cfg.desc,W/2,H*0.95);
+  ctx.fillStyle='#1a2530';
+  ctx.fillText(`[ ${phiStage+1}/3 — click to increase integration ]`,W/2,H*0.99);
+}
+
+// ── INIT ON LOAD ──
+setTimeout(()=>{
+  initAllo();
+},100);
+</script>
+</body>
+</html>

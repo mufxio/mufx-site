@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maslow × RL — blakcat / EAI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+  --bg: #0a0a0a;
+  --s1: #111111;
+  --s2: #181818;
+  --border: #222;
+  --text: #e0e0e0;
+  --muted: #555;
+  --l1: #ff6b35;   /* hunger / physiological */
+  --l2: #f7c59f;   /* safety */
+  --l3: #efefd0;   /* belonging */
+  --l4: #5bc0eb;   /* esteem */
+  --l5: #9b5de5;   /* self-actualization */
+  --l6: #00f5d4;   /* meta / evolutionary */
+  --glow1: rgba(255,107,53,0.15);
+  --glow5: rgba(155,93,229,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 1.5rem; height: 50px; gap: 2px;
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1rem;
+  color: var(--l1); margin-right: 1.5rem;
+  letter-spacing: -0.02em;
+}
+nav button {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; padding: 5px 10px; border-radius: 3px;
+  transition: all 0.2s; letter-spacing: 0.04em;
+}
+nav button:hover { color: var(--text); background: #1a1a1a; }
+nav button.active { color: var(--l1); background: var(--glow1); }
+
+/* ── SECTIONS ── */
+section { display: none; min-height: 100vh; padding: 4.5rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+section.active { display: block; }
+
+h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 0.5rem; }
+h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1.2rem; }
+h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+p { color: var(--muted); margin-bottom: 0.8rem; max-width: 66ch; }
+
+.eyebrow { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 2px;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid;
+}
+
+/* ── PYRAMID ── */
+.pyramid-wrap {
+  display: flex; gap: 2rem; align-items: flex-start;
+  margin: 2rem 0; flex-wrap: wrap;
+}
+.pyramid-svg-wrap { flex: 0 0 380px; position: relative; }
+.pyramid-detail { flex: 1; min-width: 280px; }
+
+.pyramid-level {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pyramid-level:hover { filter: brightness(1.2); }
+.pyramid-level.active polygon { stroke-width: 2; }
+
+.detail-card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-height: 300px;
+  transition: all 0.3s;
+}
+.detail-card .level-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem; font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+.detail-card .maslow-label {
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 1rem;
+}
+.detail-eq {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem; font-weight: 500;
+  padding: 0.8rem; margin: 0.8rem 0;
+  background: var(--bg); border-radius: 4px;
+  border-left: 2px solid;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem; }
+.detail-item {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 4px; padding: 0.75rem;
+  font-size: 11px;
+}
+.detail-item .di-label { color: var(--muted); font-size: 10px; letter-spacing: 0.05em; margin-bottom: 2px; }
+
+/* ── HOMEOSTATIC ── */
+.homeo-canvas-wrap {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;
+}
+canvas.homeo { width: 100%; display: block; border-radius: 4px; background: var(--bg); }
+.sim-controls { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+.sim-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; padding: 6px 14px; border-radius: 3px;
+  cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em;
+}
+.sim-btn:hover { border-color: var(--l1); color: var(--l1); }
+.sim-btn.active { border-color: var(--l1); color: var(--l1); background: var(--glow1); }
+.hunger-bar-wrap { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; }
+.hunger-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.hunger-bar-fill { height: 100%; border-radius: 3px; transition: width 0.1s; background: linear-gradient(90deg, var(--l1), #ff9f1c); }
+
+/* ── INTRINSIC MOTIVATION CHART ── */
+.im-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+.im-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.2rem; cursor: pointer;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.im-card::before {
+  content: ''; position: absolute; inset: 0;
+  opacity: 0; transition: opacity 0.3s;
+}
+.im-card:hover { transform: translateY(-3px); }
+.im-card:hover::before { opacity: 1; }
+.im-card.l1::before { background: radial-gradient(circle at 50% 0%, var(--glow1), transparent 70%); }
+.im-card.l4::before { background: radial-gradient(circle at 50% 0%, rgba(91,192,235,0.1), transparent 70%); }
+.im-card.l5::before { background: radial-gradient(circle at 50% 0%, var(--glow5), transparent 70%); }
+.im-card .im-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+.im-formula {
+  font-size: 0.85rem; font-weight: 500;
+  padding: 0.5rem; margin: 0.5rem 0;
+  background: var(--bg); border-radius: 3px;
+  overflow-x: auto; white-space: nowrap;
+}
+.im-card p { font-size: 11px; max-width: none; }
+
+/* ── LEXICOGRAPHIC ── */
+.lex-stack { margin: 1.5rem 0; }
+.lex-level {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.2rem; margin-bottom: 3px;
+  border-radius: 4px; cursor: pointer;
+  transition: all 0.2s; border: 1px solid transparent;
+  position: relative;
+}
+.lex-level:hover { border-color: var(--border); background: var(--s1); }
+.lex-level.satisfied { opacity: 0.5; }
+.lex-level.active-lex { border-color: var(--l1) !important; background: var(--glow1); }
+.lex-priority {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.lex-content { flex: 1; }
+.lex-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; }
+.lex-sub { font-size: 11px; color: var(--muted); }
+.lex-status { font-size: 11px; padding: 2px 8px; border-radius: 2px; }
+.lex-arrow {
+  width: 2px; height: 20px; background: var(--border);
+  margin: 0 0 0 13px;
+}
+
+/* ── COMPARE ── */
+.compare-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.compare-table th {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 0.75rem;
+  text-align: left; border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.compare-table td {
+  padding: 0.75rem; border-bottom: 1px solid var(--border);
+  font-size: 12px; vertical-align: top;
+}
+.compare-table tr:hover td { background: var(--s1); }
+.check { color: #4ade80; }
+.cross { color: #f87171; }
+.partial { color: #fbbf24; }
+
+/* ── BLAKCAT SPECIFIC ── */
+.blakcat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+.blakcat-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.2rem;
+  border-left: 3px solid var(--l1);
+  transition: all 0.3s;
+}
+.blakcat-card:hover { border-left-color: var(--l5); box-shadow: 0 0 20px var(--glow5); }
+.blakcat-card.novel { border-left-color: var(--l5); }
+.blakcat-card p { max-width: none; font-size: 12px; }
+
+/* ── FLOW CANVAS ── */
+#drive-canvas { width: 100%; height: 320px; display: block; border-radius: 6px; background: var(--bg); cursor: pointer; }
+
+/* animations */
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.fu { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+.fu.d1 { animation-delay: 0.05s; }
+.fu.d2 { animation-delay: 0.15s; }
+.fu.d3 { animation-delay: 0.25s; }
+.fu.d4 { animation-delay: 0.35s; }
+
+.metrics-row { display: flex; gap: 2rem; margin: 1.5rem 0; flex-wrap: wrap; }
+.metric { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; line-height: 1; }
+.metric-label { font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-top: 2px; }
+
+.info-box {
+  background: var(--s1); border: 1px solid var(--border);
+  border-left: 3px solid var(--l1); border-radius: 4px;
+  padding: 1rem 1.2rem; margin: 1rem 0;
+}
+.info-box p { max-width: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">blakcat/EAI</span>
+  <button class="active" onclick="show('pyramid')">Pyramid</button>
+  <button onclick="show('homeostatic')">Homeostatic RL</button>
+  <button onclick="show('intrinsic')">Intrinsic Motivation</button>
+  <button onclick="show('lexicographic')">Lex Priority</button>
+  <button onclick="show('novel')">What's Novel</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1: PYRAMID
+══════════════════════════════════════════════ -->
+<section id="pyramid" class="active">
+  <div class="fu d1">
+    <div class="eyebrow">Maslow × Reinforcement Learning</div>
+    <h1>The hierarchy<br>of <em style="color:var(--l1)">needs</em><br>as agent architecture.</h1>
+    <p>Each level is a different computational problem. Click a level to explore its RL formalization, key papers, and connection to blakcat.</p>
+  </div>
+
+  <div class="pyramid-wrap fu d2">
+    <div class="pyramid-svg-wrap">
+      <svg id="pyramid-svg" viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+        <!-- Level 1: Physiological / Hunger (base) -->
+        <g class="pyramid-level" onclick="selectLevel(1)" id="pl1">
+          <polygon points="60,360 340,360 310,310 90,310" fill="#ff6b35" fill-opacity="0.25" stroke="#ff6b35" stroke-width="1"/>
+          <text x="200" y="340" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#ff6b35">PHYSIOLOGICAL · HUNGER</text>
+          <text x="200" y="356" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#ff6b35" opacity="0.7">Homeostatic RL · Drive Reduction</text>
+        </g>
+        <!-- Level 2: Safety -->
+        <g class="pyramid-level" onclick="selectLevel(2)" id="pl2">
+          <polygon points="90,308 310,308 285,258 115,258" fill="#f7c59f" fill-opacity="0.2" stroke="#f7c59f" stroke-width="1"/>
+          <text x="200" y="286" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="12" fill="#f7c59f">SAFETY · FEAR</text>
+          <text x="200" y="300" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#f7c59f" opacity="0.7">Empowerment · Constrained MDP</text>
+        </g>
+        <!-- Level 3: Belonging -->
+        <g class="pyramid-level" onclick="selectLevel(3)" id="pl3">
+          <polygon points="115,256 285,256 263,206 137,206" fill="#efefd0" fill-opacity="0.15" stroke="#efefd0" stroke-width="1"/>
+          <text x="200" y="232" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="12" fill="#efefd0">BELONGING · STIGMERGY</text>
+          <text x="200" y="246" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#efefd0" opacity="0.6">Multi-agent · Social Drives</text>
+        </g>
+        <!-- Level 4: Esteem -->
+        <g class="pyramid-level" onclick="selectLevel(4)" id="pl4">
+          <polygon points="137,204 263,204 244,154 156,154" fill="#5bc0eb" fill-opacity="0.2" stroke="#5bc0eb" stroke-width="1"/>
+          <text x="200" y="177" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11" fill="#5bc0eb">ESTEEM · COMPETENCE</text>
+          <text x="200" y="190" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#5bc0eb" opacity="0.6">ICM · Learning Progress</text>
+        </g>
+        <!-- Level 5: Self-Actualization -->
+        <g class="pyramid-level" onclick="selectLevel(5)" id="pl5">
+          <polygon points="156,152 244,152 228,102 172,102" fill="#9b5de5" fill-opacity="0.2" stroke="#9b5de5" stroke-width="1"/>
+          <text x="200" y="122" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10" fill="#9b5de5">SELF-ACTUALIZATION</text>
+          <text x="200" y="135" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="#9b5de5" opacity="0.6">Compression Progress · LPM</text>
+        </g>
+        <!-- Level 6: Meta / Evolutionary -->
+        <g class="pyramid-level" onclick="selectLevel(6)" id="pl6">
+          <polygon points="172,100 228,100 214,55 186,55" fill="#00f5d4" fill-opacity="0.2" stroke="#00f5d4" stroke-width="1"/>
+          <text x="200" y="72" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="9" fill="#00f5d4">BALDWIN / EVO</text>
+          <text x="200" y="83" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#00f5d4" opacity="0.6">Meta-RL · Innate Priors</text>
+        </g>
+        <!-- apex -->
+        <polygon points="186,53 214,53 200,20" fill="#00f5d4" fill-opacity="0.35" stroke="#00f5d4" stroke-width="1"/>
+
+        <!-- unlock arrows -->
+        <text x="350" y="340" font-family="IBM Plex Mono,monospace" font-size="10" fill="#333">↑ unlock</text>
+        <text x="350" y="290" font-family="IBM Plex Mono,monospace" font-size="10" fill="#333">↑ unlock</text>
+        <text x="350" y="240" font-family="IBM Plex Mono,monospace" font-size="10" fill="#333">↑ unlock</text>
+        <text x="350" y="185" font-family="IBM Plex Mono,monospace" font-size="10" fill="#333">↑ unlock</text>
+        <text x="350" y="135" font-family="IBM Plex Mono,monospace" font-size="10" fill="#333">↑ unlock</text>
+
+        <!-- selector indicator -->
+        <line id="pyramid-indicator" x1="0" y1="0" x2="0" y2="0" stroke="white" stroke-width="1.5" stroke-dasharray="4,3" opacity="0"/>
+      </svg>
+    </div>
+
+    <div class="pyramid-detail">
+      <div class="detail-card" id="detail-card">
+        <div style="color:var(--muted); text-align:center; padding:3rem 0;">
+          ← Click a level to explore
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box fu d3">
+    <h3>The blakcat thesis in one line</h3>
+    <p>Start with ONE primitive drive (hunger). Let higher-order drives emerge from stability at the lower level. The hierarchy is discovered — not designed in.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2: HOMEOSTATIC RL
+══════════════════════════════════════════════ -->
+<section id="homeostatic">
+  <div class="fu d1">
+    <div class="eyebrow">Keramati & Gutkin (2014) · eLife · The mathematical foundation</div>
+    <h1>Hunger as<br><em style="color:var(--l1)">drive function.</em></h1>
+    <p>Homeostatic RL formalizes the core blakcat mechanism. Primary reward = reduction in drive. Seek rewards and maintain physiological stability are "two sides of the same coin."</p>
+  </div>
+
+  <div class="homeo-canvas-wrap fu d2">
+    <h3>Live simulation: hunger-driven trading organism</h3>
+    <p style="font-size:11px; margin-bottom:1rem;">Watch how hunger accumulates and drives behavior. Click events to trigger trades/losses.</p>
+    <canvas class="homeo" id="homeo-canvas" height="200"></canvas>
+    <div class="hunger-bar-wrap">
+      <span style="font-size:11px; color:var(--muted); width:80px;">Hunger D(H)</span>
+      <div class="hunger-bar-track"><div class="hunger-bar-fill" id="hunger-fill" style="width:30%;"></div></div>
+      <span id="hunger-val" style="font-size:11px; color:var(--l1); width:40px; text-align:right;">0.30</span>
+    </div>
+    <div class="sim-controls">
+      <button class="sim-btn active" id="btn-normal" onclick="setRegime('normal')">Normal market</button>
+      <button class="sim-btn" id="btn-drought" onclick="setRegime('drought')">Trading drought</button>
+      <button class="sim-btn" id="btn-feast" onclick="setRegime('feast')">Feast (profitable run)</button>
+      <button class="sim-btn" id="btn-crash" onclick="setRegime('crash')">Crash / drawdown</button>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <div>
+      <h2>The Drive Function</h2>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:1.1rem; color:var(--l1); background:var(--bg); padding:1rem; border-radius:4px; margin-bottom:1rem;">
+          D(H<sub>t</sub>) = Σ|h*<sub>i</sub> − h<sub>i,t</sub>|<sup>m</sup> / n
+        </div>
+        <p style="font-size:12px;">Distance from homeostatic equilibrium in multidimensional "homeostatic space." Setpoint h* is the target P&L rate. Deviation drives behavior.</p>
+        <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+          <div style="display:flex; gap:0.5rem; font-size:11px; align-items:center;">
+            <span style="color:var(--l1); width:30px;">h*</span>
+            <span style="color:var(--muted);">= homeostatic setpoint (target P&L rate)</span>
+          </div>
+          <div style="display:flex; gap:0.5rem; font-size:11px; align-items:center;">
+            <span style="color:var(--l1); width:30px;">h<sub>t</sub></span>
+            <span style="color:var(--muted);">= current state (actual P&L rate)</span>
+          </div>
+          <div style="display:flex; gap:0.5rem; font-size:11px; align-items:center;">
+            <span style="color:var(--l1); width:30px;">m,n</span>
+            <span style="color:var(--muted);">= shape of drive surface (exponents)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Primary Reward</h2>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:1.1rem; color:var(--l3); background:var(--bg); padding:1rem; border-radius:4px; margin-bottom:1rem;">
+          r(t) = D(H<sub>t</sub>) − D(H<sub>t+1</sub>)
+        </div>
+        <p style="font-size:12px;">Reward = reduction in drive. You get rewarded for moving closer to your setpoints. Hull's drive reduction theory — formalized as an RL reward signal.</p>
+        <div style="background:var(--bg); border-left:2px solid var(--l3); padding:0.75rem; margin-top:1rem; border-radius:0 4px 4px 0;">
+          <p style="font-size:11px; color:var(--l3); font-style:italic; max-width:none;">
+            "Maximizing discounted rewards is mathematically equivalent to minimizing discounted deviations from homeostatic setpoints." — Keramati & Gutkin
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fu d4">
+    <h2>Emergent phenomena from the drive function</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1rem;">
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+        <div style="font-size:1.3rem; margin-bottom:0.4rem;">⏰</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:0.3rem;">Anticipatory Responding</div>
+        <p style="font-size:11px; max-width:none;">Eating before you're hungry. The organism pre-positions before need becomes acute.</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+        <div style="font-size:1.3rem; margin-bottom:0.4rem;">📉</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:0.3rem;">Risk Aversion Near Satiation</div>
+        <p style="font-size:11px; max-width:none;">When close to homeostasis, gambles are less attractive. Naturally conservative when well-fed.</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+        <div style="font-size:1.3rem; margin-bottom:0.4rem;">🌊</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:0.3rem;">Rise-Fall Pattern</div>
+        <p style="font-size:11px; max-width:none;">Motivation rises as hunger grows, then falls toward satiation. Natural urgency curve.</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+        <div style="font-size:1.3rem; margin-bottom:0.4rem;">⚡</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:0.3rem;">Temporal Discounting</div>
+        <p style="font-size:11px; max-width:none;">γ &lt; 1 motivates shortest path in homeostatic space. Urgency emerges naturally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3: INTRINSIC MOTIVATION
+══════════════════════════════════════════════ -->
+<section id="intrinsic">
+  <div class="fu d1">
+    <div class="eyebrow">Oudeyer & Kaplan (2007) · Pathak (2017) · Schmidhuber (2010)</div>
+    <h1>Higher needs as<br><em style="color:var(--l5)">intrinsic</em><br>reward signals.</h1>
+    <p>The Maslow hierarchy maps directly onto computational intrinsic motivation types. Each need is a different mathematical objective. Click each card to see the formula and blakcat implication.</p>
+  </div>
+
+  <div style="margin: 1.5rem 0;">
+    <canvas id="drive-canvas"></canvas>
+    <p style="font-size:11px; text-align:center; color:var(--muted); margin-top:0.5rem;">Click to cycle the organism through need states</p>
+  </div>
+
+  <div class="im-grid fu d2">
+    <div class="im-card l1" onclick="toggleIM(this)">
+      <span class="im-icon">🍖</span>
+      <div class="tag" style="border-color:var(--l1); color:var(--l1); margin-bottom:0.5rem;">L1 · Physiological</div>
+      <h3>Homeostatic Drive</h3>
+      <div class="im-formula" style="color:var(--l1);">r(t) = D(H_t) − D(H_t+1)</div>
+      <p>Primary reward = reduction in drive. The blakcat hunger mechanism. Mapped exactly to Keramati-Gutkin's formalization. Everything begins here.</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: hunger accumulates when no profitable trades occur. Drives all behavior.
+      </div>
+    </div>
+
+    <div class="im-card" onclick="toggleIM(this)" style="--card-color:var(--l2);">
+      <span class="im-icon">🛡️</span>
+      <div class="tag" style="border-color:var(--l2); color:var(--l2); margin-bottom:0.5rem;">L2 · Safety</div>
+      <h3>Empowerment</h3>
+      <div class="im-formula" style="color:var(--l2);">E = max I(A; S' | S)</div>
+      <p>Mutual information between actions and future states. Maximizing empowerment = keeping options open. Converges to unstable equilibria — the states where control matters most.</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: empowerment maximization IS risk management. Stay liquid, stay agentic.
+      </div>
+    </div>
+
+    <div class="im-card" onclick="toggleIM(this)">
+      <span class="im-icon">👁️</span>
+      <div class="tag" style="border-color:var(--muted); color:var(--muted); margin-bottom:0.5rem;">L2 · Safety Alt.</div>
+      <h3>Uncertainty Reduction</h3>
+      <div class="im-formula" style="color:#888;">r(e,t) = C·(1 − P(e,t))</div>
+      <p>Reward novel situations. Simple but flawed — gets stuck in stochastic "noisy TV" environments. Better variant: information gain (entropy reduction).</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: not ideal alone — markets have irreducible noise. Pair with IGM.
+      </div>
+    </div>
+
+    <div class="im-card l4" onclick="toggleIM(this)">
+      <span class="im-icon">🔥</span>
+      <div class="tag" style="border-color:var(--l4); color:var(--l4); margin-bottom:0.5rem;">L4 · Esteem</div>
+      <h3>ICM · Curiosity (Pathak 2017)</h3>
+      <div class="im-formula" style="color:var(--l4);">r_i(t) = ||φ(s_t+1) − φ̂(s_t+1)||²</div>
+      <p>Curiosity = error predicting consequences of own actions in learned feature space. Features trained via inverse dynamics — captures only what the agent can influence. 4000+ citations.</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: when satiated, explore the market driven by curiosity. Build hunting models.
+      </div>
+    </div>
+
+    <div class="im-card l4" onclick="toggleIM(this)">
+      <span class="im-icon">🌊</span>
+      <div class="tag" style="border-color:var(--l4); color:var(--l4); margin-bottom:0.5rem;">L4 · Flow State</div>
+      <h3>Intermediate Novelty</h3>
+      <div class="im-formula" style="color:var(--l4); font-size:0.75rem;">r = C·exp(−C₂·||Er(t) − Er_σ||²)</div>
+      <p>Goldilocks zone: reward situations neither too easy nor too hard to predict. This IS the flow state — where competence meets challenge. The sweet spot of optimal learning.</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: seek market regimes where prediction is improving, not random noise.
+      </div>
+    </div>
+
+    <div class="im-card l5" onclick="toggleIM(this)">
+      <span class="im-icon">🌌</span>
+      <div class="tag" style="border-color:var(--l5); color:var(--l5); margin-bottom:0.5rem;">L5 · Self-Actualization</div>
+      <h3>Learning Progress (Schmidhuber)</h3>
+      <div class="im-formula" style="color:var(--l5); font-size:0.8rem;">r = &lt;Er(t−θ)&gt; − &lt;Er(t)&gt;</div>
+      <p>Reward = improvement in prediction/compression ability over time. The derivative of competence. "Artificial scientists" with intrinsic desire to understand. Compression progress = fun.</p>
+      <div style="margin-top:0.75rem; padding:0.5rem; background:var(--bg); border-radius:3px; font-size:10px; color:var(--muted);">
+        → blakcat: research mode vs. hunting mode — triggered by compression progress signal.
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem; margin:1.5rem 0;" class="fu d3">
+    <h3>Oudeyer's Playground Experiment — Developmental Stages from LPM Alone</h3>
+    <p>A learning-progress-driven robot spontaneously develops through stages without any programmed curriculum:</p>
+    <div style="display:flex; gap:0; margin-top:1rem; overflow-x:auto;">
+      <div style="flex:1; min-width:120px; padding:0.75rem; border-right:1px solid var(--border); text-align:center;">
+        <div style="color:var(--l1); font-size:1.2rem;">1</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Body Babbling</div>
+        <p style="font-size:10px; max-width:none; margin:0;">Random exploration of own body / capabilities</p>
+      </div>
+      <div style="flex:1; min-width:120px; padding:0.75rem; border-right:1px solid var(--border); text-align:center;">
+        <div style="color:var(--l2); font-size:1.2rem;">2</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Focused Interaction</div>
+        <p style="font-size:10px; max-width:none; margin:0;">Focused interaction with own body parts</p>
+      </div>
+      <div style="flex:1; min-width:120px; padding:0.75rem; border-right:1px solid var(--border); text-align:center;">
+        <div style="color:var(--l4); font-size:1.2rem;">3</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Object Actions</div>
+        <p style="font-size:10px; max-width:none; margin:0;">Actions directed at objects in environment</p>
+      </div>
+      <div style="flex:1; min-width:120px; padding:0.75rem; text-align:center;">
+        <div style="color:var(--l5); font-size:1.2rem;">4</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Affordances</div>
+        <p style="font-size:10px; max-width:none; margin:0;">Discovery of what can be done — skills emerge</p>
+      </div>
+    </div>
+    <div style="background:var(--bg); border-left:2px solid var(--l5); padding:0.75rem; margin-top:1rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--l5);">
+      This developmental progression emerges from the learning dynamics alone. No stages are programmed. This IS the Maslow pipeline — capabilities unlock in order.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4: LEXICOGRAPHIC PRIORITY
+══════════════════════════════════════════════ -->
+<section id="lexicographic">
+  <div class="fu d1">
+    <div class="eyebrow">Lexicographic Multi-Objective RL · IJCAI 2022 · arXiv:2408.13493</div>
+    <h1>The hierarchy<br>as <em style="color:var(--l4)">optimization</em><br>structure.</h1>
+    <p>Lexicographic MORL formalizes the Maslow hierarchy as an optimization algorithm. Don't scalarize — prioritize. Satisfy the most important objective first, then the next, and so on.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin:1.5rem 0;" class="fu d2">
+    <div>
+      <h2>The Lex Stack for blakcat</h2>
+      <p style="font-size:12px;">Click each level to simulate activating it. The organism allocates all resources to the current priority.</p>
+
+      <div class="lex-stack" id="lex-stack">
+        <div class="lex-level active-lex" id="lex1" onclick="activateLex(1)">
+          <div class="lex-priority" style="background:rgba(255,107,53,0.2); color:var(--l1); border:1px solid var(--l1);">1</div>
+          <div class="lex-content">
+            <div class="lex-title" style="color:var(--l1);">Survival — Don't blow up</div>
+            <div class="lex-sub">Hard constraint: max drawdown limit. ALL resources. No exceptions.</div>
+          </div>
+          <div class="lex-status" style="background:rgba(255,107,53,0.2); color:var(--l1); border:1px solid var(--l1);">ACTIVE</div>
+        </div>
+        <div class="lex-arrow"></div>
+        <div class="lex-level" id="lex2" onclick="activateLex(2)">
+          <div class="lex-priority" style="background:rgba(247,197,159,0.1); color:var(--l2); border:1px solid var(--border);">2</div>
+          <div class="lex-content">
+            <div class="lex-title" style="color:var(--l2);">Safety — Metabolic health</div>
+            <div class="lex-sub">Threshold constraint: keep hunger within manageable bounds. Once stable → unlock next.</div>
+          </div>
+          <div class="lex-status" style="background:var(--s2); color:var(--muted);">LOCKED</div>
+        </div>
+        <div class="lex-arrow"></div>
+        <div class="lex-level" id="lex3" onclick="activateLex(3)">
+          <div class="lex-priority" style="background:rgba(239,239,208,0.05); color:var(--l3); border:1px solid var(--border);">3</div>
+          <div class="lex-content">
+            <div class="lex-title" style="color:var(--l3);">Coordination — Stigmergy</div>
+            <div class="lex-sub">Multi-agent coordination through shared market environment. Collective intelligence.</div>
+          </div>
+          <div class="lex-status" style="background:var(--s2); color:var(--muted);">LOCKED</div>
+        </div>
+        <div class="lex-arrow"></div>
+        <div class="lex-level" id="lex4" onclick="activateLex(4)">
+          <div class="lex-priority" style="background:rgba(91,192,235,0.1); color:var(--l4); border:1px solid var(--border);">4</div>
+          <div class="lex-content">
+            <div class="lex-title" style="color:var(--l4);">Exploration — Curiosity</div>
+            <div class="lex-sub">ICM-driven market exploration. Build models when not actively hunting.</div>
+          </div>
+          <div class="lex-status" style="background:var(--s2); color:var(--muted);">LOCKED</div>
+        </div>
+        <div class="lex-arrow"></div>
+        <div class="lex-level" id="lex5" onclick="activateLex(5)">
+          <div class="lex-priority" style="background:rgba(155,93,229,0.1); color:var(--l5); border:1px solid var(--border);">5</div>
+          <div class="lex-content">
+            <div class="lex-title" style="color:var(--l5);">Maximize P&L performance</div>
+            <div class="lex-sub">Only when 1–4 are satisfied. Compression progress drives strategy refinement.</div>
+          </div>
+          <div class="lex-status" style="background:var(--s2); color:var(--muted);">LOCKED</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2>TLO: Thresholded Lex Ordering</h2>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:0.95rem; color:var(--l4); background:var(--bg); padding:1rem; border-radius:4px; margin-bottom:1rem;">
+          Lex-optimize:<br>[survival_hard,<br> safety_τ,<br> coord_τ,<br> explore_τ,<br> performance_max]
+        </div>
+        <p style="font-size:12px;">Each objective has a threshold τ. Once reached, further improvement provides no benefit — resources shift to the next objective. The organism doesn't need to be maximally safe — just safe enough.</p>
+        <div style="margin-top:1rem; padding:0.75rem; background:var(--bg); border-left:2px solid var(--l4); border-radius:0 4px 4px 0; font-size:11px;">
+          <strong style="color:var(--l4);">Key insight:</strong> This prevents excessive conservatism. The organism isn't risk-averse by nature — it's risk-averse when necessary, and growth-oriented when safe.
+        </div>
+      </div>
+
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem; margin-top:1rem;">
+        <h3>Psi Theory contrast: Dynamic Competition</h3>
+        <p style="font-size:12px;">Dorner's Psi theory rejects strict hierarchy — any drive can dominate if urgent enough. An urgency mechanism is more flexible than Maslow's ordering.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.75rem;">
+          <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--l1);">
+            <strong style="color:var(--l1);">Maslow / Lex</strong><br>
+            Fixed priority order. Clean. Computationally tractable.
+          </div>
+          <div style="background:var(--bg); padding:0.75rem; border-radius:4px; font-size:11px; border-left:2px solid var(--l5);">
+            <strong style="color:var(--l5);">Psi / Dynamic</strong><br>
+            Urgency-based competition. More psychologically realistic.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fu d3">
+    <h2>Modulator System (Psi Theory)</h2>
+    <p>When the organism is "stressed" (large drawdown), cognitive parameters shift. This is Psi's modulator system applied to trading:</p>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1rem;">
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem; text-align:center;">
+        <div style="color:var(--l1); font-size:1.5rem;">⚡</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Arousal ↑</div>
+        <p style="font-size:10px; max-width:none;">Faster decision-making under threat</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem; text-align:center;">
+        <div style="color:var(--l2); font-size:1.5rem;">🎯</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Goal Stability ↑</div>
+        <p style="font-size:10px; max-width:none;">Tunnel vision — don't chase new opportunities</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem; text-align:center;">
+        <div style="color:var(--l4); font-size:1.5rem;">👁️</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Sampling ↑</div>
+        <p style="font-size:10px; max-width:none;">Hypervigilance — scan environment faster</p>
+      </div>
+      <div style="background:var(--s1); border:1px solid var(--border); border-radius:6px; padding:1rem; text-align:center;">
+        <div style="color:var(--l5); font-size:1.5rem;">🧠</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; margin:0.3rem 0;">Association ↓</div>
+        <p style="font-size:10px; max-width:none;">Narrower thinking — less creative exploration</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5: WHAT'S NOVEL
+══════════════════════════════════════════════ -->
+<section id="novel">
+  <div class="fu d1">
+    <div class="eyebrow">blakcat/EAI vs. the literature</div>
+    <h1>What nobody<br>else <em style="color:var(--l6)">does.</em></h1>
+    <p>After exhaustive literature review, here's what's genuinely novel about the blakcat architecture — versus the existing traditions it builds on.</p>
+  </div>
+
+  <div class="blakcat-grid fu d2">
+    <div class="blakcat-card novel">
+      <div class="tag" style="border-color:var(--l6); color:var(--l6); margin-bottom:0.75rem;">Novel #1</div>
+      <h3>One primitive drive — everything emerges</h3>
+      <p>Most systems model multiple drives from the start. blakcat starts with ONE (hunger/survival) and lets higher-order drives emerge from stability at the lower level. Yang (2023) designs the hierarchy in. blakcat wants it to emerge from the dynamics.</p>
+    </div>
+    <div class="blakcat-card novel">
+      <div class="tag" style="border-color:var(--l6); color:var(--l6); margin-bottom:0.75rem;">Novel #2</div>
+      <h3>The organism metaphor applied to trading</h3>
+      <p>Homeostatic RL applied to robotics and neuroscience — yes. Applied to a financial trading agent where the "body" is a portfolio and "food" is profitable trades — not found in the literature.</p>
+    </div>
+    <div class="blakcat-card novel">
+      <div class="tag" style="border-color:var(--l6); color:var(--l6); margin-bottom:0.75rem;">Novel #3</div>
+      <h3>"Earning fear" as developmental milestone</h3>
+      <p>The idea that an agent must earn its risk aversion through experience (not hard-coded) is consistent with fear conditioning literature — but framing it as a developmental stage in a trading organism is genuinely new.</p>
+    </div>
+    <div class="blakcat-card novel">
+      <div class="tag" style="border-color:var(--l6); color:var(--l6); margin-bottom:0.75rem;">Novel #4</div>
+      <h3>Q-table initialization as genome</h3>
+      <p>The Baldwin Effect applied to Q-learning: evolution operates on initial Q-values (genome), learning on runtime values. Over generations, learned fear becomes innate — shifting knowledge from runtime computation to initialization. Pre-training as evolutionary Baldwin Effect.</p>
+    </div>
+  </div>
+
+  <div class="fu d3" style="margin-top:1.5rem;">
+    <h2>Literature landscape at a glance</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Tradition</th>
+          <th>Key Papers</th>
+          <th>What it contributes</th>
+          <th>blakcat uses?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--l1);">Homeostatic RL</td>
+          <td style="color:var(--muted); font-size:11px;">Keramati & Gutkin 2014<br>Laurencon 2021</td>
+          <td style="font-size:11px;">Mathematical foundation for drive functions. Primary reward as drive reduction. The killer result.</td>
+          <td><span class="check">✓ Core mechanism</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--l4);">Intrinsic Motivation</td>
+          <td style="color:var(--muted); font-size:11px;">Oudeyer 2007, Pathak 2017<br>Schmidhuber 2010, Singh 2004</td>
+          <td style="font-size:11px;">Framework for higher-level needs. Learning progress = self-actualization drive. Taxonomy of all computational curiosity types.</td>
+          <td><span class="partial">~ Higher stages</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--l3);">Drive-Based Architectures</td>
+          <td style="color:var(--muted); font-size:11px;">Psi/Dorner 2013<br>CLARION/Sun 2009</td>
+          <td style="font-size:11px;">Psychologically realistic competing motivations. Modulator system for stress-response. Personality via drive weights.</td>
+          <td><span class="partial">~ Modulator idea</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--l2);">Lexicographic MORL</td>
+          <td style="color:var(--muted); font-size:11px;">IJCAI 2022, LexiSafe 2025<br>arXiv:2408.13493</td>
+          <td style="font-size:11px;">Operational framework for priority ordering. TLO prevents excessive conservatism. Hierarchy as optimization algorithm.</td>
+          <td><span class="check">✓ Priority structure</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--l5);">Developmental Robotics</td>
+          <td style="color:var(--muted); font-size:11px;">Ugur 2015<br>Oudeyer Playground Exp.</td>
+          <td style="font-size:11px;">Staged capability development from intrinsic motivation. Maturational constraints as beneficial. Curriculum emerges from dynamics.</td>
+          <td><span class="check">✓ Maslow pipeline</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--l6);">Fear & Avoidance RL</td>
+          <td style="color:var(--muted); font-size:11px;">Yamamori 2023<br>Frontiers Sys. Neuro.</td>
+          <td style="font-size:11px;">Anxiety = punishment sensitivity ratio. Separate fear acquisition / extinction mechanisms. Regime changes require fear extinction.</td>
+          <td><span class="check">✓ "Earning fear"</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="background:var(--s1); border:1px solid var(--border); border-radius:8px; padding:1.5rem; margin:1.5rem 0; border-left:3px solid var(--l6);" class="fu d4">
+    <h3>The Baldwin Effect — Q-table as Genome</h3>
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; margin-top:1rem; align-items:center;">
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:10px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Generation 1</div>
+        <div style="height:6px; background:var(--border); border-radius:3px; margin-bottom:0.3rem;">
+          <div style="height:100%; width:5%; background:var(--l6); border-radius:3px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">~0% innate fear — must learn from experience</div>
+      </div>
+      <div style="color:var(--muted);">→ generations →</div>
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:10px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Generation 10</div>
+        <div style="height:6px; background:var(--border); border-radius:3px; margin-bottom:0.3rem;">
+          <div style="height:100%; width:40%; background:var(--l6); border-radius:3px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">Fear-adjacent biases in Q-table initialization</div>
+      </div>
+      <div style="color:var(--muted);">→</div>
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:10px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Generation 100</div>
+        <div style="height:6px; background:var(--border); border-radius:3px; margin-bottom:0.3rem;">
+          <div style="height:100%; width:90%; background:var(--l6); border-radius:3px;"></div>
+        </div>
+        <div style="font-size:10px; color:var(--muted);">Fear essentially innate — learning capacity freed for higher-order</div>
+      </div>
+    </div>
+    <div style="background:var(--bg); border-left:2px solid var(--l6); padding:0.75rem; margin-top:1rem; border-radius:0 4px 4px 0; font-size:11px; color:var(--l6);">
+      Pre-training IS the Baldwin Effect: weights encode generic useful representations (innate knowledge), fine-tuning adjusts for specific tasks (learned behavior).
+    </div>
+  </div>
+</section>
+
+<script>
+// ── NAV ──
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const ids = ['pyramid','homeostatic','intrinsic','lexicographic','novel'];
+  document.querySelectorAll('nav button')[ids.indexOf(id)].classList.add('active');
+  if (id === 'homeostatic') initHomeo();
+  if (id === 'intrinsic') initDriveCanvas();
+}
+
+// ── PYRAMID ──
+const levelData = {
+  1: {
+    color: '#ff6b35',
+    name: 'Physiological · Hunger',
+    maslow: 'Maslow Level 1 — Basic survival',
+    eq: 'r(t) = D(H_t) − D(H_{t+1})',
+    eqColor: '#ff6b35',
+    desc: 'Primary reward = reduction in drive distance from homeostatic setpoint. The foundational mechanism. Everything else depends on this being stable.',
+    items: [
+      {label:'Framework', val:'Homeostatic RL (Keramati-Gutkin 2014)'},
+      {label:'blakcat mechanism', val:'Hunger accumulates without trades'},
+      {label:'Key result', val:'Reward-seeking ≡ stability-seeking'},
+      {label:'Emergence', val:'Risk aversion, anticipation, urgency'},
+    ],
+    blakcat: 'The organism is ONLY this at first. Single Q-table. Hunger drive. Eats (profitable trades) or starves. All higher behaviors must wait.'
+  },
+  2: {
+    color: '#f7c59f',
+    name: 'Safety · Fear',
+    maslow: 'Maslow Level 2 — Security & stability',
+    eq: 'E = max I(A; S\' | S)',
+    eqColor: '#f7c59f',
+    desc: '"Earning fear" — the organism develops punishment sensitivity through experience. Empowerment (mutual info between actions & future states) formalizes risk management.',
+    items: [
+      {label:'Framework', val:'Empowerment + Constrained MDP'},
+      {label:'blakcat mechanism', val:'Earned through loss experience'},
+      {label:'Key result', val:'Empowerment max = liquidity maintenance'},
+      {label:'Fear type', val:'Approach-avoidance RL (Yamamori 2023)'},
+    ],
+    blakcat: '"Earning fear" — the organism must experience enough pain to calibrate avoidance, but not so much it is destroyed. This is a developmental milestone, not a parameter.'
+  },
+  3: {
+    color: '#efefd0',
+    name: 'Belonging · Stigmergy',
+    maslow: 'Maslow Level 3 — Social belonging',
+    eq: 'Coord = traces(market) + decay',
+    eqColor: '#efefd0',
+    desc: 'Multiple cats coordinate through the market itself — not direct communication. Price impact is pheromone. Decay is built in. The Levin "cancer" problem: prevent agents from cannibalizing each other.',
+    items: [
+      {label:'Framework', val:'Stigmergy / ACO'},
+      {label:'blakcat mechanism', val:'Trade traces in shared market'},
+      {label:'Key tension', val:'Coordination vs. arms race (Levin cancer)'},
+      {label:'Natural property', val:'Price impact decays (built-in forgetting)'},
+    ],
+    blakcat: 'Organisms do not need to talk to each other. They just trade. Their trades leave traces. Other cats respond to those traces. Emergent coordination without design.'
+  },
+  4: {
+    color: '#5bc0eb',
+    name: 'Esteem · Competence',
+    maslow: 'Maslow Level 4 — Achievement & recognition',
+    eq: 'r_i(t) = ||φ(s_{t+1}) − φ̂(s_{t+1})||²',
+    eqColor: '#5bc0eb',
+    desc: 'Curiosity-driven exploration when satiated. ICM (Pathak 2017): intrinsic reward = error predicting action consequences in learned feature space. The organism explores when not hunting.',
+    items: [
+      {label:'Framework', val:'ICM + Learning Progress (Oudeyer)'},
+      {label:'blakcat mechanism', val:'Explore when satiated / between hunts'},
+      {label:'Key signal', val:'Competence progress = improving predictions'},
+      {label:'Flow state', val:'Intermediate novelty — not too easy/hard'},
+    ],
+    blakcat: 'A satiated cat still plays. It is building hunting skills for future need. Curiosity is not wasted — it builds the models that future hunger will exploit.'
+  },
+  5: {
+    color: '#9b5de5',
+    name: 'Self-Actualization',
+    maslow: 'Maslow Level 5 — Fulfilling potential',
+    eq: 'r = ⟨Er(t−θ)⟩ − ⟨Er(t)⟩',
+    eqColor: '#9b5de5',
+    desc: 'Learning progress (Schmidhuber compression progress). The organism is rewarded for the first derivative of competence — the rate of improvement. Produces "artificial scientists."',
+    items: [
+      {label:'Framework', val:'Compression Progress (Schmidhuber 2010)'},
+      {label:'blakcat mechanism', val:'Research mode vs. hunting mode'},
+      {label:'Key signal', val:'When to build models vs. exploit them'},
+      {label:'Emergent result', val:'Agent intrinsically wants to understand'},
+    ],
+    blakcat: 'When market dynamics change rapidly (high compression progress potential), allocate to model-building. When well-understood (low progress), exploit. The organism decides this itself.'
+  },
+  6: {
+    color: '#00f5d4',
+    name: 'Baldwin Effect · Evolution',
+    maslow: 'Meta-level — Across generations',
+    eq: 'θ_init(gen+1) ← absorb(learned(gen))',
+    eqColor: '#00f5d4',
+    desc: 'The Q-table initialization IS the genome. Evolution operates on initial Q-values. Over generations, learned behaviors become innate — the Baldwin Effect. Pre-training is this process.',
+    items: [
+      {label:'Framework', val:'Baldwin Effect (1896, Hinton & Nowlan 1987)'},
+      {label:'blakcat mechanism', val:'Evolutionary optimization of Q-init'},
+      {label:'Key insight', val:'Pre-training = Baldwin Effect for NNs'},
+      {label:'Timescale', val:'Outer loop: evolution / Inner loop: learning'},
+    ],
+    blakcat: 'The hierarchy itself should be an emergent property of evolution, not a designed structure. If the architecture is right, the organism naturally develops safety, then exploration, then optimization — in order.'
+  }
+};
+
+function selectLevel(n) {
+  const d = levelData[n];
+  const card = document.getElementById('detail-card');
+  card.innerHTML = `
+    <div class="level-name" style="color:${d.color}">${d.name}</div>
+    <div class="maslow-label">${d.maslow}</div>
+    <div class="detail-eq" style="color:${d.eqColor}; border-color:${d.eqColor};">${d.eq}</div>
+    <p style="font-size:12px; max-width:none; color:#666;">${d.desc}</p>
+    <div class="detail-grid">
+      ${d.items.map(i => `<div class="detail-item"><div class="di-label">${i.label}</div><span style="color:${d.color}; font-size:11px;">${i.val}</span></div>`).join('')}
+    </div>
+    <div style="margin-top:1rem; padding:0.75rem; background:var(--bg); border-left:2px solid ${d.color}; border-radius:0 4px 4px 0; font-size:11px; color:${d.color}; font-style:italic;">
+      blakcat: ${d.blakcat}
+    </div>
+  `;
+  card.style.borderColor = d.color;
+  card.style.boxShadow = `0 0 20px ${d.color}22`;
+}
+
+// ── HOMEOSTATIC SIMULATION ──
+let homeoRunning = false;
+let homeoState = { hunger: 0.3, pnl: [], regime: 'normal', t: 0 };
+let homeoRAF;
+
+function setRegime(r) {
+  homeoState.regime = r;
+  document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + r).classList.add('active');
+}
+
+function initHomeo() {
+  const canvas = document.getElementById('homeo-canvas');
+  if (!canvas || canvas.dataset.init) return;
+  canvas.dataset.init = 1;
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+  canvas.height = 200 * window.devicePixelRatio;
+  homeoState.pnl = Array(200).fill(0);
+  homeoRunning = true;
+  runHomeo();
+}
+
+function runHomeo() {
+  if (!homeoRunning) return;
+  const canvas = document.getElementById('homeo-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio;
+
+  homeoState.t++;
+  const t = homeoState.t;
+
+  // update hunger based on regime
+  let feedProb = 0.08;
+  let shockProb = 0.03;
+  let feedSize = 0.15;
+  let shockSize = 0.08;
+  if (homeoState.regime === 'drought') { feedProb = 0.02; }
+  if (homeoState.regime === 'feast') { feedProb = 0.2; feedSize = 0.25; }
+  if (homeoState.regime === 'crash') { shockProb = 0.15; shockSize = 0.2; feedProb = 0.03; }
+
+  // hunger drifts up, drops on feed
+  homeoState.hunger += 0.008;
+  if (Math.random() < feedProb) {
+    const feed = feedSize * (0.5 + Math.random());
+    homeoState.hunger -= feed;
+    homeoState.pnl.push(feed);
+  } else if (Math.random() < shockProb) {
+    homeoState.hunger += shockSize;
+    homeoState.pnl.push(-shockSize * 0.5);
+  } else {
+    homeoState.pnl.push(0);
+  }
+  homeoState.hunger = Math.max(0, Math.min(1, homeoState.hunger));
+  homeoState.pnl = homeoState.pnl.slice(-Math.floor(W / dpr));
+
+  // update UI
+  const fill = document.getElementById('hunger-fill');
+  const val = document.getElementById('hunger-val');
+  if (fill) fill.style.width = (homeoState.hunger * 100) + '%';
+  if (val) val.textContent = homeoState.hunger.toFixed(2);
+  if (val) val.style.color = homeoState.hunger > 0.7 ? '#ef4444' : homeoState.hunger > 0.4 ? '#f59e0b' : '#4ade80';
+
+  // draw
+  ctx.clearRect(0, 0, W, H);
+  const midY = H * 0.6;
+
+  // setpoint line
+  ctx.beginPath();
+  ctx.moveTo(0, midY - H * 0.25);
+  ctx.lineTo(W, midY - H * 0.25);
+  ctx.strokeStyle = 'rgba(255,107,53,0.2)';
+  ctx.lineWidth = 1 * dpr;
+  ctx.setLineDash([4 * dpr, 6 * dpr]);
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // pnl curve
+  const plen = homeoState.pnl.length;
+  if (plen > 2) {
+    let cumulative = 0;
+    ctx.beginPath();
+    for (let i = 0; i < plen; i++) {
+      cumulative += homeoState.pnl[i];
+      const x = (i / plen) * W;
+      const y = midY - cumulative * H * 0.3;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(255,107,53,0.6)';
+    ctx.lineWidth = 1.5 * dpr;
+    ctx.stroke();
+
+    // fill below
+    ctx.lineTo(W, midY);
+    ctx.lineTo(0, midY);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, midY - H * 0.3, 0, midY);
+    grad.addColorStop(0, 'rgba(255,107,53,0.15)');
+    grad.addColorStop(1, 'rgba(255,107,53,0)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  // hunger bar (vertical)
+  const barX = W * 0.93;
+  const barH = H * 0.8;
+  const barY = H * 0.1;
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  ctx.fillRect(barX, barY, W * 0.04, barH);
+  const fillH = barH * homeoState.hunger;
+  const hungerColor = homeoState.hunger > 0.7 ? '#ef4444' : homeoState.hunger > 0.4 ? '#f59e0b' : '#4ade80';
+  ctx.fillStyle = hungerColor + '88';
+  ctx.fillRect(barX, barY + barH - fillH, W * 0.04, fillH);
+
+  // label
+  ctx.fillStyle = hungerColor;
+  ctx.font = `${9 * dpr}px IBM Plex Mono, monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText('D(H)', barX + W * 0.02, barY - 4 * dpr);
+
+  // behavior indicator
+  const aggrX = W * 0.05;
+  const aggrLabel = homeoState.hunger > 0.7 ? 'AGGRESSIVE' : homeoState.hunger > 0.4 ? 'ACTIVE' : 'CONSERVATIVE';
+  const aggrColor = homeoState.hunger > 0.7 ? '#ef4444' : homeoState.hunger > 0.4 ? '#f59e0b' : '#4ade80';
+  ctx.fillStyle = aggrColor;
+  ctx.font = `${8 * dpr}px IBM Plex Mono, monospace`;
+  ctx.textAlign = 'left';
+  ctx.fillText('MODE: ' + aggrLabel, aggrX, H * 0.95);
+  ctx.fillStyle = '#333';
+  ctx.fillText('SETPOINT ──────────────────────────────', aggrX, midY - H * 0.25 - 4 * dpr);
+
+  homeoRAF = requestAnimationFrame(runHomeo);
+}
+
+// ── DRIVE CANVAS ──
+let driveState = 0;
+const driveStates = [
+  { label: 'HUNGER ONLY', sublabel: 'Organism in survival mode', color: '#ff6b35', fills: [1,0,0,0,0] },
+  { label: 'HUNGER + FEAR', sublabel: 'Safety earned through loss', color: '#f7c59f', fills: [0.5,1,0,0,0] },
+  { label: 'COORDINATING', sublabel: 'Multi-agent stigmergy active', color: '#efefd0', fills: [0.3,0.6,1,0,0] },
+  { label: 'CURIOUS', sublabel: 'ICM exploration in satiated state', color: '#5bc0eb', fills: [0.2,0.4,0.6,1,0] },
+  { label: 'SELF-ACTUALIZING', sublabel: 'Compression progress driving model-building', color: '#9b5de5', fills: [0.1,0.2,0.4,0.7,1] },
+];
+
+function initDriveCanvas() {
+  const canvas = document.getElementById('drive-canvas');
+  if (!canvas || canvas.dataset.init) return;
+  canvas.dataset.init = 1;
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+  canvas.height = 320 * window.devicePixelRatio;
+  canvas.addEventListener('click', () => {
+    driveState = (driveState + 1) % driveStates.length;
+    drawDriveState();
+  });
+  drawDriveState();
+}
+
+function drawDriveState() {
+  const canvas = document.getElementById('drive-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const dpr = window.devicePixelRatio;
+  ctx.clearRect(0, 0, W, H);
+
+  const st = driveStates[driveState];
+  const levels = ['PHYSIOLOGICAL', 'SAFETY', 'BELONGING', 'ESTEEM', 'SELF-ACTUAL.'];
+  const colors = ['#ff6b35','#f7c59f','#efefd0','#5bc0eb','#9b5de5'];
+  const barW = (W - 40 * dpr) / 5;
+  const maxH = H * 0.7;
+  const baseY = H * 0.85;
+
+  for (let i = 0; i < 5; i++) {
+    const x = 20 * dpr + i * barW;
+    const fill = st.fills[i];
+    const barH = fill * maxH;
+
+    // background
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect(x + 4 * dpr, baseY - maxH, barW - 8 * dpr, maxH);
+
+    // filled bar
+    const grad = ctx.createLinearGradient(0, baseY - barH, 0, baseY);
+    grad.addColorStop(0, colors[i] + 'cc');
+    grad.addColorStop(1, colors[i] + '22');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x + 4 * dpr, baseY - barH, barW - 8 * dpr, barH);
+
+    // label
+    ctx.fillStyle = fill > 0.5 ? colors[i] : '#333';
+    ctx.font = `${8 * dpr}px IBM Plex Mono, monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(levels[i], x + barW / 2, baseY + 14 * dpr);
+
+    // value
+    if (fill > 0) {
+      ctx.fillStyle = colors[i];
+      ctx.font = `bold ${10 * dpr}px IBM Plex Mono, monospace`;
+      ctx.fillText(Math.round(fill * 100) + '%', x + barW / 2, baseY - barH - 6 * dpr);
+    }
+  }
+
+  // state label
+  ctx.fillStyle = st.color;
+  ctx.font = `bold ${16 * dpr}px Syne, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText(st.label, W / 2, H * 0.08);
+  ctx.fillStyle = '#444';
+  ctx.font = `${10 * dpr}px IBM Plex Mono, monospace`;
+  ctx.fillText(st.sublabel, W / 2, H * 0.14);
+
+  ctx.fillStyle = '#222';
+  ctx.font = `${9 * dpr}px IBM Plex Mono, monospace`;
+  ctx.fillText('[ click to advance through hierarchy ]', W / 2, H * 0.96);
+}
+
+// ── LEX STACK ──
+function activateLex(n) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('lex' + i);
+    el.classList.remove('active-lex', 'satisfied');
+    const status = el.querySelector('.lex-status');
+    if (i < n) {
+      el.classList.add('satisfied');
+      status.textContent = 'SATISFIED ✓';
+      status.style.background = 'rgba(74,222,128,0.1)';
+      status.style.color = '#4ade80';
+      status.style.border = '1px solid #4ade80';
+    } else if (i === n) {
+      el.classList.add('active-lex');
+      status.textContent = 'ACTIVE';
+      status.style.background = 'rgba(255,107,53,0.2)';
+      status.style.color = 'var(--l1)';
+      status.style.border = '1px solid var(--l1)';
+    } else {
+      status.textContent = 'LOCKED';
+      status.style.background = 'var(--s2)';
+      status.style.color = 'var(--muted)';
+      status.style.border = 'none';
+    }
+  }
+}
+
+// Init on load
+setTimeout(() => {
+  initDriveCanvas();
+}, 100);
+</script>
+</body>
+</html>

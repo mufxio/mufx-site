@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEPA: A Visual Deep Dive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&display=swap');
+
+  :root {
+    --bg: #080a0f;
+    --surface: #0d1117;
+    --border: #1e2530;
+    --text: #c8d0e0;
+    --muted: #4a5568;
+    --accent1: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --danger: #ef4444;
+    --glow1: rgba(0, 212, 255, 0.15);
+    --glow2: rgba(124, 58, 237, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(8,10,15,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 2rem;
+    height: 52px; gap: 2px;
+  }
+  nav .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem; font-weight: 900;
+    color: var(--accent1);
+    margin-right: 2rem;
+    letter-spacing: -0.03em;
+  }
+  nav button {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-family: 'DM Mono', monospace;
+    font-size: 11px; padding: 6px 12px; border-radius: 4px;
+    transition: all 0.2s; letter-spacing: 0.05em;
+  }
+  nav button:hover { color: var(--text); background: var(--border); }
+  nav button.active { color: var(--accent1); background: var(--glow1); }
+
+  /* ── SECTIONS ── */
+  section {
+    min-height: 100vh; padding: 5rem 2rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+    display: none;
+  }
+  section.active { display: block; }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -0.04em; margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem; font-weight: 600;
+    letter-spacing: -0.03em; margin-bottom: 1.5rem;
+    color: var(--accent1);
+  }
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem; font-weight: 600;
+    margin-bottom: 0.75rem; color: var(--text);
+  }
+  p { color: var(--muted); margin-bottom: 1rem; max-width: 66ch; }
+  .tag {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 3px; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid;
+  }
+  .tag.blue { border-color: var(--accent1); color: var(--accent1); background: var(--glow1); }
+  .tag.purple { border-color: var(--accent2); color: #a78bfa; background: var(--glow2); }
+  .tag.green { border-color: var(--accent3); color: var(--accent3); background: rgba(16,185,129,0.1); }
+  .tag.amber { border-color: var(--accent4); color: var(--accent4); background: rgba(245,158,11,0.1); }
+  .tag.red { border-color: var(--danger); color: var(--danger); background: rgba(239,68,68,0.1); }
+
+  /* ── SECTION 1: ARCHITECTURE ── */
+  .arch-container {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    overflow: hidden;
+  }
+  .arch-container::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, var(--glow1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .arch-flow {
+    display: flex; align-items: center;
+    gap: 0; justify-content: center;
+    flex-wrap: nowrap; margin: 2rem 0;
+  }
+  .arch-node {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    min-width: 110px;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .arch-node:hover {
+    border-color: var(--accent1);
+    box-shadow: 0 0 20px var(--glow1);
+    transform: translateY(-2px);
+  }
+  .arch-node.highlight {
+    border-color: var(--accent1);
+    box-shadow: 0 0 30px var(--glow1);
+  }
+  .arch-node .icon {
+    font-size: 1.5rem; display: block; margin-bottom: 0.4rem;
+  }
+  .arch-node .label {
+    font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .arch-node .name {
+    font-family: 'Fraunces', serif;
+    font-size: 0.85rem; font-weight: 600;
+    color: var(--text);
+  }
+  .arch-arrow {
+    flex: 0 0 auto;
+    display: flex; flex-direction: column;
+    align-items: center; padding: 0 4px;
+    position: relative;
+  }
+  .arch-arrow svg { width: 32px; height: 32px; }
+  .arch-arrow .arrow-label {
+    font-size: 9px; color: var(--muted);
+    letter-spacing: 0.05em; margin-top: 2px;
+    text-align: center; width: 60px;
+  }
+  .latent-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(0,212,255,0.1));
+    border: 1px dashed var(--accent2);
+    border-radius: 8px; padding: 1.2rem 1rem;
+    text-align: center; min-width: 110px;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .latent-box:hover {
+    box-shadow: 0 0 20px var(--glow2);
+    transform: translateY(-2px);
+  }
+  .arch-split {
+    display: flex; flex-direction: column;
+    gap: 8px; align-items: center;
+  }
+
+  /* animated data particles */
+  @keyframes flow-right {
+    0% { opacity: 0; transform: translateX(-10px); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(10px); }
+  }
+  .particle {
+    display: inline-block; width: 4px; height: 4px;
+    border-radius: 50%; background: var(--accent1);
+    animation: flow-right 1.5s infinite;
+  }
+  .particle:nth-child(2) { animation-delay: 0.5s; }
+  .particle:nth-child(3) { animation-delay: 1s; }
+
+  /* detail panel */
+  .detail-panel {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    min-height: 120px;
+    transition: all 0.3s;
+  }
+  .detail-panel h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem; margin-bottom: 0.5rem;
+    color: var(--accent1);
+  }
+
+  /* ── SECTION 2: COLLAPSE ── */
+  .collapse-demo {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; margin: 2rem 0;
+  }
+  .collapse-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .collapse-card h3 { margin-bottom: 1rem; }
+  canvas.emb-canvas {
+    width: 100%; height: 200px;
+    display: block; border-radius: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .collapse-label {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+  }
+  .evolution-bar {
+    height: 4px; border-radius: 2px;
+    background: var(--border); margin: 1rem 0;
+    overflow: hidden;
+  }
+  .evolution-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    transition: width 0.1s;
+  }
+
+  /* ── SECTION 3: TIMELINE ── */
+  .timeline {
+    position: relative;
+    margin: 2rem 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 24px; top: 0; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .tl-item {
+    display: flex; gap: 1.5rem;
+    margin-bottom: 2rem; position: relative;
+    opacity: 0; transform: translateX(-20px);
+    transition: all 0.5s;
+  }
+  .tl-item.visible { opacity: 1; transform: translateX(0); }
+  .tl-dot {
+    flex: 0 0 48px; height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; z-index: 1;
+    transition: all 0.3s;
+  }
+  .tl-item:hover .tl-dot {
+    border-color: var(--accent1);
+    box-shadow: 0 0 16px var(--glow1);
+  }
+  .tl-content {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem;
+    transition: all 0.3s;
+  }
+  .tl-item:hover .tl-content {
+    border-color: var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .tl-year {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--muted); margin-bottom: 0.25rem;
+  }
+  .tl-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .tl-desc { color: var(--muted); font-size: 12px; }
+  .tl-key {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    background: var(--bg);
+    border-left: 2px solid var(--accent1);
+    border-radius: 0 4px 4px 0;
+    font-size: 11px; color: var(--accent1);
+    font-style: italic;
+  }
+
+  /* ── SECTION 4: EQUATION ── */
+  .eq-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; margin: 2rem 0;
+  }
+  .eq-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.5rem;
+    transition: all 0.3s; cursor: default;
+  }
+  .eq-card:hover {
+    border-color: var(--accent1);
+    box-shadow: 0 0 24px var(--glow1);
+  }
+  .eq-formula {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem; font-weight: 500;
+    color: var(--accent1);
+    padding: 1rem; margin: 0.75rem 0;
+    background: var(--bg);
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+    overflow-x: auto;
+  }
+  .eq-parts { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .eq-part {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .eq-part span { color: var(--accent1); font-weight: 500; }
+
+  /* ── SECTION 5: COMPARISON ── */
+  .compare-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin: 2rem 0;
+  }
+  .compare-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .compare-col:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+  .compare-col.featured { border-color: var(--accent1); }
+  .compare-head {
+    padding: 1.2rem; border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .compare-head h3 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .compare-body { padding: 1.2rem; }
+  .compare-row {
+    display: flex; justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .key { color: var(--muted); }
+  .compare-row .val { color: var(--text); text-align: right; }
+  .compare-row .val.yes { color: var(--accent3); }
+  .compare-row .val.no { color: var(--danger); }
+  .compare-row .val.maybe { color: var(--accent4); }
+
+  /* ── CANVAS ANIMATION (HERO) ── */
+  #hero-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 0;
+    opacity: 0.35;
+  }
+
+  /* ── MISC ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem;
+    border-left: 3px solid var(--accent1);
+  }
+  .info-box.purple { border-left-color: var(--accent2); }
+  .info-box.green { border-left-color: var(--accent3); }
+  .info-box.amber { border-left-color: var(--accent4); }
+  .info-box p { max-width: none; }
+  .metric {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem; font-weight: 900;
+    color: var(--accent1); line-height: 1;
+  }
+  .metric-label { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; margin-top: 4px; }
+  .metrics-row { display: flex; gap: 2rem; margin: 2rem 0; flex-wrap: wrap; }
+  .metric-item { flex: 1; min-width: 120px; }
+
+  /* scroll animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+  .fade-up.d1 { animation-delay: 0.1s; opacity: 0; }
+  .fade-up.d2 { animation-delay: 0.2s; opacity: 0; }
+  .fade-up.d3 { animation-delay: 0.3s; opacity: 0; }
+  .fade-up.d4 { animation-delay: 0.4s; opacity: 0; }
+  .fade-up.d5 { animation-delay: 0.5s; opacity: 0; }
+
+  /* play button */
+  .play-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--glow1); border: 1px solid var(--accent1);
+    color: var(--accent1); font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    padding: 8px 16px; border-radius: 4px;
+    cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase; margin-top: 1rem;
+  }
+  .play-btn:hover { background: rgba(0,212,255,0.2); }
+
+  /* sigmap animation */
+  #sigreg-canvas { width: 100%; height: 280px; display: block; border-radius: 8px; background: var(--bg); }
+
+  .section-header {
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+  }
+  .section-header .eyebrow {
+    font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent1); position: relative;
+  }
+  .pulse-dot::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: var(--accent1);
+    animation: pulse-ring 1.5s ease-out infinite;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="hero-canvas"></canvas>
+
+<nav>
+  <span class="logo">JEPA</span>
+  <button class="active" onclick="show('arch')">Architecture</button>
+  <button onclick="show('collapse')">Collapse</button>
+  <button onclick="show('timeline')">Timeline</button>
+  <button onclick="show('equations')">Equations</button>
+  <button onclick="show('compare')">vs. Others</button>
+</nav>
+
+<!-- ═══════════════ SECTION 1: ARCHITECTURE ═══════════════ -->
+<section id="arch" class="active">
+  <div class="section-header fade-up d1">
+    <div class="eyebrow">Joint Embedding Predictive Architecture</div>
+    <h1>Predict in<br><em style="color:var(--accent1)">representation space</em>,<br>not pixel space.</h1>
+    <p>JEPA's core thesis: understanding comes from predicting abstract representations — not from reconstructing observations. Click each module to explore.</p>
+  </div>
+
+  <div class="arch-container fade-up d2">
+    <!-- Main Flow -->
+    <div style="text-align:center; margin-bottom:1.5rem;">
+      <span class="tag blue">Training Objective</span>
+      <span style="color:var(--muted); margin: 0 1rem;">·</span>
+      <span style="font-size:11px; color:var(--muted);">Given context x, predict the representation of target y</span>
+    </div>
+
+    <div class="arch-flow" id="arch-flow">
+
+      <!-- Input X -->
+      <div class="arch-split">
+        <div class="arch-node" onclick="showDetail('context')" id="node-context">
+          <span class="icon">🖼️</span>
+          <div class="label">Context</div>
+          <div class="name">Input x</div>
+        </div>
+        <div style="height:8px; width:1px; background:var(--border); margin:0 auto;"></div>
+        <div class="arch-node" onclick="showDetail('target-input')" id="node-target-input">
+          <span class="icon">🎯</span>
+          <div class="label">Target</div>
+          <div class="name">Input y</div>
+        </div>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="arch-arrow">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M4 16 H26 M20 10 L28 16 L20 22" stroke="var(--accent1)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div style="height:36px;"></div>
+      </div>
+
+      <!-- Encoders -->
+      <div class="arch-split">
+        <div class="arch-node" onclick="showDetail('ctx-enc')" id="node-ctx-enc" style="border-color:var(--accent1)">
+          <span class="icon">⚡</span>
+          <div class="label">Context Encoder</div>
+          <div class="name">f<sub>θ</sub>(x)</div>
+        </div>
+        <div style="height:8px; width:1px; background:var(--border); margin:0 auto;"></div>
+        <div class="arch-node" onclick="showDetail('tgt-enc')" id="node-tgt-enc" style="border-color:var(--accent2)">
+          <span class="icon">🌊</span>
+          <div class="label">Target Encoder</div>
+          <div class="name">f<sub>θ̄</sub>(y)</div>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="arch-arrow">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M4 16 H26 M20 10 L28 16 L20 22" stroke="var(--accent1)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div style="height:36px;"></div>
+      </div>
+
+      <!-- Representations -->
+      <div class="arch-split">
+        <div class="arch-node" onclick="showDetail('repr-s')" style="border-color:rgba(0,212,255,0.4)">
+          <span class="icon">🔷</span>
+          <div class="label">Representation</div>
+          <div class="name">s<sub>x</sub></div>
+        </div>
+        <div style="height:8px; width:1px; background:var(--border); margin:0 auto;"></div>
+        <div class="arch-node" onclick="showDetail('repr-t')" style="border-color:rgba(124,58,237,0.4)">
+          <span class="icon">🔮</span>
+          <div class="label">Representation</div>
+          <div class="name">s<sub>y</sub></div>
+        </div>
+      </div>
+
+      <!-- Arrow 3 + Latent injection -->
+      <div class="arch-arrow" style="flex-direction:column; align-items:center; gap:4px;">
+        <svg viewBox="0 0 32 32" fill="none" style="width:32px; height:20px; margin-top:2px;">
+          <path d="M4 10 H26 M20 4 L28 10 L20 16" stroke="var(--accent1)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div style="height:8px;"></div>
+        <div class="latent-box" onclick="showDetail('latent')" style="padding:0.5rem 0.6rem; min-width:60px;">
+          <div style="font-size:9px; color:var(--muted);">Latent</div>
+          <div style="font-family:'Fraunces',serif; font-size:0.9rem; color:#a78bfa;">z ↓</div>
+        </div>
+      </div>
+
+      <!-- Predictor -->
+      <div class="arch-node" onclick="showDetail('predictor')" id="node-predictor" style="min-width:120px; border-color:var(--accent3);">
+        <span class="icon">🧠</span>
+        <div class="label">Predictor</div>
+        <div class="name">g<sub>φ</sub>(s<sub>x</sub>, z)</div>
+      </div>
+
+      <!-- Arrow 4 -->
+      <div class="arch-arrow">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M4 16 H26 M20 10 L28 16 L20 22" stroke="var(--accent3)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Predicted -->
+      <div class="arch-node" onclick="showDetail('predicted')" style="border-color:rgba(16,185,129,0.4)">
+        <span class="icon">✨</span>
+        <div class="label">Predicted</div>
+        <div class="name">ŝ<sub>y</sub></div>
+      </div>
+
+      <!-- Arrow 5 (Loss) -->
+      <div class="arch-arrow">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M4 16 H26 M20 10 L28 16 L20 22" stroke="var(--accent4)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="arrow-label">minimize</div>
+      </div>
+
+      <!-- Loss -->
+      <div class="arch-node" onclick="showDetail('loss')" style="border-color:var(--accent4)">
+        <span class="icon">📐</span>
+        <div class="label">Loss</div>
+        <div class="name">‖ŝ<sub>y</sub>−s<sub>y</sub>‖²</div>
+      </div>
+
+    </div><!-- end arch-flow -->
+
+    <!-- EMA annotation -->
+    <div style="text-align:center; margin-top:1rem; font-size:11px; color:var(--muted);">
+      <span style="color:#a78bfa;">Target encoder</span> updates via EMA only — no direct gradients —
+      <span style="color:var(--accent1);">preventing collapse</span>
+    </div>
+
+    <!-- Detail panel -->
+    <div class="detail-panel" id="detail-panel">
+      <p style="color:var(--muted); text-align:center; font-size:12px; margin:2rem 0;">
+        ← Click any module above to see details
+      </p>
+    </div>
+  </div>
+
+  <div class="grid-2 fade-up d3" style="margin-top:2rem;">
+    <div class="info-box">
+      <h3>Mode-1: Reactive</h3>
+      <p>Fast feedforward path. Perception → world model (single step) → actor. Like Kahneman's System 1 — pattern-matched, immediate.</p>
+    </div>
+    <div class="info-box purple">
+      <h3>Mode-2: Deliberative</h3>
+      <p>Slow iterative planning. Actor proposes sequences, world model simulates outcomes, critic evaluates. Loops until optimal. Like System 2.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 2: COLLAPSE ═══════════════ -->
+<section id="collapse">
+  <div class="section-header">
+    <div class="eyebrow">The Core Problem & Solution</div>
+    <h1>Representation<br><em style="color:var(--danger)">Collapse</em><br><span style="font-size:0.5em; color:var(--muted)">& how SIGReg solves it</span></h1>
+    <p>If both encoders output constant vectors, loss goes to zero — but representations encode nothing. This is collapse. The field's entire history is the hunt for a principled solution.</p>
+  </div>
+
+  <div class="collapse-demo">
+    <div class="collapse-card">
+      <div class="collapse-label"><span class="tag red">Collapsed</span></div>
+      <h3>Without regularization</h3>
+      <canvas class="emb-canvas" id="canvas-bad"></canvas>
+      <div class="evolution-bar"><div class="evolution-fill" id="fill-bad" style="width:0%; background:var(--danger);"></div></div>
+      <p style="font-size:11px; color:var(--muted);">Embeddings collapse to a single point. Loss → 0, information → 0.</p>
+    </div>
+    <div class="collapse-card">
+      <div class="collapse-label"><span class="tag green">SIGReg</span></div>
+      <h3>With isotropic regularization</h3>
+      <canvas class="emb-canvas" id="canvas-good"></canvas>
+      <div class="evolution-bar"><div class="evolution-fill" id="fill-good" style="width:0%;"></div></div>
+      <p style="font-size:11px; color:var(--muted);">Embeddings spread to match isotropic Gaussian. Information maximized.</p>
+    </div>
+  </div>
+
+  <button class="play-btn" onclick="runCollapseDemo()">▶ Animate Collapse</button>
+
+  <div style="margin-top:3rem;">
+    <h2>SIGReg: The Principled Fix</h2>
+    <p>LeJEPA (2025) proves the isotropic Gaussian is the <em>unique optimal distribution</em> minimizing worst-case downstream task risk. SIGReg enforces this via the Cramér-Wold theorem.</p>
+    <canvas id="sigreg-canvas"></canvas>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="info-box green">
+        <h3>Cramér-Wold Trick</h3>
+        <p>A multivariate distribution is uniquely determined by all its 1D projections. SIGReg checks projections onto M random directions — O(N) complexity — and matches each to a standard normal.</p>
+      </div>
+      <div class="info-box amber">
+        <h3>What it eliminates</h3>
+        <p>No EMA teacher. No stop-gradients. No whitening layers. No asymmetric architecture. Just one regularizer. Collapse is impossible by construction — not just empirically unlikely.</p>
+      </div>
+    </div>
+    <div class="metrics-row" style="margin-top:1.5rem;">
+      <div class="metric-item">
+        <div class="metric" style="color:var(--accent3);">3×</div>
+        <div class="metric-label">More sample efficient than I-JEPA</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric" style="color:var(--accent1);">99%</div>
+        <div class="metric-label">Training loss → downstream performance correlation</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric" style="color:var(--accent4);">1</div>
+        <div class="metric-label">Hyperparameter (vs ~6 in prior methods)</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric" style="color:#a78bfa;">60+</div>
+        <div class="metric-label">Architectures tested, all stable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 3: TIMELINE ═══════════════ -->
+<section id="timeline">
+  <div class="section-header">
+    <div class="eyebrow">Collapse Prevention — Historical Arc</div>
+    <h1>From negative pairs<br>to <em style="color:var(--accent3)">provable</em><br>guarantees.</h1>
+    <p>Each generation found a simpler, more principled answer to the same question: how do you stop representations from degenerating?</p>
+  </div>
+
+  <div class="timeline" id="timeline-container">
+
+    <div class="tl-item">
+      <div class="tl-dot">🔄</div>
+      <div class="tl-content">
+        <div class="tl-year">2020</div>
+        <div class="tl-title">SimCLR / MoCo — Contrastive Learning</div>
+        <div class="tl-desc">Prevent collapse by pushing apart negative pairs. Requires large batches (SimCLR) or memory banks (MoCo). Augmentation-dependent.</div>
+        <div class="tl-key">Problem: scales poorly; needs negatives; augmentation sensitivity</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">🎓</div>
+      <div class="tl-content">
+        <div class="tl-year">2020</div>
+        <div class="tl-title">BYOL — Bootstrap Your Own Latent</div>
+        <div class="tl-desc">No negative pairs. Asymmetric architecture + EMA teacher. Mysteriously doesn't collapse. Works empirically — theory unclear at first.</div>
+        <div class="tl-key">Mystery: why doesn't it collapse? Nobody fully knew.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">📊</div>
+      <div class="tl-content">
+        <div class="tl-year">2021</div>
+        <div class="tl-title">Barlow Twins (LeCun et al.)</div>
+        <div class="tl-desc">Cross-correlation matrix between views should equal identity. Makes embedding dimensions maximally independent. Elegant — no negatives, no momentum, no asymmetry needed. 777 citations.</div>
+        <div class="tl-key">Innovation: decorrelation as the regularization objective</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">⚖️</div>
+      <div class="tl-content">
+        <div class="tl-year">2021</div>
+        <div class="tl-title">VICReg — Variance-Invariance-Covariance</div>
+        <div class="tl-desc">Three explicit terms: keep variance above threshold, embeddings of augmented views match, embedding dims decorrelated. Most explicit collapse prevention. 285 citations.</div>
+        <div class="tl-key">Innovation: named what prevents collapse; no tricks needed</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">🖼️</div>
+      <div class="tl-content">
+        <div class="tl-year">2023</div>
+        <div class="tl-title">I-JEPA — First JEPA Implementation (CVPR)</div>
+        <div class="tl-desc">Predict representations of masked image regions. EMA teacher provides stable targets. No augmentations. No pixel reconstruction. Semantic representations from masking alone. 254 citations.</div>
+        <div class="tl-key">Limitation: EMA is still a hack — no collapse guarantee</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">🎬</div>
+      <div class="tl-content">
+        <div class="tl-year">2024</div>
+        <div class="tl-title">V-JEPA — Video Extension (Meta AI)</div>
+        <div class="tl-desc">Spatiotemporal masking across 64 frames. Mask consistent across time (prevents trivial same-frame copying). 1.5–6× more sample efficient than generative pre-training.</div>
+        <div class="tl-key">Key: mask repeats across time dimension — forces genuine temporal reasoning</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">🤖</div>
+      <div class="tl-content">
+        <div class="tl-year">2025</div>
+        <div class="tl-title">V-JEPA 2 — Understanding + Planning + Robot Control</div>
+        <div class="tl-desc">1M+ hours internet video. Zero-shot robot arm control from 62 hours robot data. Action-conditioned planning via CEM in latent space. SotA on action anticipation.</div>
+        <div class="tl-key">Milestone: 62 hrs robot video → zero-shot Franka arm control across labs</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--accent3); box-shadow:0 0 16px rgba(16,185,129,0.3);">✓</div>
+      <div class="tl-content" style="border-color:var(--accent3);">
+        <div class="tl-year">2025</div>
+        <div class="tl-title">LeJEPA + SIGReg — Provable Collapse Prevention</div>
+        <div class="tl-desc">Theorem: isotropic Gaussian uniquely minimizes worst-case downstream risk. SIGReg enforces via Cramér-Wold projections. O(N) complexity. 1 hyperparameter. First JEPA with training-loss/downstream correlation.</div>
+        <div class="tl-key" style="border-color:var(--accent3); color:var(--accent3);">✓ First mathematically provable guarantee — not empirical hope</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--accent1); box-shadow:0 0 16px var(--glow1);">🌍</div>
+      <div class="tl-content" style="border-color:var(--accent1);">
+        <div class="tl-year">2026</div>
+        <div class="tl-title">LeWorldModel (AMI Labs, LeCun) — 15M Params, Raw Pixels</div>
+        <div class="tl-desc">First JEPA training stably end-to-end from raw pixels. Action-conditioned predictor = proper world model. 48× faster planning than foundation-model approaches. $1.03B seed round.</div>
+        <div class="tl-key" style="border-color:var(--accent1);">Democratization: world models on a single GPU</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 4: EQUATIONS ═══════════════ -->
+<section id="equations">
+  <div class="section-header">
+    <div class="eyebrow">Mathematical Core</div>
+    <h1>The formulas<br>that define<br><em style="color:var(--accent1)">JEPA.</em></h1>
+    <p>Hover each card to highlight the key insight embedded in each equation.</p>
+  </div>
+
+  <div class="eq-grid">
+    <div class="eq-card">
+      <span class="tag blue">Core Objective</span>
+      <h3 style="margin-top:0.75rem;">JEPA Prediction Loss</h3>
+      <div class="eq-formula">D(ŝ_y, s_y) = ||ŝ_y − s_y||²</div>
+      <p style="font-size:12px;">Minimize MSE between predicted and actual representation. No pixel reconstruction. The entire insight in one line.</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>ŝ_y</span> = predicted repr</div>
+        <div class="eq-part"><span>s_y</span> = target repr (EMA)</div>
+        <div class="eq-part"><span>||·||²</span> = L2 distance</div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <span class="tag purple">Latent Variable</span>
+      <h3 style="margin-top:0.75rem;">Predictor with Latent z</h3>
+      <div class="eq-formula" style="color:#a78bfa;">ŝ_y = g_φ(f_θ(x), z)</div>
+      <p style="font-size:12px;">z handles multimodality — given a context, many futures are valid. z picks which one. Information capacity of z is deliberately bounded.</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>f_θ</span> = context encoder</div>
+        <div class="eq-part"><span>g_φ</span> = predictor</div>
+        <div class="eq-part"><span>z</span> = latent (which future)</div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <span class="tag purple">EMA Update</span>
+      <h3 style="margin-top:0.75rem;">Target Encoder Update</h3>
+      <div class="eq-formula" style="color:#a78bfa;">θ̄ ← m·θ̄ + (1−m)·θ</div>
+      <p style="font-size:12px;">Target encoder is a slowly-evolving copy of context encoder. Typical m ≈ 0.996–1.0. Prevents collapse empirically — but no formal guarantee (SIGReg fixes this).</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>θ̄</span> = target encoder params</div>
+        <div class="eq-part"><span>θ</span> = context encoder params</div>
+        <div class="eq-part"><span>m</span> = momentum ≈ 0.996</div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <span class="tag green">SIGReg — Collapse Prevention</span>
+      <h3 style="margin-top:0.75rem;">LeJEPA Total Loss</h3>
+      <div class="eq-formula" style="color:var(--accent3);">L = L_predict + λ·L_SIGReg</div>
+      <p style="font-size:12px;">L_SIGReg uses Epps-Pulley test on M random 1D projections of embeddings, matching to N(0,1). Cramér-Wold: matching all projections = matching the full distribution.</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>λ</span> = single hyperparameter</div>
+        <div class="eq-part"><span>M</span> = random projections</div>
+        <div class="eq-part"><span>N(0,I)</span> = target distribution</div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <span class="tag amber">Energy-Based View</span>
+      <h3 style="margin-top:0.75rem;">EBM Framing</h3>
+      <div class="eq-formula" style="color:var(--accent4);">F_w(x,y) = min_z E_w(x,y,z)</div>
+      <p style="font-size:12px;">JEPA is formally an energy-based model. Low energy = compatible (x,y) pair. No normalization required — more general than probabilistic models. Connects to statistical physics.</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>F_w</span> = free energy</div>
+        <div class="eq-part"><span>E_w</span> = energy function</div>
+        <div class="eq-part">low E → compatible</div>
+      </div>
+    </div>
+
+    <div class="eq-card">
+      <span class="tag blue">LeWorldModel</span>
+      <h3 style="margin-top:0.75rem;">Action-Conditioned World Model</h3>
+      <div class="eq-formula">ŝ_{t+1} = g_φ(s_t, a_t)</div>
+      <p style="font-size:12px;">Given current state representation s_t and action a_t, predict next state representation. This IS a world model. Planning = find action sequence minimizing cost in latent space.</p>
+      <div class="eq-parts">
+        <div class="eq-part"><span>s_t</span> = state repr at t</div>
+        <div class="eq-part"><span>a_t</span> = action</div>
+        <div class="eq-part">Plan via CEM in latent</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:2rem;">
+    <h3>The Hierarchy in One Picture</h3>
+    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:0.75rem;">
+      <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:6px; min-width:120px;">
+        <div style="color:var(--danger); font-size:1.5rem;">📷</div>
+        <div style="font-size:10px; color:var(--muted); margin-top:4px;">MAE: predict<br>pixels</div>
+      </div>
+      <div style="color:var(--muted);">→ lower-level texture</div>
+      <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:6px; min-width:120px;">
+        <div style="color:var(--accent1); font-size:1.5rem;">🔷</div>
+        <div style="font-size:10px; color:var(--muted); margin-top:4px;">JEPA: predict<br>representations</div>
+      </div>
+      <div style="color:var(--muted);">→ semantic features</div>
+      <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:6px; min-width:120px;">
+        <div style="color:var(--accent3); font-size:1.5rem;">🌐</div>
+        <div style="font-size:10px; color:var(--muted); margin-top:4px;">LeWM: predict<br>+ plan</div>
+      </div>
+      <div style="color:var(--muted);">→ world model</div>
+      <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:6px; min-width:120px; border:1px solid var(--accent4);">
+        <div style="color:var(--accent4); font-size:1.5rem;">🤖</div>
+        <div style="font-size:10px; color:var(--muted); margin-top:4px;">V-JEPA2-AC:<br>zero-shot robots</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 5: COMPARE ═══════════════ -->
+<section id="compare">
+  <div class="section-header">
+    <div class="eyebrow">Landscape Position</div>
+    <h1>JEPA vs.<br>the <em style="color:var(--accent1)">field.</em></h1>
+    <p>How does JEPA compare to other world model and self-supervised approaches? The distinctions are subtle but architecturally important.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-head">
+        <span class="tag red" style="margin-bottom:0.5rem; display:inline-block;">Generative</span>
+        <h3>MAE / Diffusion</h3>
+        <p style="font-size:11px; color:var(--muted);">Predict or reconstruct in pixel space</p>
+      </div>
+      <div class="compare-body">
+        <div class="compare-row"><span class="key">Prediction target</span><span class="val">Pixels / tokens</span></div>
+        <div class="compare-row"><span class="key">Augmentations</span><span class="val maybe">Optional</span></div>
+        <div class="compare-row"><span class="key">Collapse risk</span><span class="val no">None (reconstruction)</span></div>
+        <div class="compare-row"><span class="key">Understanding</span><span class="val maybe">Indirect</span></div>
+        <div class="compare-row"><span class="key">Sample efficiency</span><span class="val no">Low–Medium</span></div>
+        <div class="compare-row"><span class="key">Planning</span><span class="val no">Requires generation</span></div>
+        <div class="compare-row"><span class="key">Scale to video</span><span class="val maybe">Expensive</span></div>
+      </div>
+    </div>
+
+    <div class="compare-col">
+      <div class="compare-head">
+        <span class="tag purple" style="margin-bottom:0.5rem; display:inline-block;">Contrastive</span>
+        <h3>SimCLR / DINO</h3>
+        <p style="font-size:11px; color:var(--muted);">Push/pull between augmented pairs</p>
+      </div>
+      <div class="compare-body">
+        <div class="compare-row"><span class="key">Prediction target</span><span class="val">Embedding space</span></div>
+        <div class="compare-row"><span class="key">Augmentations</span><span class="val no">Required (sensitive)</span></div>
+        <div class="compare-row"><span class="key">Collapse risk</span><span class="val maybe">Negatives required</span></div>
+        <div class="compare-row"><span class="key">Understanding</span><span class="val yes">High (semantic)</span></div>
+        <div class="compare-row"><span class="key">Sample efficiency</span><span class="val maybe">Medium</span></div>
+        <div class="compare-row"><span class="key">Planning</span><span class="val no">Not native</span></div>
+        <div class="compare-row"><span class="key">Scale to video</span><span class="val no">Very expensive</span></div>
+      </div>
+    </div>
+
+    <div class="compare-col featured">
+      <div class="compare-head" style="background:rgba(0,212,255,0.05);">
+        <span class="tag blue" style="margin-bottom:0.5rem; display:inline-block;">★ JEPA</span>
+        <h3>I-JEPA / V-JEPA / LeWM</h3>
+        <p style="font-size:11px; color:var(--muted);">Predict representations of masked regions</p>
+      </div>
+      <div class="compare-body">
+        <div class="compare-row"><span class="key">Prediction target</span><span class="val yes">Representation space</span></div>
+        <div class="compare-row"><span class="key">Augmentations</span><span class="val yes">Not needed</span></div>
+        <div class="compare-row"><span class="key">Collapse risk</span><span class="val yes">SIGReg: provable fix</span></div>
+        <div class="compare-row"><span class="key">Understanding</span><span class="val yes">High (abstract)</span></div>
+        <div class="compare-row"><span class="key">Sample efficiency</span><span class="val yes">1.5–6× better</span></div>
+        <div class="compare-row"><span class="key">Planning</span><span class="val yes">Native (latent CEM)</span></div>
+        <div class="compare-row"><span class="key">Scale to video</span><span class="val yes">Efficient</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <h2>World Model Comparison</h2>
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-head">
+          <h3>Dreamer / DreamerV3</h3>
+          <span class="tag amber" style="margin-top:4px; display:inline-block;">Generative world model</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-row"><span class="key">Trains from</span><span class="val">Interaction (RL)</span></div>
+          <div class="compare-row"><span class="key">Uses reconstruction</span><span class="val no">Yes (DreamerV1–3)</span></div>
+          <div class="compare-row"><span class="key">Passive pretraining</span><span class="val no">No</span></div>
+          <div class="compare-row"><span class="key">Robot transfer</span><span class="val maybe">Needs env data</span></div>
+        </div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head">
+          <h3>MuZero</h3>
+          <span class="tag purple" style="margin-top:4px; display:inline-block;">Latent planning (no recon)</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-row"><span class="key">Trains from</span><span class="val">Interaction (RL)</span></div>
+          <div class="compare-row"><span class="key">Uses reconstruction</span><span class="val yes">No — pure latent</span></div>
+          <div class="compare-row"><span class="key">Passive pretraining</span><span class="val no">No</span></div>
+          <div class="compare-row"><span class="key">Robot transfer</span><span class="val no">Not designed for it</span></div>
+        </div>
+      </div>
+      <div class="compare-col featured">
+        <div class="compare-head" style="background:rgba(0,212,255,0.05);">
+          <h3>V-JEPA 2 / LeWM</h3>
+          <span class="tag blue" style="margin-top:4px; display:inline-block;">Self-supervised world model</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-row"><span class="key">Trains from</span><span class="val yes">Passive video (SSL)</span></div>
+          <div class="compare-row"><span class="key">Uses reconstruction</span><span class="val yes">No — pure latent</span></div>
+          <div class="compare-row"><span class="key">Passive pretraining</span><span class="val yes">Yes — 1M+ hrs video</span></div>
+          <div class="compare-row"><span class="key">Robot transfer</span><span class="val yes">Zero-shot, 62hrs data</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box amber" style="margin-top:2rem;">
+    <h3>The Key Bet JEPA Makes</h3>
+    <p>Generation and understanding are separable. You can generate photorealistic video without understanding physics (diffusion models). And you can understand physics without generating video (JEPA). The path to understanding goes through <em>compressed, abstract prediction</em> — not through generative scaling.</p>
+    <p style="margin-top:0.5rem; font-size:11px; color:var(--accent4);">Verdict: Partly right. Generative models work better than LeCun claimed (Sora). But understanding ≠ generation remains a valid philosophical point. The future is likely hybrid.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+// ── NAV ──
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const buttons = ['arch','collapse','timeline','equations','compare'];
+  document.querySelectorAll('nav button')[buttons.indexOf(id)].classList.add('active');
+  if (id === 'timeline') initTimeline();
+  if (id === 'collapse') initCollapseCanvases();
+}
+
+// ── HERO BACKGROUND ──
+const heroCanvas = document.getElementById('hero-canvas');
+const hCtx = heroCanvas.getContext('2d');
+let heroW, heroH, heroNodes = [], heroEdges = [];
+
+function initHero() {
+  heroW = heroCanvas.width = window.innerWidth;
+  heroH = heroCanvas.height = window.innerHeight;
+  heroNodes = [];
+  const N = 60;
+  for (let i = 0; i < N; i++) {
+    heroNodes.push({
+      x: Math.random() * heroW,
+      y: Math.random() * heroH,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 2 + 1,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+initHero();
+
+function animHero(t) {
+  hCtx.clearRect(0, 0, heroW, heroH);
+  for (let n of heroNodes) {
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > heroW) n.vx *= -1;
+    if (n.y < 0 || n.y > heroH) n.vy *= -1;
+    n.phase += 0.01;
+    const pulse = 0.5 + 0.5 * Math.sin(n.phase);
+    hCtx.beginPath();
+    hCtx.arc(n.x, n.y, n.r * (0.8 + 0.2 * pulse), 0, Math.PI * 2);
+    hCtx.fillStyle = `rgba(0,212,255,${0.3 * pulse})`;
+    hCtx.fill();
+  }
+  for (let i = 0; i < heroNodes.length; i++) {
+    for (let j = i + 1; j < heroNodes.length; j++) {
+      const dx = heroNodes[i].x - heroNodes[j].x;
+      const dy = heroNodes[i].y - heroNodes[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 120) {
+        hCtx.beginPath();
+        hCtx.moveTo(heroNodes[i].x, heroNodes[i].y);
+        hCtx.lineTo(heroNodes[j].x, heroNodes[j].y);
+        hCtx.strokeStyle = `rgba(0,212,255,${0.08 * (1 - d/120)})`;
+        hCtx.lineWidth = 0.5;
+        hCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animHero);
+}
+animHero();
+window.addEventListener('resize', initHero);
+
+// ── ARCH DETAIL PANEL ──
+const details = {
+  'context': {
+    title: 'Context Input (x)',
+    body: 'The observed portion of an image. For I-JEPA: one large block (scale 0.85–1.0). The context encoder ONLY processes this visible region — target blocks are masked out from the input, not just the output. This forces genuine prediction, not copying.'
+  },
+  'target-input': {
+    title: 'Target Input (y)',
+    body: 'The region to predict. For I-JEPA: 4 target blocks (scale 0.15–0.2). CRITICAL design choice: the target encoder sees the FULL image, then representations are extracted from target positions. This ensures targets are high-level semantic features, not degraded partial views.'
+  },
+  'ctx-enc': {
+    title: 'Context Encoder f_θ(x)',
+    body: 'A Vision Transformer (ViT) processing only visible patches. Receives gradients — this is the student network being trained. For I-JEPA: ViT-Huge/14. Learns to build rich semantic representations from partial observations.'
+  },
+  'tgt-enc': {
+    title: 'Target Encoder f_θ̄(y)',
+    body: 'The teacher network. An EMA copy of the context encoder — updated as: θ̄ ← m·θ̄ + (1−m)·θ with m ≈ 0.996–1.0. Receives NO gradients. Provides stable prediction targets. Its slow movement prevents collapse empirically (but SIGReg provides a principled alternative).'
+  },
+  'repr-s': {
+    title: 'Context Representation s_x',
+    body: 'The encoded context — a set of patch-level feature vectors. Captures high-level semantic content of the visible region. Will be passed to the predictor along with positional information about WHERE to predict.'
+  },
+  'repr-t': {
+    title: 'Target Representation s_y',
+    body: 'The encoded target — what the predictor is trying to predict. Because the target encoder sees the full image, s_y contains rich semantic context. This is NOT pixel-level; it\'s abstracted features where irrelevant details (textures, lighting) have been compressed away.'
+  },
+  'latent': {
+    title: 'Latent Variable z',
+    body: 'Handles the multimodality of prediction: given context x, many futures y are valid. z selects which future. Its information capacity is deliberately limited (via regularization) to prevent cheating — the predictor can\'t just encode y directly into z. In practice, many implementations (I-JEPA, V-JEPA) set z = position tokens (WHERE to predict), not a learned latent. In V-JEPA 2-AC, z = action sequence.'
+  },
+  'predictor': {
+    title: 'Predictor g_φ(s_x, z)',
+    body: 'The world model. Takes context representation + positional/action information, outputs what the target representation should be. A smaller Transformer than the encoders. In LeWorldModel, this IS the dynamics model: g_φ(s_t, a_t) = ŝ_{t+1}. Planning = finding the action sequence that drives this predictor toward goal states.'
+  },
+  'predicted': {
+    title: 'Predicted Representation ŝ_y',
+    body: 'The predictor\'s best guess for what s_y should be. Training drives ŝ_y → s_y. At inference / planning time, you run this WITHOUT requiring an actual target — you just run the predictor forward in latent space to simulate future states. This is where planning lives.'
+  },
+  'loss': {
+    title: 'Loss D(ŝ_y, s_y) = ‖ŝ_y − s_y‖²',
+    body: 'Mean squared error in representation space. Applied per target block, averaged. NO pixel reconstruction — this is the entire philosophical difference from MAE. Low loss = the predictor correctly models how context maps to targets. This is understanding. With SIGReg, loss also penalizes deviation from isotropic Gaussian, making this metric reliable for model selection.'
+  }
+};
+
+function showDetail(key) {
+  const d = details[key];
+  if (!d) return;
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `<h4>${d.title}</h4><p style="max-width:none; color:var(--muted); font-size:12px;">${d.body}</p>`;
+}
+
+// ── TIMELINE ANIMATION ──
+function initTimeline() {
+  const items = document.querySelectorAll('.tl-item');
+  items.forEach((item, i) => {
+    setTimeout(() => item.classList.add('visible'), i * 150);
+  });
+}
+
+// ── COLLAPSE CANVASES ──
+let collapseAnimating = false;
+let collapseStep = 0;
+
+function initCollapseCanvases() {
+  const canvasBad = document.getElementById('canvas-bad');
+  const canvasGood = document.getElementById('canvas-good');
+  if (!canvasBad) return;
+  canvasBad.width = canvasBad.offsetWidth * window.devicePixelRatio;
+  canvasBad.height = 200 * window.devicePixelRatio;
+  canvasGood.width = canvasGood.offsetWidth * window.devicePixelRatio;
+  canvasGood.height = 200 * window.devicePixelRatio;
+  drawCollapse(0);
+}
+
+function drawCollapse(progress) {
+  const canvasBad = document.getElementById('canvas-bad');
+  const canvasGood = document.getElementById('canvas-good');
+  if (!canvasBad) return;
+  const W = canvasBad.width, H = canvasBad.height;
+  const ctx1 = canvasBad.getContext('2d');
+  const ctx2 = canvasGood.getContext('2d');
+
+  // Bad: collapse toward center
+  ctx1.clearRect(0, 0, W, H);
+  const cx = W/2, cy = H/2;
+  const spread = (1 - progress) * 0.9;
+  const N = 80;
+  const seed = 42;
+  for (let i = 0; i < N; i++) {
+    const t = i / N;
+    const angle = t * Math.PI * 4;
+    const baseR = 0.3 + 0.4 * Math.sin(angle * 1.7 + seed);
+    const r = baseR * spread;
+    const x = cx + r * W * 0.45 * Math.cos(angle);
+    const y = cy + r * H * 0.45 * Math.sin(angle * 0.7);
+    const opacity = 0.7 - 0.5 * progress;
+    ctx1.beginPath();
+    ctx1.arc(x, y, 3, 0, Math.PI*2);
+    ctx1.fillStyle = `rgba(239,68,68,${opacity})`;
+    ctx1.fill();
+  }
+  // Draw collapsed point
+  const collapsedR = 8 * progress;
+  if (collapsedR > 0) {
+    ctx1.beginPath();
+    ctx1.arc(cx, cy, collapsedR, 0, Math.PI*2);
+    const g1 = ctx1.createRadialGradient(cx,cy,0,cx,cy,collapsedR);
+    g1.addColorStop(0, `rgba(239,68,68,${progress})`);
+    g1.addColorStop(1, `rgba(239,68,68,0)`);
+    ctx1.fillStyle = g1;
+    ctx1.fill();
+  }
+
+  // Good: spread to isotropic Gaussian
+  ctx2.clearRect(0, 0, W, H);
+  const spreadG = 0.1 + progress * 0.8;
+  for (let i = 0; i < N; i++) {
+    const t = i / N;
+    const angle = t * Math.PI * 4;
+    const baseR = 0.3 + 0.4 * Math.sin(angle * 1.7 + seed);
+    const r = baseR * spreadG;
+    const x = cx + r * W * 0.45 * Math.cos(angle);
+    const y = cy + r * H * 0.45 * Math.sin(angle * 0.7 + 0.3);
+    ctx2.beginPath();
+    ctx2.arc(x, y, 3, 0, Math.PI*2);
+    // Color by distance from center (isotropic check)
+    const dist = Math.sqrt((x-cx)**2 + (y-cy)**2) / (Math.min(W,H) * 0.4);
+    const hue = 160 + dist * 60;
+    ctx2.fillStyle = `hsla(${hue}, 80%, 60%, 0.8)`;
+    ctx2.fill();
+  }
+  // Gaussian contour rings
+  if (progress > 0.3) {
+    const ringOpacity = (progress - 0.3) / 0.7;
+    for (let ring = 1; ring <= 3; ring++) {
+      ctx2.beginPath();
+      ctx2.arc(cx, cy, ring * W * 0.12, 0, Math.PI*2);
+      ctx2.strokeStyle = `rgba(16,185,129,${ringOpacity * 0.3})`;
+      ctx2.lineWidth = 1;
+      ctx2.setLineDash([4, 6]);
+      ctx2.stroke();
+      ctx2.setLineDash([]);
+    }
+  }
+}
+
+function runCollapseDemo() {
+  if (collapseAnimating) return;
+  collapseAnimating = true;
+  collapseStep = 0;
+  const fillBad = document.getElementById('fill-bad');
+  const fillGood = document.getElementById('fill-good');
+  const total = 120;
+  function step() {
+    collapseStep++;
+    const p = collapseStep / total;
+    drawCollapse(p);
+    if (fillBad) fillBad.style.width = (p * 100) + '%';
+    if (fillGood) fillGood.style.width = (p * 100) + '%';
+    if (collapseStep < total) {
+      requestAnimationFrame(step);
+    } else {
+      collapseAnimating = false;
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// ── SIGREG VISUALIZATION ──
+function drawSigreg() {
+  const canvas = document.getElementById('sigreg-canvas');
+  if (!canvas) return;
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+  canvas.height = 280 * window.devicePixelRatio;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const w = canvas.offsetWidth, h = 280;
+
+  // Draw three panels
+  const panelW = w / 3;
+
+  // Panel 1: Raw embeddings (not isotropic)
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, panelW - 4, h);
+  ctx.fillStyle = 'rgba(30,37,48,0.8)';
+  ctx.fillRect(4, 4, panelW - 12, h - 8);
+
+  // scatter
+  const cx1 = panelW / 2, cy1 = h/2;
+  for (let i = 0; i < 60; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.random();
+    // anisotropic: stretched
+    const x = cx1 + r * panelW * 0.35 * Math.cos(angle);
+    const y = cy1 + r * h * 0.12 * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(239,68,68,0.6)';
+    ctx.fill();
+  }
+  ctx.fillStyle = 'rgba(239,68,68,0.8)';
+  ctx.font = '11px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('Anisotropic', cx1, h - 20);
+  ctx.fillStyle = '#4a5568';
+  ctx.fillText('(collapsed / degenerate)', cx1, h - 6);
+
+  // Panel 2: 1D projections (Cramér-Wold)
+  const px2 = panelW + 4;
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(px2, 0, panelW - 8, h);
+  ctx.fillStyle = 'rgba(30,37,48,0.8)';
+  ctx.fillRect(px2 + 4, 4, panelW - 16, h - 8);
+
+  const cx2 = px2 + (panelW - 8)/2;
+  // Draw M random projection lines from center
+  const M = 6;
+  for (let m = 0; m < M; m++) {
+    const angle = (m / M) * Math.PI;
+    const len = (panelW - 20) * 0.4;
+    const x1 = cx2 - Math.cos(angle) * len;
+    const y1 = cy1 - Math.sin(angle) * len;
+    const x2 = cx2 + Math.cos(angle) * len;
+    const y2 = cy1 + Math.sin(angle) * len;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = `hsla(${m * 60 + 180}, 70%, 60%, 0.4)`;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // small dots along projection
+    for (let j = 0; j < 12; j++) {
+      const t = (j / 12) * 2 - 1;
+      const gaussian = Math.exp(-t*t*2) * (0.8 + Math.random()*0.2);
+      const xp = cx2 + t * len;
+      const yp = cy1 + (Math.sin(angle) > 0.5 ? 1 : -1) * gaussian * 25;
+      ctx.beginPath();
+      ctx.arc(xp, y1 + (y2-y1)*(j/12), 1.5, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${m * 60 + 180}, 70%, 60%, 0.5)`;
+      ctx.fill();
+    }
+  }
+  ctx.fillStyle = 'rgba(0,212,255,0.8)';
+  ctx.font = '11px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Cramér-Wold: M projections`, cx2, h - 20);
+  ctx.fillStyle = '#4a5568';
+  ctx.fillText(`match each to N(0,1)`, cx2, h - 6);
+
+  // Panel 3: Isotropic Gaussian (target)
+  const px3 = panelW * 2 + 8;
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(px3, 0, panelW - 8, h);
+  ctx.fillStyle = 'rgba(30,37,48,0.8)';
+  ctx.fillRect(px3 + 4, 4, panelW - 16, h - 8);
+
+  const cx3 = px3 + (panelW - 8)/2;
+  // isotropic scatter
+  for (let i = 0; i < 60; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const r = Math.sqrt(-2 * Math.log(Math.random() + 0.001)) * 0.5;
+    const rclamp = Math.min(r, 0.85);
+    const x = cx3 + rclamp * panelW * 0.28 * Math.cos(angle);
+    const y = cy1 + rclamp * h * 0.28 * Math.sin(angle);
+    const dist = rclamp;
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI*2);
+    ctx.fillStyle = `hsla(${150 + dist*80}, 70%, 60%, 0.7)`;
+    ctx.fill();
+  }
+  // contour rings
+  for (let ring = 1; ring <= 3; ring++) {
+    ctx.beginPath();
+    ctx.arc(cx3, cy1, ring * panelW * 0.1, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(16,185,129,0.25)`;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.fillStyle = 'rgba(16,185,129,0.8)';
+  ctx.font = '11px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('Isotropic Gaussian', cx3, h - 20);
+  ctx.fillStyle = 'rgba(16,185,129,0.6)';
+  ctx.fillText('(optimal — proven)', cx3, h - 6);
+
+  // Arrow between panels
+  ctx.fillStyle = 'rgba(0,212,255,0.6)';
+  ctx.font = '16px sans-serif';
+  ctx.fillText('→', panelW - 2, cy1 + 6);
+  ctx.fillText('→', panelW * 2 + 4, cy1 + 6);
+}
+
+// Init sigreg when switching to collapse
+const origShow = window.show;
+document.querySelectorAll('nav button').forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    setTimeout(() => {
+      drawSigreg();
+      initCollapseCanvases();
+    }, 50);
+  });
+});
+
+setTimeout(drawSigreg, 100);
+</script>
+</body>
+</html>

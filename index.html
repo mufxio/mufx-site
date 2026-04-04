@@ -104,6 +104,51 @@ a:hover { color:#c4956a; }
   transition:all 0.3s;
 }
 .hero-title:hover { color:#c4956a; }
+
+/* Rabbit Hole Button */
+.rabbit-btn {
+  background:none; border:1px dashed rgba(196,149,106,0.2); color:rgba(160,160,160,0.3);
+  padding:5px 16px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px;
+  cursor:pointer; border-radius:2px; transition:all 0.4s;
+}
+.rabbit-btn:hover {
+  border-style:solid; border-color:rgba(196,149,106,0.5); color:#c4956a;
+  box-shadow:0 0 8px rgba(196,149,106,0.15), 0 0 20px rgba(196,149,106,0.08);
+}
+
+/* Rabbit Hole */
+.rabbit-popup {
+  display:none; position:fixed; inset:0; z-index:60;
+  background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center;
+}
+.rabbit-box {
+  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
+  border-radius:4px; padding:32px 40px; text-align:center;
+}
+.rabbit-warn { font-size:12px; color:rgba(160,160,160,0.5); letter-spacing:2px; margin-bottom:8px; }
+.rabbit-sub { font-size:10px; color:rgba(160,160,160,0.25); margin-bottom:20px; }
+.rabbit-btns { display:flex; gap:12px; justify-content:center; }
+.rabbit-page {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:55;
+  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.1);
+  border-radius:4px; padding:24px 28px; width:320px; backdrop-filter:blur(8px);
+}
+.rabbit-header {
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:11px; color:rgba(196,149,106,0.5); letter-spacing:2px;
+  margin-bottom:20px; padding-bottom:8px; border-bottom:1px solid rgba(160,160,160,0.06);
+}
+.rabbit-link {
+  display:flex; gap:10px; align-items:center;
+  padding:8px 10px; margin:4px 0; border-radius:3px;
+  color:rgba(160,160,160,0.35); transition:all 0.3s;
+  border:1px solid transparent;
+}
+.rabbit-link:hover { color:#c4956a; background:rgba(196,149,106,0.04); border-color:rgba(196,149,106,0.1); padding-left:14px; }
+.rabbit-num { font-size:8px; color:rgba(160,160,160,0.15); letter-spacing:1px; }
+.rabbit-link:hover .rabbit-num { color:rgba(196,149,106,0.4); }
+.rabbit-title { font-size:10px; }
 .fish-row { display:flex; justify-content:center; gap:10px; margin-bottom:4px; }
 .fish { font-size:11px; color:rgba(160,160,160,0.15); cursor:pointer; transition:all 0.3s; letter-spacing:1px; }
 .fish:hover { color:rgba(160,160,160,0.4); }
@@ -266,8 +311,9 @@ a:hover { color:#c4956a; }
 <div class="hero-cat" id="heroCat" style="cursor:pointer;"></div>
 <div class="hero-title" onclick="toggleFloorNote()" style="cursor:pointer;"><span style="color:#c4956a;">floor</span>36</div>
 <div class="hero-sub">research journal</div>
-<div style="text-align:center;margin-top:16px;">
-  <button class="weather-btn" id="btn-yarn" onclick="toggleYarn()" style="font-size:9px;letter-spacing:2px;padding:4px 14px;margin-bottom:8px;">show yarn</button>
+<div style="text-align:center;margin-top:8px;">
+  <div><button class="rabbit-btn" id="btn-rabbit" onclick="document.getElementById('rabbitPopup').style.display='flex'">&gt; rabbit hole &lt;</button></div>
+  <div style="margin-top:24px;"><button class="weather-btn" id="btn-yarn" onclick="toggleYarn()" style="font-size:9px;letter-spacing:2px;padding:4px 14px;">show yarn</button></div>
   <div class="fish-row" id="fishRow">
     <span class="fish" id="fish-rainCitation" onclick="toggleFish('rainCitation')">&gt;&lt;&gt;</span>
     <span class="fish" id="fish-soundCitation" onclick="toggleFish('soundCitation')">&gt;&lt;&gt;</span>
@@ -277,6 +323,38 @@ a:hover { color:#c4956a; }
     <span class="fish" id="fish-note-mind" onclick="toggleFish('note-mind')">&gt;&lt;&gt;</span>
     <span class="fish" id="fish-note-soul" onclick="toggleFish('note-soul')">&gt;&lt;&gt;</span>
   </div>
+</div>
+
+<!-- Rabbit Hole Popup -->
+<div class="rabbit-popup" id="rabbitPopup">
+  <div class="rabbit-box">
+    <div class="rabbit-warn">about to enter the rabbit hole</div>
+    <div class="rabbit-sub">are you sure?</div>
+    <div class="rabbit-btns">
+      <button class="weather-btn" onclick="document.getElementById('rabbitPopup').style.display='none';document.getElementById('rabbitPage').style.display='block'" style="padding:4px 16px;font-size:9px;letter-spacing:2px;">yes</button>
+      <button class="weather-btn" onclick="document.getElementById('rabbitPopup').style.display='none'" style="padding:4px 16px;font-size:9px;letter-spacing:2px;">no</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rabbit Hole Archive -->
+<div class="rabbit-page" id="rabbitPage" style="display:none;">
+  <div class="rabbit-header">
+    <span>the rabbit hole</span>
+    <span class="popup-x" onclick="document.getElementById('rabbitPage').style.display='none'" style="cursor:pointer;color:rgba(160,160,160,0.3);font-size:14px;">&times;</span>
+  </div>
+  <a href="rabbit-maslow.html" class="rabbit-link">
+    <span class="rabbit-num">01</span>
+    <span class="rabbit-title">maslow x reinforcement learning</span>
+  </a>
+  <a href="rabbit-jepa.html" class="rabbit-link">
+    <span class="rabbit-num">02</span>
+    <span class="rabbit-title">JEPA: a visual deep dive</span>
+  </a>
+  <a href="rabbit-freestyle.html" class="rabbit-link">
+    <span class="rabbit-num">03</span>
+    <span class="rabbit-title">the organism that trades</span>
+  </a>
 </div>
 
 <!-- Flow -->
