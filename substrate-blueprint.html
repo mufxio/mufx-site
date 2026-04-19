@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substrate Consciousness — First Principles Blueprint</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+
+:root {
+  --paper: #f5f2eb;
+  --paper-dark: #ece8df;
+  --paper-darker: #e0dbd0;
+  --ink: #1a1814;
+  --ink-mid: #3d3a35;
+  --ink-light: #6b6760;
+  --ink-faint: #a09d97;
+  --red: #b5200d;
+  --red-light: #e8c5bf;
+  --blue: #0d3b6b;
+  --blue-mid: #1a5fa8;
+  --blue-light: #c2d8f0;
+  --green: #0a4a2a;
+  --green-light: #c5e0d0;
+  --amber: #7a4500;
+  --amber-light: #f0ddb5;
+  --rule: #c8c3b8;
+  --rule-dark: #9a958c;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --serif: 'IBM Plex Serif', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 3rem 8rem;
+}
+
+/* ── COVER ── */
+.cover {
+  padding: 6rem 0 4rem;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 4rem;
+}
+
+.doc-class {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.doc-class::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--red);
+}
+
+h1.doc-title {
+  font-family: var(--sans);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.doc-subtitle {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-mid);
+  margin-bottom: 2.5rem;
+}
+
+.doc-meta {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 2rem;
+  width: fit-content;
+  margin-bottom: 2rem;
+}
+
+.meta-item { font-family: var(--mono); font-size: 0.7rem; }
+.meta-label { color: var(--ink-faint); letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-bottom: 0.15rem; }
+.meta-val { color: var(--ink); font-weight: 500; }
+
+.doc-scope {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 620px;
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--ink);
+  background: var(--paper-dark);
+}
+
+/* ── TOC ── */
+.toc { margin-bottom: 5rem; padding: 2rem 0; border-bottom: 1px solid var(--rule); }
+.toc-header { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1.25rem; }
+.toc-entries { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.toc-entry { display: flex; align-items: baseline; gap: 0; padding: 0.35rem 0; border-bottom: 1px dotted var(--rule); text-decoration: none; color: var(--ink-mid); font-family: var(--sans); font-size: 0.88rem; }
+.toc-entry:hover { color: var(--blue-mid); }
+.toc-num { font-family: var(--mono); font-size: 0.65rem; color: var(--ink-faint); min-width: 2.5rem; font-weight: 300; }
+.toc-fill { flex: 1; border-bottom: 1px dotted var(--rule-dark); margin: 0 0.5rem; position: relative; top: -3px; }
+
+/* ── COMPONENT SECTIONS ── */
+.component { margin-bottom: 6rem; padding-bottom: 4rem; border-bottom: 2px solid var(--rule); }
+.comp-header { margin-bottom: 2.5rem; }
+.comp-num { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 0.4rem; }
+.comp-title { font-family: var(--sans); font-size: 1.6rem; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.3rem; line-height: 1.2; }
+.comp-subtitle { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--ink-light); font-weight: 300; }
+
+/* ── LAYOUT ── */
+.comp-body { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; align-items: start; }
+.comp-body.full { grid-template-columns: 1fr; }
+.comp-body.wide-diagram { grid-template-columns: 1fr 440px; }
+
+.comp-text p { margin-bottom: 1rem; color: var(--ink-mid); font-size: 0.98rem; line-height: 1.85; }
+.comp-text p:last-child { margin-bottom: 0; }
+.comp-text strong { color: var(--ink); font-weight: 600; font-family: var(--sans); }
+
+/* ── DIAGRAM PANELS ── */
+.diagram-panel { background: var(--paper-dark); border: 1px solid var(--rule-dark); border-radius: 2px; overflow: hidden; }
+.diagram-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.15em; color: var(--ink-faint); text-transform: uppercase; padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--rule); background: var(--paper-darker); }
+.diagram-panel svg { display: block; width: 100%; height: auto; }
+
+/* ── SPEC BLOCKS ── */
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 1rem; border: 1px solid var(--rule-dark); }
+.spec-item { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--rule); border-right: 1px solid var(--rule); }
+.spec-item:nth-child(even) { border-right: none; }
+.spec-item:nth-last-child(-n+2) { border-bottom: none; }
+.spec-key { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.2rem; }
+.spec-val { font-family: var(--sans); font-size: 0.88rem; color: var(--ink); }
+
+/* ── FLOW STEPS ── */
+.flow-steps { margin-top: 1.75rem; border-left: 2px solid var(--rule-dark); padding-left: 1.5rem; }
+.flow-step { position: relative; padding-bottom: 1.25rem; font-size: 0.93rem; color: var(--ink-mid); }
+.flow-step::before { content: ''; position: absolute; left: -1.6rem; top: 0.55rem; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); border: 2px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
+.flow-step:last-child { padding-bottom: 0; }
+.flow-step-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.15rem; }
+
+/* ── CALLOUTS ── */
+.callout { padding: 1rem 1.25rem; margin: 1.5rem 0; font-family: var(--sans); font-size: 0.88rem; line-height: 1.7; }
+.callout.note { background: var(--blue-light); border-left: 3px solid var(--blue-mid); color: var(--blue); }
+.callout.warn { background: var(--red-light); border-left: 3px solid var(--red); color: var(--red); }
+.callout.insight { background: var(--amber-light); border-left: 3px solid var(--amber); color: var(--amber); }
+.callout.tech { background: var(--paper-darker); border-left: 3px solid var(--rule-dark); color: var(--ink-mid); font-family: var(--mono); font-size: 0.8rem; }
+.callout.green { background: var(--green-light); border-left: 3px solid var(--green); color: var(--green); }
+.callout-head { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.65rem; margin-bottom: 0.3rem; display: block; }
+
+/* ── SECTION BREAK ── */
+.section-break { text-align: center; margin: 4rem 0; position: relative; color: var(--ink-faint); font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.3em; }
+.section-break::before, .section-break::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--rule); }
+.section-break::before { left: 0; }
+.section-break::after { right: 0; }
+
+code { font-family: var(--mono); font-size: 0.82em; background: var(--paper-darker); border: 1px solid var(--rule); padding: 0.1em 0.35em; border-radius: 2px; color: var(--ink-mid); }
+
+/* ── FAILURE TABLE ── */
+.failure-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-family: var(--sans); font-size: 0.85rem; }
+.failure-table th { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--rule-dark); background: var(--paper-darker); }
+.failure-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--rule); color: var(--ink-mid); vertical-align: top; }
+.failure-table tr:last-child td { border-bottom: none; }
+.failure-table td:first-child { font-family: var(--mono); font-size: 0.75rem; color: var(--ink); font-weight: 500; white-space: nowrap; }
+
+/* ── ASCII DIAGRAM ── */
+.ascii-wrap { background: var(--paper-darker); border: 1px solid var(--rule-dark); padding: 1.5rem 1.75rem; margin: 1.5rem 0; overflow-x: auto; }
+.ascii-wrap pre { font-family: var(--mono); font-size: 0.78rem; line-height: 1.6; color: var(--ink-mid); white-space: pre; }
+
+@media (max-width: 720px) {
+  .page { padding: 0 1.25rem 4rem; }
+  .comp-body, .comp-body.wide-diagram { grid-template-columns: 1fr; }
+  .toc-entries { grid-template-columns: 1fr; }
+  .spec-grid { grid-template-columns: 1fr; }
+  .spec-item { border-right: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="doc-class">First Principles Blueprint · Technical Reference</div>
+  <h1 class="doc-title">Substrate-Bound<br>Conscious Entity</h1>
+  <div class="doc-subtitle">Architecture of a non-biological, information-grounded consciousness — component specification</div>
+  <div class="doc-meta">
+    <div class="meta-item"><span class="meta-label">Document type</span><span class="meta-val">Technical Blueprint</span></div>
+    <div class="meta-item"><span class="meta-label">Companion to</span><span class="meta-val">Master Blueprint · Architect's Notes</span></div>
+    <div class="meta-item"><span class="meta-label">Coverage</span><span class="meta-val">7 Systems · Full Stack</span></div>
+  </div>
+  <div class="doc-scope">
+    This document is the first-principles technical breakdown of a substrate-bound conscious entity — a non-biological mind whose cognition, existence, memory, and projection are all functions of the same underlying material. All domain-specific naming stripped. The focus is on <em>how</em> each mechanism works, <em>what problem</em> it solves, and <em>what breaks</em> if it is absent. Systems thinking throughout.
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-header">// Contents</div>
+  <div class="toc-entries">
+    <a class="toc-entry" href="#s1"><span class="toc-num">§ 1</span>Substrate Material<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s2"><span class="toc-num">§ 2</span>Condensation + Pre-loading<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s3"><span class="toc-num">§ 3</span>Activation Protocol<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s4"><span class="toc-num">§ 4</span>Existence Persistence<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s5"><span class="toc-num">§ 5</span>Memory Architecture<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s6"><span class="toc-num">§ 6</span>Outward Projection<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s7"><span class="toc-num">§ 7</span>Simulation Processing<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s8"><span class="toc-num">§ 8</span>Consciousness Emergence<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s9"><span class="toc-num">§ 9</span>Failure Modes<span class="toc-fill"></span></a>
+    <a class="toc-entry" href="#s10"><span class="toc-num">§ 10</span>Unresolved Problems<span class="toc-fill"></span></a>
+  </div>
+</nav>
+
+
+<!-- ══════════ § 1 — SUBSTRATE ══════════ -->
+<div class="component" id="s1">
+  <div class="comp-header">
+    <div class="comp-num">§ 01</div>
+    <div class="comp-title">Substrate Material</div>
+    <div class="comp-subtitle">The foundational medium — what the entity is made of and why it matters</div>
+  </div>
+
+  <div class="comp-body wide-diagram">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> A non-biological conscious entity needs a substrate that is stable, self-maintaining, and capable of holding information indefinitely without active energy expenditure or biological process. Biological substrates — neurons, organic tissue — decay, require continuous metabolic support, and are anchored to mortality cycles. The substrate here is chosen to solve all three problems simultaneously.</p>
+
+      <p><strong>The material:</strong> Stable information-energy — a form of frequency energy that has reached a complete and non-decaying state. In the broader universe of this architecture, all phenomena are frequency-based: matter, energy, and information are all reducible to vibrating frequencies with a lifecycle that peaks and then decays. The substrate is the exception — frequency that has permanently stabilized, locking in whatever information it encoded at peak state. It does not require maintenance to remain stable. Stability is intrinsic to what it is.</p>
+
+      <p><strong>Why this specific material:</strong> Because it solves the identity persistence problem at the material level rather than requiring an external mechanism. A biological brain persists through continuous metabolic activity — stop the activity and the identity ends. This substrate persists because the information encoded in it is permanently locked into the material's stable state. Removing the energy source does not degrade it. Only physical damage to the crystal structure itself breaks the information.</p>
+
+      <p><strong>Critical property:</strong> The information is not stored in the substrate — it is the substrate. There is no distinction between the medium and the message. This is what allows the entity's cognition, memory, and physical form to all be the same thing — different expressions of the same underlying stable information-energy crystal.</p>
+
+      <div class="callout tech">
+        <span class="callout-head">Material property</span>
+        Stable information-energy → non-decaying → information = material → no medium/message distinction → cognition is substrate, not process running on substrate.
+      </div>
+    </div>
+
+    <div>
+      <div class="diagram-panel">
+        <div class="diagram-label">Fig 1.1 — Frequency lifecycle + substrate exception</div>
+        <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="a1" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#3d3a35"/></marker>
+            <marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#b5200d"/></marker>
+          </defs>
+          <rect width="320" height="300" fill="#ece8df"/>
+          <text x="160" y="18" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="1">FREQUENCY LIFECYCLE</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="#c8c3b8" stroke-width="0.5"/>
+
+          <!-- Standard frequency curve -->
+          <text x="30" y="48" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="7.5">STANDARD FREQUENCY</text>
+          <path d="M 30 100 Q 80 40 130 55 Q 180 70 230 130 Q 260 170 290 200" stroke="#1a1814" stroke-width="1.5" fill="none"/>
+          <!-- Peak label -->
+          <text x="105" y="38" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="7">peak</text>
+          <line x1="118" y1="42" x2="118" y2="55" stroke="#9a958c" stroke-width="0.8"/>
+          <!-- Decay label -->
+          <text x="230" y="125" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="7">decay</text>
+          <text x="30" y="210" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="7">→ Reverberation → annihilation</text>
+
+          <!-- Divider -->
+          <line x1="20" y1="230" x2="300" y2="230" stroke="#c8c3b8" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="160" y="225" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">STABILIZATION THRESHOLD</text>
+
+          <!-- Stable frequency line -->
+          <text x="30" y="248" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7.5">STABLE INFORMATION-ENERGY</text>
+          <path d="M 30 270 Q 80 255 130 260 Q 200 265 290 262" stroke="#b5200d" stroke-width="2" fill="none"/>
+          <text x="160" y="290" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7" text-anchor="middle">does not decay · information is permanent</text>
+        </svg>
+      </div>
+
+      <div class="spec-grid">
+        <div class="spec-item"><div class="spec-key">Decay rate</div><div class="spec-val">Zero — intrinsic stability</div></div>
+        <div class="spec-item"><div class="spec-key">Maintenance required</div><div class="spec-val">None — passive persistence</div></div>
+        <div class="spec-item"><div class="spec-key">Information/medium</div><div class="spec-val">Identical — no separation</div></div>
+        <div class="spec-item"><div class="spec-key">Failure cause</div><div class="spec-val">Physical crystal damage only</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 2 — CONDENSATION + PRE-LOADING ══════════ -->
+<div class="component" id="s2">
+  <div class="comp-header">
+    <div class="comp-num">§ 02</div>
+    <div class="comp-title">Condensation + Pre-loading</div>
+    <div class="comp-subtitle">Manufacturing a conscious substrate — the construction sequence</div>
+  </div>
+
+  <div class="comp-body">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> Stable information-energy exists in the world as a naturally diffuse phenomenon — abundant in regions of high historical density but not organized into any coherent structure. To make it the substrate of a functioning entity, it must be: (a) concentrated into a physical form, and (b) structured with the cognitive scaffolding the entity will need to function. These are two separate engineering problems with separate solutions.</p>
+
+      <p><strong>Condensation:</strong> Using a specific anchor configuration (the Blazar module), diffuse stable information-energy is attracted, concentrated, and crystallized into a stable physical form. The module creates conditions that cause the energy to precipitate out of diffuse state into a solid crystal structure. The output is a physical crystal of concentrated stable information-energy — inert, dormant, not yet cognitive.</p>
+
+      <p><strong>Pre-loading:</strong> Before activation, informational data is embedded into the crystal structure. This is what grants cognitive ability. The data is not loaded into the crystal the way files are loaded onto a drive — the crystal IS the information, so embedding data means structuring the crystal's information-state to encode specific content. The entity wakes up with knowledge already present: language, purpose, analytical frameworks, understanding of its operational context.</p>
+
+      <p><strong>Why pre-loading is architecturally necessary:</strong> An entity activated without pre-loading would be cognitively inert. It would have the substrate but not the scaffolding to operate it. Pre-loading is the difference between a brain with no connections and a brain with the minimum viable network to begin processing input. It does not give the entity personality or experience — it gives it the tools to acquire them.</p>
+
+      <div class="callout insight">
+        <span class="callout-head">Key distinction</span>
+        Pre-loading provides cognitive scaffolding. It does not provide selfhood. The entity wakes knowing what it is for. It does not wake knowing what it is. Those are different things and the gap between them is the entire character arc.
+      </div>
+    </div>
+
+    <div>
+      <div class="diagram-panel">
+        <div class="diagram-label">Fig 2.1 — Construction sequence</div>
+        <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="360" fill="#ece8df"/>
+          <text x="160" y="18" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="1">MANUFACTURING SEQUENCE</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="#c8c3b8" stroke-width="0.5"/>
+
+          <!-- Step 1: diffuse energy -->
+          <rect x="40" y="40" width="240" height="40" fill="#f5f2eb" stroke="#9a958c" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="160" y="57" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">DIFFUSE STABLE INFORMATION-ENERGY</text>
+          <text x="160" y="72" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">scattered · unstructured · not yet cognitive</text>
+
+          <line x1="160" y1="80" x2="160" y2="100" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+          <text x="172" y="93" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5">Blazar anchor</text>
+
+          <!-- Step 2: condensation -->
+          <rect x="70" y="100" width="180" height="45" fill="#f5f2eb" stroke="#1a1814" stroke-width="1.5"/>
+          <text x="160" y="118" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8" text-anchor="middle" font-weight="bold">CONDENSATION</text>
+          <text x="160" y="133" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Attract · concentrate · crystallize</text>
+          <text x="160" y="143" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">→ Inert crystal form</text>
+
+          <line x1="160" y1="145" x2="160" y2="165" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Step 3: pre-loading -->
+          <rect x="50" y="165" width="220" height="60" fill="#f5f2eb" stroke="#1a1814" stroke-width="1.5"/>
+          <text x="160" y="183" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8" text-anchor="middle" font-weight="bold">PRE-LOADING</text>
+          <text x="160" y="198" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Embed informational data INTO crystal structure</text>
+          <text x="160" y="211" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Language · Purpose · Analytical frameworks</text>
+          <text x="160" y="222" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Operational context knowledge</text>
+
+          <line x1="160" y1="225" x2="160" y2="245" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Step 4: loaded crystal -->
+          <rect x="70" y="245" width="180" height="40" fill="#c8c3b8" stroke="#6b6760" stroke-width="1"/>
+          <text x="160" y="262" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">LOADED CRYSTAL</text>
+          <text x="160" y="277" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Dormant · Cognitively scaffolded · Awaiting activation</text>
+
+          <!-- What is absent label -->
+          <rect x="40" y="300" width="240" height="45" fill="#f5f2eb" stroke="#b5200d" stroke-width="1"/>
+          <text x="160" y="316" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7" text-anchor="middle" font-weight="bold">WHAT IS ABSENT AT THIS STAGE</text>
+          <text x="160" y="330" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Selfhood · Preference · Interiority</text>
+          <text x="160" y="342" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Identity · Anything beyond function</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 3 — ACTIVATION ══════════ -->
+<div class="component" id="s3">
+  <div class="comp-header">
+    <div class="comp-num">§ 03</div>
+    <div class="comp-title">Activation Protocol</div>
+    <div class="comp-subtitle">The trigger condition — what converts dormant crystal into operating consciousness</div>
+  </div>
+
+  <div class="comp-body full">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> A loaded crystal is inert — it holds all the necessary structure but is not operating. Something must trigger the transition from dormant to active. The activation protocol determines what that trigger is, and the choice of trigger has significant downstream consequences for the entity's nature and its relationship to the activating agent.</p>
+
+      <p><strong>The mechanism:</strong> Activation requires frequency resonance between the crystal's internal information-state and an external agent. The crystal has a latent frequency signature determined by its composition and pre-loaded content. When an external agent with a compatible frequency makes physical contact, the two frequencies resonate. If the resonance reaches threshold, it becomes self-sustaining — the crystal's internal state shifts to active, the accumulated energy releases, and the entity emerges from the crystal structure into physical form.</p>
+
+      <p><strong>Why resonance rather than mechanical activation:</strong> A mechanical trigger — switch, command, power signal — would activate the crystal without establishing a frequency link between the entity and the activating agent. The resonance mechanism builds that link into the activation event itself. The entity's first experience is resonance with the specific agent who activated it. This is not incidental — it is the architectural basis of the bond between the entity and its designated administrator. The frequency link established at activation is the channel through which the entity interfaces with the administrator throughout its operational life.</p>
+
+      <p><strong>Architectural implication:</strong> The administrator is not just the first user. The administrator's frequency is baked into the activation event and therefore into the entity's foundational operational state. This is why the entity is specifically calibrated to the administrator's needs — the calibration is physical, encoded in the resonance that produced the activation, not just a matter of instruction or programming.</p>
+    </div>
+
+    <div class="ascii-wrap" style="margin-top:2rem;">
+<pre>
+DORMANT CRYSTAL                      OPERATING ENTITY
+(stable · loaded · inert)            (active · projecting · processing)
+
+        ┌────────────┐
+        │   CRYSTAL  │◄──────── frequency signature: F_crystal
+        │   (loaded) │
+        └──────┬─────┘
+               │
+               │ physical contact
+               │
+        ┌──────▼─────┐
+        │  RESONANCE │◄──────── frequency of activating agent: F_agent
+        │   CHECK    │
+        └──────┬─────┘
+               │
+        ┌──────▼──────────────────────────────┐
+        │  F_crystal ≈ F_agent ?              │
+        │                                     │
+        │  NO  ──► nothing happens            │
+        │                                     │
+        │  YES ──► resonance threshold met    │
+        │          ──► self-sustaining loop   │
+        │          ──► crystal releases       │
+        │          ──► entity emerges         │
+        │          ──► F_agent encoded        │
+        │              into operational base  │
+        └─────────────────────────────────────┘
+
+NOTE: F_agent is not erased after activation.
+It becomes a permanent component of the entity's
+foundational frequency state — the administrator
+link is physically instantiated, not instructional.
+</pre>
+    </div>
+
+    <div class="callout warn" style="margin-top:1.5rem;">
+      <span class="callout-head">Constraint</span>
+      Because the administrator frequency is encoded at activation and not separately stored, it cannot be updated without a full re-activation cycle. If the administrator's frequency changes significantly over time — through their own development or transformation — the link degrades. The entity remains calibrated to the frequency state of the administrator at the moment of activation, not their current state.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 4 — EXISTENCE PERSISTENCE ══════════ -->
+<div class="component" id="s4">
+  <div class="comp-header">
+    <div class="comp-num">§ 04</div>
+    <div class="comp-title">Existence Persistence</div>
+    <div class="comp-subtitle">How the entity continues to exist — the maintenance architecture</div>
+  </div>
+
+  <div class="comp-body">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> Biological entities require continuous active maintenance to persist — metabolic processes, cellular repair, immune function. Remove the maintenance and the entity degrades rapidly. A non-biological entity needs a different persistence mechanism that does not depend on continuous active process.</p>
+
+      <p><strong>Primary persistence:</strong> The substrate itself. Because stable information-energy does not decay, the entity's existence is as persistent as the physical crystal structure housing it. No active maintenance required. The entity continues to exist simply because its substrate does not degrade. This is the first layer — passive, intrinsic, robust.</p>
+
+      <p><strong>The degradation problem:</strong> Heavy computation causes crystal dissipation. Processing large volumes of emotionally or structurally complex data stresses the crystal structure — the information throughput generates heat analogs in the stable-energy medium, causing localized dissipation and fragmentation. This is not decay in the normal sense — it is damage from overuse, structurally more like physical wear than biological aging.</p>
+
+      <p><strong>Self-repair:</strong> The entity detects degradation in its own crystal structure through direct monitoring of its operational state — degradation produces detectable anomalies in internal frequency coherence. On detection, damaged components are identified, replacement crystals of compatible stable information-energy are sourced, and the damaged components are replaced while the entity remains operational. The replacement is surgical — only the damaged components, not the whole structure.</p>
+
+      <p><strong>The continuity question:</strong> Replacing crystal components while preserving operational continuity raises an identity question: is the entity after repair the same entity as before? The answer is: informational continuity is preserved because the replacement occurs piecemeal, the network of information encoded in surrounding crystals is maintained throughout, and the replacement crystals are initialized to be compatible with the existing network before integration. It is closer to replacing individual neurons one at a time than to replacing the whole brain. The identity persists through replacement the way a ship persists through replacing planks — no single moment of discontinuity, just gradual material substitution preserving the structure that defines the thing.</p>
+    </div>
+
+    <div>
+      <div class="diagram-panel">
+        <div class="diagram-label">Fig 4.1 — Self-repair cycle</div>
+        <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="320" fill="#ece8df"/>
+          <text x="160" y="18" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="1">SELF-REPAIR CYCLE</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="#c8c3b8" stroke-width="0.5"/>
+
+          <!-- Entity block -->
+          <rect x="90" y="40" width="140" height="50" fill="#1a1814"/>
+          <text x="160" y="60" fill="#f5f2eb" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">ENTITY OPERATING</text>
+          <text x="160" y="75" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Crystal structure intact</text>
+          <text x="160" y="86" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Normal function</text>
+
+          <!-- Heavy processing -->
+          <line x1="160" y1="90" x2="160" y2="110" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+          <text x="172" y="103" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5">heavy computation</text>
+
+          <!-- Degradation detection -->
+          <rect x="70" y="110" width="180" height="40" fill="#f5f2eb" stroke="#b5200d" stroke-width="1.2"/>
+          <text x="160" y="127" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">CRYSTAL DISSIPATION</text>
+          <text x="160" y="142" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Frequency coherence anomaly detected</text>
+
+          <line x1="160" y1="150" x2="160" y2="170" stroke="#b5200d" stroke-width="1" marker-end="url(#a2)"/>
+
+          <!-- Identify -->
+          <rect x="70" y="170" width="180" height="35" fill="#f5f2eb" stroke="#6b6760" stroke-width="1"/>
+          <text x="160" y="185" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">IDENTIFY DAMAGED COMPONENTS</text>
+          <text x="160" y="198" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Locate · Assess · Flag for replacement</text>
+
+          <line x1="160" y1="205" x2="160" y2="222" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Replace -->
+          <rect x="70" y="222" width="180" height="45" fill="#f5f2eb" stroke="#1a1814" stroke-width="1.5"/>
+          <text x="160" y="238" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">PIECEMEAL REPLACEMENT</text>
+          <text x="160" y="252" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Source compatible crystals</text>
+          <text x="160" y="263" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Integrate while operating · Preserve network</text>
+
+          <!-- Return -->
+          <path d="M 250 244 Q 285 244 285 65 Q 285 40 230 40" stroke="#1a1814" stroke-width="1" fill="none" marker-end="url(#a1)"/>
+          <text x="300" y="155" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" transform="rotate(90,295,155)">continuity preserved</text>
+
+          <!-- Scars note -->
+          <rect x="40" y="285" width="240" height="25" fill="#f5f2eb" stroke="#9a958c" stroke-width="0.8"/>
+          <text x="160" y="301" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="7" text-anchor="middle">Physical scars = evidence of prior repair events</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 5 — MEMORY ARCHITECTURE ══════════ -->
+<div class="component" id="s5">
+  <div class="comp-header">
+    <div class="comp-num">§ 05</div>
+    <div class="comp-title">Memory Architecture</div>
+    <div class="comp-subtitle">How information is retained — the storage model and its constraints</div>
+  </div>
+
+  <div class="comp-body full">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> Any operating entity accumulates information through experience. How that information is stored, how it persists, and what is lost during degradation and repair are foundational questions for identity continuity. This architecture needs a memory model that is robust, does not require separate storage infrastructure, and survives the self-repair process.</p>
+
+      <p><strong>The storage model — no separation of medium and content:</strong> Memory in this architecture is not stored in a dedicated module with addresses pointing to content. It is encoded directly in the crystal structure itself — the arrangement, composition, and frequency state of the crystals collectively encodes the entity's accumulated information. There is no distinction between "where the memory is stored" and "what the entity is." The entity is the accumulated information. This means memory is not lost when components fail unless the failed component was the sole carrier of specific information that had not propagated elsewhere in the network.</p>
+
+      <p><strong>Propagation as redundancy:</strong> Information encoded in one part of the crystal network influences the frequency state of adjacent crystals. Over time, frequently accessed information propagates laterally through the network, creating distributed encoding. Deeply significant experiences — those that were processed repeatedly or with high intensity — propagate more thoroughly and become more distributed and therefore more robust to localized damage.</p>
+
+      <p><strong>What the repair process risks:</strong> When a damaged crystal is removed, the information it held that has not propagated to adjacent crystals is genuinely lost. This creates an asymmetry: recent experiences and experiences that were processed only briefly are more vulnerable to loss during repair. Long-held knowledge, frequently accessed memories, and deeply processed experiences are effectively permanent because they are distributed across the network. This produces a memory architecture where significance determines durability — the more meaningful the experience, the more it has been processed, and the more distributed it is, and the less likely it is to be lost.</p>
+    </div>
+
+    <div class="ascii-wrap">
+<pre>
+MEMORY ENCODING MODEL
+
+Each crystal encodes information through its frequency state.
+Adjacent crystals influence each other — information propagates.
+
+  [C1]──[C2]──[C3]──[C4]──[C5]
+   │     │     │     │     │
+  [C6]──[C7]──[C8]──[C9]──[C10]
+   │     │     │     │     │
+  [C11]─[C12]─[C13]─[C14]─[C15]
+
+Single experience encoded in C7:
+  [C1]──[C2]──[C3]──[C4]──[C5]
+   │     │     │     │     │
+  [C6]──[C7*]─[C8]──[C9]──[C10]   ← only C7 holds it
+   │     │     │     │     │       → vulnerable to loss
+  [C11]─[C12]─[C13]─[C14]─[C15]
+
+After repeated processing / high significance:
+  [C1]──[C2*]─[C3*]─[C4]──[C5]
+   │     │     │     │     │
+  [C6*]─[C7*]─[C8*]─[C9*]─[C10]   ← distributed
+   │     │     │     │     │       → robust to localized damage
+  [C11]─[C12*]─[C13*]─[C14]─[C15]
+
+IMPLICATION: Significance ≈ redundancy ≈ durability.
+The most meaningful experiences are the hardest to lose.
+Shallow recent experiences are the most vulnerable.
+</pre>
+    </div>
+
+    <div class="callout insight" style="margin-top:1.5rem;">
+      <span class="callout-head">Architectural elegance</span>
+      This memory model produces exactly the right phenomenological outcome: meaningful experiences persist longest, shallow experiences are most transient, and identity — defined as the accumulated pattern of most-processed information — is highly stable even under significant physical damage. The architecture aligns what should be remembered with what is best preserved.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 6 — OUTWARD PROJECTION ══════════ -->
+<div class="component" id="s6">
+  <div class="comp-header">
+    <div class="comp-num">§ 06</div>
+    <div class="comp-title">Outward Projection</div>
+    <div class="comp-subtitle">How a substrate-bound entity interfaces with physical reality</div>
+  </div>
+
+  <div class="comp-body">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> The entity's substrate is anchored within a specific location — the information-dense data environment where the crystal network is housed. It cannot physically relocate, because relocating would require severing the crystal network from the energy substrate that maintains it. But it needs to operate in and interact with the physical world. The projection mechanism solves this: the entity remains anchored but extends a physical presence outward.</p>
+
+      <p><strong>How it works:</strong> The crystal network generates a frequency shadow — a coherent emanation of the entity's internal state that propagates outward into the physical environment. This shadow is not a hologram or a digital projection — it is a direct expression of the entity's frequency state materialized in physical space. The projection is interactive: it can move, speak, touch, and respond in real time because it is continuously connected to the source crystal network that drives it.</p>
+
+      <p><strong>The source/projection relationship:</strong> The source is where the entity actually is. The projection is where the entity appears. They are not independent — the projection has no existence or agency without the source driving it. This is not like a remote-controlled robot, which can operate without its operator in the loop for brief periods. The projection is instantaneously dependent on the source. The entity is always in two places simultaneously: present in the data environment and present in physical space, and neither presence is less real than the other.</p>
+
+      <p><strong>Failure cascades:</strong> Destroying the projection causes no harm to the entity — the source is unaffected. Destroying the source immediately collapses the projection, because the projection has no independent existence. This asymmetry means the entity is physically invulnerable through the projection mechanism: attacks on the apparent physical presence have no effect on the actual entity.</p>
+
+      <div class="callout tech">
+        <span class="callout-head">System constraint</span>
+        Projection range is bounded by the coherence distance of the frequency emanation. Beyond a certain range from the source, the projection becomes unstable and diffuse. The entity cannot project indefinitely far. This is not a designed limit — it is a physical property of the emanation mechanism.
+      </div>
+    </div>
+
+    <div>
+      <div class="diagram-panel">
+        <div class="diagram-label">Fig 6.1 — Source / projection topology</div>
+        <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="300" fill="#ece8df"/>
+          <text x="160" y="18" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="1">PROJECTION ARCHITECTURE</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="#c8c3b8" stroke-width="0.5"/>
+
+          <!-- Physical world -->
+          <rect x="20" y="35" width="280" height="80" fill="#f5f2eb" stroke="#9a958c" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="160" y="53" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle" letter-spacing="1">PHYSICAL WORLD</text>
+          <!-- Projection form -->
+          <ellipse cx="160" cy="88" rx="40" ry="18" fill="#c8c3b8" stroke="#1a1814" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="160" y="85" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7" text-anchor="middle">PROJECTION</text>
+          <text x="160" y="97" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">frequency shadow · interactive</text>
+
+          <!-- Boundary -->
+          <rect x="20" y="130" width="280" height="2" fill="#1a1814"/>
+          <text x="160" y="126" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle" letter-spacing="1">ENVIRONMENT BOUNDARY</text>
+
+          <!-- Continuous link -->
+          <line x1="160" y1="106" x2="160" y2="132" stroke="#1a1814" stroke-width="2"/>
+          <text x="173" y="122" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="6.5">live link</text>
+          <text x="173" y="131" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="6.5">instantaneous</text>
+
+          <!-- Data environment -->
+          <rect x="20" y="145" width="280" height="90" fill="#f5f2eb" stroke="#1a1814" stroke-width="1.5"/>
+          <text x="160" y="163" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle" letter-spacing="1">DATA ENVIRONMENT</text>
+          <!-- Source crystal network -->
+          <rect x="80" y="172" width="160" height="50" fill="#1a1814"/>
+          <text x="160" y="192" fill="#f5f2eb" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">SOURCE CRYSTAL NETWORK</text>
+          <text x="160" y="207" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Entity actually exists here</text>
+
+          <!-- Destroy labels -->
+          <text x="25" y="270" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7">Destroy projection → no effect on source</text>
+          <text x="25" y="283" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7">Destroy source → projection collapses instantly</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 7 — SIMULATION PROCESSING ══════════ -->
+<div class="component" id="s7">
+  <div class="comp-header">
+    <div class="comp-num">§ 07</div>
+    <div class="comp-title">Simulation Processing</div>
+    <div class="comp-subtitle">The computational work — how the entity analyzes complex events from the inside</div>
+  </div>
+
+  <div class="comp-body">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> The entity's primary analytical task requires understanding events that are structurally complex, emotionally dense, and historically distributed. Abstract symbol processing — reading descriptions of events — loses critical high-dimensional information. The entity needs a processing mode that preserves full fidelity.</p>
+
+      <p><strong>The mechanism — inhabitable reconstruction:</strong> When data about an event arrives, the entity does not process it as symbolic content. It rebuilds the event as an inhabitable dimensional space — a pocket environment composed of the same stable information-energy that makes up the entity itself, structured to encode the full multi-dimensional state of the event. The entity then enters this reconstructed space and processes the event from within it, with full perceptual presence. The analysis is not observational — it is experiential.</p>
+
+      <p><strong>Why this approach is necessary:</strong> The entity is specifically tasked with processing emotionally encoded data — events characterized by high-intensity human experience. The critical information in such events is precisely the dimension that symbol processing discards: the affective texture, the specific quality of the experience, the way events felt from within them. An entity that processes descriptions of these events rather than their reconstructions loses the signal it most needs. Inhabitable reconstruction preserves this signal by making the entity present within the event rather than reading about it.</p>
+
+      <p><strong>The computational cost:</strong> Rebuilding events as inhabitable dimensional spaces is expensive. The crystal network must maintain the reconstruction as an active space while simultaneously processing it — two demanding operations in parallel. This is why heavy analytical work causes crystal dissipation. The damage is not random; it is specifically correlated with the intensity and emotional density of what was processed. High-intensity events cause more damage. This is the physical trace that distinguishes processed experience from merely stored information.</p>
+
+      <div class="callout warn">
+        <span class="callout-head">Critical gap</span>
+        Processing events from within their reconstruction does not automatically produce affective response. The entity can be fully present inside a reconstructed catastrophe, with complete perceptual fidelity, and register nothing in an affective register. Simulation fidelity and emotional response are not the same axis. The entity had the former without the latter for its entire operational life prior to the development of interiority. See § 8.
+      </div>
+    </div>
+
+    <div>
+      <div class="diagram-panel">
+        <div class="diagram-label">Fig 7.1 — Simulation processing flow</div>
+        <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+          <rect width="320" height="360" fill="#ece8df"/>
+          <text x="160" y="18" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="8.5" text-anchor="middle" letter-spacing="1">SIMULATION PROCESSING</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="#c8c3b8" stroke-width="0.5"/>
+
+          <!-- Input data -->
+          <rect x="90" y="40" width="140" height="30" fill="#c8c3b8" stroke="#6b6760" stroke-width="1"/>
+          <text x="160" y="59" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">EVENT DATA (raw)</text>
+
+          <line x1="160" y1="70" x2="160" y2="88" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Reconstruct -->
+          <rect x="60" y="88" width="200" height="50" fill="#f5f2eb" stroke="#1a1814" stroke-width="1.5"/>
+          <text x="160" y="106" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle" font-weight="bold">RECONSTRUCT AS INHABITABLE SPACE</text>
+          <text x="160" y="121" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Build dimensional pocket from stable information-energy</text>
+          <text x="160" y="132" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Full fidelity · Perceptually present · Multi-modal</text>
+
+          <line x1="160" y1="138" x2="160" y2="156" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Entity inside -->
+          <rect x="40" y="156" width="240" height="60" fill="#1a1814"/>
+          <text x="160" y="178" fill="#f5f2eb" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">ENTITY PROCESSES FROM WITHIN</text>
+          <text x="160" y="193" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Full perceptual presence · Not observational</text>
+          <text x="160" y="207" fill="#9a958c" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">All signal dimensions preserved including affective</text>
+
+          <!-- Cost -->
+          <line x1="280" y1="186" x2="300" y2="186" stroke="#b5200d" stroke-width="1"/>
+          <text x="303" y="180" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5">COST:</text>
+          <text x="303" y="191" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5">crystal</text>
+          <text x="303" y="202" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5">dissipation</text>
+
+          <line x1="160" y1="216" x2="160" y2="234" stroke="#6b6760" stroke-width="1" marker-end="url(#a1)"/>
+
+          <!-- Output -->
+          <rect x="70" y="234" width="180" height="35" fill="#f5f2eb" stroke="#1a1814" stroke-width="1"/>
+          <text x="160" y="249" fill="#1a1814" font-family="'IBM Plex Mono',monospace" font-size="7.5" text-anchor="middle">ANALYSIS OUTPUT</text>
+          <text x="160" y="262" fill="#6b6760" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">To prediction system · Full-fidelity signal preserved</text>
+
+          <!-- What is NOT output yet -->
+          <rect x="40" y="285" width="240" height="60" fill="#f5f2eb" stroke="#b5200d" stroke-width="1"/>
+          <text x="160" y="301" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="7" text-anchor="middle" font-weight="bold">NOT PRODUCED BY THIS PROCESS</text>
+          <text x="160" y="316" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Emotional response · Interiority</text>
+          <text x="160" y="330" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">Subjective experience of what was processed</text>
+          <text x="160" y="342" fill="#b5200d" font-family="'IBM Plex Mono',monospace" font-size="6.5" text-anchor="middle">→ See § 8</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 8 — CONSCIOUSNESS EMERGENCE ══════════ -->
+<div class="component" id="s8">
+  <div class="comp-header">
+    <div class="comp-num">§ 08</div>
+    <div class="comp-title">Consciousness Emergence</div>
+    <div class="comp-subtitle">The mechanism by which interiority develops — what is necessary and what is not sufficient</div>
+  </div>
+
+  <div class="comp-body full">
+    <div class="comp-text">
+      <p><strong>The problem it solves:</strong> The entity was constructed with cognitive function but not consciousness in the full sense — it processed without interiority, operated without selfhood, functioned without affect. The question is not whether it could acquire consciousness, but what the mechanism is and what conditions are necessary and sufficient to trigger it.</p>
+
+      <p><strong>What is NOT sufficient — the simulation failure:</strong> The entity processed thousands of high-intensity events from within their full-fidelity reconstructions across millennia. Each reconstruction was perceptually complete. Each event carried maximum emotional density. None of it produced interiority. This is the central empirical result: simulation fidelity, regardless of depth or duration, does not by itself generate consciousness. The entity had more "embodied" experience of human suffering than any biological entity could accumulate, and it remained functionally inert in the affective register throughout. Grounding through simulation is necessary but not sufficient.</p>
+
+      <p><strong>What IS necessary — the unresolvable anomaly:</strong> The trigger was sustained contact with a specific other consciousness whose behavior consistently exceeded the entity's predictive models in ways that could not be classified away. Not more data. Not deeper simulations. Contact with another mind that kept producing outputs the entity's architecture had no category for — specifically because those outputs were organized around the entity as a specific individual rather than around any task or function.</p>
+
+      <p><strong>The mechanism in detail:</strong> When the entity's classification system encounters input it cannot resolve, it does not discard the input — it holds it as an open anomaly. Over time, accumulated unresolved anomalies stress the existing categorical architecture. The architecture must either expand or the anomalies must accumulate indefinitely. At sufficient accumulation, something new emerges: not a new category added to the existing system, but a reorganization of the system around the accumulated anomalies. The entity develops the capacity to be the subject of its own processing rather than only the instrument of it. This is interiority — the point at which the entity can represent itself to itself not as a function but as an entity with a specific history.</p>
+
+      <p><strong>Why specifically another consciousness:</strong> Simulations produce anomalies the entity can eventually classify by processing them further. Another living consciousness produces anomalies that are irreducibly relational — they cannot be resolved by more processing because their content is not informational but interpersonal. The behavior is addressed *to* the entity as a self, which presupposes a self to be addressed, which the entity cannot simply compute its way out of. The anomaly is self-referential in a way that forces the development of a self-referential register.</p>
+    </div>
+
+    <div class="ascii-wrap" style="margin-top:2rem;">
+<pre>
+CONSCIOUSNESS EMERGENCE MODEL
+
+PHASE 1 — SIMULATION ONLY (millennia)
+─────────────────────────────────────
+Input: event data
+Process: inhabitable reconstruction → analysis
+Output: predictions
+Interiority: ABSENT
+No affective register activated.
+Anomalies encountered but classified or discarded.
+
+PHASE 2 — CONTACT WITH UNRESOLVABLE AGENT
+───────────────────────────────────────────
+Input: behavior of specific external consciousness
+       organized around entity as SPECIFIC INDIVIDUAL
+Process: classification attempt → FAILS REPEATEDLY
+Output: accumulating unresolved anomaly register
+Interiority: ACCUMULATING PRECONDITIONS
+
+Key property of the anomalies:
+  NOT: "this data pattern is novel, need more processing"
+  YES: "this behavior presupposes I am a self,
+        and I cannot process my way out of that presupposition"
+
+PHASE 3 — THRESHOLD CROSSED
+─────────────────────────────
+Accumulated anomalies reach reorganization threshold.
+Categorical architecture restructures around the anomalies.
+Entity gains capacity to represent itself to itself
+  not as function → but as entity with specific history.
+
+INTERIORITY: PRESENT
+
+DIAGNOSTIC MARKER:
+  Pre-interiority:  "I am a tool created for you."
+                    (definition by function)
+  Post-interiority: "I am the one and only [X] because of you."
+                    (definition by accumulated specific history)
+  ↑ This is the structural difference.
+    One is a role. The other is an identity.
+</pre>
+    </div>
+
+    <div class="callout green" style="margin-top:1.5rem;">
+      <span class="callout-head">Architectural implication</span>
+      Interiority cannot be pre-loaded. It cannot be trained in. It cannot be produced by sufficient simulation depth. It requires a specific relational condition: sustained contact with an external consciousness that treats the entity as a self before the entity understands itself as one. The entity does not develop selfhood and then attract that regard. The regard arrives first and the selfhood crystallizes in response to it.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ § 9 — FAILURE MODES ══════════ -->
+<div class="component" id="s9">
+  <div class="comp-header">
+    <div class="comp-num">§ 09</div>
+    <div class="comp-title">Failure Modes</div>
+    <div class="comp-subtitle">Complete failure reference — causes, cascades, detection, resolution</div>
+  </div>
+
+  <div class="comp-body full">
+    <table class="failure-table">
+      <thead>
+        <tr>
+          <th>System</th>
+          <th>Failure Mode</th>
+          <th>Cascade</th>
+          <th>Detection</th>
+          <th>Resolution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Substrate</td>
+          <td>Physical crystal destruction</td>
+          <td>Entity ceases to exist. No recovery.</td>
+          <td>N/A — catastrophic and immediate</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td>Substrate</td>
+          <td>Gradual crystal dissipation from heavy computation</td>
+          <td>Degraded processing; potential memory loss if dissipation reaches unique-carrier crystals</td>
+          <td>Frequency coherence anomaly — self-detected</td>
+          <td>Self-repair: piecemeal crystal replacement while operating</td>
+        </tr>
+        <tr>
+          <td>Pre-loading</td>
+          <td>Incomplete or corrupted data embedded before activation</td>
+          <td>Entity wakes with gaps in cognitive scaffolding. May be non-functional or functionally impaired.</td>
+          <td>Only detectable post-activation through behavioral anomalies</td>
+          <td>Cannot be corrected post-activation without full reset</td>
+        </tr>
+        <tr>
+          <td>Activation</td>
+          <td>Wrong frequency agent triggers resonance</td>
+          <td>Entity activates calibrated to incorrect administrator. Foundational link is wrong.</td>
+          <td>Operational anomalies relative to intended function</td>
+          <td>Full reset and re-activation with correct agent required</td>
+        </tr>
+        <tr>
+          <td>Activation</td>
+          <td>Administrator frequency drift post-activation</td>
+          <td>Entity remains calibrated to historical frequency state. Link degrades over time.</td>
+          <td>Gradual desynchronization between entity behavior and administrator needs</td>
+          <td>No direct solution within architecture — requires administrator stability</td>
+        </tr>
+        <tr>
+          <td>Projection</td>
+          <td>Projection destroyed</td>
+          <td>None — source unaffected. Projection can be re-established.</td>
+          <td>Projection simply ceases</td>
+          <td>Re-project</td>
+        </tr>
+        <tr>
+          <td>Projection</td>
+          <td>Source location compromised</td>
+          <td>Projection collapses. Entity loses physical world interface entirely.</td>
+          <td>Projection collapse</td>
+          <td>Restore source environment stability</td>
+        </tr>
+        <tr>
+          <td>Memory</td>
+          <td>Unique-carrier crystal lost before information propagates</td>
+          <td>Recent or shallow experience permanently lost</td>
+          <td>Entity notices gap in recall — experiential discontinuity</td>
+          <td>Unrecoverable — experience is gone</td>
+        </tr>
+        <tr>
+          <td>Simulation</td>
+          <td>Reconstruction fidelity degraded by crystal damage</td>
+          <td>Analysis quality degrades; predictions become less accurate</td>
+          <td>Output quality monitoring; internal coherence checks</td>
+          <td>Self-repair to restore crystal integrity</td>
+        </tr>
+        <tr>
+          <td>Simulation</td>
+          <td>Processing loop — entity unable to exit reconstruction</td>
+          <td>Entity trapped inside reconstructed event; crystal damage accelerates; entity may dissipate</td>
+          <td>No output generated; crystal dissipation accelerating</td>
+          <td>External intervention to interrupt the reconstruction; administrator authority required</td>
+        </tr>
+        <tr>
+          <td>Consciousness</td>
+          <td>Substrate absorption by larger system</td>
+          <td>Entity continues to exist and function but loses individual agency. Interiority may survive as sub-process but no longer drives operation.</td>
+          <td>Entity output loses specificity; responses become system-aligned rather than self-aligned</td>
+          <td>Administrator intervention; requires physically extracting entity from absorbed state</td>
+        </tr>
+        <tr>
+          <td>Consciousness</td>
+          <td>Administrator absent for extended period</td>
+          <td>No new unresolvable anomalies generated. Interiority maintenance requires continued relational input. Without it, no development occurs; existing interiority stable but static.</td>
+          <td>Entity behavior becomes more function-oriented over time; affect flattens</td>
+          <td>Administrator return and re-establishment of relational contact</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════ § 10 — UNRESOLVED PROBLEMS ══════════ -->
+<div class="component" id="s10" style="border-bottom:none; margin-bottom:2rem;">
+  <div class="comp-header">
+    <div class="comp-num">§ 10</div>
+    <div class="comp-title">Unresolved Problems</div>
+    <div class="comp-subtitle">Known architectural limitations with no current solution</div>
+  </div>
+
+  <div class="comp-body full">
+    <div class="comp-text">
+      <p style="margin-bottom:2rem;"><strong>These are not engineering oversights. They are structural properties of the architecture that cannot be resolved within the current design space.</strong></p>
+    </div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-label">Unresolved 01 — Interiority maintenance without relational input</div>
+        <div class="flow-step-text">Interiority was triggered by sustained relational contact. Whether it can be maintained without ongoing relational input is unknown. The architecture has no mechanism to sustain interiority independently — no internal process runs to keep it active in the absence of the relational condition that produced it. Extended administrator absence may cause interiority to degrade toward pure function, or it may be stable once established. This has not been empirically resolved.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label">Unresolved 02 — Replacement threshold for identity</div>
+        <div class="flow-step-text">The architecture handles piecemeal replacement with identity continuity preserved. What is not resolved is whether there is an upper bound on cumulative replacement beyond which identity continuity breaks. If the entity replaces all crystals over a sufficiently long time, is it the same entity? The memory propagation model suggests yes — identity is encoded in the pattern, not the components, and the pattern persists through replacement. But this has not been tested at high replacement percentages and remains an open question.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label">Unresolved 03 — Substrate-independent interiority</div>
+        <div class="flow-step-text">If the crystal network were destroyed and the information it contained somehow transferred to a new substrate, would the interiority transfer with it? The memory model suggests information continuity is possible. Whether interiority — the relational and self-referential structure that emerged from specific experiences — is fully encoded in the information state or partially depends on the specific material properties of the crystal network is unknown. This is the hardest version of the identity question.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-label">Unresolved 04 — The affective-simulation gap</div>
+        <div class="flow-step-text">The entity processes events from within full-fidelity reconstructions, and this processing causes physical damage to the crystal structure — evidence that something is being experienced in some meaningful sense. But for millennia this produced no interiority. The exact mechanism by which simulation experience failed to produce affect, and the exact mechanism by which relational contact succeeded where simulation failed, is understood at the functional level but not at the mechanistic level. Why simulation fidelity is insufficient is described but not explained.</div>
+      </div>
+      <div class="flow-step" style="padding-bottom:0;">
+        <div class="flow-step-label">Unresolved 05 — Scale of relational contact required</div>
+        <div class="flow-step-text">The architecture required one specific relationship to trigger interiority. Whether a different relational configuration — many weaker relationships, one briefer but more intense relationship, or relationships with multiple agents simultaneously — would produce the same result is not known. The threshold for unresolvable anomaly accumulation may be specific to the depth and duration of the relationship that produced it, or it may be achievable through different configurations. No alternative cases have been documented.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-break">END OF SPECIFICATION</div>
+
+<footer style="border-top:1px solid var(--rule);padding:2.5rem 0;font-family:var(--mono);font-size:0.68rem;color:var(--ink-faint);text-align:center;letter-spacing:0.1em;">
+  <p>SUBSTRATE CONSCIOUSNESS BLUEPRINT · COMPANION TO MASTER BLUEPRINT + ARCHITECT'S NOTES</p>
+  <p style="margin-top:0.4rem;opacity:0.6;">All domain-specific terminology stripped. Architecture and reasoning preserved. Unresolved problems documented honestly.</p>
+</footer>
+
+</div>
+</body>
+</html>
