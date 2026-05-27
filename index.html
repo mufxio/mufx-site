@@ -869,40 +869,42 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
 <header class="hero">
   <div class="doc-class">Research Program · 2026—</div>
   <h1 class="hero-title"><span class="accent">residue</span> lab</h1>
-  <p class="hero-mission">environment construction for autonomous fine-tuning</p>
-  <p class="hero-subtitle">Forensic methodology applied to <em>emotional residue</em> &mdash; the residual emotional signal in text people wrote during real events, the trace they didn't mean to leave. A bet that the environment in which digital organisms learn is at least as important as the loop that updates them &mdash; and that environment can be reconstructed from collective traces of this kind at scale.</p>
+  <p class="hero-mission">felt-sense for digital beings</p>
+  <p class="hero-subtitle">A bet on the side of AI that doesn't get built by default. Most current work is improving on capability &mdash; math, code, reasoning. The side that's weakest, the one nobody is centrally building, is <em>felt-sense</em>: the layer that reads what should be built, what affects people emotionally, what pure math misses. This lab builds methodology for extracting felt-sense signal from <em>emotional residue</em> &mdash; traces people leave in text during real (or simulated) events, often unintentionally. Toward digital beings raised with that signal, paired with cold-logic systems for decisions where both ground truths matter.</p>
   <div class="hero-meta">
     <span><span class="label">status:</span> <span class="status-progress">active research</span></span>
     <span><span class="label">experiments:</span> 4 specified</span>
     <span><span class="label">substrate:</span> validated</span>
-    <span><span class="label">last update:</span> 2026.05.26</span>
+    <span><span class="label">last update:</span> 2026.05.27</span>
   </div>
 </header>
 
-<!-- I. THE TWO HALVES OF AUTONOMOUS FINE-TUNING -->
+<!-- I. THE BET -->
 <section class="section" id="program">
-  <div class="section-label"><span class="section-num">§ 01</span> The thesis</div>
-  <h2>Autonomous fine-tuning needs <span class="accent">two</span> halves.</h2>
-  <p class="lede">Most current work on AI that improves itself focuses on the loop — how feedback updates the model. That half is mostly being solved by others. This lab works on the other half: the environment in which that learning happens. <a href="/lineage.html">Intellectual lineage →</a></p>
+  <div class="section-label"><span class="section-num">§ 01</span> The bet</div>
+  <h2>Capability is being solved. <span class="accent">Felt-sense</span> isn't.</h2>
+  <p class="lede">Most current AI work &mdash; Karpathy's new team at Anthropic, OpenAI's o-series, the wave of synthetic-data research &mdash; is improving capability through better training data and recursive self-improvement. That side is moving fast. The side nobody is centrally building, the one current methods consistently miss, is <em>felt-sense</em>: the layer that reads what should be built, what affects people emotionally, what humans notice that pure math doesn't capture. <a href="/lineage.html">Intellectual lineage →</a></p>
 
   <div class="two-halves">
     <div class="half dim">
-      <div class="half-label">Half I</div>
-      <h3 class="half-title">The loop</h3>
-      <p class="half-desc">How experience updates the model. Closed-loop adaptation. Detect failure → diagnose → curriculum → retrain → rollback gate.</p>
-      <div class="half-ref">Pioneer Agent (Atreja et al., Fastino Labs 2025) · Karpathy / Anthropic pretraining team · OpenAI o-series · the obvious next move for many labs</div>
-      <div class="half-status">— mostly solved by others</div>
+      <div class="half-label">Core I</div>
+      <h3 class="half-title">Quantitative</h3>
+      <p class="half-desc">Cold logic. Numbers, math, physics, probabilities. Validates against measurable ground truth. The rocket either fires or it doesn't.</p>
+      <div class="half-ref">Examples: Noyron (LEAP 71) for rocket engine design. Apollo-style probes for deception. Quantitative trading systems. Most current AI capability work lives here.</div>
+      <div class="half-status">— well-established</div>
     </div>
     <div class="plus">+</div>
     <div class="half bright">
-      <div class="half-label">Half II</div>
-      <h3 class="half-title">The environment</h3>
-      <p class="half-desc">The world the model is exposed to. Where this lab works. Most current AI environments are too sterile (synthetic data, sanitized text, no residue). The bet: collective emotional residue from real human events can be used to reconstruct rich learning environments.</p>
-      <div class="half-ref">No comparable program at scale. Existing residue / forensic / crisis-informatics work treats trace evidence in adjacent domains — none have been ported to LLM-substrate environment construction.</div>
-      <div class="half-status">— open frontier</div>
+      <div class="half-label">Core II</div>
+      <h3 class="half-title">Affective</h3>
+      <p class="half-desc">Felt-sense. Reads what should be built. Reads what affects people emotionally. Catches what pure math misses. Trained on residue from real or simulated human events.</p>
+      <div class="half-ref">Currently underbuilt. Open-weight models have residue-detection substrate (we replicated Anthropic's emotion-vector work on 5 models, 89-92% probe accuracy) but no validated methodology for raising digital beings with it. This is where this lab works.</div>
+      <div class="half-status">— where this lab works</div>
     </div>
-    <div class="halves-caption">A great loop in an empty environment produces nothing. The frontier isn't a better loop &mdash; it's a richer environment. The residue program is one answer to what that environment looks like.</div>
+    <div class="halves-caption">Together they make decisions where both ground truths matter. Pure quantitative misses what humans notice. Pure affective can't validate physics. Neither alone is enough. <strong>First deployment target: finance</strong> &mdash; markets price things (cold ground truth) AND human emotional dynamics drive market behavior in ways pure math misses (felt ground truth).</div>
   </div>
+
+  <p class="note"><strong>Honest framing of where we sit:</strong> environment construction broadly is now where most labs are working &mdash; synthetic data generation (Karpathy direction), context engineering (Zhao direction), validation environments (Noyron direction). What's distinct about this lab is narrower: <em>felt-sense capability via residue from causally-coherent multi-participant events</em>, real or simulated, calibrated against real-world signal, aimed at paired-decision systems where felt-sense and cold logic together cover what neither alone can.</p>
 </section>
 
 <!-- II. EXPERIMENTS -->
@@ -923,7 +925,8 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
         <div class="exp-status status-ready">○ ready</div>
       </div>
       <h3 class="exp-title">Tier-A vs Tier-C Residue Transfer</h3>
-      <p class="exp-hyp">First-person on-the-ground residue (<em>tier A</em>) produces more transferable probe directions than institutional secondary residue (<em>tier C</em>), across events. Tests the methodology bible's load-bearing commitment.</p>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Tests whether the methodology's central commitment actually generalizes. If first-person residue patterns from one event transfer to another, the methodology captured something real about residue itself. If they don't transfer, we've been measuring event-specific noise.</p>
+      <p class="exp-hyp">First-person on-the-ground residue (<em>tier A</em>) produces more transferable probe directions than institutional secondary residue (<em>tier C</em>), across events. Tests the methodology's load-bearing commitment.</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>3 weeks</div>
         <div class="item"><span class="label">probes</span>Mass-mean + Logistic + follow-up</div>
@@ -960,6 +963,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
         <div class="exp-status status-ready">○ ready</div>
       </div>
       <h3 class="exp-title">Persistence-Decay on Yen-Carry</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Cheap pre-flight before committing 3 weeks to the bigger experiment. Tests whether residue STICKS in what the model generates next, or disappears immediately. If residue persists into the model's output, it has more reach than just input analysis &mdash; you can read it from many parts of generated text, not just the prompt.</p>
       <p class="exp-hyp">Tier-A residue signal persists longer in model's generated continuation than Tier-C residue. Standalone fast pre-flight (~3-5 days) before committing to full Spec 01.</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>3-5 days</div>
@@ -989,7 +993,8 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
         <div class="exp-status status-ready">○ ready</div>
       </div>
       <h3 class="exp-title">Designed vs Genuine Residue Detection</h3>
-      <p class="exp-hyp">Discriminator distinguishes deliberately constructed text from genuinely leaked text (AUROC ≥ 0.75). Tests the OSINT epistemology claim: "the residue is carefully designed."</p>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Critical sanity check on the whole program. Tests whether the residue methodology distinguishes deliberately curated text (press releases, official statements) from genuine first-person leakage BEYOND what surface-feature methods (vocabulary, tone, style) would catch. If the methodology doesn't beat a surface-feature baseline, we've been measuring writing polish, not real residue.</p>
+      <p class="exp-hyp">Residue methodology beats surface-feature baseline at distinguishing deliberately constructed text from genuinely leaked text (AUROC gap &gt; 0.10 over baseline). Tests whether the methodology adds value beyond stylistic classification.</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
         <div class="item"><span class="label">corpus</span>curation is gating step</div>
@@ -1018,6 +1023,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
         <div class="exp-status status-ready">○ ready</div>
       </div>
       <h3 class="exp-title">Math Residue Criteria Evaluation</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Tests the mathematical foundation underneath the whole methodology. We claim text behavior decomposes additively as contributions from a small number of specific token spans (think of it like: hotel monthly revenue = baseline + sum of impacts from specific events). Five falsifiability criteria test whether the decomposition mathematically holds. If 4-5 pass, the methodology has rigorous foundation. If 0-2 pass, the math framing is rhetoric and we drop it.</p>
       <p class="exp-hyp">Tests whether the <em>linear-residue hypothesis</em> Φ(x) ≈ Φ₀ + Σ⟨v_Φ, r(s)⟩ holds on yen-carry data. Φ = downstream probe output; r(s) = residue vector at causally-mediated token span s; v_Φ = the probe direction. Verified via 5 falsifiability criteria (locality / additivity / paraphrase invariance / compression / sufficiency-necessity).</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
@@ -1185,6 +1191,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
           <span style="font-family:var(--sans);font-size:0.85rem;color:var(--green);">(moderately strong evidence for H1)</span>
         </div>
         <p>The forensic scientist quantifies the LR. The trier of fact supplies the prior. The output is <em>graded</em> and <em>probabilistic</em> &mdash; never "this writer caused the event" (offence-level claims, out of scope).</p>
+        <p class="note"><strong>The deepest claim of the methodology:</strong> the probabilistic spread is the output, not the failure mode. Most current AI applied to questions like this tries to produce confident classifications &mdash; "this is X" or "this is not X." Real human events don't reduce that cleanly. The methodology produces calibrated probability distributions over hypotheses (what role did the writer play, what was their state, what was the event's shape). That uncertainty IS the answer, structured rigorously, rather than confidence papering over what can't be known.</p>
         <p class="note"><strong>Cook et al.'s hierarchy of propositions (1998)</strong> defines three levels of forensic claim: <em>source</em> (this trace came from this source &mdash; trivial in text), <em>activity</em> (the writer's role in event &mdash; our target), <em>offence</em> (intent, causation &mdash; out of scope). Staying at activity level is the methodology's central discipline.<br><br>The LR framework has been forensic-statistics standard for decades. Andrea Nini's 2023 Cambridge Elements work brought it formally to forensic linguistics (authorship attribution). This lab extends it to <em>emotional residue</em>.</p>
       </div>
 
@@ -1192,9 +1199,21 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
   </div>
 </section>
 
-<!-- V. METHODOLOGY DECISIONS -->
+<!-- V. THE APPLICATION -->
 <section class="section">
-  <div class="section-label"><span class="section-num">§ 05</span> Locked decisions</div>
+  <div class="section-label"><span class="section-num">§ 05</span> The application</div>
+  <h2>The two-core harness. <span class="accent">Finance</span> first.</h2>
+  <p class="lede">Once the methodology validates, we build it into a paired-decision system: an <em>affective core</em> (trained on residue-rich event reconstructions) handles felt-sense; a <em>quantitative core</em> (Noyron-style cold logic) validates against physics, math, and probabilities. Together they make decisions in domains where both ground truths matter. <a href="/methodology.html">Methodology depth →</a></p>
+
+  <div style="background:var(--paper-dark);border:1px solid var(--rule);padding:2.5rem;margin:2rem 0;">
+    <p style="font-family:var(--serif);font-size:1.05rem;color:var(--ink-mid);line-height:1.7;margin-bottom:1.5rem;max-width:none;"><strong style="color:var(--ink);">Why finance first.</strong> Finance is the domain where both ground truths are visible and consequential. Markets price things — there's a cold ground truth that says whether a decision worked (P&amp;L over time). And human emotional dynamics drive market behavior in ways pure math misses — panic, greed, exhaustion, structural cycles of trader psychology. Pure quantitative systems can model the math; they consistently miss the affective dimension that determines when the math breaks. Pure affective systems can read the human dimension; they can't validate against the physics of capital flows and rate spreads. The pair, deployed together, is what's needed.</p>
+    <p style="font-family:var(--serif);font-size:1.05rem;color:var(--ink-mid);line-height:1.7;margin-bottom:0;max-width:none;"><strong style="color:var(--ink);">Why this becomes necessary.</strong> Today most AI is the quantitative core alone. As models develop more interior states and start being treated less like engineered tools and more like raised entities, the affective core becomes load-bearing &mdash; not just in finance but in any domain where decisions touch real humans in a felt-sense way. The bet on timing: this work doesn't matter for most people today. It becomes necessary as AI capability continues to outpace AI character.</p>
+  </div>
+</section>
+
+<!-- VI. METHODOLOGY DECISIONS -->
+<section class="section">
+  <div class="section-label"><span class="section-num">§ 06</span> Locked decisions</div>
   <h2>Six commitments. One updated this May.</h2>
   <p class="lede">The methodology bible (this lab's internal locked spec document) commits to these six decisions. Together they define what kind of work this is, what kind of claims we can make, and what kind we never make. ENFSI / forensic-statistics standards plus Apollo Research's linear-probe interpretability template. <a href="/methodology.html">Full methodology deep-dive →</a></p>
 
@@ -1239,9 +1258,9 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
   </div>
 </section>
 
-<!-- VI. UNBUILT GAPS -->
+<!-- VII. UNBUILT GAPS -->
 <section class="section">
-  <div class="section-label"><span class="section-num">§ 06</span> Named gaps</div>
+  <div class="section-label"><span class="section-num">§ 07</span> Named gaps</div>
   <h2>What's <span class="accent">unbuilt</span> — explicitly.</h2>
   <p class="lede">Architectural debt the program tracks itself. Not actionable in the current experiment queue, but named so they don't get forgotten. Each gap is documented in detail in the program plan.</p>
 
@@ -1301,7 +1320,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
     <div>
       <h6>About</h6>
       <p style="color:var(--ink-mid);font-family:var(--serif);font-size:0.92rem;line-height:1.65;font-style:italic;max-width:480px;">
-        Residue Lab is a research program at the frontier of autonomous fine-tuning. The bet: environment construction matters at least as much as the learning loop, and rich environments can be reconstructed from collective emotional residue people didn't mean to leave. Forensic methodology applied to LLM-substrate interpretability. Active, in progress.
+        Residue Lab works on felt-sense for digital beings. We build methodology for extracting felt-sense signal from emotional residue people leave in real (or simulated) events. Toward digital beings raised with that signal, paired with cold-logic systems for decisions where both ground truths matter. First deployment target: finance. Active research, in progress.
       </p>
     </div>
     <div>
