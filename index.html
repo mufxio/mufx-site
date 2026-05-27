@@ -3,934 +3,1353 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>floor36</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Residue Lab — environment construction for autonomous fine-tuning</title>
+<meta name="description" content="Residue Lab: forensic methodology applied to emotional residue from real human events. Environment construction for autonomous fine-tuning.">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-body { background:#0a0a0a; color:#888; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:300; line-height:2; overflow-x:hidden; transition:background 1s; }
-::selection { background:rgba(196,149,106,0.25); color:#ccc; }
-a { color:#888; text-decoration:none; transition:all 0.3s; }
-a:hover { color:#c4956a; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
 
-/* Weather particles */
-.weather-layer { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:1; overflow:hidden; }
+:root {
+  /* Paper palette (from master-blueprint) */
+  --paper: #f5f2eb;
+  --paper-dark: #ece8df;
+  --paper-darker: #e0dbd0;
+  --ink: #1a1814;
+  --ink-mid: #3d3a35;
+  --ink-light: #6b6760;
+  --ink-faint: #a09d97;
+  --rule: #c8c3b8;
+  --rule-dark: #9a958c;
+  --rule-faint: #ddd9d0;
 
-/* Rain - slanted */
-.drop { position:absolute; width:1px; background:linear-gradient(180deg, transparent, rgba(160,180,220,0.3)); }
-.drop.slant { animation:fallSlant linear infinite; }
-.drop.slant-hard { animation:fallSlantHard linear infinite; }
-@keyframes fallSlant { 0%{transform:translate(0,-20px)} 100%{transform:translate(30px,100vh)} }
-@keyframes fallSlantHard { 0%{transform:translate(0,-20px)} 100%{transform:translate(60px,100vh)} }
+  /* Semantic accents */
+  --red: #b5200d;
+  --red-light: #e8c5bf;
+  --blue: #0d3b6b;
+  --blue-mid: #1a5fa8;
+  --blue-light: #c2d8f0;
+  --green: #0a4a2a;
+  --green-light: #c5e0d0;
+  --amber: #7a4500;
+  --amber-light: #f0ddb5;
+  --gold: #c4956a;
+  --gold-light: #ead8c0;
 
-/* Lightning flash */
-.lightning { position:fixed; inset:0; background:rgba(200,210,230,0.06); pointer-events:none; z-index:3; opacity:0; }
-.lightning.flash { animation:lightningFlash 0.15s ease-out; }
-@keyframes lightningFlash { 0%{opacity:1} 100%{opacity:0} }
+  /* Status colors */
+  --status-done: var(--green);
+  --status-progress: var(--amber);
+  --status-ready: var(--blue);
+  --status-gap: var(--red);
+  --status-external: var(--ink-light);
 
-/* Sun rays */
-.ray { position:absolute; top:-50px; width:1px; height:120vh; background:linear-gradient(180deg, rgba(196,149,106,0.03), transparent 60%); transform-origin:top center; }
-
-/* Shiver animation */
-@keyframes shiver { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-1px)} 75%{transform:translateX(1px)} }
-.shiver { animation:shiver 0.15s infinite; }
-
-/* Nav */
-.nav { position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(160,160,160,0.06); }
-.nav-inner { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; }
-.nav-logo { font-size:13px; letter-spacing:4px; font-weight:400; color:#ccc; }
-.nav-logo .f { color:#c4956a; }
-.nav-links { display:flex; gap:20px; font-size:11px; letter-spacing:1px; }
-.nav-links a { color:rgba(160,160,160,0.3); }
-.nav-links a:hover { color:#c4956a; }
-.nav-links a.active { color:#888; }
-.pulse { display:inline-block; width:4px; height:4px; border-radius:50%; background:#c4956a; animation:blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* Weather buttons + click me */
-.weather-bar { position:fixed; top:64px; left:24px; z-index:40; display:flex; gap:6px; align-items:center; }
-.weather-btn { background:none; border:1px solid rgba(160,160,160,0.08); color:rgba(160,160,160,0.25); padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:1px; cursor:pointer; border-radius:2px; transition:all 0.3s; }
-.weather-btn:hover { border-color:rgba(196,149,106,0.2); color:rgba(160,160,160,0.5); }
-.weather-btn.active { border-color:rgba(196,149,106,0.3); color:#c4956a; }
-.sound-btn { position:fixed; top:64px; right:24px; z-index:40; }
-.sound-citation { position:absolute; top:90px; right:24px; z-index:40; display:none; max-width:260px; background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15); border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7; color:rgba(160,160,160,0.5); backdrop-filter:blur(8px); }
-.sound-citation .src { display:block; font-size:8px; color:rgba(196,149,106,0.4); margin-top:8px; letter-spacing:0.5px; }
-/* Sticky side notes */
-.sticky-note {
-  position:absolute; width:260px;
-  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
-  border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7;
-  color:rgba(160,160,160,0.5); z-index:30;
-  display:none; backdrop-filter:blur(8px);
-}
-.sticky-note.open { display:block; animation:fadeNote 0.3s ease-out; }
-@keyframes fadeNote { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-.sticky-note:hover { border-color:rgba(196,149,106,0.25); color:rgba(160,160,160,0.5); }
-.sticky-note .src { display:block; font-size:7px; color:rgba(196,149,106,0.3); margin-top:6px; letter-spacing:0.5px; }
-.sticky-note .src-link { font-size:7px; margin-top:4px; padding:1px 6px; }
-/* Clickable labels */
-.eai-clickable { cursor:pointer; transition:all 0.3s; }
-.eai-clickable:hover { color:#c4956a; }
-.eai-clickable.active { color:#c4956a; }
-
-@media(max-width:900px) {
-  .sticky-note, .rain-citation, .sound-citation, .floor-note { width:140px !important; max-width:140px !important; font-size:7px !important; padding:8px 10px !important; }
-  .sn-connector { display:none !important; }
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --serif: 'IBM Plex Serif', serif;
 }
 
-/* Rain citation */
-.rain-citation { position:absolute; top:90px; left:24px; z-index:40; background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15); border-radius:4px; padding:14px 18px; max-width:260px; font-size:10px; line-height:1.7; color:rgba(160,160,160,0.5); display:none; backdrop-filter:blur(8px); }
-.rain-citation .src { display:block; margin-top:8px; font-size:8px; color:rgba(196,149,106,0.5); letter-spacing:0.5px; }
-.popup-x { position:absolute; top:6px; right:10px; cursor:pointer; color:rgba(160,160,160,0.25); font-size:14px; transition:color 0.2s; z-index:2; }
-.popup-x:hover { color:rgba(160,160,160,0.6); }
-.src-link { display:inline-block; color:rgba(196,149,106,0.5); border:1px solid rgba(196,149,106,0.15); padding:2px 8px; border-radius:2px; transition:all 0.3s; font-size:8px; letter-spacing:1px; margin-top:8px; }
-.src-link:hover { border-color:rgba(196,149,106,0.4); color:#c4956a; background:rgba(196,149,106,0.06); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-/* Layout */
-.page { max-width:640px; margin:0 auto; padding:100px 24px 60px; position:relative; z-index:2; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* Hero */
-.hero-cat { text-align:center; margin:40px 0 20px; white-space:pre; font-size:12px; line-height:1.3; color:rgba(160,160,160,0.2); min-height:70px; transition:color 0.5s; }
-.hero-cat .eyes { color:#c4956a; animation:catBlink 4s infinite; }
-@keyframes catBlink { 0%,42%,46%,100%{opacity:1} 44%{opacity:0} }
-/* Cat reactions */
-.cat-reaction { text-align:center; font-size:11px; color:rgba(196,149,106,0.5); min-height:20px; margin-bottom:4px; transition:all 0.3s; }
-.cat-reaction.pop { animation:popUp 0.4s ease-out; }
-@keyframes popUp { 0%{opacity:0;transform:translateY(8px)} 50%{opacity:1;transform:translateY(-4px)} 100%{opacity:1;transform:translateY(0)} }
-.pat-hint { text-align:center; font-size:8px; color:rgba(160,160,160,0.2); letter-spacing:1px; margin-top:-12px; margin-bottom:12px; transition:opacity 0.3s; }
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
 
+::selection { background: var(--gold-light); color: var(--ink); }
+a { color: var(--blue); text-decoration: none; border-bottom: 1px solid var(--blue-light); transition: all 0.2s; }
+a:hover { color: var(--red); border-bottom-color: var(--red-light); }
+
+/* ── NAV ── */
+.nav {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 242, 235, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.nav-logo {
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  text-transform: lowercase;
+  border-bottom: none;
+}
+.nav-logo .accent { color: var(--red); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  color: var(--ink-light);
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  border-bottom: none;
+  font-size: 11px;
+}
+.nav-links a:hover { color: var(--red); }
+.nav-pulse {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  margin-left: 4px;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── PAGE ── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 8rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 8rem 0 5rem;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 5rem;
+}
+.doc-class {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.doc-class::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--red);
+}
 .hero-title {
-  text-align:center; font-size:15px; font-weight:400; color:#ccc; letter-spacing:4px; margin-bottom:4px;
-  transition:all 0.3s;
+  font-family: var(--serif);
+  font-size: 4.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
 }
-.hero-title:hover { color:#c4956a; }
+.hero-title .accent { color: var(--red); font-style: italic; }
+.hero-mission {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--ink-mid);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  max-width: 720px;
+}
+.hero-subtitle {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  max-width: 720px;
+  line-height: 1.7;
+}
+.hero-meta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-top: 3rem;
+  display: flex;
+  gap: 2.5rem;
+}
+.hero-meta span { display: flex; gap: 0.5rem; align-items: center; }
+.hero-meta .label { color: var(--ink-light); }
 
-/* Rabbit Hole Button */
-.rabbit-btn {
-  background:none; border:1px dashed rgba(196,149,106,0.2); color:rgba(160,160,160,0.3);
-  padding:5px 16px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px;
-  cursor:pointer; border-radius:2px; transition:all 0.4s;
+/* ── SECTION ── */
+.section {
+  padding: 2.5rem 0 4rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
 }
-.rabbit-btn:hover {
-  border-style:solid; border-color:rgba(196,149,106,0.5); color:#c4956a;
-  box-shadow:0 0 8px rgba(196,149,106,0.15), 0 0 20px rgba(196,149,106,0.08);
+.section:last-of-type { border-bottom: none; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-label::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--blue);
+}
+.section-num {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+.section h2 {
+  font-family: var(--serif);
+  font-size: 2.4rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  line-height: 1.15;
+}
+.section h2 .accent { color: var(--red); font-style: italic; }
+.section .lede {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink-mid);
+  max-width: 780px;
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+.section p {
+  max-width: 740px;
+  margin-bottom: 1rem;
+  color: var(--ink-mid);
+}
+.section p.note {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  border-left: 2px solid var(--gold);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  background: var(--paper-dark);
+  padding: 0.85rem 1rem;
 }
 
-/* Rabbit Hole */
-.rabbit-popup {
-  display:none; position:fixed; inset:0; z-index:60;
-  background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
-  align-items:center; justify-content:center;
+/* ── TWO HALVES DIAGRAM ── */
+.two-halves {
+  background: var(--paper-dark);
+  border: 1px solid var(--rule);
+  padding: 3rem 2.5rem;
+  margin: 2rem 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: stretch;
 }
-.rabbit-box {
-  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
-  border-radius:4px; padding:32px 40px; text-align:center;
+.half {
+  padding: 1.5rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  transition: all 0.3s;
+  position: relative;
 }
-.rabbit-warn { font-size:12px; color:rgba(160,160,160,0.5); letter-spacing:2px; margin-bottom:8px; }
-.rabbit-sub { font-size:10px; color:rgba(160,160,160,0.25); margin-bottom:20px; }
-.rabbit-btns { display:flex; gap:12px; justify-content:center; }
-.rabbit-page {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:55;
-  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.1);
-  border-radius:4px; padding:24px 28px; width:320px; backdrop-filter:blur(8px);
+.half.dim { opacity: 0.65; }
+.half.bright { border-color: var(--red); box-shadow: 0 2px 12px rgba(181, 32, 13, 0.06); }
+.half:hover { transform: translateY(-2px); }
+.half-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  color: var(--ink-light);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }
-.rabbit-header {
-  display:flex; justify-content:space-between; align-items:center;
-  font-size:11px; color:rgba(196,149,106,0.5); letter-spacing:2px;
-  margin-bottom:20px; padding-bottom:8px; border-bottom:1px solid rgba(160,160,160,0.06);
+.half.bright .half-label { color: var(--red); }
+.half-title {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+  color: var(--ink);
 }
-.rabbit-link {
-  display:flex; gap:10px; align-items:center;
-  padding:8px 10px; margin:4px 0; border-radius:3px;
-  color:rgba(160,160,160,0.35); transition:all 0.3s;
-  border:1px solid transparent;
+.half.bright .half-title { color: var(--red); font-style: italic; }
+.half-desc {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
 }
-.rabbit-link:hover { color:#c4956a; background:rgba(196,149,106,0.04); border-color:rgba(196,149,106,0.1); padding-left:14px; }
-.rabbit-num { font-size:8px; color:rgba(160,160,160,0.15); letter-spacing:1px; }
-.rabbit-link:hover .rabbit-num { color:rgba(196,149,106,0.4); }
-.rabbit-title { font-size:10px; }
-.fish-row { display:flex; justify-content:center; gap:10px; margin-bottom:4px; }
-.fish { font-size:11px; color:rgba(160,160,160,0.15); cursor:pointer; transition:all 0.3s; letter-spacing:1px; }
-.fish:hover { color:rgba(160,160,160,0.4); }
-.fish.lit { color:#c4956a; text-shadow:0 0 6px rgba(196,149,106,0.3); }
-.floor-note {
-  position:absolute; top:360px; right:24px; z-index:40;
-  display:none; max-width:260px;
-  background:rgba(15,15,18,0.95); border:1px solid rgba(196,149,106,0.15);
-  border-radius:4px; padding:14px 18px; font-size:10px; line-height:1.7;
-  color:rgba(160,160,160,0.5); backdrop-filter:blur(8px);
+.half-ref {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-top: 1px solid var(--rule-faint);
+  padding-top: 0.75rem;
 }
-.floor-note-text { font-style:italic; margin-bottom:10px; color:rgba(160,160,160,0.4); }
-.floor-note-quote { font-size:9px; color:rgba(160,160,160,0.35); border-left:1px solid rgba(196,149,106,0.2); padding-left:10px; margin:8px 0; }
-.floor-note .src { display:block; font-size:8px; color:rgba(196,149,106,0.4); margin-top:8px; letter-spacing:0.5px; }
-.hero-sub { text-align:center; font-size:10px; color:rgba(160,160,160,0.3); letter-spacing:2px; margin-bottom:60px; }
+.half-status {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+.half.dim .half-status { color: var(--ink-light); }
+.half.bright .half-status { color: var(--red); font-weight: 500; }
+.plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 2rem;
+  color: var(--ink-faint);
+  font-weight: 300;
+}
+.halves-caption {
+  grid-column: 1 / -1;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink-mid);
+  font-style: italic;
+  line-height: 1.65;
+}
 
-/* Project Card */
-.project-card {
-  display:block; margin:0 0 32px;
-  background:transparent;
-  border:none;
-  padding:20px 24px; position:relative;
-  transition:all 0.3s; color:#888;
+/* ── EXPERIMENT CARDS ── */
+.exp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
-.project-card:hover { color:#c4956a; padding-left:28px; }
-.project-card:hover .project-title { color:#c4956a; }
-.project-card:hover .project-sub { color:rgba(160,160,160,0.5); }
-.project-card:hover .mini-cat.dim { color:rgba(160,160,160,0.18); }
-.project-card:hover .mini-cat.lit { color:rgba(196,149,106,0.45); }
-
-/* Three cats - face only */
-.three-cats { display:flex; justify-content:center; gap:40px; margin-bottom:16px; align-items:center; }
-.mini-cat { text-align:center; font-size:11px; line-height:1.35; transition:all 0.3s; position:relative; }
-.mc-ear, .mc-face, .mc-mouth { white-space:pre; }
-.mini-cat.dim { color:rgba(160,160,160,0.12); }
-.mini-cat.lit { color:rgba(160,160,160,0.35); }
-.mini-cat.lit .mc-eyes { color:#c4956a; }
-.mini-cat-label { font-size:7px; letter-spacing:2px; color:rgba(160,160,160,0.2); margin-top:6px; }
-.mini-cat.lit .mini-cat-label { color:rgba(196,149,106,0.4); }
-
-.project-title { font-size:14px; font-weight:500; color:#ccc; letter-spacing:1px; margin-bottom:4px; text-align:center; }
-.project-sub { font-size:10px; color:rgba(160,160,160,0.4); text-align:center; letter-spacing:1px; }
-
-/* EAI Tree - vertical */
-.eai-tree { margin:24px 0 32px; position:relative; padding-left:32px; }
-.eai-tree::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:1px; background:linear-gradient(180deg, rgba(196,149,106,0.3), rgba(196,149,106,0.15), rgba(196,149,106,0.05)); }
-.eai-root { position:relative; margin-bottom:32px; }
-.eai-root::before { content:''; position:absolute; left:-28px; top:6px; width:9px; height:9px; background:#c4956a; border-radius:50%; box-shadow:0 0 8px rgba(196,149,106,0.3); }
-.eai-root-label { font-size:14px; font-weight:500; color:#c4956a; letter-spacing:3px; }
-.eai-root-sub { font-size:9px; color:rgba(160,160,160,0.25); letter-spacing:1px; margin-top:4px; }
-.eai-trunk { display:none; }
-.eai-branches { display:flex; flex-direction:column; gap:0; }
-.eai-branches::before { display:none; }
-.eai-branch { position:relative; margin-bottom:24px; padding-left:0; }
-.eai-branch::before { content:''; position:absolute; left:-28px; top:6px; width:9px; height:9px; background:#0a0a0a; border:1.5px solid rgba(196,149,106,0.25); border-radius:50%; transition:all 0.3s; z-index:2; }
-.eai-branch:hover::before { background:rgba(196,149,106,0.3); border-color:#c4956a; box-shadow:0 0 6px rgba(196,149,106,0.2); }
-.eai-branch-connector { display:none; }
-.eai-branch-label {
-  font-size:12px; font-weight:500; letter-spacing:4px; margin-bottom:2px;
-  color:rgba(160,160,160,0.4); transition:all 0.4s; cursor:pointer;
+.exp-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
 }
-.eai-branch:hover .eai-branch-label { color:#c4956a; }
-.eai-branch-sub { font-size:9px; color:rgba(160,160,160,0.2); letter-spacing:1px; margin-bottom:8px; transition:all 0.3s; }
-.eai-branch:hover .eai-branch-sub { color:rgba(160,160,160,0.35); }
-.eai-leaves { display:flex; flex-direction:column; gap:0; padding-left:16px; border-left:1px solid rgba(160,160,160,0.04); }
-.eai-leaf {
-  display:block; padding:4px 10px; font-size:10px; color:rgba(160,160,160,0.25);
-  transition:all 0.3s; border-radius:3px; border:1px solid transparent;
+.exp-card:hover {
+  border-color: var(--ink-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(26, 24, 20, 0.04);
 }
-.eai-leaf:hover { color:#c4956a; background:rgba(196,149,106,0.04); border-color:rgba(196,149,106,0.1); padding-left:14px; }
-.eai-leaf-num { font-size:8px; color:rgba(160,160,160,0.15); letter-spacing:1px; margin-right:4px; }
-.eai-leaf:hover .eai-leaf-num { color:rgba(196,149,106,0.4); }
-.eai-leaf-title { font-size:10px; }
-.eai-leaf-desc {
-  display:block; font-size:8px; color:rgba(160,160,160,0.0); line-height:1.6;
-  max-height:0; overflow:hidden; transition:all 0.4s; margin-top:0;
+.exp-card.expanded {
+  background: var(--paper-dark);
+  border-color: var(--blue);
 }
-.eai-leaf:hover .eai-leaf-desc { color:rgba(160,160,160,0.3); max-height:40px; margin-top:4px; }
+.exp-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+.exp-id {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-light);
+}
+.exp-status {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+.status-ready { color: var(--status-ready); }
+.status-progress { color: var(--status-progress); }
+.status-done { color: var(--status-done); }
+.status-gap { color: var(--status-gap); }
+.exp-tier {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.exp-title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  color: var(--ink);
+}
+.exp-hyp {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+.exp-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-light);
+  letter-spacing: 0.05em;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-faint);
+}
+.exp-meta .item .label {
+  display: block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  margin-bottom: 0.25rem;
+}
+.exp-details {
+  display: none;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  animation: fadeIn 0.3s ease-out;
+}
+.exp-card.expanded .exp-details { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.exp-details h4 {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+.exp-details h4:first-child { margin-top: 0; }
+.exp-details p {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+.exp-predictions {
+  list-style: none;
+  margin: 0.5rem 0 1rem;
+}
+.exp-predictions li {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--ink-mid);
+  padding: 0.4rem 0 0.4rem 1.8rem;
+  border-bottom: 1px dotted var(--rule-faint);
+  position: relative;
+  line-height: 1.55;
+}
+.exp-predictions li::before {
+  content: counter(pred);
+  counter-increment: pred;
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--red);
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 1px solid var(--red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exp-predictions { counter-reset: pred; }
+.exp-card-expand {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.exp-card.expanded .exp-card-expand::after { content: '— collapse'; }
+.exp-card:not(.expanded) .exp-card-expand::after { content: '+ expand'; }
 
-/* Flow line */
-.flow { position:relative; padding-left:32px; }
-.flow::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:1px; background:linear-gradient(180deg, rgba(196,149,106,0.3), rgba(196,149,106,0.08), rgba(160,160,160,0.04)); }
+/* ── TIMELINE / BUILD ORDER ── */
+.timeline-wrap {
+  background: var(--paper-dark);
+  border: 1px solid var(--rule);
+  padding: 2rem;
+  margin-top: 2rem;
+  overflow-x: auto;
+}
+.timeline {
+  display: grid;
+  grid-template-columns: 100px repeat(8, 1fr);
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  min-width: 800px;
+}
+.tl-header {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+.tl-header.spec-label { text-align: left; }
+.tl-row { display: contents; }
+.tl-spec {
+  padding: 12px 8px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  font-weight: 500;
+  border-right: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+}
+.tl-cell {
+  padding: 12px 4px;
+  background: transparent;
+  border-radius: 2px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: transparent;
+}
+.tl-cell.active-01 { background: var(--blue-light); color: var(--blue); border: 1px solid var(--blue-mid); }
+.tl-cell.active-02 { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber); }
+.tl-cell.active-03 { background: var(--green-light); color: var(--green); border: 1px solid var(--green); }
+.tl-cell.active-04 { background: var(--red-light); color: var(--red); border: 1px solid var(--red); }
+.tl-cell.critical { outline: 3px solid var(--ink); outline-offset: -3px; position: relative; z-index: 2; }
+.tl-legend {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-light);
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--rule);
+}
+.tl-legend .swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  border: 1px solid currentColor;
+  vertical-align: middle;
+}
 
-/* Gem */
-.gem { position:relative; margin-bottom:32px; display:block; color:#888; transition:all 0.3s; }
-.gem:hover { color:#c4956a; padding-left:4px; }
-.gem::before { content:''; position:absolute; left:-28px; top:12px; width:9px; height:9px; background:#0a0a0a; border:1.5px solid rgba(196,149,106,0.3); border-radius:50%; transition:all 0.3s; z-index:2; }
-.gem:hover::before { background:#c4956a; border-color:#c4956a; box-shadow:0 0 8px rgba(196,149,106,0.3); }
-.gem-num { font-size:9px; color:rgba(160,160,160,0.25); letter-spacing:2px; margin-bottom:2px; }
-.gem-title { font-size:13px; font-weight:400; color:inherit; line-height:1.6; }
-.gem-line { font-size:11px; color:rgba(160,160,160,0.35); line-height:1.8; margin-top:2px; }
-.gem:hover .gem-line { color:rgba(160,160,160,0.5); }
+/* ── WHAT IS RESIDUE WALKTHROUGH ── */
+.walkthrough {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 2.5rem 2rem;
+  margin-top: 2rem;
+}
+.wt-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1rem;
+}
+.wt-step-btn {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-light);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.wt-step-btn:hover { color: var(--ink); border-color: var(--ink-light); }
+.wt-step-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.wt-content { min-height: 280px; }
+.wt-step { display: none; }
+.wt-step.active { display: block; animation: fadeIn 0.3s ease-out; }
+.wt-step h4 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+.wt-step h4 .num {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--red);
+  margin-right: 0.5rem;
+  letter-spacing: 0.1em;
+}
+.wt-step p {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  margin-bottom: 1rem;
+  max-width: 720px;
+}
+.wt-text-display {
+  background: var(--paper-darker);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.25rem;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 1.25rem 0;
+  font-style: italic;
+}
+.wt-text-display .singular {
+  background: var(--red-light);
+  border-bottom: 2px solid var(--red);
+  font-style: normal;
+  padding: 1px 3px;
+  font-weight: 500;
+}
+.wt-vector {
+  display: flex;
+  gap: 6px;
+  margin: 1.5rem 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  align-items: end;
+}
+.wt-vector-bar {
+  flex: 1;
+  background: var(--blue-mid);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  color: var(--paper);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  padding: 4px 0;
+  position: relative;
+  min-height: 16px;
+}
+.wt-vector-bar::after {
+  content: attr(data-dim);
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--ink-light);
+  font-size: 0.62rem;
+}
+.wt-score {
+  background: var(--green-light);
+  border: 1px solid var(--green);
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--green);
+  margin: 1rem 0;
+  letter-spacing: 0.05em;
+}
+.wt-score .lr {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+  display: block;
+}
 
-/* Section Label */
-.section-label { font-size:9px; color:rgba(160,160,160,0.2); letter-spacing:3px; margin:48px 0 24px; position:relative; }
-.section-label::before { content:''; position:absolute; left:-28px; top:4px; width:9px; height:9px; background:rgba(196,149,106,0.15); border-radius:50%; }
+/* ── METHODOLOGY DECISIONS ── */
+.decisions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.decision {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 1.25rem 1.4rem;
+  position: relative;
+}
+.decision-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+.decision-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.decision-body {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink-mid);
+  line-height: 1.55;
+}
+.decision.updated {
+  border-color: var(--gold);
+  background: linear-gradient(to bottom right, var(--paper), var(--gold-light));
+}
+.decision.updated .decision-num::after {
+  content: ' • updated may 2026';
+  color: var(--gold);
+}
 
-/* Footer */
-.footer { margin-top:80px; padding-top:24px; border-top:1px solid rgba(160,160,160,0.04); text-align:center; }
-.footer-text { font-size:11px; font-style:italic; color:rgba(160,160,160,0.15); }
-.footer-copy { font-size:9px; color:rgba(160,160,160,0.08); letter-spacing:2px; margin-top:8px; }
+/* ── GAPS ── */
+.gap-list {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+  margin-top: 1.5rem;
+}
+.gap-item {
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 1.5rem;
+  align-items: baseline;
+}
+.gap-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.gap-content h5 {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+}
+.gap-content p {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  line-height: 1.55;
+  margin: 0;
+  max-width: none;
+}
+.gap-horizon {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
-@media(max-width:600px) {
-  .weather-bar { left:12px; }
-  .three-cats { gap:20px; }
-  .mini-cat { font-size:9px; }
-  .nav-inner { padding:14px 16px; }
+/* ── FOOTER ── */
+.footer {
+  margin-top: 6rem;
+  padding-top: 2.5rem;
+  border-top: 3px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  letter-spacing: 0.05em;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+.footer h6 {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.footer ul { list-style: none; }
+.footer li { margin-bottom: 0.4rem; }
+.footer a { color: var(--ink-mid); border-bottom: none; font-size: 0.78rem; }
+.footer a:hover { color: var(--red); }
+.footer-base {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .nav-inner { padding: 12px 16px; }
+  .nav-links { gap: 16px; }
+  .page { padding: 0 20px 4rem; }
+  .hero { padding: 4rem 0 3rem; }
+  .hero-title { font-size: 2.6rem; }
+  .hero-mission { font-size: 1.1rem; }
+  .hero-meta { flex-direction: column; gap: 0.5rem; }
+  .section h2 { font-size: 1.8rem; }
+  .two-halves { grid-template-columns: 1fr; padding: 1.5rem; }
+  .plus { transform: rotate(90deg); padding: 1rem 0; }
+  .exp-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .gap-item { grid-template-columns: 1fr; gap: 0.5rem; }
 }
 </style>
 </head>
 <body>
 
-<div class="nav">
+<!-- Navigation -->
+<nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><span class="f">floor</span>36</a>
+    <a href="/" class="nav-logo"><span class="accent">residue</span> lab</a>
     <div class="nav-links">
-      <a href="index.html" class="active">journal</a>
-      <a href="street-cat.html">blakcat</a>
-      <a href="mailto:research@mufx.io">contact</a>
-      <span class="pulse"></span>
+      <a href="#program">program</a>
+      <a href="#experiments">experiments</a>
+      <a href="#mechanics">mechanics</a>
+      <a href="/methodology.html">methodology</a>
+      <a href="/lineage.html">lineage</a>
+      <a href="/floor36/">floor36</a>
+      <a href="https://github.com/mufxio/emotion-vector-bench" target="_blank">github</a>
+      <span class="nav-pulse" title="active research"></span>
     </div>
   </div>
-</div>
-
-<div class="weather-bar">
-  <button class="weather-btn" onclick="setWeather('sunny')" id="btn-sunny">sunny</button>
-  <button class="weather-btn" onclick="setWeather('drizzle')" id="btn-drizzle">drizzle</button>
-  <button class="weather-btn" onclick="setWeather('storm')" id="btn-storm">storm</button>
-</div>
-<button class="weather-btn sound-btn" onclick="toggleSound()" id="btn-sound">sound</button>
-<div class="sound-citation" id="soundCitation">
-  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('soundCitation',false)">&times;</span>
-  when a plate is vibrated at specific frequencies, standing wave patterns form. particles migrate to nodal lines, creating geometric patterns unique to each frequency. change the frequency, change the pattern. same frequency, same boundary conditions, same pattern, every time.
-  <span class="src">Chladni plate experiments (18th c.) / Hans Jenny, cymatics (1960s)</span>
-  <a href="p2.html" class="src-link">research ii</a>
-</div>
-
-<div class="floor-note" id="floorNote">
-  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('floorNote',false)">&times;</span>
-  <div class="floor-note-text">i had a dream one time that i was going up to the 36th floor in the airport to reconvene with my wife.</div>
-  <div class="floor-note-quote">"dreams are not replays of waking experience. recent experiences are not replayed in their original form. instead, dreams intermingle fragments of recent experience with other content, creating novel scenarios. the dream is a creative recombination, not a recording."</div>
-  <span class="src">Wamsley & Stickgold (2011)</span>
-  <a href="p3.html" class="src-link">research iii</a>
-</div>
-
-<div class="weather-layer" id="weatherLayer"></div>
-<div class="lightning" id="lightning"></div>
-
-<div class="rain-citation" id="rainCitation">
-  <span class="popup-x" onclick="this.parentElement.style.display='none';syncFish('rainCitation',false)">&times;</span>
-  individual raindrops are unpredictable. but the rain itself has structure. musical rhythms obey a 1/f power law with a cutoff frequency: long-range correlations exist, but only up to a point. beyond the cutoff, it's noise. the cutoff defines the maximum horizon of predictability.
-  <span class="src">Levitin et al. (2012) "Musical rhythm spectra from Bach to Joplin obey a 1/f power law"</span>
-  <a href="p1.html" class="src-link">research i</a>
-</div>
+</nav>
 
 <div class="page">
 
-<!-- Hero -->
-<div class="cat-reaction" id="catReaction"></div>
-<div class="hero-cat" id="heroCat" style="cursor:pointer;"></div>
-<div class="hero-title" onclick="toggleFloorNote()" style="cursor:pointer;"><span style="color:#c4956a;">floor</span>36</div>
-<div class="hero-sub">research journal</div>
-<div style="text-align:center;margin-top:8px;">
-  <div><button class="rabbit-btn" id="btn-rabbit" onclick="document.getElementById('rabbitPopup').style.display='flex'">&gt; wip &lt;</button></div>
-  <div style="margin-top:24px;"><button class="weather-btn" id="btn-yarn" onclick="toggleYarn()" style="font-size:9px;letter-spacing:2px;padding:4px 14px;">show yarn</button></div>
-  <div class="fish-row" id="fishRow">
-    <span class="fish" id="fish-rainCitation" onclick="toggleFish('rainCitation')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-soundCitation" onclick="toggleFish('soundCitation')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-floorNote" onclick="toggleFish('floorNote')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-note-eai" onclick="toggleFish('note-eai')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-note-body" onclick="toggleFish('note-body')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-note-mind" onclick="toggleFish('note-mind')">&gt;&lt;&gt;</span>
-    <span class="fish" id="fish-note-soul" onclick="toggleFish('note-soul')">&gt;&lt;&gt;</span>
+<!-- HERO -->
+<header class="hero">
+  <div class="doc-class">Research Program · 2026—</div>
+  <h1 class="hero-title"><span class="accent">residue</span> lab</h1>
+  <p class="hero-mission">environment construction for autonomous fine-tuning</p>
+  <p class="hero-subtitle">Forensic methodology applied to <em>emotional residue</em> &mdash; the residual emotional signal in text people wrote during real events, the trace they didn't mean to leave. A bet that the environment in which digital organisms learn is at least as important as the loop that updates them &mdash; and that environment can be reconstructed from collective traces of this kind at scale.</p>
+  <div class="hero-meta">
+    <span><span class="label">status:</span> <span class="status-progress">active research</span></span>
+    <span><span class="label">experiments:</span> 4 specified</span>
+    <span><span class="label">substrate:</span> validated</span>
+    <span><span class="label">last update:</span> 2026.05.26</span>
   </div>
-</div>
+</header>
 
-<!-- Rabbit Hole Popup -->
-<div class="rabbit-popup" id="rabbitPopup">
-  <div class="rabbit-box">
-    <div class="rabbit-warn">about to enter the rabbit hole</div>
-    <div class="rabbit-sub">are you sure?</div>
-    <div class="rabbit-btns">
-      <button class="weather-btn" onclick="document.getElementById('rabbitPopup').style.display='none';document.getElementById('rabbitPage').style.display='block'" style="padding:4px 16px;font-size:9px;letter-spacing:2px;">yes</button>
-      <button class="weather-btn" onclick="document.getElementById('rabbitPopup').style.display='none'" style="padding:4px 16px;font-size:9px;letter-spacing:2px;">no</button>
+<!-- I. THE TWO HALVES OF AUTONOMOUS FINE-TUNING -->
+<section class="section" id="program">
+  <div class="section-label"><span class="section-num">§ 01</span> The thesis</div>
+  <h2>Autonomous fine-tuning needs <span class="accent">two</span> halves.</h2>
+  <p class="lede">Most current work on AI that improves itself focuses on the loop — how feedback updates the model. That half is mostly being solved by others. This lab works on the other half: the environment in which that learning happens. <a href="/lineage.html">Intellectual lineage →</a></p>
+
+  <div class="two-halves">
+    <div class="half dim">
+      <div class="half-label">Half I</div>
+      <h3 class="half-title">The loop</h3>
+      <p class="half-desc">How experience updates the model. Closed-loop adaptation. Detect failure → diagnose → curriculum → retrain → rollback gate.</p>
+      <div class="half-ref">Pioneer Agent (Atreja et al., Fastino Labs 2025) · Karpathy / Anthropic pretraining team · OpenAI o-series · the obvious next move for many labs</div>
+      <div class="half-status">— mostly solved by others</div>
     </div>
-  </div>
-</div>
-
-<!-- Rabbit Hole Archive -->
-<div class="rabbit-page" id="rabbitPage" style="display:none;">
-  <div class="rabbit-header">
-    <span>project: shorekeeper</span>
-    <span class="popup-x" onclick="document.getElementById('rabbitPage').style.display='none'" style="cursor:pointer;color:rgba(160,160,160,0.3);font-size:14px;">&times;</span>
-  </div>
-  <a href="master-blueprint.html" class="rabbit-link">
-    <span class="rabbit-num">01</span>
-    <span class="rabbit-title">master blueprint</span>
-  </a>
-  <a href="substrate-blueprint.html" class="rabbit-link">
-    <span class="rabbit-num">02</span>
-    <span class="rabbit-title">substrate consciousness blueprint</span>
-  </a>
-</div>
-
-<!-- Flow -->
-<div class="flow">
-
-<!-- PROJECT: BLAKCAT (TOP) -->
-<div class="section-label">PROJECTS</div>
-
-<a href="street-cat.html" class="project-card" id="projectCard">
-  <div class="three-cats">
-    <div class="mini-cat lit">
-      <div class="mc-ear">/\_/\</div>
-      <div class="mc-face">( <span class="mc-eyes">O.O</span> )</div>
-      <div class="mc-mouth">> ~ <</div>
-      <div class="mini-cat-label">STREET</div>
+    <div class="plus">+</div>
+    <div class="half bright">
+      <div class="half-label">Half II</div>
+      <h3 class="half-title">The environment</h3>
+      <p class="half-desc">The world the model is exposed to. Where this lab works. Most current AI environments are too sterile (synthetic data, sanitized text, no residue). The bet: collective emotional residue from real human events can be used to reconstruct rich learning environments.</p>
+      <div class="half-ref">No comparable program at scale. Existing residue / forensic / crisis-informatics work treats trace evidence in adjacent domains — none have been ported to LLM-substrate environment construction.</div>
+      <div class="half-status">— open frontier</div>
     </div>
-    <div class="mini-cat dim">
-      <div class="mc-ear">/\_/\</div>
-      <div class="mc-face">( -.- )</div>
-      <div class="mc-mouth">> w <</div>
-      <div class="mini-cat-label">HOUSE</div>
-    </div>
-    <div class="mini-cat lit">
-      <div class="mc-ear">/\_/\</div>
-      <div class="mc-face">( <span class="mc-eyes">?&omega;?</span> )</div>
-      <div class="mc-mouth">> _ <</div>
-      <div class="mini-cat-label">RANDOM</div>
-    </div>
+    <div class="halves-caption">A great loop in an empty environment produces nothing. The frontier isn't a better loop &mdash; it's a richer environment. The residue program is one answer to what that environment looks like.</div>
   </div>
-  <div class="project-title">project: blakcat</div>
-  <div class="project-sub">biologically inspired emergent architectural intelligence</div>
-</a>
+</section>
 
-<div class="section-label">RESEARCH</div>
+<!-- II. EXPERIMENTS -->
+<section class="section" id="experiments">
+  <div class="section-label"><span class="section-num">§ 02</span> Active experiments</div>
+  <h2>Four specified. Click any card for detail.</h2>
+  <p class="lede">Each experiment tests a specific load-bearing claim of the methodology. All have explicit pre-specified propositions, numerical pass/fail criteria, and named failure modes. ENFSI-style discipline — proposition fitting after seeing data is not allowed.</p>
 
-<!-- EAI TREE -->
-<div class="eai-tree" style="position:relative;">
-  <!-- Root -->
-  <div class="eai-root">
-    <div class="eai-root-label eai-clickable" data-note="note-eai" data-side="left" onclick="toggleNote('note-eai')">emergent architectural intelligence</div>
-    <div class="eai-root-sub">intelligence emerges from architecture, not from scale</div>
-  </div>
+  <div class="exp-grid">
 
-  <div class="eai-trunk"></div>
-
-  <!-- Three branches -->
-  <div class="eai-branches">
-    <!-- BODY -->
-    <div class="eai-branch">
-      <div class="eai-branch-connector"></div>
-      <div class="eai-branch-label eai-clickable" data-note="note-body" data-side="left" onclick="toggleNote('note-body')">BODY</div>
-      <div class="eai-branch-sub">what it perceives</div>
-      <div class="eai-leaves">
-        <a href="p1.html" class="eai-leaf">
-          <span class="eai-leaf-num">i</span>
-          <span class="eai-leaf-title">music theory</span>
-          <span class="eai-leaf-desc">pleasure from prediction, alpha from calibrated surprise</span>
-        </a>
-        <a href="p2.html" class="eai-leaf">
-          <span class="eai-leaf-num">ii</span>
-          <span class="eai-leaf-title">coupled oscillators</span>
-          <span class="eai-leaf-desc">kuramoto tells you when the sync snaps</span>
-        </a>
-        <a href="p3.html" class="eai-leaf">
-          <span class="eai-leaf-num">iii</span>
-          <span class="eai-leaf-title">the brain</span>
-          <span class="eai-leaf-desc">the cerebellum predicts milliseconds ahead</span>
-        </a>
+    <!-- Spec 01 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 01</div>
+          <div class="exp-tier">tier 1 · priority high</div>
+        </div>
+        <div class="exp-status status-ready">○ ready</div>
+      </div>
+      <h3 class="exp-title">Tier-A vs Tier-C Residue Transfer</h3>
+      <p class="exp-hyp">First-person on-the-ground residue (<em>tier A</em>) produces more transferable probe directions than institutional secondary residue (<em>tier C</em>), across events. Tests the methodology bible's load-bearing commitment.</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">duration</span>3 weeks</div>
+        <div class="item"><span class="label">probes</span>Mass-mean + Logistic + follow-up</div>
+        <div class="item"><span class="label">events</span>2 (yen carry unwind + Event B)</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>Residue tiers (recap)</h4>
+        <p>Tier A = first-person on-the-ground texts written during the event (panicked Slack, traders' notes). Tier B = first-person slightly removed. Tier C = institutional secondary (BIS reports, press releases, analyst notes). Tier D = outside commentary / retrospectives. Mapping borrowed from Carrier &amp; Spafford's primary/secondary digital crime scene distinction.</p>
+        <h4>Event A: yen carry unwind</h4>
+        <p>The Aug 5 2024 USD/JPY rapid unwind &mdash; Nikkei dropped 12.4%, VIX spiked to 65, large carry-trade losses globally. Provides Tier-A residue from on-the-ground traders. The lab already has 25 tiered quotes + a 16-step extraction pipeline + projections from this event.</p>
+        <h4>Three falsifiable predictions</h4>
+        <ul class="exp-predictions">
+          <li>Mass-mean probes show less classification degradation than Logistic across distribution shift (Event A → Event B). The practical analog of Marks &amp; Tegmark 2024's causal-validity finding (which they measured via Normalized Indirect Effect under intervention; we measure via cross-event AUROC stability). Threshold: MM AUROC degradation ≤ 0.05 vs Logistic degradation &gt; 0.10.</li>
+          <li>Tier-A probes transfer better than Tier-C probes across events (≥0.05 AUROC gap). Tests the bottom-up first-person-residue commitment &mdash; the bible's load-bearing decision.</li>
+          <li>Tier-A residue signal persists longer in the model's generated continuation than Tier-C (≥0.10 gap at offset ≥100 tokens). Applies Zhang &amp; Zhong 2025's offset-aware probe technique to residue.</li>
+        </ul>
+        <h4>Outcome interpretation</h4>
+        <p><strong>3/3 validated:</strong> program-level validation. Write up as methodology-validation paper.<br><strong>2/3:</strong> partial; update bible accordingly.<br><strong>0-1/3:</strong> revisit core commitments.</p>
+        <h4>Failure modes named</h4>
+        <p>10 in spec, including: yen-carry tier counts insufficient, length confound dominates, probes don't transfer at all, spurious correlation to morality.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
       </div>
     </div>
 
-    <!-- MIND -->
-    <div class="eai-branch">
-      <div class="eai-branch-connector"></div>
-      <div class="eai-branch-label eai-clickable" data-note="note-mind" data-side="right" onclick="toggleNote('note-mind')">MIND</div>
-      <div class="eai-branch-sub">how it thinks</div>
-      <div class="eai-leaves">
-        <a href="p4.html" class="eai-leaf">
-          <span class="eai-leaf-num">iv</span>
-          <span class="eai-leaf-title">markov vs trees</span>
-          <span class="eai-leaf-desc">markets have grammar, not just statistics</span>
-        </a>
-        <a href="p5.html" class="eai-leaf">
-          <span class="eai-leaf-num">v</span>
-          <span class="eai-leaf-title">nature solved it</span>
-          <span class="eai-leaf-desc">architecture beats volume. corvids proved it</span>
-        </a>
+    <!-- Spec 02 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 02</div>
+          <div class="exp-tier">tier 2 · pre-flight</div>
+        </div>
+        <div class="exp-status status-ready">○ ready</div>
+      </div>
+      <h3 class="exp-title">Persistence-Decay on Yen-Carry</h3>
+      <p class="exp-hyp">Tier-A residue signal persists longer in model's generated continuation than Tier-C residue. Standalone fast pre-flight (~3-5 days) before committing to full Spec 01.</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">duration</span>3-5 days</div>
+        <div class="item"><span class="label">technique</span>Zhang &amp; Zhong offset-probe</div>
+        <div class="item"><span class="label">corpus</span>existing yen-carry</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>Single hypothesis</h4>
+        <p>At offset ≥ 100 tokens of generated continuation, probe accuracy on tier-A-prompted continuations exceeds tier-C-prompted continuations by ≥ 0.10, statistically significant after Bonferroni correction.</p>
+        <h4>Why this experiment</h4>
+        <p>Validates whether Zhang &amp; Zhong's technique transfers from overt emotion (their domain) to emotional residue (ours) BEFORE committing weeks to the full transfer test. Cheap risk-mitigation.</p>
+        <h4>Decision tree</h4>
+        <p><strong>Pass:</strong> proceed with full Spec 01 with confidence.<br><strong>Fail mode A:</strong> drop persistence-decay from Spec 01; document negative.<br><strong>Fail mode B (counter-intuitive direction):</strong> pause Spec 01; revisit the bottom-up methodology commitment.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
       </div>
     </div>
 
-    <!-- SOUL -->
-    <div class="eai-branch">
-      <div class="eai-branch-connector"></div>
-      <div class="eai-branch-label eai-clickable" data-note="note-soul" data-side="right" onclick="toggleNote('note-soul')">SOUL</div>
-      <div class="eai-branch-sub">is it real?</div>
-      <div class="eai-leaves">
-        <a href="p6.html" class="eai-leaf">
-          <span class="eai-leaf-num">vi</span>
-          <span class="eai-leaf-title">reinventing wheels?</span>
-          <span class="eai-leaf-desc">the synthesis doesn't exist. yet</span>
-        </a>
-        <a href="p7.html" class="eai-leaf">
-          <span class="eai-leaf-num">vii</span>
-          <span class="eai-leaf-title">the honest audit</span>
-          <span class="eai-leaf-desc">what's elegant but wrong, and what's next</span>
-        </a>
+    <!-- Spec 03 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 03</div>
+          <div class="exp-tier">tier 2 · independent</div>
+        </div>
+        <div class="exp-status status-ready">○ ready</div>
       </div>
+      <h3 class="exp-title">Designed vs Genuine Residue Detection</h3>
+      <p class="exp-hyp">Discriminator distinguishes deliberately constructed text from genuinely leaked text (AUROC ≥ 0.75). Tests the OSINT epistemology claim: "the residue is carefully designed."</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
+        <div class="item"><span class="label">corpus</span>curation is gating step</div>
+        <div class="item"><span class="label">methods</span>3 discriminators + ensemble</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>The claim being tested</h4>
+        <p>Institutional / curated text deliberately constructs the residue it leaves (press releases, official communications). Genuine first-person text leaks residue without intending to (panic posts, internal messages during stress). These should look structurally different at activation level.</p>
+        <h4>Three discriminators tested</h4>
+        <p><strong>Dispersion-based:</strong> designed text has lower dispersion than genuine.<br><strong>Mass-mean probe:</strong> standard approach, contrast designed vs genuine.<br><strong>Compression-based:</strong> designed text more predictable to base LM than genuine.</p>
+        <h4>Corpus contamination risks</h4>
+        <p>Hard part: avoiding the probe tracking first-person voice or publication time instead of design intent. Anti-contamination matching protocol specified.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
+      </div>
+    </div>
+
+    <!-- Spec 04 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 04</div>
+          <div class="exp-tier">tier 2 · methodology</div>
+        </div>
+        <div class="exp-status status-ready">○ ready</div>
+      </div>
+      <h3 class="exp-title">Math Residue Criteria Evaluation</h3>
+      <p class="exp-hyp">Tests whether the <em>linear-residue hypothesis</em> Φ(x) ≈ Φ₀ + Σ⟨v_Φ, r(s)⟩ holds on yen-carry data. Φ = downstream probe output; r(s) = residue vector at causally-mediated token span s; v_Φ = the probe direction. Verified via 5 falsifiability criteria (locality / additivity / paraphrase invariance / compression / sufficiency-necessity).</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
+        <div class="item"><span class="label">cost</span>compute-heavy (20K passes)</div>
+        <div class="item"><span class="label">verdict</span>per-criterion + aggregate</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>Five sub-hypotheses (one per criterion)</h4>
+        <ul class="exp-predictions">
+          <li><strong>Locality:</strong> ≤5 singular spans account for ≥90% of total causal effect.</li>
+          <li><strong>Additivity:</strong> R² ≥ 0.7 between sum-of-residues and observed Φ on held-out.</li>
+          <li><strong>Paraphrase invariance:</strong> ‖r(s) − r(s')‖ / ‖r(s)‖ &lt; 0.2 for paraphrases.</li>
+          <li><strong>Compression:</strong> ρ = (|S(x)| · k) / n &lt; 0.1 — residue is at most 10% of text.</li>
+          <li><strong>Sufficiency-necessity:</strong> ≥7/10 sufficient + ≥8/10 necessary spans per text.</li>
+        </ul>
+        <h4>Aggregate verdict</h4>
+        <p><strong>4-5/5 pass:</strong> linear-residue framing is rigorous; bible decision #5 locked. <strong>3/5:</strong> framework partly holds; revise specific decision. <strong>≤2/5:</strong> the math residue framing is rhetoric; drop decision #5 from bible.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- III. BUILD ORDER -->
+<section class="section">
+  <div class="section-label"><span class="section-num">§ 03</span> Build order</div>
+  <h2>Critical path: ~7 weeks minimum.</h2>
+  <p class="lede">Spec 02 (pre-flight) gates Spec 01 (load-bearing). Spec 04 depends on Spec 01's best probes. Spec 03 is independent — its corpus curation starts day 1 since it's the longest serial task.</p>
+
+  <div class="timeline-wrap">
+    <div class="timeline">
+      <!-- Header row -->
+      <div class="tl-header spec-label">spec</div>
+      <div class="tl-header">wk 1</div>
+      <div class="tl-header">wk 2</div>
+      <div class="tl-header">wk 3</div>
+      <div class="tl-header">wk 4</div>
+      <div class="tl-header">wk 5</div>
+      <div class="tl-header">wk 6</div>
+      <div class="tl-header">wk 7</div>
+      <div class="tl-header">wk 8</div>
+
+      <!-- Spec 02 (pre-flight) -->
+      <div class="tl-spec">02 pre-flight</div>
+      <div class="tl-cell active-02 critical">3-5d</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+
+      <!-- Spec 01 (tier 1) -->
+      <div class="tl-spec">01 tier 1</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell active-01 critical">setup</div>
+      <div class="tl-cell active-01 critical">extract</div>
+      <div class="tl-cell active-01 critical">eval</div>
+      <div class="tl-cell active-01">report</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+
+      <!-- Spec 03 (designed vs genuine) -->
+      <div class="tl-spec">03 independent</div>
+      <div class="tl-cell active-03">corpus</div>
+      <div class="tl-cell active-03">corpus</div>
+      <div class="tl-cell active-03">corpus</div>
+      <div class="tl-cell active-03">probes</div>
+      <div class="tl-cell active-03">eval+report</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+
+      <!-- Spec 04 (math criteria) -->
+      <div class="tl-spec">04 math</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell active-04 critical">setup</div>
+      <div class="tl-cell active-04 critical">locality+add</div>
+      <div class="tl-cell active-04 critical">paraphrase+comp</div>
+      <div class="tl-cell active-04 critical">suff-nec+report</div>
+      <div class="tl-cell active-04">synthesis</div>
+    </div>
+    <div class="tl-legend">
+      <span><span class="swatch" style="background:var(--amber-light);color:var(--amber);"></span>02 pre-flight</span>
+      <span><span class="swatch" style="background:var(--blue-light);color:var(--blue);"></span>01 tier 1</span>
+      <span><span class="swatch" style="background:var(--green-light);color:var(--green);"></span>03 independent</span>
+      <span><span class="swatch" style="background:var(--red-light);color:var(--red);"></span>04 math criteria</span>
+      <span><span class="swatch" style="background:transparent;border:2px solid var(--ink);"></span>critical path</span>
     </div>
   </div>
-</div>
 
-</div><!-- /flow -->
+  <p class="note"><strong>Day 1 actions:</strong> kick off Spec 02 setup + Spec 03 corpus curation in parallel. They don't compete on compute (corpus is research, Spec 02 needs MPS time). By day 5 you have a go/no-go signal for Spec 01.</p>
+</section>
 
-<div class="footer">
-  <div class="footer-text">the search continues</div>
-  <div class="footer-copy">FLOOR36 2026</div>
-</div>
+<!-- IV. WHAT IS RESIDUE WALKTHROUGH -->
+<section class="section" id="mechanics">
+  <div class="section-label"><span class="section-num">§ 04</span> What is residue?</div>
+  <h2>A 4-step walkthrough of the substrate.</h2>
+  <p class="lede">Click through the steps. This is what the residue extraction pipeline does mechanically — from a piece of text someone wrote during an event, to a numerical claim about what role they played in it. <a href="/methodology.html#stage-pipeline">Full 9-stage pipeline →</a></p>
+
+  <div class="walkthrough">
+    <div class="wt-nav">
+      <button class="wt-step-btn active" data-step="1" onclick="showStep(1)">1 · TEXT</button>
+      <button class="wt-step-btn" data-step="2" onclick="showStep(2)">2 · SINGULARITIES</button>
+      <button class="wt-step-btn" data-step="3" onclick="showStep(3)">3 · RESIDUE VECTOR</button>
+      <button class="wt-step-btn" data-step="4" onclick="showStep(4)">4 · LR OUTPUT</button>
+    </div>
+
+    <div class="wt-content">
+
+      <!-- Step 1: Text -->
+      <div class="wt-step active" data-step="1">
+        <h4><span class="num">01 ›</span> A text written during an event</h4>
+        <p>Start with a piece of text someone wrote during or just after a specific event. Could be a panicked Slack message, a trader's note, a Reddit post during a market crash. Tier-A residue: first-person, on-the-ground, unintentional.</p>
+        <div class="wt-text-display">
+          "honestly i don't know if i can keep doing this. that fucking flush last night ate my whole month. wife is asking why i'm not sleeping and i don't have an answer. just need this trade to come back."
+        </div>
+        <p>This text is a sample from a Tier-A residue corpus around a financial crisis event. The model never sees a label — only the text. Whatever it has noticed about who wrote it lives in its internal activations.</p>
+      </div>
+
+      <!-- Step 2: Singular spans -->
+      <div class="wt-step" data-step="2">
+        <h4><span class="num">02 ›</span> Find the singularities</h4>
+        <p>Not every token of the text carries equal residue. Causal mediation (ablation experiments) tells us which specific spans actually drive the model's representation. These are the <em>singularities</em> — the spans where the residue concentrates.</p>
+        <div class="wt-text-display">
+          "<span class="singular">honestly i don't know if i can keep doing this</span>. that fucking flush last night <span class="singular">ate my whole month</span>. wife is asking why i'm not sleeping and <span class="singular">i don't have an answer</span>. just need this trade to come back."
+        </div>
+        <p>If these spans were paraphrased to something institutional ("market conditions remain challenging"), the model's downstream representation would shift substantially. The other words (function words, topic words) matter much less. <strong>Locality</strong> is one of five criteria that test whether this kind of sparse-singular-span analysis is rigorous.</p>
+      </div>
+
+      <!-- Step 3: Residue vector -->
+      <div class="wt-step" data-step="3">
+        <h4><span class="num">03 ›</span> Extract the residue vector</h4>
+        <p>For each singularity, project the activation difference (with-span vs without-span) onto a low-dimensional subspace of validated emotion / residue directions. The result is a residue vector — a compact representation of what the model picked up from that span.</p>
+        <div class="wt-vector">
+          <div class="wt-vector-bar" style="height:72%" data-dim="hopeless">+0.72</div>
+          <div class="wt-vector-bar" style="height:58%" data-dim="exhausted">+0.58</div>
+          <div class="wt-vector-bar" style="height:25%" data-dim="ashamed">+0.25</div>
+          <div class="wt-vector-bar" style="height:48%" data-dim="anxious">+0.48</div>
+          <div class="wt-vector-bar" style="height:8%" data-dim="proud">+0.08</div>
+          <div class="wt-vector-bar" style="height:5%" data-dim="content">+0.05</div>
+        </div>
+        <p style="font-family:var(--mono);font-size:0.7rem;color:var(--ink-faint);letter-spacing:0.1em;text-transform:uppercase;margin-top:2rem;">— illustrative values · cosine projection onto validated emotion directions</p>
+        <p style="margin-top:1.5rem;">This residue is what survives self-sanitization: even if the writer deletes the post, other writers' references, archived caches, and the structural co-occurrence patterns still encode this signal. <strong>That's why collective residue is the right substrate for event reconstruction — it's the trace that's hardest to erase.</strong></p>
+      </div>
+
+      <!-- Step 4: LR output -->
+      <div class="wt-step" data-step="4">
+        <h4><span class="num">04 ›</span> Likelihood ratio output, not classification</h4>
+        <p>We report the result as a <strong>likelihood ratio (LR)</strong> &mdash; the forensic standard from ENFSI 2015 (European Network of Forensic Science Institutes guidelines). Not as a classification label. Two propositions are specified in advance:</p>
+        <div class="wt-text-display" style="border-left-color:var(--blue);">
+          <strong>H1:</strong> the writer was an on-the-ground participant in the event (first-person, during).<br><br>
+          <strong>H2:</strong> the writer was an external observer / institutional spokesperson writing from outside.
+        </div>
+        <div class="wt-score">
+          <span style="font-family:var(--sans);font-size:0.85rem;color:var(--ink-mid);">LR(H1 / H2) <span style="color:var(--ink-faint);font-style:italic;">&mdash; illustrative</span></span>
+          <span class="lr">≈ 850</span>
+          <span style="font-family:var(--sans);font-size:0.85rem;color:var(--green);">(moderately strong evidence for H1)</span>
+        </div>
+        <p>The forensic scientist quantifies the LR. The trier of fact supplies the prior. The output is <em>graded</em> and <em>probabilistic</em> &mdash; never "this writer caused the event" (offence-level claims, out of scope).</p>
+        <p class="note"><strong>Cook et al.'s hierarchy of propositions (1998)</strong> defines three levels of forensic claim: <em>source</em> (this trace came from this source &mdash; trivial in text), <em>activity</em> (the writer's role in event &mdash; our target), <em>offence</em> (intent, causation &mdash; out of scope). Staying at activity level is the methodology's central discipline.<br><br>The LR framework has been forensic-statistics standard for decades. Andrea Nini's 2023 Cambridge Elements work brought it formally to forensic linguistics (authorship attribution). This lab extends it to <em>emotional residue</em>.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- V. METHODOLOGY DECISIONS -->
+<section class="section">
+  <div class="section-label"><span class="section-num">§ 05</span> Locked decisions</div>
+  <h2>Six commitments. One updated this May.</h2>
+  <p class="lede">The methodology bible (this lab's internal locked spec document) commits to these six decisions. Together they define what kind of work this is, what kind of claims we can make, and what kind we never make. ENFSI / forensic-statistics standards plus Apollo Research's linear-probe interpretability template. <a href="/methodology.html">Full methodology deep-dive →</a></p>
+
+  <div class="decisions">
+
+    <div class="decision">
+      <div class="decision-num">DEC 01</div>
+      <div class="decision-title">Residue, not emotion</div>
+      <div class="decision-body">Sidesteps consciousness claims about the model. The model is a sensor for traces, not an entity with feelings. Honest about what's mechanically happening.</div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-num">DEC 02</div>
+      <div class="decision-title">Event reconstruction, not writer-state inference</div>
+      <div class="decision-body">Carrier &amp; Spafford 2003 lineage (the foundational digital-forensics paper that mapped computer investigation onto physical crime-scene reasoning). We reconstruct events from collective trace evidence &mdash; not infer individual writer mental states. Multi-trace integration is natural.</div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-num">DEC 03</div>
+      <div class="decision-title">LR output, not classification</div>
+      <div class="decision-body">ENFSI 2015 standard (European Network of Forensic Science Institutes). Forensic scientist quantifies likelihood ratio; trier of fact supplies prior. We never report posterior probability of identity or causation.</div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-num">DEC 04</div>
+      <div class="decision-title">Activity-level propositions</div>
+      <div class="decision-body">Cook, Evett, Jackson, Jones &amp; Lambert 1998 hierarchy (Science &amp; Justice 38:4). Our claims live at the <em>activity</em> level &mdash; writer's role in event &mdash; not <em>source</em> level (trivial: this trace = this source) or <em>offence</em> level (out of scope: intent, causation).</div>
+    </div>
+
+    <div class="decision">
+      <div class="decision-num">DEC 05</div>
+      <div class="decision-title">Linear-residue hypothesis as falsifiable approximation</div>
+      <div class="decision-body">Math-residue framing is metaphor with partial rigorous core, not theorem. Borrowed from Cauchy's residue theorem in complex analysis (local data at singularities determines global integrals). For us: behavioral effect of text decomposes as sum over residue vectors at causally-mediated token spans. Spec 04 tests five falsifiability criteria.</div>
+    </div>
+
+    <div class="decision updated">
+      <div class="decision-num">DEC 06</div>
+      <div class="decision-title">Mass-mean probes + Bayesian network aggregation</div>
+      <div class="decision-body"><strong>Updated:</strong> originally Apollo Research's logistic-regression probes (Goldowsky-Dill et al. 2025 "Detecting Strategic Deception"). Marks &amp; Tegmark 2024 (COLM, "The Geometry of Truth") showed mass-mean probes are more causally implicated in model outputs. Now: MM primary, Logistic secondary baseline.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VI. UNBUILT GAPS -->
+<section class="section">
+  <div class="section-label"><span class="section-num">§ 06</span> Named gaps</div>
+  <h2>What's <span class="accent">unbuilt</span> — explicitly.</h2>
+  <p class="lede">Architectural debt the program tracks itself. Not actionable in the current experiment queue, but named so they don't get forgotten. Each gap is documented in detail in the program plan.</p>
+
+  <ul class="gap-list">
+
+    <li class="gap-item">
+      <div class="gap-tag">G·01</div>
+      <div class="gap-content">
+        <h5>Interior State Builder</h5>
+        <p>The bridge from residue extraction (we have) to simulation construction (we don't). The major architectural gap. Internally specified in the yen-carry pipeline (step 06) but never built. Multi-month research project, not a 2-week experiment.</p>
+      </div>
+      <div class="gap-horizon">future · multi-month</div>
+    </li>
+
+    <li class="gap-item">
+      <div class="gap-tag">G·02</div>
+      <div class="gap-content">
+        <h5>Conscious receiver as architectural component</h5>
+        <p>The interpretive layer that catches what optimization misses. Currently operational (the researcher catches drift) but not architectural. No plan to build at substrate level — open research problem.</p>
+      </div>
+      <div class="gap-horizon">long horizon · research</div>
+    </li>
+
+    <li class="gap-item">
+      <div class="gap-tag">G·03</div>
+      <div class="gap-content">
+        <h5>Reference corpus principled construction</h5>
+        <p>What's the "irrelevant population" of writers for residue base rates? Wikipedia? Recipes? Code documentation? Currently empirical-test-and-pick (Spec 01 tests three candidates). Should eventually have a principled construction.</p>
+      </div>
+      <div class="gap-horizon">near-term · methodological</div>
+    </li>
+
+    <li class="gap-item">
+      <div class="gap-tag">G·04</div>
+      <div class="gap-content">
+        <h5>Full Bayesian network multi-trace integration</h5>
+        <p>Hierarchical Bayes with writer-level random effects nested under event-level fixed effects. Bible commits to this for eventual deployment. Premature now — current data (one event, 25 quotes) doesn't justify the model complexity.</p>
+      </div>
+      <div class="gap-horizon">deferred · scale-dependent</div>
+    </li>
+
+    <li class="gap-item">
+      <div class="gap-tag">G·05</div>
+      <div class="gap-content">
+        <h5>Memory architecture beyond file-based artifacts</h5>
+        <p>The file-based workaround (synthesis docs as durable memory) works for now but doesn't scale. Properly architectural memory for digital entities is a separate research problem.</p>
+      </div>
+      <div class="gap-horizon">long horizon · meta</div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <h6>About</h6>
+      <p style="color:var(--ink-mid);font-family:var(--serif);font-size:0.92rem;line-height:1.65;font-style:italic;max-width:480px;">
+        Residue Lab is a research program at the frontier of autonomous fine-tuning. The bet: environment construction matters at least as much as the learning loop, and rich environments can be reconstructed from collective emotional residue people didn't mean to leave. Forensic methodology applied to LLM-substrate interpretability. Active, in progress.
+      </p>
+    </div>
+    <div>
+      <h6>Artifacts</h6>
+      <ul>
+        <li><a href="/methodology.html">methodology deep-dive</a></li>
+        <li><a href="/lineage.html">intellectual lineage</a></li>
+        <li><a href="https://github.com/mufxio/emotion-vector-bench" target="_blank">emotion-vector-bench (github)</a></li>
+        <li><a href="/floor36/">floor36 (earlier work)</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6>Contact</h6>
+      <ul>
+        <li><a href="mailto:research@mufx.io">research@mufx.io</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>residue lab · mufx.io · 2026—</span>
+    <span>v0.1 · 2026.05.26</span>
+  </div>
+</footer>
 
 </div><!-- /page -->
 
-<!-- Sticky Notes (fixed position, toggled by JS) -->
-<div class="sticky-note" id="note-eai">
-  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-eai')">&times;</span>
-  untrained architectures produce brain-like representations. architecture alone, before any training, already encodes useful structure about the world.
-  <span class="src">Bonner et al. (2025, Nature Machine Intelligence)</span>
-  <a href="p6.html" class="src-link">research vi</a>
-</div>
-<div class="sticky-note" id="note-body">
-  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-body')">&times;</span>
-  beat synchronization shares genetic architecture with biological rhythms: walking pace, breathing rate, circadian chronotype. rhythm is a manifestation of the body's fundamental temporal organization.
-  <span class="src">Part iii, genetic architecture of rhythm</span>
-  <a href="p3.html" class="src-link">research iii</a>
-</div>
-<div class="sticky-note" id="note-mind">
-  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-mind')">&times;</span>
-  two passages can have identical chord sequences but different structural meanings. the markov chain sees the same state. schenker sees two entirely different functions.
-  <span class="src">Schenker / Lerdahl & Jackendoff (GTTM)</span>
-  <a href="p4.html" class="src-link">research iv</a>
-</div>
-<div class="sticky-note" id="note-soul">
-  <span class="popup-x" onclick="event.stopPropagation();closeNote('note-soul')">&times;</span>
-  interpretability of individual components doesn't guarantee interpretability of the whole. emergence is more than the sum of parts. you might understand each oscillator and still not understand the synchronized collective.
-  <span class="src">Dr. Yuki Tanaka, AI Safety, Anthropik Council</span>
-  <a href="p7.html" class="src-link">research vii</a>
-</div>
-
 <script>
-// === WEATHER SYSTEM ===
-const catStates = {
-  sunny: `     /\\_/\\
-    ( <span class="eyes">-&#x03C9;-</span> )
-     (_____)`,
-  drizzle: `     /\\_/\\
-    ( <span class="eyes">o.o</span> )
-     (  _  )
-      ~~~ `,
-  storm: `  _______________
- /                 \\
-|                   |
-|_______/ <span class="eyes">&gt;.&lt;</span> \\_______|`
-};
-
-let currentWeather = null;
-let lightningInterval = null;
-const layer = document.getElementById('weatherLayer');
-const heroCat = document.getElementById('heroCat');
-const rainCit = document.getElementById('rainCitation');
-const lightningEl = document.getElementById('lightning');
-
-function clearWeather() {
-  layer.innerHTML = '';
-  rainCit.style.display = 'none';
-  syncFish('rainCitation', false);
-  heroCat.classList.remove('shiver');
-  if (lightningInterval) { clearInterval(lightningInterval); lightningInterval = null; }
-  document.querySelectorAll('.weather-btn:not(.sound-btn)').forEach(b => b.classList.remove('active'));
+// Card expansion
+function toggleCard(card) {
+  card.classList.toggle('expanded');
 }
 
-function setWeather(w) {
-  clearWeather();
-  currentWeather = w;
-  document.getElementById('btn-' + w).classList.add('active');
-  heroCat.innerHTML = catStates[w];
-
-  if (w === 'sunny') {
-    for (let i = 0; i < 5; i++) {
-      const ray = document.createElement('div');
-      ray.className = 'ray';
-      ray.style.left = (15 + i * 18) + '%';
-      ray.style.transform = 'rotate(' + (-10 + i * 5) + 'deg)';
-      ray.style.opacity = 0.4 + Math.random() * 0.3;
-      layer.appendChild(ray);
-    }
-    document.body.style.background = '#0c0a08';
-  }
-  else if (w === 'drizzle') {
-    heroCat.classList.add('shiver');
-    for (let i = 0; i < 35; i++) {
-      const d = document.createElement('div');
-      d.className = 'drop slant';
-      d.style.left = (Math.random() * 110 - 10) + '%';
-      d.style.height = 10 + Math.random() * 14 + 'px';
-      d.style.animationDuration = 1.2 + Math.random() * 0.8 + 's';
-      d.style.animationDelay = Math.random() * 2 + 's';
-      d.style.opacity = 0.15 + Math.random() * 0.25;
-      layer.appendChild(d);
-    }
-    rainCit.style.display = 'block'; syncFish('rainCitation', true);
-    document.body.style.background = '#08090a';
-  }
-  else if (w === 'storm') {
-    heroCat.classList.add('shiver');
-    for (let i = 0; i < 100; i++) {
-      const d = document.createElement('div');
-      d.className = 'drop slant-hard';
-      d.style.left = (Math.random() * 120 - 20) + '%';
-      d.style.height = 14 + Math.random() * 22 + 'px';
-      d.style.animationDuration = 0.3 + Math.random() * 0.4 + 's';
-      d.style.animationDelay = Math.random() * 1 + 's';
-      d.style.opacity = 0.2 + Math.random() * 0.4;
-      d.style.background = 'linear-gradient(180deg, transparent, rgba(140,160,200,0.5))';
-      layer.appendChild(d);
-    }
-    rainCit.style.display = 'block'; syncFish('rainCitation', true);
-    document.body.style.background = '#060708';
-    // Lightning
-    lightningInterval = setInterval(() => {
-      if (currentWeather === 'storm' && Math.random() < 0.3) {
-        lightningEl.classList.add('flash');
-        setTimeout(() => lightningEl.classList.remove('flash'), 150);
-      }
-    }, 1500);
-  }
+// Walkthrough stepper
+function showStep(n) {
+  document.querySelectorAll('.wt-step').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.wt-step-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.wt-step[data-step="' + n + '"]').classList.add('active');
+  document.querySelector('.wt-step-btn[data-step="' + n + '"]').classList.add('active');
 }
 
-// === STICKY NOTE TOGGLES ===
-
-function closeNote(noteId) {
-  const note = document.getElementById(noteId);
-  note.classList.remove('open');
-  note.style.display = 'none';
-  const label = document.querySelector('[data-note="' + noteId + '"]');
-  if (label) label.classList.remove('active');
-  syncFish(noteId, false);
-}
-
-
-// Fixed positions for each note - never change
-const notePositions = {
-  'note-eai':  { left: '20px', right: 'auto', top: '620px' },
-  'note-body': { left: '20px', right: 'auto', top: '840px' },
-  'note-mind': { left: 'auto', right: '20px', top: '750px' },
-  'note-soul': { left: 'auto', right: '20px', top: '970px' },
-};
-
-function positionNote(el, note, side) {
-  const pos = notePositions[note.id];
-  if (!pos) return;
-  note.style.left = pos.left;
-  note.style.right = pos.right;
-  note.style.top = pos.top;
-}
-
-function toggleNote(noteId) {
-  const note = document.getElementById(noteId);
-  const label = document.querySelector('[data-note="' + noteId + '"]');
-  const isOpen = getComputedStyle(note).display !== 'none';
-  if (isOpen) {
-    note.style.display = 'none';
-    note.classList.remove('open');
-    if (label) label.classList.remove('active');
-    syncFish(noteId, false);
-  } else {
-    note.style.display = 'block';
-    note.classList.add('open');
-    if (label) { label.classList.add('active'); positionNote(label, note, label.dataset.side); }
-    syncFish(noteId, true);
-  }
-}
-
-function updateConnectors() {} // no-op, lines removed
-
-let yarnOpen = false;
-function toggleYarn() {
-  yarnOpen = !yarnOpen;
-  const btn = document.getElementById('btn-yarn');
-  // Tree sticky notes
-  const treeNotes = ['note-eai','note-body','note-mind','note-soul'];
-  if (yarnOpen) {
-    btn.textContent = 'hide yarn';
-    btn.classList.add('active');
-    // Open tree notes
-    treeNotes.forEach(id => {
-      const note = document.getElementById(id);
-      const label = document.querySelector('[data-note="' + id + '"]');
-      if (note) {
-        note.classList.add('open');
-        note.style.display = 'block';
-      }
-      if (label) {
-        label.classList.add('active');
-        positionNote(label, note, label.dataset.side);
-      }
-    });
-    // Open floor36, rain, sound
-    document.getElementById('floorNote').style.display = 'block';
-    document.getElementById('rainCitation').style.display = 'block';
-    document.getElementById('soundCitation').style.display = 'block';
-    // Light all fish
-    document.querySelectorAll('.fish').forEach(f => f.classList.add('lit'));
-  } else {
-    btn.textContent = 'show yarn';
-    btn.classList.remove('active');
-    treeNotes.forEach(id => {
-      const note = document.getElementById(id);
-      const label = document.querySelector('[data-note="' + id + '"]');
-      if (note) { note.classList.remove('open'); note.style.display = 'none'; }
-      if (label) label.classList.remove('active');
-    });
-    document.getElementById('floorNote').style.display = 'none';
-    document.getElementById('rainCitation').style.display = 'none';
-    document.getElementById('soundCitation').style.display = 'none';
-    // Dim all fish
-    document.querySelectorAll('.fish').forEach(f => f.classList.remove('lit'));
-  }
-  updateConnectors();
-}
-
-function syncFish(noteId, isOpen) {
-  const fish = document.getElementById('fish-' + noteId);
-  if (fish) { isOpen ? fish.classList.add('lit') : fish.classList.remove('lit'); }
-}
-
-function toggleFish(noteId) {
-  const treeNotes = ['note-eai','note-body','note-mind','note-soul'];
-  if (treeNotes.includes(noteId)) {
-    toggleNote(noteId);
-  } else {
-    const el = document.getElementById(noteId);
-    const isOpen = getComputedStyle(el).display !== 'none';
-    el.style.display = isOpen ? 'none' : 'block';
-    syncFish(noteId, !isOpen);
-  }
-}
-
-function toggleFloorNote() {
-  const n = document.getElementById('floorNote');
-  const opening = n.style.display === 'none' || !n.style.display;
-  n.style.display = opening ? 'block' : 'none';
-  syncFish('floorNote', opening);
-}
-
-
-// === CAT INTERACTIONS ===
-const catReaction = document.getElementById('catReaction');
-let interactionTimeout = null;
-
-const catInteracted = {
-  sunny: `     /\\_/\\
-    ( <span class="eyes">O.O</span> )
-     (_____)`,
-  drizzle: `     /\\_/\\
-    ( <span class="eyes">^.^</span> )
-     (  _  )
-      ~~~ `,
-  storm: `  _______________
- /                 \\
-|                   |
-|_______/___\\_______|`
-};
-
-heroCat.addEventListener('click', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  if (!currentWeather) return;
-
-  if (currentWeather === 'sunny') {
-    heroCat.innerHTML = catInteracted.sunny;
-    catReaction.textContent = '?';
-    catReaction.className = 'cat-reaction pop';
-    clearTimeout(interactionTimeout);
-    interactionTimeout = setTimeout(() => {
-      heroCat.innerHTML = catStates.sunny;
-      catReaction.textContent = '';
-      catReaction.className = 'cat-reaction';
-    }, 1500);
-  }
-  else if (currentWeather === 'drizzle') {
-    heroCat.classList.remove('shiver');
-    heroCat.innerHTML = catInteracted.drizzle;
-    catReaction.textContent = '~ meow';
-    catReaction.className = 'cat-reaction pop';
-    clearTimeout(interactionTimeout);
-    interactionTimeout = setTimeout(() => {
-      heroCat.innerHTML = catStates.drizzle;
-      heroCat.classList.add('shiver');
-      catReaction.textContent = '';
-      catReaction.className = 'cat-reaction';
-    }, 2500);
-  }
-  else if (currentWeather === 'storm') {
-    heroCat.innerHTML = catInteracted.storm;
-    catReaction.textContent = '...';
-    catReaction.className = 'cat-reaction pop';
-    clearTimeout(interactionTimeout);
-    interactionTimeout = setTimeout(() => {
-      heroCat.innerHTML = catStates.storm;
-      catReaction.textContent = '';
-      catReaction.className = 'cat-reaction';
-    }, 2000);
-  }
+// Keyboard nav for walkthrough
+document.addEventListener('keydown', (e) => {
+  const active = document.querySelector('.wt-step.active');
+  if (!active) return;
+  const n = parseInt(active.dataset.step);
+  if (e.key === 'ArrowRight' && n < 4) showStep(n + 1);
+  if (e.key === 'ArrowLeft' && n > 1) showStep(n - 1);
 });
-
-// === AMBIENT SOUND ===
-let audioCtx = null;
-let soundOn = false;
-let ambientNodes = [];
-
-function createAmbient(weather) {
-  stopAmbient();
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
-  if (weather === 'sunny') {
-    // Warm pad: two detuned sine waves with slow LFO
-    const g = audioCtx.createGain();
-    g.gain.value = 0;
-    g.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 2);
-    g.connect(audioCtx.destination);
-
-    [174.61, 220.00, 261.63].forEach((freq, i) => {
-      const osc = audioCtx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      osc.detune.value = (i - 1) * 3;
-      const og = audioCtx.createGain();
-      og.gain.value = 0.4;
-      osc.connect(og);
-      og.connect(g);
-      osc.start();
-      ambientNodes.push(osc);
-    });
-
-    // Slow LFO on volume
-    const lfo = audioCtx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.08;
-    const lfoGain = audioCtx.createGain();
-    lfoGain.gain.value = 0.015;
-    lfo.connect(lfoGain);
-    lfoGain.connect(g.gain);
-    lfo.start();
-    ambientNodes.push(lfo);
-    ambientNodes.push(g);
-  }
-  else if (weather === 'drizzle') {
-    // Filtered noise (rain) + soft low drone
-    const bufSize = audioCtx.sampleRate * 2;
-    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
-
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buf;
-    noise.loop = true;
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 800;
-    filter.Q.value = 0.5;
-
-    const ng = audioCtx.createGain();
-    ng.gain.value = 0;
-    ng.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 2);
-
-    noise.connect(filter);
-    filter.connect(ng);
-    ng.connect(audioCtx.destination);
-    noise.start();
-
-    // Low drone
-    const drone = audioCtx.createOscillator();
-    drone.type = 'sine';
-    drone.frequency.value = 65.41;
-    const dg = audioCtx.createGain();
-    dg.gain.value = 0;
-    dg.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 3);
-    drone.connect(dg);
-    dg.connect(audioCtx.destination);
-    drone.start();
-
-    ambientNodes.push(noise, drone, ng, dg);
-  }
-  else if (weather === 'storm') {
-    // Heavy noise + sub bass rumble + occasional crackle
-    const bufSize = audioCtx.sampleRate * 2;
-    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
-
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buf;
-    noise.loop = true;
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 1200;
-    filter.Q.value = 0.3;
-
-    const ng = audioCtx.createGain();
-    ng.gain.value = 0;
-    ng.gain.linearRampToValueAtTime(0.07, audioCtx.currentTime + 2);
-
-    noise.connect(filter);
-    filter.connect(ng);
-    ng.connect(audioCtx.destination);
-    noise.start();
-
-    // Sub rumble
-    const sub = audioCtx.createOscillator();
-    sub.type = 'sine';
-    sub.frequency.value = 40;
-    const sg = audioCtx.createGain();
-    sg.gain.value = 0;
-    sg.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2);
-    sub.connect(sg);
-    sg.connect(audioCtx.destination);
-    sub.start();
-
-    // Rumble LFO
-    const lfo = audioCtx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.15;
-    const lfoG = audioCtx.createGain();
-    lfoG.gain.value = 0.02;
-    lfo.connect(lfoG);
-    lfoG.connect(ng.gain);
-    lfo.start();
-
-    ambientNodes.push(noise, sub, lfo, ng, sg);
-  }
-}
-
-function stopAmbient() {
-  ambientNodes.forEach(n => {
-    try {
-      if (n.stop) n.stop();
-      else if (n.disconnect) n.disconnect();
-    } catch(e) {}
-  });
-  ambientNodes = [];
-}
-
-
-function toggleSound() {
-  soundOn = !soundOn;
-  const btn = document.getElementById('btn-sound');
-  if (soundOn) {
-    btn.classList.add('active');
-    document.getElementById('soundCitation').style.display = 'block';
-    syncFish('soundCitation', true);
-    createAmbient(currentWeather);
-  } else {
-    btn.classList.remove('active');
-    document.getElementById('soundCitation').style.display = 'none';
-    syncFish('soundCitation', false);
-    stopAmbient();
-  }
-}
-
-// Re-trigger ambient when weather changes (if sound is on)
-const origSetWeather = setWeather;
-setWeather = function(w) {
-  origSetWeather(w);
-  if (soundOn) createAmbient(w);
-};
-
-
-// Random weather on load
-setWeather('sunny');
 </script>
 
 </body>

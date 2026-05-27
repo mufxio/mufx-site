@@ -1,0 +1,41 @@
+# Netlify redirects for the floor36 → /floor36/ migration (2026-05-26)
+# Preserves external links to specific pages that previously lived at root
+
+/about.html              /floor36/about.html              301
+/archive.html            /floor36/archive.html            301
+/master-blueprint.html   /floor36/master-blueprint.html   301
+/substrate-blueprint.html /floor36/substrate-blueprint.html 301
+/street-cat.html         /floor36/street-cat.html         301
+/cipher.html             /floor36/cipher.html             301
+/cipher3.html            /floor36/cipher3.html            301
+/research.html           /floor36/research.html           301
+/ops.html                /floor36/ops.html                301
+/verify.html             /floor36/verify.html             301
+/signals.html            /floor36/signals.html            301
+/rabbit-freestyle.html   /floor36/rabbit-freestyle.html   301
+/rabbit-jepa.html        /floor36/rabbit-jepa.html        301
+/rabbit-maslow.html      /floor36/rabbit-maslow.html      301
+/p1.html                 /floor36/p1.html                 301
+/p2.html                 /floor36/p2.html                 301
+/p3.html                 /floor36/p3.html                 301
+/p4.html                 /floor36/p4.html                 301
+/p5.html                 /floor36/p5.html                 301
+/p6.html                 /floor36/p6.html                 301
+/p7.html                 /floor36/p7.html                 301
+/draft1.html             /floor36/draft1.html             301
+/draft2.html             /floor36/draft2.html             301
+/draft3.html             /floor36/draft3.html             301
+/q2-2026-outlook.html    /floor36/q2-2026-outlook.html    301
+/kayle-20260317.html     /floor36/kayle-20260317.html     301
+/briefing-20260228.html  /floor36/briefing-20260228.html  301
+/briefing-20260316.html  /floor36/briefing-20260316.html  301
+/signal-20260224.html    /floor36/signal-20260224.html    301
+/signal-20260225.html    /floor36/signal-20260225.html    301
+/signal-20260226.html    /floor36/signal-20260226.html    301
+/signal-20260227.html    /floor36/signal-20260227.html    301
+/signal-20260302.html    /floor36/signal-20260302.html    301
+/signal-20260316.html    /floor36/signal-20260316.html    301
+/weekly-20260228.html    /floor36/weekly-20260228.html    301
+/weekly-20260314.html    /floor36/weekly-20260314.html    301
+/mufx.css                /floor36/mufx.css                301
+/og-narrative-gap.png    /floor36/og-narrative-gap.png    301

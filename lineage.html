@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lineage — Residue Lab</title>
+<meta name="description" content="The Residue Lab program's intellectual lineage: ML interpretability, forensic statistics, digital forensics, crisis informatics, forensic linguistics, and substrate validation.">
+<link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+
+:root {
+  /* Paper palette (from master-blueprint) */
+  --paper: #f5f2eb;
+  --paper-dark: #ece8df;
+  --paper-darker: #e0dbd0;
+  --ink: #1a1814;
+  --ink-mid: #3d3a35;
+  --ink-light: #6b6760;
+  --ink-faint: #a09d97;
+  --rule: #c8c3b8;
+  --rule-dark: #9a958c;
+  --rule-faint: #ddd9d0;
+
+  /* Semantic accents */
+  --red: #b5200d;
+  --red-light: #e8c5bf;
+  --blue: #0d3b6b;
+  --blue-mid: #1a5fa8;
+  --blue-light: #c2d8f0;
+  --green: #0a4a2a;
+  --green-light: #c5e0d0;
+  --amber: #7a4500;
+  --amber-light: #f0ddb5;
+  --gold: #c4956a;
+  --gold-light: #ead8c0;
+
+  /* Status colors */
+  --status-done: var(--green);
+  --status-progress: var(--amber);
+  --status-ready: var(--blue);
+  --status-gap: var(--red);
+  --status-external: var(--ink-light);
+
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --serif: 'IBM Plex Serif', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+::selection { background: var(--gold-light); color: var(--ink); }
+a { color: var(--blue); text-decoration: none; border-bottom: 1px solid var(--blue-light); transition: all 0.2s; }
+a:hover { color: var(--red); border-bottom-color: var(--red-light); }
+
+/* ── NAV ── */
+.nav {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 242, 235, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.nav-logo {
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  text-transform: lowercase;
+  border-bottom: none;
+}
+.nav-logo .accent { color: var(--red); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  color: var(--ink-light);
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  border-bottom: none;
+  font-size: 11px;
+}
+.nav-links a:hover { color: var(--red); }
+.nav-links a.active { color: var(--red); }
+.nav-pulse {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  margin-left: 4px;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── PAGE ── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 8rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 8rem 0 5rem;
+  border-bottom: 3px solid var(--ink);
+  margin-bottom: 5rem;
+}
+.doc-class {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.doc-class::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--red);
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: 4.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+.hero-title .accent { color: var(--red); font-style: italic; }
+.hero-mission {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--ink-mid);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  max-width: 760px;
+}
+.hero-subtitle {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  max-width: 760px;
+  line-height: 1.7;
+}
+.hero-meta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-top: 3rem;
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+.hero-meta span { display: flex; gap: 0.5rem; align-items: center; }
+.hero-meta .label { color: var(--ink-light); }
+
+/* ── SECTION ── */
+.section {
+  padding: 2.5rem 0 4rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
+}
+.section:last-of-type { border-bottom: none; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-label::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--blue);
+}
+.section-num {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+.section h2 {
+  font-family: var(--serif);
+  font-size: 2.4rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  line-height: 1.15;
+}
+.section h2 .accent { color: var(--red); font-style: italic; }
+.section .lede {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink-mid);
+  max-width: 780px;
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+.section p {
+  max-width: 760px;
+  margin-bottom: 1rem;
+  color: var(--ink-mid);
+}
+.section p.note {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  border-left: 2px solid var(--gold);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  background: var(--paper-dark);
+  padding: 0.85rem 1rem;
+}
+
+/* ── LINEAGE CARDS ── */
+.lineage-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-top: 1rem;
+}
+.src {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 2rem 2.25rem;
+  position: relative;
+  transition: all 0.25s;
+  border-left-width: 4px;
+}
+.src:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(26, 24, 20, 0.04);
+}
+.src-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px dashed var(--rule-faint);
+}
+.src-head-left { flex: 1; min-width: 0; }
+.src-id {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+.src-title {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+.src-title em { font-style: italic; font-weight: 400; }
+.src-authors {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--ink-mid);
+  line-height: 1.45;
+}
+.src-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.src-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+.src-block h4 {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.src-block h4::before {
+  content: '';
+  width: 12px;
+  height: 1px;
+  background: currentColor;
+}
+.src-block p {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin: 0;
+  max-width: none;
+}
+.src-links {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-light);
+  border-top: 1px solid var(--rule-faint);
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: baseline;
+}
+.src-links .key {
+  color: var(--ink-faint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+}
+.src-links a {
+  color: var(--ink-mid);
+  border-bottom: 1px dotted var(--rule-dark);
+  font-size: 0.72rem;
+}
+.src-links a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+/* ── Color variants ── */
+.src.c-blue   { border-left-color: var(--blue-mid); }
+.src.c-blue .src-block h4   { color: var(--blue); }
+.src.c-blue .src-tag        { color: var(--blue); }
+
+.src.c-red    { border-left-color: var(--red); }
+.src.c-red .src-block h4    { color: var(--red); }
+.src.c-red .src-tag         { color: var(--red); }
+
+.src.c-amber  { border-left-color: var(--amber); }
+.src.c-amber .src-block h4  { color: var(--amber); }
+.src.c-amber .src-tag       { color: var(--amber); }
+
+.src.c-green  { border-left-color: var(--green); }
+.src.c-green .src-block h4  { color: var(--green); }
+.src.c-green .src-tag       { color: var(--green); }
+
+.src.c-gold   { border-left-color: var(--gold); }
+.src.c-gold .src-block h4   { color: var(--amber); }
+.src.c-gold .src-tag        { color: var(--amber); }
+
+.src.c-ink    { border-left-color: var(--ink-mid); }
+.src.c-ink .src-block h4    { color: var(--ink-mid); }
+.src.c-ink .src-tag         { color: var(--ink-mid); }
+
+/* ── INTEGRATION (closing) ── */
+.integration {
+  background: var(--paper-dark);
+  border: 1px solid var(--rule);
+  padding: 2.5rem 2.5rem;
+  margin-top: 2rem;
+}
+.integration h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+  color: var(--ink);
+}
+.integration h3 .accent { color: var(--red); font-style: italic; }
+.integration p {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  max-width: 780px;
+  margin-bottom: 1rem;
+}
+.integration .six-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 1.75rem 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+.integration .field {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.integration .field .num {
+  color: var(--red);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+}
+.integration .field .name {
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+.integration .field .src-ref {
+  color: var(--ink-light);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+/* ── CROSS-LINKS ── */
+.crosslinks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.crosslink {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 1.5rem 1.75rem;
+  transition: all 0.25s;
+  border-bottom: 1px solid var(--rule);
+}
+.crosslink:hover {
+  border-color: var(--ink-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(26, 24, 20, 0.04);
+}
+.crosslink-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+.crosslink-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+.crosslink-title .accent { color: var(--red); font-style: italic; }
+.crosslink-desc {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--ink-mid);
+  line-height: 1.55;
+}
+a.crosslink { color: inherit; border-bottom: 1px solid var(--rule); }
+a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: 6rem;
+  padding-top: 2.5rem;
+  border-top: 3px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  letter-spacing: 0.05em;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+.footer h6 {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.footer ul { list-style: none; }
+.footer li { margin-bottom: 0.4rem; }
+.footer a { color: var(--ink-mid); border-bottom: none; font-size: 0.78rem; }
+.footer a:hover { color: var(--red); }
+.footer-base {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .nav-inner { padding: 12px 16px; }
+  .nav-links { gap: 14px; flex-wrap: wrap; }
+  .page { padding: 0 20px 4rem; }
+  .hero { padding: 4rem 0 3rem; }
+  .hero-title { font-size: 2.6rem; }
+  .hero-mission { font-size: 1.1rem; }
+  .hero-meta { flex-direction: column; gap: 0.5rem; }
+  .section h2 { font-size: 1.8rem; }
+  .src { padding: 1.5rem 1.25rem; }
+  .src-body { grid-template-columns: 1fr; gap: 1.25rem; }
+  .src-head { flex-direction: column; gap: 0.75rem; }
+  .integration { padding: 1.5rem; }
+  .integration .six-fields { grid-template-columns: 1fr; }
+  .crosslinks { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><span class="accent">residue</span> lab</a>
+    <div class="nav-links">
+      <a href="/#program">program</a>
+      <a href="/#experiments">experiments</a>
+      <a href="/methodology.html">methodology</a>
+      <a href="/lineage.html" class="active">lineage</a>
+      <a href="/floor36/">floor36</a>
+      <a href="https://github.com/mufxio/emotion-vector-bench" target="_blank">github</a>
+      <span class="nav-pulse" title="active research"></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="doc-class">Bibliography · Annotated Lineage · 2026—</div>
+  <h1 class="hero-title"><span class="accent">lineage</span></h1>
+  <p class="hero-mission">eight sources, one integration nobody has done yet.</p>
+  <p class="hero-subtitle">This program is not a new framework. It is a specific integration of borrowed components — ML interpretability, forensic statistics, digital forensics, crisis informatics, forensic linguistics, substrate validation. Each card below documents what the source did, what we borrow from it, and what we extend.</p>
+  <div class="hero-meta">
+    <span><span class="label">sources:</span> 8 primary</span>
+    <span><span class="label">disciplines:</span> 6 fields</span>
+    <span><span class="label">posture:</span> applied integration</span>
+  </div>
+</header>
+
+<!-- §01 APOLLO -->
+<section class="section" id="apollo">
+  <div class="section-label"><span class="section-num">§ 01</span> ML Interpretability · Apollo Research</div>
+  <h2>The methodological template.</h2>
+  <p class="lede">The Apollo deception-probe paper is the spine of the lab's experimental pipeline. Probe training data, layer selection, contrast pairs, evaluation metrics, named failure modes — all downstream of how Apollo did it.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-blue">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 01 · 2025</div>
+          <div class="src-title">Detecting Strategic Deception Using Linear Probes</div>
+          <div class="src-authors">Goldowsky-Dill, Chughtai, Heimersheim, Hobbhahn · Apollo Research</div>
+        </div>
+        <div class="src-tag">Methodological Template</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Trained linear probes on Llama-3.3-70B-Instruct activations to detect strategic deception. Contrast-pair training data from instructed-pairs and roleplay; mean-pooled logistic-regression probes; AUROC plus recall@1%FPR on a held-out control. They named three failure modes — mean-pool washout, formality correlation, base-rate confusion — that any probe-based program inherits.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The pipeline shape: contrast pairs, mid-layer activations (Apollo: layer 22 of 80), AUROC + recall@1%FPR, separately-curated control, and the three failure modes as named risks in every spec. ENFSI-style discipline plus Apollo-style probe rigor is the methodological core.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Apollo probes for an internal property — deception during inference. We probe for an external property: traces a writer's situation left on the text. We also commit to LR output over classification, embed probes inside the forensic hierarchy of propositions, and aggregate across writers via Bayesian network — none of which Apollo's framework addresses.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">arXiv</span>
+        <a href="https://arxiv.org/abs/2502.03407" target="_blank">2502.03407</a>
+        <span class="key">venue</span>
+        <span>Apollo Research preprint, Feb 2025</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §02 MARKS & TEGMARK -->
+<section class="section" id="marks-tegmark">
+  <div class="section-label"><span class="section-num">§ 02</span> ML Interpretability · Mass-Mean Probes</div>
+  <h2>The finding that updated <span class="accent">Decision 06</span>.</h2>
+  <p class="lede">Marks &amp; Tegmark's geometry-of-truth paper is the reason the bible's probe-method decision was rewritten in May 2026. Their result: the probe direction we want for residue work is not the one Apollo defaulted to.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-red">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 02 · COLM 2024</div>
+          <div class="src-title">The Geometry of Truth: Emergent Linear Structure in LLM Representations of True/False Datasets</div>
+          <div class="src-authors">Samuel Marks · Max Tegmark</div>
+        </div>
+        <div class="src-tag">Probe-method Update</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Compared probe methods on LLaMA-2-70B truth/falsehood representations. Mass-mean (MM) probes recover a direction more causally implicated in model output than logistic-regression. In a steering experiment on sp_en_trans, the MM direction flipped true→false with normalized indirect effect 0.89 versus LR's 0.19 — a ~5× gap in causal validity at comparable classification accuracy.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The result and its interpretation: LR probes optimize <em>against</em> entangled features (formality, voice, performativity), so they end up tilted to avoid them; MM recovers the underlying direction with entanglements intact. For residue work, where entanglement is the phenomenon, MM is the right object. Bible Decision 06 is now MM-primary, LR retained as secondary baseline.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Marks &amp; Tegmark validated MM on a clean truth/falsehood task. We extend to a messier substrate — emotional residue, where entanglements are the phenomenon. Spec 01 makes the MM-vs-LR head-to-head a pre-registered prediction (≥0.05 AUROC gap on out-of-event transfer), so our use of MM is itself falsifiable.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">arXiv</span>
+        <a href="https://arxiv.org/abs/2310.06824" target="_blank">2310.06824</a>
+        <span class="key">venue</span>
+        <span>COLM 2024</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §03 ZHANG & ZHONG -->
+<section class="section" id="zhang-zhong">
+  <div class="section-label"><span class="section-num">§ 03</span> ML Interpretability · Closest Published Neighbor</div>
+  <h2>The persistence-decay technique source.</h2>
+  <p class="lede">Zhang &amp; Zhong are the closest published neighbor at the substrate level. The gap between what they did and what this lab does is, structurally, the research opportunity.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-amber">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 03 · Oct 2025</div>
+          <div class="src-title">Decoding Emotion in the Deep: A Systematic Study of How LLMs Represent, Retain, and Express Emotion</div>
+          <div class="src-authors">Jingxiang Zhang · Lujia Zhong · University of Southern California</div>
+        </div>
+        <div class="src-tag">Closest Neighbor</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Systematic probing of how LLMs represent and propagate emotion across layers, prompts, and generation length. Emotion structure peaks at roughly 50-75% depth. They introduced an offset-probe technique: probe accuracy as a function of how many tokens into the model's own generated continuation you look — a measure of signal persistence downstream.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The persistence-decay technique itself. Spec 02 (pre-flight) is a direct port: probe accuracy at offset 0 versus offset 100+ on yen-carry continuations, comparing Tier-A and Tier-C prompts. Their layer-depth finding also seeds our layer-sweep prior.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Zhang &amp; Zhong studied overt emotion — explicit affective content. We extend to <em>residue</em>: traces of an event in text that was never about expressing emotion. Their framework treats writer-state as label; ours treats writer-role as inferential target inside a forensic LR hierarchy, stratified by tier — which their corpus does not.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">arXiv</span>
+        <a href="https://arxiv.org/abs/2510.04064" target="_blank">2510.04064</a>
+        <span class="key">venue</span>
+        <span>Preprint, Oct 2025</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §04 COOK ET AL -->
+<section class="section" id="cook">
+  <div class="section-label"><span class="section-num">§ 04</span> Forensic Statistics · Hierarchy of Propositions</div>
+  <h2>Where our claims live — and where they don't.</h2>
+  <p class="lede">The Cook et al. hierarchy is the reason this lab can say what it says — and the reason it refuses to say certain other things. Activity level is the only claim shape we support.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-green">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 04 · 1998</div>
+          <div class="src-title">A Hierarchy of Propositions: Deciding Which Level to Address in Casework</div>
+          <div class="src-authors">Cook, Evett, Jackson, Jones, Lambert · Forensic Science Service</div>
+        </div>
+        <div class="src-tag">Activity-Level Commitment</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Formalized a three-level hierarchy of propositions for forensic casework. <em>Source level</em>: did this trace come from this source? <em>Activity level</em>: what activity produced this trace? <em>Offence level</em>: did this person commit the offence? Forensic scientists must choose a level before computing an LR — conflating them is the most common path to bad expert testimony.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The hierarchy and the discipline of pre-registering the level before any LR. Decision 04 commits us to activity-level: <em>what role did this writer play in this event</em>. Source-level (this text came from this writer) is trivial; offence-level (this writer caused or intended harm) is out of scope — exactly the overreach the hierarchy was designed to prevent.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Cook et al. wrote for physical-trace forensics — glass, fiber, gunshot residue. We apply the same level discipline to a substrate they could not have anticipated: model activations carrying residue from text. Activity: <em>being an on-the-ground participant during an event</em>. Trace: reconstructed through an LLM, not a microscope. Hierarchy logic preserved; substrate new.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">cite</span>
+        <span>Science &amp; Justice 38(4):231-239</span>
+        <span class="key">DOI</span>
+        <a href="https://doi.org/10.1016/S1355-0306(98)72117-3" target="_blank">10.1016/S1355-0306(98)72117-3</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §05 CARRIER & SPAFFORD -->
+<section class="section" id="carrier-spafford">
+  <div class="section-label"><span class="section-num">§ 05</span> Digital Forensics · Crime-Scene Framing</div>
+  <h2>Primary vs secondary scenes — Tier-A vs Tier-C.</h2>
+  <p class="lede">Carrier &amp; Spafford's digital-investigation reframe is the lineage anchor for Decision 02 (event reconstruction, not writer-state inference) and for the tier-A versus tier-C stratification this lab tests.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-ink">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 05 · 2003</div>
+          <div class="src-title">Getting Physical with the Digital Investigation Process</div>
+          <div class="src-authors">Brian Carrier · Eugene H. Spafford · CERIAS / Purdue</div>
+        </div>
+        <div class="src-tag">Event-Reconstruction Anchor</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Proposed that digital investigations be modeled on physical crime-scene investigation. A computer system is a digital crime scene; files, logs, RAM are evidence the way fibers and prints are evidence. They distinguished the <em>primary</em> digital scene (where action occurred) from <em>secondary</em> scenes (caches, mirrors, downstream logs). A 2004 follow-up formalized event as state transition with cause, time, location, effect.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>Primary-versus-secondary maps directly onto Tier-A versus Tier-C. Tier-A is the primary scene: first-person on-the-ground writing during the event. Tier-C is secondary: institutional summaries, press coverage, recaps that propagate but transform the residue. The reframe also justifies Decision 02 — reconstruct events from collective traces rather than infer individual mental states.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Their scene is a single compromised system. Our scene is a distributed corpus from many participants of a socially-shared event — trader notes, crisis threads, panic posts, post-mortems. Spec 01 puts a number on primary-versus-secondary at the substrate level for the first time: do Tier-A probes transfer across events better than Tier-C, by an effect size worth betting research direction on?</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">cite</span>
+        <span>CERIAS Tech Report 2003-29 · IJDE Vol 2 Issue 2</span>
+        <span class="key">venue</span>
+        <span>Purdue CERIAS, 2003</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §06 VIEWEG ET AL -->
+<section class="section" id="vieweg">
+  <div class="section-label"><span class="section-num">§ 06</span> Crisis Informatics · Collective Traces</div>
+  <h2>Signal in the aggregate, not the individual.</h2>
+  <p class="lede">Vieweg, Hughes, Starbird, and Palen are the precedent for taking collective text streams seriously as carriers of event structure. Signal lives in the aggregate, not in any single message — the lab's collective-trace stance starts here.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-green">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 06 · CHI 2010</div>
+          <div class="src-title">Microblogging During Two Natural Hazards Events: What Twitter May Contribute to Situational Awareness</div>
+          <div class="src-authors">Sarah Vieweg · Amanda L. Hughes · Kate Starbird · Leysia Palen · ConnectivIT Lab, CU Boulder</div>
+        </div>
+        <div class="src-tag">Collective-Trace Precedent</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Studied Twitter activity during the April 2009 Oklahoma grassfires and the Red River floods. The aggregate stream contained genuine situational-awareness information — road closures, evacuation routes, fire fronts — even though most individual tweets were noisy or redundant. Crisis informatics formed around this observation.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The core claim: <em>the signal lives in the aggregate</em>. Any single writer's text is too noisy to support strong event claims. Aggregate residue across many writers encodes the event's emotional and structural contour — and that aggregate is the right object of inference. Hence our deployment vision: hierarchical Bayes across many writers per event, not best-classification per text.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Vieweg et al. read explicit situational content — words people wrote to inform each other. We read what their writing leaks when it was not trying to communicate the event at all. Substrate: intentional reporting → incidental trace. Target: situational facts → writer-role distributions. The collective-aggregate logic survives intact.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">cite</span>
+        <span>CHI 2010 Proceedings · ACM</span>
+        <span class="key">DOI</span>
+        <a href="https://doi.org/10.1145/1753326.1753486" target="_blank">10.1145/1753326.1753486</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §07 NINI -->
+<section class="section" id="nini">
+  <div class="section-label"><span class="section-num">§ 07</span> Forensic Linguistics · LR Framework Validation</div>
+  <h2>The framework is already accepted — for text.</h2>
+  <p class="lede">Andrea Nini's 2023 work tells us we are not inventing a paradigm. Forensic linguistics has already accepted the LR framework for authorship. We borrow its acceptance and port the substrate.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-gold">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 07 · 2023</div>
+          <div class="src-title">A Theory of Linguistic Individuality for Authorship Analysis</div>
+          <div class="src-authors">Andrea Nini · University of Manchester</div>
+        </div>
+        <div class="src-tag">LR-Framework Validation</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Built a theoretical and methodological foundation for modern LR-based forensic linguistics. Authorship attribution within the likelihood-ratio framework: the forensic scientist reports the LR under two pre-specified propositions; the trier of fact supplies the prior. Operational implementation via the open-source <code>idiolect</code> R package, validated on real-case data.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The legitimacy of LR-based inference on text. A field that takes text as forensic evidence has already aligned on the LR framework, the hierarchy of propositions, and the no-classification commitment. Decision 03 inherits directly — we follow a paradigm the closest adjacent forensic discipline accepted.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Nini's substrate is surface linguistic features — n-grams, function-word distributions, idiolect markers. Ours is internal model activations. The same LR framework wraps both with the same propositional discipline, but the evidence is no longer observable in the text — it is the model's representation of the text. Forensic-linguistic LR, ported from idiolect to substrate.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">series</span>
+        <span>Cambridge Elements in Forensic Linguistics</span>
+        <span class="key">DOI</span>
+        <a href="https://doi.org/10.1017/9781108974851" target="_blank">10.1017/9781108974851</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §08 ANTHROPIC -->
+<section class="section" id="anthropic">
+  <div class="section-label"><span class="section-num">§ 08</span> Substrate Validation · Anthropic Circuits</div>
+  <h2>The paper we replicated on open weights.</h2>
+  <p class="lede">Anthropic's 2026 emotion-concepts paper is the substrate-validation source. It established that emotion concepts in large transformers behave as functional, structured representations rather than bag-of-words affect. We replicated the substrate-level findings on open weights — work this lab can actually run.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-red">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 08 · April 2026</div>
+          <div class="src-title">Emotion Concepts and their Function in a Large Language Model</div>
+          <div class="src-authors">Sofroniew, Kauvar, Saunders et al. · Anthropic</div>
+        </div>
+        <div class="src-tag">Substrate Validation</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Identified and characterized emotion concepts inside a frontier model. Emotional features are recoverable as structured directions in the residual stream, those directions are causally implicated in behavior (steering shifts output predictably), and emotion concepts <em>function</em> — they participate in computation rather than passively reflecting prompt content. Emotion as first-class object inside internals, not surface artifact.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The substrate-level result: emotion-relevant directions are real, recoverable, and causally implicated in LLM activations. This is the precondition for all residue work — if affective structure didn't live linearly in activations, the program collapses. We borrow the confirmation methodology and the functional-not-ornamental interpretation.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>Sofroniew et al. validated on a frontier model. We replicated the core findings on open weights — Llama-3.1-8B-Instruct for prototyping, Llama-3.3-70B-Instruct to match Apollo — to make the work runnable and auditable outside a single lab. We also extend the object: from emotion concepts (what the writer feels) to emotional residue (what the event left on the text).</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">venue</span>
+        <span>Transformer Circuits Thread, April 2026</span>
+        <span class="key">url</span>
+        <a href="https://transformer-circuits.pub" target="_blank">transformer-circuits.pub</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §09 INTEGRATION -->
+<section class="section" id="integration">
+  <div class="section-label"><span class="section-num">§ 09</span> The integration nobody has done yet</div>
+  <h2>Borrowed pieces. <span class="accent">Novel</span> assembly.</h2>
+  <p class="lede">None of the eight sources is novel in isolation. Apollo's pipeline exists. The hierarchy of propositions exists. The crime-scene reframe, the aggregate-trace stance, the LR framework for text — all exist. What does not exist anywhere in the literature is this specific assembly.</p>
+
+  <div class="integration">
+    <h3>Six fields, <span class="accent">one</span> integration.</h3>
+    <p>Each card imports one piece. Combined, they form a configuration the literature has not produced: forensic-grade Bayesian inference, on frontier-class LLM activations, applied to emotional residue from collective traces of socially-shared events, governed by the activity-level hierarchy and the LR commitment, framed as event reconstruction rather than writer-state inference.</p>
+
+    <div class="six-fields">
+      <div class="field">
+        <span class="num">01</span>
+        <span class="name">ML Interpretability</span>
+        <span class="src-ref">Apollo · Marks &amp; Tegmark · Zhang &amp; Zhong</span>
+      </div>
+      <div class="field">
+        <span class="num">02</span>
+        <span class="name">Forensic Statistics</span>
+        <span class="src-ref">Cook et al. · ENFSI 2015</span>
+      </div>
+      <div class="field">
+        <span class="num">03</span>
+        <span class="name">Digital Forensics</span>
+        <span class="src-ref">Carrier &amp; Spafford</span>
+      </div>
+      <div class="field">
+        <span class="num">04</span>
+        <span class="name">Crisis Informatics</span>
+        <span class="src-ref">Vieweg · Hughes · Starbird · Palen</span>
+      </div>
+      <div class="field">
+        <span class="num">05</span>
+        <span class="name">Forensic Linguistics</span>
+        <span class="src-ref">Nini · Cambridge Elements</span>
+      </div>
+      <div class="field">
+        <span class="num">06</span>
+        <span class="name">Substrate Validation</span>
+        <span class="src-ref">Anthropic · Sofroniew et al.</span>
+      </div>
+    </div>
+
+    <p>Each adjacent program has half a foot on the bridge. The Apollo lineage does not engage activity-level propositions. Cook et al. did not anticipate model activations. Carrier &amp; Spafford did not work in linguistic substrate. Crisis informatics did not extract internal representations. Nini did not probe transformers. Anthropic's emotion-concepts work did not commit to forensic LR output. Zhang &amp; Zhong did not stratify by trace tier or embed in a forensic hierarchy.</p>
+
+    <p>The lab's bet is that the bridge is the whole point. Environment construction for autonomous fine-tuning needs a substrate that is rich, evaluable, and forensically defensible — and that intersection is what these six fields produce only when integrated, not when consulted in isolation. The novelty is not in any component; it is in the configuration. Bibliography, not manifesto.</p>
+  </div>
+</section>
+
+<!-- CROSS-LINKS -->
+<section class="section" id="next">
+  <div class="section-label"><span class="section-num">§ 10</span> Read next</div>
+  <h2>Where to go from here.</h2>
+  <p class="lede">This page documents <em>why</em> the program looks the way it does. Adjacent pages document <em>what</em> it does and <em>how</em> the methodology operates.</p>
+
+  <div class="crosslinks">
+    <a href="/" class="crosslink">
+      <div class="crosslink-label">← back to landing</div>
+      <div class="crosslink-title"><span class="accent">residue</span> lab · index</div>
+      <div class="crosslink-desc">The program at a glance: two halves of autonomous fine-tuning, four experiment specs, build order, locked decisions, named gaps.</div>
+    </a>
+    <a href="/methodology.html" class="crosslink">
+      <div class="crosslink-label">deep-dive →</div>
+      <div class="crosslink-title">methodology</div>
+      <div class="crosslink-desc">How the lineage above operationalizes — probe construction, mass-mean vs logistic-regression, LR computation, anti-contamination protocols, the five math-residue criteria.</div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <h6>About</h6>
+      <p style="color:var(--ink-mid);font-family:var(--serif);font-size:0.92rem;line-height:1.65;font-style:italic;max-width:480px;">
+        Residue Lab is a research program at the frontier of autonomous fine-tuning. Forensic methodology applied to LLM-substrate interpretability. Collective emotional residue as the environment substrate. Active, in progress.
+      </p>
+    </div>
+    <div>
+      <h6>Pages</h6>
+      <ul>
+        <li><a href="/">index</a></li>
+        <li><a href="/methodology.html">methodology</a></li>
+        <li><a href="/lineage.html">lineage</a></li>
+        <li><a href="/floor36/">floor36 (earlier work)</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6>Contact</h6>
+      <ul>
+        <li><a href="mailto:research@mufx.io">research@mufx.io</a></li>
+        <li><a href="https://github.com/mufxio/emotion-vector-bench" target="_blank">github</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>residue lab · mufx.io · 2026—</span>
+    <span>lineage v0.1 · 2026.05.26</span>
+  </div>
+</footer>
+
+</div><!-- /page -->
+
+</body>
+</html>
