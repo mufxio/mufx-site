@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>期货 · The China Gold Tape — muFX</title>
+<meta name="description" content="A short, visual primer on China's commodity futures (期货), the Shanghai gold market, and why it's a corner the rest of the world can't easily read.">
+<link rel="icon" href="/mufx-favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="mufx.css">
+<style>
+  /* ── page-local: CJK rendering + visual components ── */
+  .zh { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", var(--mono); }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 22px 120px; }
+
+  /* hero */
+  .hero { padding: 90px 0 48px; border-bottom: 1px solid var(--border); }
+  .hero .big { font-size: clamp(56px, 18vw, 120px); line-height: 0.95; color: var(--accent); letter-spacing: -2px; }
+  .hero .py { color: var(--text-dim); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; }
+  .hero h1 { color: var(--text-bright); font-weight: 400; font-size: clamp(20px, 5vw, 30px); margin: 22px 0 14px; letter-spacing: -0.5px; }
+  .hero .lede { color: var(--text); font-size: 15px; max-width: 60ch; }
+  .hero .lede b { color: var(--accent); font-weight: 400; }
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--border); }
+  .kicker { color: var(--accent); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { color: var(--text-bright); font-weight: 400; font-size: clamp(19px, 4.6vw, 25px); letter-spacing: -0.5px; margin-bottom: 14px; }
+  p { margin-bottom: 14px; max-width: 64ch; }
+  p b, strong { color: var(--text-bright); font-weight: 400; }
+  .gold { color: var(--accent); }
+  .dim { color: var(--text-dim); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+
+  /* venue map */
+  .venues { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 22px 0 8px; }
+  .venue { border: 1px solid var(--border); border-radius: 8px; padding: 14px; background: var(--bg-code); }
+  .venue.gold-host { border-color: rgba(196,149,106,0.45); box-shadow: 0 0 0 1px var(--accent-ghost), inset 0 0 40px var(--accent-ghost); }
+  .venue .code { color: var(--accent); font-size: 15px; }
+  .venue .cn { color: var(--text-bright); font-size: 13px; margin: 2px 0 8px; }
+  .venue .trades { color: var(--text-dim); font-size: 12px; line-height: 1.6; }
+  .venue.gold-host .trades b { color: var(--accent); font-weight: 400; }
+
+  /* flow diagram */
+  .flow { display: grid; gap: 0; margin: 24px 0; }
+  .node { border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; background: var(--bg-code); }
+  .node.sge { border-color: rgba(196,149,106,0.4); }
+  .node .t { color: var(--text-bright); font-size: 14px; }
+  .node .t .gold { font-size: 15px; }
+  .node .d { color: var(--text-dim); font-size: 12.5px; margin-top: 5px; }
+  .arrow { text-align: center; color: var(--accent-dim); font-size: 18px; line-height: 1.4; padding: 6px 0; }
+  .arrow span { color: var(--text-ghost); font-size: 11px; letter-spacing: 1px; }
+
+  /* feature cards */
+  .feat { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+  .card { border: 1px solid var(--border); border-radius: 8px; padding: 18px; background: var(--bg-code); }
+  .card h3 { color: var(--accent); font-weight: 400; font-size: 14px; margin-bottom: 8px; }
+  .card p { font-size: 13px; color: var(--text); margin: 0; max-width: none; }
+
+  /* stat row */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 22px 0; }
+  .stat { border-left: 2px solid var(--accent); padding: 4px 0 4px 14px; }
+  .stat .n { color: var(--accent); font-size: clamp(22px, 6vw, 30px); line-height: 1; }
+  .stat .l { color: var(--text-dim); font-size: 12px; margin-top: 6px; line-height: 1.5; }
+
+  /* spec card */
+  .spec { border: 1px solid rgba(196,149,106,0.4); border-radius: 10px; background: var(--bg-code); padding: 20px; margin: 22px 0; }
+  .spec .hd { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+  .spec .hd .name { color: var(--accent); font-size: 18px; }
+  .spec .hd .ven { color: var(--text-dim); font-size: 12px; }
+  .spec .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 24px; }
+  .spec .r .k { color: var(--text-dim); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .spec .r .v { color: var(--text-bright); font-size: 14px; margin-top: 2px; }
+
+  /* chart */
+  figure { margin: 22px 0; }
+  .chart { width: 100%; height: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-code); }
+  figcaption { color: var(--text-dim); font-size: 12px; margin-top: 8px; line-height: 1.6; }
+  figcaption .tag { color: var(--accent); }
+
+  .pullquote { border-left: 2px solid var(--accent); padding-left: 18px; margin: 24px 0; color: var(--text-bright); font-size: 16px; }
+
+  footer { padding: 40px 0 0; color: var(--text-ghost); font-size: 12px; }
+  footer a { color: var(--text-dim); border: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="big zh">期货</div>
+    <div class="py">qī huò · "futures"</div>
+    <h1>The China Gold Tape</h1>
+    <p class="lede">A short, visual primer on the futures market the rest of the world <b>can't easily read</b> — and the gold that sits at the center of it. The data is mostly public. The barrier isn't access. It's language.</p>
+  </header>
+
+  <section>
+    <div class="kicker">01 — the word</div>
+    <h2><span class="zh">期货</span> is just "futures"</h2>
+    <p>A futures contract is a standardized promise: a fixed amount of a thing, at a price agreed today, settled on a date in the future. Strip the romance and that's it — a price, a quantity, a deadline, traded on an exchange that stands in the middle so neither side has to trust the other.</p>
+    <p>What makes <span class="zh gold">期货</span> in China worth a primer of its own isn't the mechanism — it's the <b>ecosystem</b>: the largest, most retail-driven, most self-contained commodity-futures world on earth, walled off behind a closed capital account and a language most Western desks don't read. Gold lives near the middle of it.</p>
+  </section>
+
+  <section>
+    <div class="kicker">02 — the venues</div>
+    <h2>Six exchanges, one of them is yours</h2>
+    <p>China runs its derivatives across a handful of state-supervised exchanges, split by what they list. You don't need all of them — but you should be able to point at the map.</p>
+    <div class="venues">
+      <div class="venue gold-host">
+        <div class="code">SHFE</div>
+        <div class="cn zh">上海期货交易所</div>
+        <div class="trades"><b>gold (沪金 / AU)</b>, silver, copper, aluminium, rebar, crude products. <b>Your venue.</b></div>
+      </div>
+      <div class="venue">
+        <div class="code">SGE</div>
+        <div class="cn zh">上海黄金交易所</div>
+        <div class="trades">Not a futures exchange — the <b style="color:var(--accent);font-weight:400">physical</b> gold market. The import gateway. (next section)</div>
+      </div>
+      <div class="venue">
+        <div class="code">DCE</div>
+        <div class="cn zh">大连商品交易所</div>
+        <div class="trades">soybeans, iron ore, corn, palm oil, coke</div>
+      </div>
+      <div class="venue">
+        <div class="code">ZCE</div>
+        <div class="cn zh">郑州商品交易所</div>
+        <div class="trades">cotton, sugar, wheat, methanol, PTA</div>
+      </div>
+      <div class="venue">
+        <div class="code">INE</div>
+        <div class="cn zh">上海国际能源交易中心</div>
+        <div class="trades">crude oil — the "internationalized" one, open to foreigners</div>
+      </div>
+      <div class="venue">
+        <div class="code">CFFEX / GFEX</div>
+        <div class="cn zh">中金所 · 广期所</div>
+        <div class="trades">stock-index & bond futures (financial) · industrial silicon, lithium (newest)</div>
+      </div>
+    </div>
+    <p class="dim" style="font-size:13px">Gold <em>futures</em> live on SHFE as <span class="zh gold">沪金</span> (ticker AU). But to understand China gold, you have to look one door over — at the SGE.</p>
+  </section>
+
+  <section>
+    <div class="kicker">03 — the two doors</div>
+    <h2>Gold's two markets: <span class="zh">现货</span> &amp; <span class="zh">期货</span></h2>
+    <p>Chinese gold runs on two parallel rails. The <b>SGE</b> is where the physical metal actually moves — bars, deferred contracts, the legal channel through which gold <em>enters</em> the country. The <b>SHFE future</b> is the paper claim layered on top. Read them together and you're reading both the metal and the bet.</p>
+
+    <div class="flow">
+      <div class="node">
+        <div class="t">International market — <span class="gold">LBMA London · COMEX</span></div>
+        <div class="d">the global benchmark price (loco London / USD). Where the "world price" of gold is set.</div>
+      </div>
+      <div class="arrow">↓ <span>imports via licensed banks · quota-gated</span></div>
+      <div class="node sge">
+        <div class="t"><span class="zh gold">上海黄金交易所</span> — SGE (physical / spot + deferred)</div>
+        <div class="d">world's largest <b>physical</b> gold exchange. Products: Au99.99, Au(T+D) deferred. The single legal gateway for imported gold into mainland China — so its price reflects <em>domestic</em> supply &amp; demand, not London's.</div>
+      </div>
+      <div class="arrow">↓ <span>paper layered on physical</span></div>
+      <div class="node">
+        <div class="t"><span class="zh gold">沪金 (AU)</span> — SHFE gold futures</div>
+        <div class="d">the leveraged, T+0, night-session bet on the SGE/spot price. Where the speculation, hedging and the metagame happen.</div>
+      </div>
+      <div class="arrow">↓ <span>who's pulling</span></div>
+      <div class="node">
+        <div class="t">Demand — <span class="gold">PBoC · jewelry · investment bars · ETFs · retail</span></div>
+        <div class="d">central-bank accumulation, the world's largest jewelry market, and a deep retail bid. The pull that sets the premium.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">04 — why it's its own planet</div>
+    <h2>China gold doesn't trade like the rest of the world</h2>
+    <p>Because the capital account is closed and imports are quota-gated, Chinese gold can't freely arbitrage to the London price. So it forms its <b>own price</b> — and the gap between the two is one of the most honest demand signals in the entire market.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="n">#1</div><div class="l">gold consumer in the world</div></div>
+      <div class="stat"><div class="n">#1</div><div class="l">gold producer in the world</div></div>
+      <div class="stat"><div class="n">SGE</div><div class="l">largest physical gold exchange on earth</div></div>
+      <div class="stat"><div class="n">PBoC</div><div class="l">among the largest central-bank buyers</div></div>
+    </div>
+
+    <div class="feat">
+      <div class="card">
+        <h3>The Shanghai premium</h3>
+        <p>SGE gold trades at a <b>premium or discount</b> to the London price. Premium = China is hungry, importers are paying up to pull metal in. Discount = demand has gone soft. It's a thermometer for Chinese gold appetite — and it's a number, daily.</p>
+      </div>
+      <div class="card">
+        <h3>The <span class="zh">大妈</span> bid</h3>
+        <p>"Chinese aunties" — <span class="zh">中国大妈</span> — became shorthand in 2013 when retail buyers swarmed gold on a price dip. Deep, sentiment-driven, jewelry-and-bars retail demand is a structural feature, not a footnote.</p>
+      </div>
+      <div class="card">
+        <h3>De-dollarization</h3>
+        <p>The PBoC has been accumulating gold as a reserve asset, part of a slow pivot away from the dollar. A structural, price-insensitive buyer underneath the market.</p>
+      </div>
+      <div class="card">
+        <h3>The mechanics are different</h3>
+        <p><b>T+0</b> (buy and sell same day), a <b>night session</b> (<span class="zh">夜盘</span>) that tracks New York/London hours, daily price limits (<span class="zh">涨跌停板</span>), and a heavily margined, heavily retail order book.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">05 — the contract</div>
+    <h2>The instrument itself</h2>
+    <div class="spec">
+      <div class="hd">
+        <div class="name"><span class="zh">沪金</span> · AU</div>
+        <div class="ven">SHFE gold futures · representative spec</div>
+      </div>
+      <div class="rows">
+        <div class="r"><div class="k">underlying</div><div class="v">Au99.95 gold bullion</div></div>
+        <div class="r"><div class="k">contract size</div><div class="v">1,000 grams / lot</div></div>
+        <div class="r"><div class="k">quote</div><div class="v">CNY / gram</div></div>
+        <div class="r"><div class="k">trading</div><div class="v">T+0, plus a night session (<span class="zh">夜盘</span>)</div></div>
+        <div class="r"><div class="k">price limit</div><div class="v">daily <span class="zh">涨跌停板</span> (capped move)</div></div>
+        <div class="r"><div class="k">settlement</div><div class="v">physical delivery</div></div>
+      </div>
+    </div>
+    <p class="dim" style="font-size:12.5px">Specs change; confirm live values on the SHFE site before trading anything. The point here is the <em>shape</em>: priced in <span class="gold">CNY per gram</span>, not USD per ounce — a different unit, a different currency, a different clock.</p>
+  </section>
+
+  <section>
+    <div class="kicker">06 — the signal</div>
+    <h2>The premium is a tape you can read</h2>
+    <p>Picture the Shanghai premium over time. Most of the time it hovers in a narrow band near the London price. Then a demand shock, an import squeeze, or a stress event pulls it wide — and the gap <em>screams</em> before the headline does.</p>
+
+    <figure>
+      <svg class="chart" viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schematic of the Shanghai gold premium over time">
+        <line x1="40" y1="120" x2="700" y2="120" stroke="rgba(160,160,160,0.25)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="46" y="112" fill="rgba(160,160,160,0.45)" font-family="monospace" font-size="11">London price (parity)</text>
+        <text x="46" y="34" fill="#c4956a" font-family="monospace" font-size="11">premium — China is pulling metal in</text>
+        <text x="46" y="214" fill="rgba(160,160,160,0.45)" font-family="monospace" font-size="11">discount — demand soft</text>
+        <path d="M40,128 C90,124 110,132 150,126 C190,120 210,134 250,122 C290,112 320,118 360,108 C400,100 430,116 470,110 C520,104 540,60 580,44 C610,32 630,70 660,96 C680,110 692,118 700,116"
+              fill="none" stroke="#c4956a" stroke-width="2"/>
+        <circle cx="580" cy="44" r="3.5" fill="#c4956a"/>
+        <text x="560" y="32" fill="#c4956a" font-family="monospace" font-size="10" text-anchor="middle">stress spike</text>
+      </svg>
+      <figcaption><span class="tag">Schematic — illustrative of the pattern, not live data.</span> The real series (SGE premium vs. international) updates daily and is exactly the kind of thing you already ingest. Premium widening into a stress window is the corridor telling you something the screen price won't.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="kicker">07 — the edge that doesn't transfer</div>
+    <h2>The metagame is in the language</h2>
+    <p>China's futures market is overwhelmingly <b>retail and speculative</b> — and that means the order flow is soaked in sentiment. The forums, the broker chatter, the <span class="zh">大妈</span> psychology, the way a <span class="zh">期货</span> crowd piles into <span class="zh gold">沪金</span> on a rumor — it's a readable <em>felt-state</em>, a residue of what a whole market is feeling.</p>
+    <p>A Western desk renting an AI tool can translate the words. It cannot cheaply buy the thing underneath: <b>which print matters, what the crowd actually means, who's really bidding.</b> That layer is context and trust, and it doesn't transfer through a translation API.</p>
+    <div class="pullquote">AI killed the cost of <em>reading</em> the Chinese tape. It didn't touch the cost of <em>understanding</em> it. That gap is the whole corner.</div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="kicker">08 — where you go in</div>
+    <h2>The un-contested corner</h2>
+    <p>Not a job. A <b>corner</b>: the China-gold read-through, in a language the desks that move the world price can't read natively. The price is public (SGE, the premium series). The mechanics are learnable (this page). The wedge is the part you can't fake — the native read on what the corridor is feeling.</p>
+    <p>You don't need a balance sheet to occupy the <em>information</em> layer of this market. You need the tape, the language, and the discipline to score yourself honestly. Two of the three, you already have.</p>
+    <p class="dim" style="font-size:13px">Start by watching one number: the Shanghai premium. Ask it, every day, the only question that matters — <span class="gold">what did the sink just do?</span></p>
+  </section>
+
+  <footer>
+    <p>muFX · floor36 — a primer. Mechanics are pedagogical; verify live specs and data before trading. Schematic charts are illustrative.</p>
+    <p style="margin-top:8px"><a href="/floor36/">← floor36</a> · <a href="/">muFX</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
