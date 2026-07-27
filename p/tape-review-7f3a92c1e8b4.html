@@ -1,0 +1,367 @@
+<title>Tape Review — 决策审计</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --baseline:#383835; --ring:rgba(255,255,255,.10);
+    --gA:#86b6ef; --gB:#3987e5; --gC:#184f95;
+    --actual:#3987e5; --cf:#199e70;
+    --crit:#d03b3b; --good:#0ca30c;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+      --grid:#e1e0d9; --baseline:#c3c2b7; --ring:rgba(11,11,11,.10);
+      --gA:#5598e7; --gB:#256abf; --gC:#0d366b;
+      --actual:#2a78d6; --cf:#1baf7a; --good:#006300;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);
+       font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 20px 80px;display:flex;flex-direction:column;gap:28px}
+  header{display:flex;flex-direction:column;gap:6px;padding-bottom:8px}
+  .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{margin:0;font-size:34px;line-height:1.15;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+  h1 .cjk{color:var(--ink2);font-weight:500}
+  .sub{color:var(--ink2);max-width:64ch}
+  h2{margin:0 0 4px;font-size:19px;font-weight:650;letter-spacing:-.005em}
+  h2 .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-left:10px}
+  .card{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .tile{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+  .tile .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tile .v{font-size:26px;font-weight:700;line-height:1.1}
+  .tile .d{font-size:12px;color:var(--ink2)}
+  .v .up{color:var(--good);font-size:14px;font-weight:600}
+  .v .down{color:var(--crit);font-size:14px;font-weight:600}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--ink2)}
+  .legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .chartbox{overflow-x:auto}
+  svg text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+  .axis{font-size:11px;fill:var(--muted)}
+  .dlabel{font-size:11px;font-weight:600;fill:var(--ink2)}
+  .finding{display:flex;gap:12px;align-items:flex-start}
+  .finding .badge{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 8px;border-radius:99px;border:1px solid var(--ring);margin-top:2px;white-space:nowrap}
+  .badge.crit{color:var(--crit);border-color:var(--crit)}
+  .badge.good{color:var(--good);border-color:var(--good)}
+  .badge.info{color:var(--gA)}
+  .finding p{margin:0;color:var(--ink2)}
+  .finding b{color:var(--ink)}
+  table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+  th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;
+     padding:8px 10px;border-bottom:1px solid var(--baseline);font-weight:600}
+  td{padding:7px 10px;border-bottom:1px solid var(--grid);color:var(--ink2)}
+  td.n{text-align:right}
+  td .gchip{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;
+     border-radius:5px;padding:1px 6px;color:#fff}
+  tr.bot4 td:first-child{border-left:2px solid var(--crit)}
+  .tablewrap{overflow-x:auto}
+  #tt{position:fixed;pointer-events:none;background:var(--surface);border:1px solid var(--ring);
+      border-radius:8px;padding:8px 11px;font-size:12.5px;color:var(--ink);opacity:0;
+      transition:opacity .1s;box-shadow:0 4px 16px rgba(0,0,0,.35);max-width:280px;z-index:9}
+  @media(prefers-reduced-motion:reduce){#tt{transition:none}}
+  #tt .t1{font-weight:650}
+  #tt .t2{color:var(--ink2)}
+  .method{font-size:13px;color:var(--ink2);max-width:70ch}
+  .method b{color:var(--ink)}
+  footer{color:var(--muted);font-size:12px;border-top:1px solid var(--grid);padding-top:14px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Match Audit · Council Report · <span id="range"></span></div>
+  <h1>Tape Review <span class="cjk">决策审计</span></h1>
+  <p class="sub">Every number below is derived from freehand post-game commentary under the tokenization
+  delegation, then counted. Grades and attributions are the council's conservative reading of the player's
+  own words. Updated <span id="updated"></span>.</p>
+</header>
+
+<div class="tiles" id="tiles"></div>
+
+<section class="card">
+  <h2>Placement timeline <span class="tag">colored by self-grade</span></h2>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--gA)"></span>A-grade</span>
+    <span><span class="sw" style="background:var(--gB)"></span>B-grade</span>
+    <span><span class="sw" style="background:var(--gC)"></span>C-grade</span>
+    <span style="margin-left:auto">1st at top · dashed = top-4 boundary · hover any game</span>
+  </div>
+  <div class="chartbox" id="timeline"></div>
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>The grade gradient <span class="tag">self-assessment validity</span></h2>
+    <div id="gradechart"></div>
+    <div class="finding"><span class="badge good">Validated</span>
+      <p id="gradeblurb"></p></div>
+  </section>
+  <section class="card">
+    <h2>Attribution symmetry <span class="tag">bias check</span></h2>
+    <div class="tablewrap"><table id="symtable">
+      <tr><th></th><th>luck</th><th>mixed</th><th>skill / self</th></tr>
+    </table></div>
+    <div class="finding"><span class="badge good">Inverted bias</span>
+      <p id="symblurb"></p></div>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Session-length effect <span class="tag">first half vs second half, per day</span></h2>
+  <div id="fatigue"></div>
+  <div class="tablewrap"><table id="fattable">
+    <tr><th>day</th><th>games</th><th>first-half avg</th><th>second-half avg</th><th>Δ</th></tr>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Comp portfolio <span class="tag">families with 2+ plays · avg and spread</span></h2>
+  <div id="comps"></div>
+</section>
+
+<section class="card">
+  <h2>Actual vs counterfactual <span class="tag">by session-day, from the player's own reviews</span></h2>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--actual)"></span>Actual avg</span>
+    <span><span class="sw" style="background:var(--cf)"></span>Counterfactual avg</span>
+  </div>
+  <div id="cfchart"></div>
+</section>
+
+<section class="card">
+  <h2>Findings <span class="tag">council synthesis — editorial, updated per batch</span></h2>
+  <div style="display:flex;flex-direction:column;gap:12px">
+  <!-- FINDINGS:EDIT-PER-BATCH -->
+    <div class="finding"><span class="badge good">1</span><p><b>Day 5 was the first C-free session — and the best.</b>
+      Zero champion-select errors in 10 games, session avg 3.70, +102 LP. The report's core finding (the tail lives
+      at entry) was validated within 24 hours of being written: honor the entry rules, and the floor rises.</p></div>
+    <div class="finding"><span class="badge good">2</span><p><b>The audit instrument holds at n=39.</b> A-games avg ~2.2
+      with 100% top-4; C-games avg ~7.4 with zero. Attribution stays inverted: pure-luck excuses in losses remain
+      near zero while ~40% of wins are luck-credited.</p></div>
+    <div class="finding"><span class="badge info">3</span><p><b>New behavior: the delayed re-review.</b> The exalted-adventure
+      game was filed as "lost to 5-anima, don't blame myself" — then re-opened 20 minutes later, unprompted, and upgraded
+      into a named alternative line (tank/carry redistribution, reading the opponent's fear). "Its easier to say 5 anima
+      is op than to sit down and think what i actually couldve done. and apparently there is."</p></div>
+    <div class="finding"><span class="badge crit">4</span><p><b>Named leak, twice now: contest-fear.</b> "I need to stop
+      being scared of contesting" (game 10) echoes the abandoned medallion of 07-25. When the fear was inverted —
+      out-rolling both contesters — it produced a dominant 3rd. The scout data even supports boldness: the game-1 pivot
+      off a 3-way contest beat both contesters by two placements.</p></div>
+    <div class="finding"><span class="badge crit">5</span><p><b>The count-cliff persists, shopping break or not.</b>
+      Day 5 games 1–5: avg 2.60 (elite). Games 6–10: 4.80 — including both 8ths, and the last game self-described as
+      "brain was kinda not there." Third consecutive long session where the tail underperforms the head.</p></div>
+  <!-- /FINDINGS -->
+  </div>
+</section>
+
+<section class="card">
+  <h2>Full ledger <span class="tag">red bar = bottom-4 · hover rows in timeline for notes</span></h2>
+  <div class="tablewrap"><table id="ledger">
+    <tr><th>#</th><th>day</th><th>comp</th><th>place</th><th>grade</th><th>attribution</th><th>cf</th><th>alt-line</th></tr>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Method &amp; caveats</h2>
+  <p class="method"><b>Source:</b> freehand reviews, tokenized conservatively (grades from self-assigned errors;
+  counterfactuals only where the reviews themselves claim or deny a better line). <b>Caveats:</b> placements
+  self-reported and unverified against a tracker; in-day game order assumed from listing order; two placements
+  were inferred from context and confirmed or flagged in the ledger notes; LP is known only at a handful of
+  session boundaries; the symmetry number stabilizes near n≈50. Nothing here is canon until adjudicated.</p>
+</section>
+
+<footer>match audit · tokenized &amp; compiled by the council · grades are one blue, stepped — identity also
+carried by labels everywhere · the full ledger above is the accessibility view</footer>
+</div>
+
+<div id="tt"></div>
+
+<script>
+window.TAPE={"updated": "2026-07-27", "slug": "tape-review-7f3a92c1e8b4", "days": [{"id": "D1", "label": "Day 1 · ~07-22"}, {"id": "D2", "label": "Day 2 · ~07-23"}, {"id": "D3", "label": "Day 3 · 07-24"}, {"id": "D4", "label": "Day 4 · 07-25"}, {"id": "D5", "label": "Day 5 · 07-26"}], "lp": [{"date": "07-23", "lp": 380, "note": "trough"}, {"date": "07-25 midday", "lp": 650, "note": "peak"}, {"date": "07-25 close", "lp": 524, "note": "session end"}, {"date": "07-26 start", "lp": 524, "note": "session start"}, {"date": "07-26 end", "lp": 626, "note": "+102 on the day"}], "games": [{"day": "D1", "comp": "jinx", "family": "jinx", "place": 4, "grade": "B", "attr": "mixed", "cf": 3, "alt": "yes", "note": "akali route priced & declined"}, {"day": "D1", "comp": "ap95", "family": "95", "place": 2, "grade": "A-", "attr": "mixed", "cf": 1, "alt": "yes", "note": "'played super well' · bard/nunu misplay"}, {"day": "D1", "comp": "diana-anima", "family": "other", "place": 4, "grade": "B", "attr": "luck", "cf": 4, "alt": "none", "note": "streak broke · 'not much to learn'"}, {"day": "D2", "comp": "double-zoe", "family": "other", "place": 2, "grade": "B", "attr": "luck", "cf": 2, "alt": "yes", "note": "'very lucky with small neekos'"}, {"day": "D2", "comp": "vanguard-lb", "family": "other", "place": 7, "grade": "C", "attr": "mixed", "cf": 6, "alt": "yes", "note": "'6 vanguard is terrible' · pandora 0 bows"}, {"day": "D2", "comp": "corki-riven", "family": "corki", "place": 5, "grade": "B", "attr": "mixed", "cf": 4, "alt": "none", "note": "'honestly didnt think that far'"}, {"day": "D2", "comp": "veigar-baby", "family": "veigar", "place": 4, "grade": "B", "attr": "mixed", "cf": 2.5, "alt": "none", "note": "'couldve placed second' · mech unseen"}, {"day": "D2", "comp": "akali-stargazer", "family": "akali", "place": 2, "grade": "A", "attr": "skill", "cf": 2, "alt": "none", "note": "'made good decisions' throughout"}, {"day": "D2", "comp": "shepherd-lb", "family": "shep", "place": 4, "grade": "B", "attr": "skill", "cf": 2.5, "alt": "yes", "note": "判断/远见: committed to neither path"}, {"day": "D3", "comp": "95", "family": "95", "place": 8, "grade": "C", "attr": "mixed", "cf": 8, "alt": "yes", "note": "planned 95 · 'bad CHOICE to begin with'"}, {"day": "D3", "comp": "darkstar-mech", "family": "other", "place": 2, "grade": "B", "attr": "luck", "cf": 2, "alt": "none", "note": "'unexpected but ok'"}, {"day": "D3", "comp": "veigar", "family": "veigar", "place": 1, "grade": "B+", "attr": "luck", "cf": 1, "alt": "none", "note": "'game pretty much handed me this one'"}, {"day": "D3", "comp": "darkstar", "family": "other", "place": 7, "grade": "C+", "attr": "mixed", "cf": 5, "alt": "yes", "note": "relied on augments to 'save' the plan"}, {"day": "D3", "comp": "morde-zoe", "family": "other", "place": 2, "grade": "B", "attr": "luck", "cf": 2, "alt": "none", "note": "'once in a life type comp'"}, {"day": "D3", "comp": "serpent-lulu", "family": "other", "place": 8, "grade": "C", "attr": "mixed", "cf": 7, "alt": "yes", "note": "no rods · akali lobby · lost cause"}, {"day": "D3", "comp": "95", "family": "95", "place": 1, "grade": "A", "attr": "skill", "cf": 1, "alt": "none", "note": "'i thought i was DEAD' · quality pull"}, {"day": "D4", "comp": "lb-morg", "family": "other", "place": 3, "grade": "A-", "attr": "skill", "cf": 3, "alt": "none", "note": "good rolldown, 走位, item 规划"}, {"day": "D4", "comp": "jinx", "family": "jinx", "place": 2, "grade": "B+", "attr": "mixed", "cf": 2, "alt": "none", "note": "lost only to 5-anima · 'half luck half skill'"}, {"day": "D4", "comp": "space-groove", "family": "sgroove", "place": 2, "grade": "A-", "attr": "skill", "cf": 2, "alt": "none", "note": "counter-picked the akalis"}, {"day": "D4", "comp": "akali", "family": "akali", "place": 2, "grade": "B", "attr": "luck", "cf": 2, "alt": "none", "note": "'saved by luxury subscription'"}, {"day": "D4", "comp": "space-groove", "family": "sgroove", "place": 7, "grade": "B-", "attr": "mixed", "cf": 6, "alt": "yes", "note": "'prismatic augment always a little off'"}, {"day": "D4", "comp": "veigar", "family": "veigar", "place": 5, "grade": "B", "attr": "mixed", "cf": 3, "alt": "yes", "note": "positioning threw late · early game saved it"}, {"day": "D4", "comp": "corki-riv", "family": "corki", "place": 6, "grade": "C+", "attr": "mixed", "cf": 4, "alt": "yes", "note": "missed the nami pivot · 'slight blunder'"}, {"day": "D4", "comp": "corki-riv", "family": "corki", "place": 6, "grade": "B-", "attr": "mixed", "cf": 6, "alt": "yes", "note": "'cornered but didnt go 8th' · flexible"}, {"day": "D4", "comp": "medallion", "family": "other", "place": 3, "grade": "A", "attr": "skill", "cf": 3, "alt": "none", "note": "out-rolled both contesters, broke their econ"}, {"day": "D4", "comp": "shep-lb", "family": "shep", "place": 4, "grade": "B", "attr": "skill", "cf": 4, "alt": "none", "note": "standard · contester went 7th"}, {"day": "D4", "comp": "space-groove", "family": "sgroove", "place": 8, "grade": "C", "attr": "self", "cf": 5, "alt": "yes", "note": "'headhard' · 'i thought i had 特色 but not really'"}, {"day": "D4", "comp": "akali", "family": "akali", "place": 4, "grade": "B+", "attr": "luck", "cf": 2.5, "alt": "none", "note": "met the monster twice in 3 rounds"}, {"day": "D4", "comp": "95", "family": "95", "place": 8, "grade": "C", "attr": "mixed", "cf": 7, "alt": "yes", "note": "forced birthday reunion · no econ augments"}, {"day": "D5", "comp": "space-groove", "family": "sgroove", "place": 5, "grade": "B+", "attr": "mixed", "cf": 5, "alt": "yes", "note": "pivoted off 3-way shep contest — the sheps went 6th & 7th"}, {"day": "D5", "comp": "brawler-yi", "family": "other", "place": 2, "grade": "B+", "attr": "mixed", "cf": 2, "alt": "none", "note": "patient lvl-9 fiora 2 · mountain 'hard to beat'"}, {"day": "D5", "comp": "yi", "family": "other", "place": 1, "grade": "A", "attr": "mixed", "cf": 1, "alt": "none", "note": "engineered loss-streak preservation into 400-anima cashout"}, {"day": "D5", "comp": "medallion-wait", "family": "other", "place": 3, "grade": "A", "attr": "skill", "cf": 3, "alt": "none", "note": "'didnt make sense but i made it work' — 4th-place comp played as tempo"}, {"day": "D5", "comp": "exalted-adventure", "family": "other", "place": 2, "grade": "A-", "attr": "mixed", "cf": 1.5, "alt": "yes", "note": "the 20-min-later 残局 re-analysis: read his fear, named the redistribution"}, {"day": "D5", "comp": "baby-veigar", "family": "veigar", "place": 8, "grade": "B-", "attr": "mixed", "cf": 6, "alt": "yes", "note": "radiant chest misallocated · zero veigars showed"}, {"day": "D5", "comp": "corki-riv", "family": "corki", "place": 2, "grade": "B+", "attr": "luck", "cf": 2, "alt": "none", "note": "400-anima cashout carried · golden egg 'not close at all lol'"}, {"day": "D5", "comp": "mf-reroll", "family": "other", "place": 3, "grade": "A-", "attr": "skill", "cf": 2.5, "alt": "yes", "note": "争二保四 · wise spending · augment tradeoff reasoned both ways"}, {"day": "D5", "comp": "medallion", "family": "other", "place": 3, "grade": "B+", "attr": "mixed", "cf": 3, "alt": "none", "note": "1-cost comp at stage 7 — 'they couldnt believe it'"}, {"day": "D5", "comp": "space-groove", "family": "sgroove", "place": 8, "grade": "B-", "attr": "mixed", "cf": 7, "alt": "yes", "note": "augment paralysis · 'need to stop being scared of contesting' · PLACEMENT INFERRED — he wrote '10'"}]};
+const D=window.TAPE, G=D.games, N=G.length;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const gcol=g=>g[0]==="A"?css('--gA'):g[0]==="B"?css('--gB'):css('--gC');
+const NS='http://www.w3.org/2000/svg';
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+const tt=document.getElementById('tt');
+const showTT=(e,h)=>{tt.innerHTML=h;tt.style.opacity=1;
+  tt.style.left=Math.min(e.clientX+14,innerWidth-300)+'px';tt.style.top=Math.min(e.clientY+14,innerHeight-100)+'px'};
+const hideTT=()=>tt.style.opacity=0;
+const sum=a=>a.reduce((x,y)=>x+y,0), avg=a=>sum(a)/a.length, f2=x=>x.toFixed(2);
+const ord=p=>p==1?'1st':p==2?'2nd':p==3?'3rd':p+'th';
+
+/* ---- derived stats ---- */
+const pl=G.map(g=>g.place), cf=G.map(g=>g.cf);
+const wins=G.filter(g=>g.place<=4), losses=G.filter(g=>g.place>4);
+const sd=Math.sqrt(sum(pl.map(p=>(p-avg(pl))**2))/(N-1));
+const med=[...pl].sort((a,b)=>a-b)[Math.floor(N/2)];
+const tiers={A:[],B:[],C:[]}; G.forEach(g=>tiers[g.grade[0]].push(g.place));
+const attrOf=g=>g.attr.includes('luck')?'luck':(g.attr==='skill'||g.attr==='self')?'skillself':'mixed';
+const symW={luck:0,mixed:0,skillself:0}, symL={luck:0,mixed:0,skillself:0};
+wins.forEach(g=>symW[attrOf(g)]++); losses.forEach(g=>{ (g.attr==='luck')?symL.luck++:(g.attr==='self'||g.attr==='skill')?symL.skillself++:symL.mixed++; });
+const pureLuckLoss=symL.luck;
+
+/* ---- tiles ---- */
+const days=D.days.map(d=>d.id);
+document.getElementById('range').textContent=D.days[0].label.split('·')[1].trim()+' → '+D.days[days.length-1].label.split('·')[1].trim()+' · '+N+' games';
+document.getElementById('updated').textContent=D.updated;
+const lpLast=D.lp[D.lp.length-1];
+document.getElementById('tiles').innerHTML=[
+ ['Games',N,D.days.length+' session-days'],
+ ['Avg place',f2(avg(pl)),'median '+med+' · σ '+f2(sd)],
+ ['Counterfactual',f2(avg(cf)),'per his own reviews'],
+ ['Decision tax','<span class="down">−'+f2(avg(pl)-avg(cf))+'</span>','places lost / game'],
+ ['Top-4 rate',Math.round(100*wins.length/N)+'%',wins.length+' of '+N+' · '+pl.filter(p=>p==1).length+' firsts'],
+ ['Pure-luck losses',pureLuckLoss+'<span class="up"> / '+losses.length+'</span>','every loss self-examined'],
+ ['LP',lpLast.lp,lpLast.date+' · '+lpLast.note]
+].map(t=>`<div class="tile"><span class="k">${t[0]}</span><span class="v">${t[1]}</span><span class="d">${t[2]}</span></div>`).join('');
+
+/* ---- timeline ---- */
+(function(){
+  const W=Math.max(920,N*24),H=250,L=34,R=10,T=18,B=34,iw=W-L-R,ih=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',style:'min-width:'+Math.min(W,1200)+'px'});
+  const y=p=>T+(p-1)/7*ih;
+  for(let p=1;p<=8;p++){svg.append(el('line',{x1:L,x2:W-R,y1:y(p),y2:y(p),stroke:css('--grid')}));
+    const t=el('text',{x:L-8,y:y(p)+4,'text-anchor':'end',class:'axis'});t.textContent=p;svg.append(t);}
+  svg.append(el('line',{x1:L,x2:W-R,y1:y(4.5),y2:y(4.5),stroke:css('--muted'),'stroke-dasharray':'4 4'}));
+  const xs=G.map((g,i)=>L+18+i*(iw-30)/(N-1));
+  D.days.forEach((d,di)=>{
+    const idx=G.map((g,i)=>g.day===d.id?i:-1).filter(i=>i>=0);
+    if(!idx.length)return;
+    const x0=xs[idx[0]]-11,x1=xs[idx[idx.length-1]]+11;
+    if(di%2)svg.prepend(el('rect',{x:x0,y:T-6,width:x1-x0,height:ih+16,fill:css('--ink'),opacity:.035}));
+    const t=el('text',{x:(x0+x1)/2,y:H-10,'text-anchor':'middle',class:'axis'});t.textContent=d.label;svg.append(t);
+  });
+  for(let i=1;i<N;i++)svg.append(el('line',{x1:xs[i-1],y1:y(G[i-1].place),x2:xs[i],y2:y(G[i].place),
+    stroke:css('--baseline'),'stroke-width':1.5,'stroke-dasharray':G[i].day!==G[i-1].day?'2 4':'none'}));
+  G.forEach((g,i)=>{
+    svg.append(el('circle',{cx:xs[i],cy:y(g.place),r:6,fill:gcol(g.grade),stroke:css('--surface'),'stroke-width':2}));
+    const hit=el('circle',{cx:xs[i],cy:y(g.place),r:12,fill:'transparent'});
+    hit.addEventListener('mousemove',e=>showTT(e,`<div class="t1">#${i+1} ${g.comp} — ${ord(g.place)}</div>
+      <div class="t2">grade ${g.grade} · ${g.attr} · cf ${g.cf}</div><div class="t2">${g.note}</div>`));
+    hit.addEventListener('mouseleave',hideTT);svg.append(hit);
+  });
+  document.getElementById('timeline').append(svg);
+})();
+
+/* ---- grade gradient ---- */
+(function(){
+  const rows=['A','B','C'].map(k=>{const v=tiers[k];return [k,v.length,v.length?avg(v):0,
+    v.length?Math.round(100*v.filter(p=>p<=4).length/v.length):0]});
+  const W=420,H=150,L=30,T=8,bw=26,gap=(W-L-40)/3;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%'});
+  const y=v=>T+(v-1)/7*(H-46-T);
+  svg.append(el('line',{x1:L,x2:W-8,y1:H-38,y2:H-38,stroke:css('--baseline')}));
+  rows.forEach((r,i)=>{const x=L+30+i*gap,col=r[0]==="A"?css('--gA'):r[0]==="B"?css('--gB'):css('--gC');
+    svg.append(el('rect',{x:x,y:y(r[2]),width:bw,height:H-38-y(r[2]),fill:col,rx:4}));
+    const v=el('text',{x:x+bw/2,y:y(r[2])-6,'text-anchor':'middle',class:'dlabel'});v.textContent=f2(r[2]);svg.append(v);
+    const l=el('text',{x:x+bw/2,y:H-22,'text-anchor':'middle',class:'axis'});l.textContent=`${r[0]} · n=${r[1]}`;svg.append(l);
+    const l2=el('text',{x:x+bw/2,y:H-8,'text-anchor':'middle',class:'axis'});l2.textContent=`top4 ${r[3]}%`;svg.append(l2);});
+  document.getElementById('gradechart').append(svg);
+  document.getElementById('gradeblurb').innerHTML=`Self-grades <b>predict outcomes</b>: A-games average ${f2(avg(tiers.A))}
+    with ${Math.round(100*tiers.A.filter(p=>p<=4).length/tiers.A.length)}% top-4; C-games average ${f2(avg(tiers.C))}
+    with <b>${Math.round(100*tiers.C.filter(p=>p<=4).length/tiers.C.length)}% top-4</b>. The instrument tracks reality.`;
+})();
+
+/* ---- symmetry ---- */
+(function(){
+  const t=document.getElementById('symtable');
+  t.insertAdjacentHTML('beforeend',`<tr><td>Wins (n=${wins.length})</td><td class="n">${symW.luck}</td>
+    <td class="n">${symW.mixed}</td><td class="n">${symW.skillself}</td></tr>
+    <tr><td>Losses (n=${losses.length})</td><td class="n">${symL.luck}</td><td class="n">${symL.mixed}</td>
+    <td class="n">${symL.skillself}</td></tr>`);
+  document.getElementById('symblurb').innerHTML=`Luck credited in <b>${Math.round(100*symW.luck/wins.length)}% of wins</b>
+    but <b>${symL.luck} of ${losses.length} losses</b> excused as pure luck — the self-serving bias this audit was
+    built to catch is running <b>backwards</b>. Alt-lines are named in ${G.filter(g=>g.place>4&&g.alt==='yes').length}
+    of ${losses.length} losses.`;
+})();
+
+/* ---- fatigue ---- */
+(function(){
+  const tbl=document.getElementById('fattable');
+  let big=null;
+  D.days.forEach(d=>{
+    const v=G.filter(g=>g.day===d.id).map(g=>g.place);
+    if(v.length>=6){
+      const h=Math.ceil(v.length/2),a1=avg(v.slice(0,h)),a2=avg(v.slice(h));
+      tbl.insertAdjacentHTML('beforeend',`<tr><td>${d.label}</td><td class="n">${v.length}</td>
+        <td class="n">${f2(a1)}</td><td class="n">${f2(a2)}</td>
+        <td class="n" style="color:${a2>a1?'var(--crit)':'var(--good)'}">${(a2-a1>=0?'+':'')+f2(a2-a1)}</td></tr>`);
+      if(!big||v.length>big.v.length)big={d,v};
+    }
+  });
+  if(!big)return;
+  const v=big.v,W=920,H=190,L=34,R=10,T=14,B=30,iw=W-L-R,ih=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',style:'min-width:680px'});
+  const y=p=>T+(p-1)/7*ih,x=i=>L+24+i*(iw-48)/(v.length-1);
+  for(let p=1;p<=8;p++){svg.append(el('line',{x1:L,x2:W-R,y1:y(p),y2:y(p),stroke:css('--grid')}));
+    if(p%2)svg.append(Object.assign(el('text',{x:L-8,y:y(p)+4,'text-anchor':'end',class:'axis'}),{textContent:p}));}
+  const h=Math.ceil(v.length/2);
+  svg.append(el('rect',{x:x(h)-10,y:T-4,width:x(v.length-1)-x(h)+24,height:ih+8,fill:css('--crit'),opacity:.07}));
+  for(let i=1;i<v.length;i++)svg.append(el('line',{x1:x(i-1),y1:y(v[i-1]),x2:x(i),y2:y(v[i]),stroke:css('--actual'),'stroke-width':2}));
+  v.forEach((p,i)=>{svg.append(el('circle',{cx:x(i),cy:y(p),r:5.5,fill:css('--actual'),stroke:css('--surface'),'stroke-width':2}));});
+  const t1=el('text',{x:x(Math.floor(h/2)),y:y(avg(v.slice(0,h)))-8,'text-anchor':'middle',class:'dlabel'});
+  t1.textContent=`games 1–${h} · avg ${f2(avg(v.slice(0,h)))}`;svg.append(t1);
+  const t2=el('text',{x:x(h+Math.floor((v.length-h)/2)),y:y(avg(v.slice(h)))+18,'text-anchor':'middle',class:'dlabel'});
+  t2.textContent=`games ${h+1}–${v.length} · avg ${f2(avg(v.slice(h)))}`;svg.append(t2);
+  const xt=el('text',{x:(L+W-R)/2,y:H-6,'text-anchor':'middle',class:'axis'});
+  xt.textContent=big.d.label+' (largest session) · shaded = second half';svg.append(xt);
+  document.getElementById('fatigue').append(svg);
+})();
+
+/* ---- comps ---- */
+(function(){
+  const fams={};G.forEach(g=>(fams[g.family]=fams[g.family]||[]).push(g.place));
+  const rows=Object.entries(fams).filter(([k,v])=>v.length>=2&&k!=='other')
+    .map(([k,v])=>[k,v,avg(v)]).sort((a,b)=>a[2]-b[2]);
+  const W=920,H=rows.length*34+40,L=110,R=30,T=8,iw=W-L-R;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',style:'min-width:600px'});
+  const x=v=>L+(v-1)/7*iw;
+  for(let p=1;p<=8;p++){svg.append(el('line',{x1:x(p),x2:x(p),y1:T,y2:H-26,stroke:css('--grid')}));
+    const t=el('text',{x:x(p),y:H-10,'text-anchor':'middle',class:'axis'});t.textContent=p;svg.append(t);}
+  rows.forEach((r,i)=>{const yy=T+14+i*34;
+    const lab=el('text',{x:L-10,y:yy+4,'text-anchor':'end',class:'dlabel'});lab.textContent=r[0]+' ('+r[1].length+')';svg.append(lab);
+    svg.append(el('line',{x1:x(Math.min(...r[1])),x2:x(Math.max(...r[1])),y1:yy,y2:yy,stroke:css('--baseline'),'stroke-width':1.5}));
+    r[1].forEach(p=>svg.append(el('circle',{cx:x(p),cy:yy,r:4,fill:css('--gB'),opacity:.55,stroke:css('--surface'),'stroke-width':1})));
+    svg.append(el('circle',{cx:x(r[2]),cy:yy,r:6.5,fill:css('--gA'),stroke:css('--surface'),'stroke-width':2}));
+    const hit=el('rect',{x:L,y:yy-14,width:iw,height:28,fill:'transparent'});
+    hit.addEventListener('mousemove',e=>showTT(e,`<div class="t1">${r[0]}</div><div class="t2">[${r[1].join(', ')}] · avg ${f2(r[2])}</div>`));
+    hit.addEventListener('mouseleave',hideTT);svg.append(hit);});
+  document.getElementById('comps').append(svg);
+})();
+
+/* ---- actual vs cf ---- */
+(function(){
+  const rows=D.days.map(d=>{const v=G.filter(g=>g.day===d.id);
+    return [d.label.split('·')[0].trim(),avg(v.map(g=>g.place)),avg(v.map(g=>g.cf))]});
+  rows.push(['All '+N,avg(pl),avg(cf)]);
+  const W=920,H=190,L=34,T=10,B=30,iw=W-L-20,ih=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',style:'min-width:600px'});
+  const y=v=>T+(v-1)/7*ih;
+  for(let p=1;p<=8;p++){svg.append(el('line',{x1:L,x2:W-20,y1:y(p),y2:y(p),stroke:css('--grid')}));
+    if(p%2)svg.append(Object.assign(el('text',{x:L-8,y:y(p)+4,'text-anchor':'end',class:'axis'}),{textContent:p}));}
+  const gw=iw/rows.length;
+  rows.forEach((r,i)=>{const cx=L+gw*i+gw/2,bw=24;
+    svg.append(el('rect',{x:cx-bw-1,y:y(r[1]),width:bw,height:(H-B)-y(r[1]),fill:css('--actual'),rx:4}));
+    svg.append(el('rect',{x:cx+1,y:y(r[2]),width:bw,height:(H-B)-y(r[2]),fill:css('--cf'),rx:4}));
+    const v1=el('text',{x:cx-bw/2-1,y:y(r[1])-5,'text-anchor':'middle',class:'dlabel'});v1.textContent=f2(r[1]);svg.append(v1);
+    const v2=el('text',{x:cx+bw/2+1,y:y(r[2])-5,'text-anchor':'middle',class:'dlabel'});v2.textContent=f2(r[2]);svg.append(v2);
+    const l=el('text',{x:cx,y:H-8,'text-anchor':'middle',class:'axis'});l.textContent=r[0];svg.append(l);});
+  document.getElementById('cfchart').append(svg);
+})();
+
+/* ---- ledger ---- */
+(function(){
+  const tbl=document.getElementById('ledger');
+  G.forEach((g,i)=>{
+    const tr=document.createElement('tr');if(g.place>4)tr.className='bot4';
+    tr.innerHTML=`<td>${i+1}</td><td>${g.day}</td><td>${g.comp}</td><td class="n">${g.place}</td>
+      <td><span class="gchip" style="background:${gcol(g.grade)}">${g.grade}</span></td>
+      <td>${g.attr}</td><td class="n">${g.cf}</td><td>${g.alt==='yes'?'named':'none'}</td>`;
+    tbl.append(tr);
+  });
+})();
+</script>
