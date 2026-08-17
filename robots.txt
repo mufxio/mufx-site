@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
 
+# /p/ holds unlisted working documents; they carry noindex individually.
+Disallow: /p/
+
 Sitemap: https://mufx.io/sitemap.xml
 
-# muFX — Institutional-grade FX research
+# Residue Lab — environment construction for autonomous fine-tuning
 # https://mufx.io

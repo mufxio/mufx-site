@@ -860,6 +860,8 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
     <div class="nav-links">
       <a href="/#program">program</a>
       <a href="/#experiments">experiments</a>
+      <a href="/results.html">results</a>
+      <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
       <a href="/methodology.html" class="current">methodology</a>
       <a href="/lineage.html">lineage</a>
       <a href="/floor36/">floor36</a>
@@ -981,6 +983,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
   <div class="section-label"><span class="section-num">§ 03</span> The nine-stage pipeline</div>
   <h2>How residue actually gets made.</h2>
   <p class="lede">The four-step walkthrough on the landing page is the public sketch. This is the working pipeline. Skip a stage and something measurable breaks.</p>
+  <p class="note"><strong>The pipeline is becoming an agent loop.</strong> These nine stages were first written as a process a human researcher runs by hand. The thing we are actually building is the same sequence redrawn as <em>agent-executable steps with typed input/output contracts</em> — collect a tiered corpus → build control corpora → probe → fine-tune → self-verify → integrate into a persistent base. The lab's load-bearing contribution is not a single probe or model but <em>a runnable methodology an autonomous agent executes to attempt felt-sense capability for a new event.</em> Each event is meant to leave the system slightly better at the next. Whether that loop produces signal above the probing floor is the open question, not a settled result.</p>
 
   <div class="pipeline">
 
@@ -1027,10 +1030,10 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
     <div class="stage">
       <div class="stage-num">05</div>
       <div class="stage-body">
-        <div class="stage-name">Probe evaluation</div>
-        <p class="stage-what">AUROC + recall@1%FPR (deployment metric). Span-level scoring. Reliability-diagram calibration. Spurious-correlation ablations vs adjacent concepts (anger / moral indignation, grief / solemnity).</p>
-        <p class="stage-why">Apollo's failure mode #1 was tracking morality not honesty — we plan for the analog.</p>
-        <div class="stage-out"><strong>output:</strong> probe scorecard · calibration · ablations</div>
+        <div class="stage-name">Probe evaluation · control-corpus isolation</div>
+        <p class="stage-what">AUROC + recall@1%FPR (deployment metric). Span-level scoring. Reliability-diagram calibration. Spurious-correlation ablations vs adjacent concepts (anger / moral indignation, grief / solemnity). <strong>Load-bearing check:</strong> does the probe separate genuine event-residue from ordinary and emotional <em>first-person</em> control text — not just from Wikipedia?</p>
+        <p class="stage-why">Apollo's failure mode #1 was tracking morality not honesty — we plan for the analog. Spec 1.5 found a probe can satisfy the bible's monotonic A&gt;B&gt;C&gt;D tier ordering while still being a <em>register</em> detector, not a residue detector. The tier gradient is now a sanity check; the control-corpus isolation test is what the claim rests on.</p>
+        <div class="stage-out"><strong>output:</strong> probe scorecard · calibration · ablations · control-corpus separation</div>
       </div>
     </div>
 
@@ -1077,6 +1080,22 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
   </div>
 
   <p class="note"><strong>For the 2-week pilot:</strong> stages 1–5 required. Stage 6 makes the framework falsifiable. Stage 7 is novel for residue. Stage 8 drops the full Bayesian network early. Stage 9 makes it citable.</p>
+
+  <h3><span class="num">03.1</span> Two rungs beyond probing</h3>
+  <p>Everything above is the probing rung — infrastructure for <em>reading</em> a marginal, model-specific signal off activations. Two further rungs turn that infrastructure into something an agent can build with. Probing was the floor; these are the build steps.</p>
+
+  <div class="literal-aspirational">
+    <div class="la-cell literal">
+      <div class="la-label">› rung · amplify</div>
+      <p>Fine-tune a model to push a marginal residue floor toward a more robust signal — the gain only counts if it holds on held-out events <em>and</em> held-out controls, so it can't be a register artifact or a memorized event. If it only survives on seen events, or only against Wikipedia, it doesn't count.</p>
+    </div>
+    <div class="la-cell asp">
+      <div class="la-label">› rung · automate</div>
+      <p>Wrap the nine stages as an autonomous loop with typed contracts: collect tiered corpus → build control corpora → probe → fine-tune → self-verify → integrate into a persistent base. A new event enters; the loop runs; the base is meant to carry the capability forward.</p>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:1.5rem;"><strong>Pre-registered bands are the loop's self-honesty mechanism.</strong> In ENFSI discipline a human pre-registers pass/fail thresholds before seeing data. In the autonomous loop that same act becomes the agent's calibration check: content-addressed bands the agent cannot move mid-run. This is the thing that stops an agent from confidently reporting a confounded model — one that passes the tier gradient but fails control-corpus isolation — as residue-capable. The bands are not yet evidence the loop works; they are what would make a "works" verdict trustworthy if one ever lands.</p>
 </section>
 
 <!-- §04 — MATH RESIDUE FRAMING -->
@@ -1315,7 +1334,23 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
       <div class="disc-tag">DISC 08</div>
       <div class="disc-body">
         <h5><span class="neg">not</span> a novel probe or architecture</h5>
-        <p>The contribution is the integration. We borrow MM probes (Marks &amp; Tegmark), LR + follow-up probes (Apollo), the 171-emotion list (Anthropic), forensic statistics from a century of practice. Novelty: bringing them into one pipeline on one substrate.</p>
+        <p>The contribution is the integration. We borrow MM probes (Marks &amp; Tegmark), LR + follow-up probes (Apollo), the 171-emotion list (Anthropic), forensic statistics from a century of practice. Novelty: bringing them into one pipeline on one substrate — and, increasingly, an agent loop that runs them.</p>
+      </div>
+    </div>
+
+    <div class="disc-item">
+      <div class="disc-tag">DISC 09</div>
+      <div class="disc-body">
+        <h5><span class="neg">tier gradient</span> is not sufficient</h5>
+        <p>Spec 1.5 is the cautionary finding: a probe can satisfy the bible's monotonic A&gt;B&gt;C&gt;D tier ordering and still be a <em>register</em> detector, not a residue detector. The load-bearing validation is the control-corpus isolation test — separating event-residue from ordinary and emotional first-person text. The tier gradient is demoted to a sanity check.</p>
+      </div>
+    </div>
+
+    <div class="disc-item">
+      <div class="disc-tag">DISC 10</div>
+      <div class="disc-body">
+        <h5><span class="neg">bands locked</span> before the agent sees data</h5>
+        <p>For the autonomous loop, ENFSI pre-registration becomes the agent's calibration check: content-addressed pass/fail bands the agent cannot move mid-run. This is what keeps the loop from confidently reporting a confounded model as residue-capable. The honest state remains a marginal, model-specific probing floor — the bands govern how a stronger claim would have to be earned, not whether one exists yet.</p>
       </div>
     </div>
 

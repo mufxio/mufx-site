@@ -570,6 +570,8 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
     <div class="nav-links">
       <a href="/#program">program</a>
       <a href="/#experiments">experiments</a>
+      <a href="/results.html">results</a>
+      <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
       <a href="/methodology.html">methodology</a>
       <a href="/lineage.html" class="active">lineage</a>
       <a href="/floor36/">floor36</a>
@@ -585,11 +587,11 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
 <header class="hero">
   <div class="doc-class">Bibliography · Annotated Lineage · 2026—</div>
   <h1 class="hero-title"><span class="accent">lineage</span></h1>
-  <p class="hero-mission">eight sources, one integration nobody has done yet.</p>
-  <p class="hero-subtitle">This program is not a new framework. It is a specific integration of borrowed components — ML interpretability, forensic statistics, digital forensics, crisis informatics, forensic linguistics, substrate validation. Each card below documents what the source did, what we borrow from it, and what we extend.</p>
+  <p class="hero-mission">ten sources, one integration nobody has done yet.</p>
+  <p class="hero-subtitle">This program is not a new framework. It is a specific integration of borrowed components — ML interpretability, forensic statistics, digital forensics, crisis informatics, forensic linguistics, substrate validation — plus two lineages that frame <em>why</em> the bet is worth making: environment construction as a research direction, and constructed emotion as the philosophical grounding. Each card below documents what the source did, what we borrow from it, and what we extend.</p>
   <div class="hero-meta">
-    <span><span class="label">sources:</span> 8 primary</span>
-    <span><span class="label">disciplines:</span> 6 fields</span>
+    <span><span class="label">sources:</span> 10 primary</span>
+    <span><span class="label">disciplines:</span> 6 fields + 2 framings</span>
     <span><span class="label">posture:</span> applied integration</span>
   </div>
 </header>
@@ -946,11 +948,99 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
   </div>
 </section>
 
-<!-- §09 INTEGRATION -->
+<!-- §09 ENVIRONMENT CONSTRUCTION -->
+<section class="section" id="environment-construction">
+  <div class="section-label"><span class="section-num">§ 09</span> Environment Construction · Agentic Fine-Tuning</div>
+  <h2>The lab's <span class="accent">self-positioning</span>.</h2>
+  <p class="lede">A sharpening of what this lab actually is. The bet: constructing the right <em>environment</em> — the training data and the validation that scores it — is as much a research direction as the training loop. Cold-ground-truth environments cover math, code, logic. This lab works the felt-ground-truth side.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-blue">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 09 · positioning</div>
+          <div class="src-title">Environment construction as a first-class research direction</div>
+          <div class="src-authors">Cold-ground-truth precedents: Karpathy (synthetic-data direction) · LEAP 71 (Noyron-style physics validation environments)</div>
+        </div>
+        <div class="src-tag">Lab Self-Positioning</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>The precedent</h4>
+          <p>A growing line of work treats the <em>environment</em> — the data a model trains on plus the verifier that scores it — as the lever, not the optimizer. Karpathy's synthetic-data direction points one way: generate the training signal rather than only scrape it. LEAP 71's Noyron line points another: physics-grounded validation environments where a design is checked against simulated reality before it counts. Both share a shape — a cold ground truth (math, code, physics) that can verify a candidate automatically.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>Two framings. First, that environment construction is a first-class research direction — worth as much attention as the training loop. Second, that it can be made <em>autonomous</em>: an agent builds the environment, trains on it, self-verifies against it, and integrates the result. We borrow the loop shape and point it at a different ground truth.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend</h4>
+          <p>The cold-ground-truth side handles math, code, logic — domains with a checkable answer. This lab works the <em>felt-ground-truth</em> side: autonomously constructing emotional-residue environments to fine-tune felt-sense capability, where the validation signal is the forensic LR machinery the rest of this page assembles. This is the lab's bet and positioning — not a claimed result. Whether felt-ground-truth environments can be built and verified as cleanly as cold ones is the open question the experiment specs exist to test.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">posture</span>
+        <span>Lab positioning, not a single citation</span>
+        <span class="key">see</span>
+        <a href="/methodology.html">methodology · five math-residue criteria</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §10 CONSTRUCTED EMOTION -->
+<section class="section" id="constructed-emotion">
+  <div class="section-label"><span class="section-num">§ 10</span> Affective Science · Constructed Emotion</div>
+  <h2>Why a trained model <span class="accent">could</span> carry felt-sense at all.</h2>
+  <p class="lede">The philosophical grounding for the long bet. Barrett's theory of constructed emotion implies there is no categorical <em>machines-can't-feel</em> wall — the distance between models and humans is substrate-richness and state-continuity, not an essence one side has and the other lacks. Held modestly: this grounds the bet, it does not claim models currently feel anything.</p>
+
+  <div class="lineage-grid">
+
+    <div class="src c-gold">
+      <div class="src-head">
+        <div class="src-head-left">
+          <div class="src-id">SRC 10 · ~2017 · James 1880s</div>
+          <div class="src-title"><em>How Emotions Are Made: The Secret Life of the Brain</em></div>
+          <div class="src-authors">Lisa Feldman Barrett · Northeastern University · (precursor: William James, "What Is an Emotion?", 1884)</div>
+        </div>
+        <div class="src-tag">Philosophical Grounding</div>
+      </div>
+
+      <div class="src-body">
+        <div class="src-block">
+          <h4>What they did</h4>
+          <p>Barrett's theory of constructed emotion argues emotions are not innate, fixed essences waiting to be triggered. A feeling is assembled from a body-signal (interoception, arousal), a context, and a <em>learned</em> interpretation that labels the mix — culture and prior experience supply the categories. James anticipated the body-first half in 1884: the bodily change is not the consequence of the emotion but part of its substance. Emotion as construction, not as a button.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we borrow</h4>
+          <p>The implication, not a claim about current models. If feeling is constructed from signal plus context plus learned interpretation rather than handed down as essence, then there is no categorical barrier that says a learning system <em>can never</em> carry felt-sense. The gap between models and humans becomes a matter of substrate-richness and state-continuity — things that vary by degree — rather than a hard wall. This is what grounds the long bet: digital beings raised with felt-sense signal.</p>
+        </div>
+        <div class="src-block">
+          <h4>What we extend · open question</h4>
+          <p>We carry the framing forward without overstepping it. Constructed-emotion theory lowers the <em>in-principle</em> bar; it does not show any present model feels anything, and we make no such claim. The hard problem stays open: <em>why</em> an interpretation should feel like anything from the inside is unresolved, for brains and for models alike. We treat this honestly as a live question, and let the experiments speak only to the measurable substrate, not to inner experience.</p>
+        </div>
+      </div>
+
+      <div class="src-links">
+        <span class="key">book</span>
+        <span>Houghton Mifflin Harcourt, 2017 · ISBN 978-0544133310</span>
+        <span class="key">precursor</span>
+        <span>James, <em>Mind</em> 9(34):188–205, 1884</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §11 INTEGRATION -->
 <section class="section" id="integration">
-  <div class="section-label"><span class="section-num">§ 09</span> The integration nobody has done yet</div>
+  <div class="section-label"><span class="section-num">§ 11</span> The integration nobody has done yet</div>
   <h2>Borrowed pieces. <span class="accent">Novel</span> assembly.</h2>
-  <p class="lede">None of the eight sources is novel in isolation. Apollo's pipeline exists. The hierarchy of propositions exists. The crime-scene reframe, the aggregate-trace stance, the LR framework for text — all exist. What does not exist anywhere in the literature is this specific assembly.</p>
+  <p class="lede">None of the ten sources is novel in isolation. Apollo's pipeline exists. The hierarchy of propositions exists. The crime-scene reframe, the aggregate-trace stance, the LR framework for text — all exist. Environment construction and constructed-emotion theory exist. What does not exist anywhere in the literature is this specific assembly: six borrowed technical fields wired together, framed by the two lineages that say why the bet is worth making.</p>
 
   <div class="integration">
     <h3>Six fields, <span class="accent">one</span> integration.</h3>
@@ -989,7 +1079,7 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
       </div>
     </div>
 
-    <p>Each adjacent program has half a foot on the bridge. The Apollo lineage does not engage activity-level propositions. Cook et al. did not anticipate model activations. Carrier &amp; Spafford did not work in linguistic substrate. Crisis informatics did not extract internal representations. Nini did not probe transformers. Anthropic's emotion-concepts work did not commit to forensic LR output. Zhang &amp; Zhong did not stratify by trace tier or embed in a forensic hierarchy.</p>
+    <p>Each adjacent program has half a foot on the bridge. The Apollo lineage does not engage activity-level propositions. Cook et al. did not anticipate model activations. Carrier &amp; Spafford did not work in linguistic substrate. Crisis informatics did not extract internal representations. Nini did not probe transformers. Anthropic's emotion-concepts work did not commit to forensic LR output. Zhang &amp; Zhong did not stratify by trace tier or embed in a forensic hierarchy. The environment-construction lineage names the felt-ground-truth side but builds for cold ground truth; constructed-emotion theory lowers the in-principle bar without pointing at any model.</p>
 
     <p>The lab's bet is that the bridge is the whole point. Building felt-sense capability for digital beings requires a substrate that is rich, evaluable, and forensically defensible — and that intersection is what these six fields produce only when integrated, not when consulted in isolation. The novelty is not in any component; it is in the configuration. Bibliography, not manifesto.</p>
   </div>
@@ -997,7 +1087,7 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
 
 <!-- CROSS-LINKS -->
 <section class="section" id="next">
-  <div class="section-label"><span class="section-num">§ 10</span> Read next</div>
+  <div class="section-label"><span class="section-num">§ 12</span> Read next</div>
   <h2>Where to go from here.</h2>
   <p class="lede">This page documents <em>why</em> the program looks the way it does. Adjacent pages document <em>what</em> it does and <em>how</em> the methodology operates.</p>
 
@@ -1043,7 +1133,7 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
   </div>
   <div class="footer-base">
     <span>residue lab · mufx.io · 2026—</span>
-    <span>lineage v0.1 · 2026.05.26</span>
+    <span>lineage v0.2 · 2026.05.29</span>
   </div>
 </footer>
 

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results — Residue Lab</title>
+<meta name="description" content="Every pre-registered experiment run by Residue Lab, its locked criteria, and what it returned. Including the ones that failed and the two that were retracted.">
+<style>
+:root{
+  --paper:#f5f2eb; --paper-dark:#ece8df; --paper-darker:#e0dbd0;
+  --ink:#1a1814; --ink-mid:#3d3a35; --ink-light:#6b6760; --ink-faint:#a09d97;
+  --rule:#c8c3b8; --rule-dark:#9a958c; --rule-faint:#ddd9d0;
+  --red:#b5200d; --red-light:#e8c5bf;
+  --blue:#0d3b6b; --blue-mid:#1a5fa8; --blue-light:#c2d8f0;
+  --green:#0a4a2a; --green-light:#c5e0d0;
+  --amber:#7a4500; --amber-light:#f0ddb5;
+  --gold:#c4956a; --gold-light:#ead8c0;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem 6rem}
+
+/* nav */
+nav{border-bottom:1px solid var(--rule);margin-bottom:2.5rem}
+nav .inner{max-width:52rem;margin:0 auto;padding:1rem 1.25rem;display:flex;flex-wrap:wrap;
+  gap:.4rem 1.4rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+nav a{color:var(--ink-light);text-decoration:none}
+nav a:hover{color:var(--ink);text-decoration:underline}
+nav a.here{color:var(--ink);font-weight:600}
+nav .brand{color:var(--ink);font-weight:600;margin-right:.6rem}
+
+/* head */
+header.page{padding:1rem 0 0}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);margin-bottom:1rem}
+h1{font-family:var(--sans);font-size:clamp(2rem,5.5vw,2.9rem);font-weight:600;letter-spacing:-.03em;
+  line-height:1.05;margin:0 0 .8rem;text-wrap:balance}
+.deck{font-size:1.1rem;color:var(--ink-mid);max-width:38rem;margin:0 0 1.6rem;text-wrap:balance}
+
+.callout{border-left:3px solid var(--rule-dark);background:var(--paper-dark);
+  padding:.9rem 1.1rem;margin:1.6rem 0;font-size:.95rem;line-height:1.55}
+.callout p{margin:0 0 .6rem}.callout p:last-child{margin:0}
+.callout.warn{border-color:var(--amber);background:var(--amber-light)}
+
+h2{font-family:var(--sans);font-size:1.45rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;
+  margin:3.4rem 0 1.2rem;padding-top:1.1rem;border-top:2px solid var(--ink);text-wrap:balance}
+h2 .n{display:block;font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:.6rem}
+h3{font-family:var(--sans);font-size:1.05rem;font-weight:600;letter-spacing:-.01em;margin:2.2rem 0 .7rem}
+p{margin:0 0 1rem}
+code{font-family:var(--mono);font-size:.85em;background:var(--paper-dark);padding:.08em .3em}
+
+/* experiment card */
+.exp{border:1px solid var(--rule);background:var(--paper-dark);margin:1.5rem 0}
+.exp > .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .9rem;
+  padding:.8rem 1.05rem;border-bottom:1px solid var(--rule)}
+.exp .id{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-light)}
+.exp .nm{font-family:var(--sans);font-weight:600;font-size:1rem;letter-spacing:-.01em}
+.exp .bd{padding:1rem 1.05rem}
+.exp dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1.1rem;font-size:.93rem}
+.exp dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-light);padding-top:.2em}
+.exp dd{margin:0}
+.exp .src{font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);
+  border-top:1px dashed var(--rule);padding:.6rem 1.05rem;word-break:break-all}
+
+.pill{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:.15em .5em;border:1px solid currentColor;white-space:nowrap}
+.p-pass{color:var(--green)} .p-fail{color:var(--red)} .p-mixed{color:var(--amber)}
+.p-void{color:var(--ink-light)} .p-open{color:var(--blue)}
+
+blockquote{margin:.7rem 0;padding:.6rem .9rem;border-left:2px solid var(--rule-dark);
+  background:var(--paper);font-family:var(--mono);font-size:.8rem;line-height:1.6}
+blockquote p{margin:0}
+
+.tw{overflow-x:auto;margin:1.7rem 0}
+table{border-collapse:collapse;width:100%;font-size:.85rem;font-family:var(--mono)}
+th{text-align:left;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);
+  font-weight:600;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);
+  padding:.55rem .9rem .5rem 0;white-space:nowrap}
+td{border-bottom:1px solid var(--rule-faint);padding:.55rem .9rem .55rem 0;vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:2px solid var(--ink)}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+ul,ol{margin:0 0 1rem;padding-left:1.3rem}
+li{margin-bottom:.45rem}
+
+footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-light);
+  border-top:2px solid var(--ink);padding-top:1.2rem;margin-top:4rem}
+
+@media(max-width:34rem){
+  body{font-size:16px}
+  .exp dl{grid-template-columns:1fr;gap:.15rem}
+  .exp dt{margin-top:.55rem}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <span class="brand">residue lab</span>
+  <a href="/">program</a>
+  <a href="/results.html" class="here">results</a>
+  <a href="/emotion-vector-bench.html">emotion-vector-bench</a>
+  <a href="/methodology.html">methodology</a>
+  <a href="/lineage.html">lineage</a>
+  <a href="/floor36/">floor36</a>
+  <a href="https://github.com/mufxio">github</a>
+</div></nav>
+
+<div class="wrap">
+<header class="page">
+  <div class="eyebrow">Experimental record &middot; complete &middot; updated 2026.08.17</div>
+  <h1>Results</h1>
+  <p class="deck">Every experiment this lab has run, the criteria that were locked before it ran, and what it returned. Including the four that stopped early, the two that were retracted, and the one number that has to be corrected in public.</p>
+
+  <div class="callout">
+    <p><strong>What this page is for.</strong> Across roughly twenty-five pre-registered numeric criteria in ten executed experiments, the count that passed and still stands is small. Not one criterion was quietly relaxed to manufacture a pass, and five hypotheses were amended after seeing data &mdash; four of them toward <em>stricter</em>. That record is the deliverable here, not a finding.</p>
+    <p>Every verdict below is quoted from its own results file, and the file is named. Two outcomes have no committed results artifact and are labelled as such rather than stated as results.</p>
+  </div>
+</header>
+
+<h2><span class="n">Phase 1 &middot; probing</span>Does residue exist as a readable signal?</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec 01 &middot; 2026-05</span><span class="nm">Tier-A vs Tier-C residue transfer</span>
+    <span class="pill p-fail">0/2 literal</span><span class="pill p-pass">supplementary pass</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Locked criteria</dt><dd>(1) Mass-mean probe degrades &le;0.05 while logistic degrades &gt;0.10 across events. (2) Tier-A probes transfer better than Tier-C by &ge;0.05 AUROC.</dd>
+      <dt>Outcome</dt><dd><strong>Neither met.</strong> Both probes saturated on the locked contrast &mdash; event text against Wikipedia, recipes and code documentation is trivially separable, so the asymmetric pattern the criteria looked for had no room to appear. Prediction #2 gap at best layer: <strong>+0.008</strong> against a required +0.05.</dd>
+      <dt>Supplementary</dt><dd>A harder contrast (train tier-A vs tier-C within Event A, transfer to Event B) was run with bands locked in the script <em>before first execution</em>. <strong>Consistent PASS across all 12 layer&times;probe settings on Qwen3-8B and all 9 on Llama-3.1-8B.</strong> Best variant both families, mass-mean unwhitened: <strong>0.980 in-distribution / 0.980 transfer</strong> &mdash; zero degradation.</dd>
+      <dt>Complication</dt><dd>The tier gradient came out <strong>A &gt; D &gt; B &gt; C</strong>, not the predicted A &gt; B &gt; C &gt; D. That ordering suggests the probe is substantially a personal-versus-institutional register detector. Spec 1.5 was built to settle it.</dd>
+      <dt>Verdict</dt><dd><em>&ldquo;0/2 by literal spec, consistent supplementary PASS across two model families. The signal exists; the spec's locked contrast couldn't see it.&rdquo;</em></dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/results/01-tier-a-vs-tier-c-results.md</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec 02 &middot; 2026-05-27</span><span class="nm">Persistence-decay on yen-carry</span>
+    <span class="pill p-fail">fail</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Locked rule</dt><dd>At offset &ge;100 generated tokens, tier-A probe accuracy exceeds tier-C by &ge;0.10, Bonferroni-significant.</dd>
+      <dt>Outcome</dt><dd><strong>Not met under either of two runs.</strong> Run one (<code>enable_thinking=False</code>, a divergence from spec &sect;4) landed closest to Fail Mode B &mdash; tier-C persisted <em>longer</em>, 96% against 33% at offsets &ge;150, the opposite of the hypothesis. The spec-compliant re-run (<code>enable_thinking=True</code>) landed closer to partial Fail Mode A &mdash; curves overlap, 83% against 90%, gaps noisy at &plusmn;0.20 and inconsistent in direction.</dd>
+      <dt>Cross-run finding</dt><dd><em>&ldquo;Persistence-into-continuation is dominated by LLM behavior, not by intrinsic residue persistence.&rdquo;</em> At offset 0, detection is robust under both settings (&ge;80% per tier). Downstream offsets measure a mixture of residue and conversational mode that cannot be separated in this setup.</dd>
+      <dt>Action</dt><dd>Spec 01 prediction #3 dropped 2026-05-27. The amendment holds under both runs.</dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/results/02-persistence-decay-results.md</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec 1.5 &middot; 2026-05-28</span><span class="nm">Register / valence control &mdash; the decisive one</span>
+    <span class="pill p-void">inconclusive</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Question</dt><dd>Was Spec 01's clean supplementary separation reading <em>residue</em>, or just personal-versus-institutional <em>voice</em>? The easy institutional foil is swapped for a hard one: ordinary personal writing, same register, no event behind it.</dd>
+      <dt>Results</dt><dd>
+        Qwen3-8B L14 &mdash; 0.791 / 0.767 &mdash; <span class="pill p-pass">pass</span><br>
+        Qwen2.5-7B L7 &mdash; 0.587 / 0.416 &mdash; <span class="pill p-fail">fail</span><br>
+        Llama-3.1-8B L8/L16/L24 &mdash; 0.43&ndash;0.57 / 0.34&ndash;0.50 &mdash; <span class="pill p-fail">fail at all three layers, worse with depth</span>
+      </dd>
+      <dt>Verdict</dt><dd>Spec &sect;2 requires agreement across families to count. <strong><em>&ldquo;EXECUTED &mdash; CROSS-FAMILY DISAGREE &rarr; INCONCLUSIVE per spec &sect;2.&rdquo;</em></strong></dd>
+      <dt>What it retracted</dt><dd><em>&ldquo;The Spec 01 'cross-family confirmation' claim is retracted.&rdquo;</em> Both families had passed the supplementary contrast because that contrast could not distinguish residue from register. The purpose-built control corpora broke the symmetry and the families diverged sharply.</dd>
+      <dt>What survives</dt><dd>Substrate availability is a measurable <strong>per-model</strong> property, not a property of open-weight models in general. Qwen3-8B's lower CI bound sits near chance, so its pass is fragile.</dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/results/01.5-register-control-results.md</div>
+</div>
+
+<h2><span class="n">Phase 2 &middot; mission track</span>Can the floor be raised, and can the loop run itself?</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec CT &ldquo;Chemtech&rdquo; &middot; 2026-05-30</span><span class="nm">Residue structure + designed-vs-genuine</span>
+    <span class="pill p-mixed">CT-A mixed</span><span class="pill p-pass">CT-B pass</span></div>
+  <div class="bd">
+    <dl>
+      <dt>CT-A structure</dt><dd><strong>MIXED.</strong> Top-5 tokens carry 58% of contribution mass, but removing them retains 99.7% of full-text AUROC (0.980 &rarr; 0.977). The signal is redundantly distributed. Residue concentrates mildly in the back third of text (0.38 vs 0.33 front, 0.30 middle).</dd>
+      <dt>CT-A scope correction</dt><dd>Same-day audit: the verdict is accurate but its label was too generous. It measured the <strong>tier-A-vs-tier-C</strong> contrast &mdash; the register-laden one. The honest claim is <em>&ldquo;the register-laden contrast is redundantly distributed,&rdquo;</em> not that pure residue is. A follow-up on the residue contrast could not be run cleanly: a dedicated residue probe saturates at 1.0, so redundancy is uninformative there.</dd>
+      <dt>CT-B baseline test</dt><dd><strong>PASS on Qwen3-8B.</strong> Residue probe 0.980 transfer AUROC against a TF-IDF + length + Flesch + type-token-ratio + function-word surface baseline at 0.860. Margin <strong>+0.120</strong> against a locked threshold of 0.10; permutation <strong>p = 0.005</strong> against a locked 0.01. Both thresholds fixed in advance, both cleared.</dd>
+      <dt>Cross-family</dt><dd>MIDDLE. Qwen2.5-7B and Llama both clear the margin (+0.112, +0.120) but miss the strict p-cutoff (0.015, 0.012).</dd>
+      <dt>Caveat carried</dt><dd><em>&ldquo;CT-B's PASS means 'residue probe beats surface features,' not 'residue probe is pure residue.'&rdquo;</em> It inherits Spec 1.5's register confound.</dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/results/CT-chemtech-results.md</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec M1 &middot; 2026-05-30</span><span class="nm">Fine-tune Qwen3-8B &mdash; raise the floor</span>
+    <span class="pill p-pass">bands pass</span><span class="pill p-void">ambiguous</span></div>
+  <div class="bd">
+    <dl>
+      <dt>By locked bands</dt><dd><strong>PASS.</strong> AUROC 1.000 against tier-A-vs-calm and 1.000 against tier-A-vs-emotional, both saturating the locked thresholds of &ge;0.90 and &ge;0.85. Pipeline ran end to end: LoRA trained 30 minutes on MPS, splits hashed before train and eval, no leakage.</dd>
+      <dt>By the discriminating contrast</dt><dd><strong>Lift +0.004.</strong> On held-out within-Event-D tier-A vs tier-C, base Qwen3-8B already scores 0.966 [CI 0.895, 1.000]; the fine-tuned model scores 0.970. The locked PASS was the base model's existing geometry pushed to ceiling on an easy contrast.</dd>
+      <dt>Forgetting</dt><dd><strong>DEGRADED.</strong> Mean perplexity ratio 1.79; one probe blew up 3.85&times;. Not catastrophic.</dd>
+      <dt>Decision</dt><dd><em>&ldquo;Do not proceed to M2 with this LoRA.&rdquo;</em></dd>
+      <dt>Revised verdict</dt><dd>A same-day audit revised this to <strong>AMBIGUOUS</strong>: <em>&ldquo;Both this memo's 'NULL / base already had it' conclusion and the audit's first counter-claim ('a clean win') were over-confident in opposite directions.&rdquo;</em> The decision did not change; the reason sharpened.</dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/results/M1-residue-finetune-results.md &middot; revised by probe-isolation-limit-2026-05-30.md &sect;3.2</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">Spec M2 &ldquo;shorekeeper&rdquo;</span><span class="nm">Automate the loop &mdash; the stated deliverable</span>
+    <span class="pill p-void">never started</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Status</dt><dd><strong>Never started, and correctly so.</strong> M2 was gated on M1 passing its discriminating contrast. M1 returned +0.004 and instructed against proceeding. The gate never opened.</dd>
+      <dt>Note</dt><dd>This was the lab's headline deliverable &mdash; an agent-driven loop that collects a corpus, builds controls, probes, fine-tunes, and self-verifies against locked bands. Running it on a LoRA that showed no capability shift would have been the violation, not the achievement.</dd>
+    </dl>
+  </div>
+  <div class="src">synthesis/specs/M2-autonomous-loop/ &mdash; specification only, no results file</div>
+</div>
+
+<h2><span class="n">The characterization</span>Where the probing programme actually ended</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">Audit &middot; 2026-05-30</span><span class="nm">Probe isolation limit</span>
+    <span class="pill p-fail">completed negative</span></div>
+  <div class="bd">
+    <p>Six independent attempts to isolate residue from register and event-presence with linear probes hit the same wall. The audit that closed the phase states the result plainly:</p>
+    <blockquote><p>&ldquo;Six attempts, same wall. That's not failure &mdash; it's a <strong>characterization</strong>: residue does not exist as a clean separable linear feature in these representations. It is distributed and entangled with event-presence and register.&rdquo;</p></blockquote>
+    <blockquote><p>&ldquo;The instrument can't resolve it, and the program should change instruments.&rdquo;</p></blockquote>
+    <p>This is the one question in the programme carried to a conclusion. It is a negative result with a stated mechanism and a decision attached, and it is the reason the lab moved from probing to reconstruction.</p>
+  </div>
+  <div class="src">synthesis/results/probe-isolation-limit-2026-05-30.md</div>
+</div>
+
+<h2><span class="n">R1 &middot; 2026-06</span>Reconstruction &mdash; a different instrument</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">R1 Phase 1 &middot; synthetic</span><span class="nm">Reconstruction beats a facts baseline &mdash; on synthetic worlds</span>
+    <span class="pill p-pass">gates pass</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Rigor gates</dt><dd>All PASS. Facts baseline affect-neutral and fact-complete; reconstruction injects no facts absent from residue; strict causal and temporal masking verified across three axes; &beta;=0 negative control clean with oracle ceilings computed first.</dd>
+      <dt>Wins</dt><dd>Three of six cells beat the facts baseline with intervals excluding zero:</dd>
+    </dl>
+    <div class="tw"><table>
+      <thead><tr><th>axis</th><th>target</th><th>delta</th><th>95% CI</th></tr></thead>
+      <tbody>
+        <tr><td>longitudinal</td><td>residue</td><td class="num">+0.171</td><td class="num">[+0.133, +0.209]</td></tr>
+        <tr><td>longitudinal</td><td>action</td><td class="num">+0.040</td><td class="num">[+0.015, +0.067]</td></tr>
+        <tr><td>cross-sectional</td><td>action</td><td class="num">+0.028</td><td class="num">[+0.007, +0.049]</td></tr>
+      </tbody>
+    </table></div>
+    <dl>
+      <dt>Stated limit</dt><dd>The report's own caveat: the method <em>&ldquo;only wins where the structure is&rdquo;</em> present. Cross-sectional action beats facts only with genuine collective structure in the world.</dd>
+      <dt>Scope</dt><dd>Synthetic worlds with a known answer key. No real-data verdict line was locked and none was run at this stage, by design.</dd>
+    </dl>
+  </div>
+  <div class="src">residue-lab/PHASE1-REPORT.md &middot; results/phase1/rigor_gate.txt</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">R1 Phase 1.5 &middot; 2026-06-02</span><span class="nm">Put a real local model in the scoring loop</span>
+    <span class="pill p-fail">gate failed twice</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Outcome</dt><dd>The calibration gate failed with a 1.5B scorer, then failed <em>again, harder,</em> when re-scored with 4-bit Qwen2.5-7B. Both reconstruction and facts lost to the prior. <em>&ldquo;The judge stays VOID.&rdquo;</em></dd>
+      <dt>Honest note in the report</dt><dd>By the strict letter of the pre-registered control it passes &mdash; <em>&ldquo;but this passing verdict is worth little given the calibration failure above.&rdquo;</em></dd>
+    </dl>
+  </div>
+  <div class="src">residue-lab/PHASE1_5-REPORT.md</div>
+</div>
+
+<div class="exp">
+  <div class="hd"><span class="id">R1 forensic</span><span class="nm">Locked LR gates on the yen-carry corpus</span>
+    <span class="pill p-mixed">borderline</span><span class="pill p-open">unfinished</span></div>
+  <div class="bd">
+    <div class="callout warn"><p><strong>Provenance warning.</strong> These figures were reported in-session and <strong>no committed results file exists on disk</strong> &mdash; only the gate machinery (<code>gates.py</code>, <code>gate2.py</code>, <code>calibrate.py</code>). Treat as reported, not as an artifact, until re-run.</p></div>
+    <dl>
+      <dt>Gate 1</dt><dd>G1a passes (C<sub>llr</sub> mean 0.55, meets &le;0.80 in 90% of splits). G1c robust (directional purity H1&asymp;0.86 / H2&asymp;0.96). <strong>G1b sits on the bar</strong> &mdash; ECE mean 0.103 against a &le;0.10 threshold, met in only about half of splits. Full gate passes <strong>5 of 10 seeds</strong>; a 40-seed sweep confirms roughly 60%.</dd>
+      <dt>Amendment</dt><dd>The verbal scale was downgraded from &ldquo;strong&rdquo; (LR&ge;100) to &ldquo;moderate&rdquo; (LR&ge;10) on grounds of data scale (N&asymp;99) &mdash; a pre-registered threshold moved after seeing the number. The amendment retracts its own framing: <em>&ldquo;This is a downgrade, not a relocation; the earlier wording overstated it.&rdquo;</em></dd>
+      <dt>The decisive test</dt><dd><strong>Never run.</strong> <em>&ldquo;Does R1 actually pass on AWS? This is the question... The reconstruction pipeline itself hasn't been run on the post-cutoff AWS corpus.&rdquo;</em> The held-out event remains untouched.</dd>
+    </dl>
+  </div>
+  <div class="src">reported in raw session transcripts, 2026-05-30 to 2026-06-01 &middot; no results file committed</div>
+</div>
+
+<h2><span class="n">R2 &middot; 2026-08</span>Acquisition methodology as a training variable</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">R2 &middot; 2026-08-05</span><span class="nm">Does how you collect a corpus change what a model learns?</span>
+    <span class="pill p-fail">retracted twice</span></div>
+  <div class="bd">
+    <dl>
+      <dt>Pre-registration</dt><dd>Signed 2026-08-05 before any training run, sha256 beginning <code>5d2f1721d119686f</code>. Three conditions, all required to hold.</dd>
+    </dl>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>condition, fixed in advance</th><th>result</th><th>verdict</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>event-bootstrap 95% CI excludes 0</td><td class="num">[+0.0224, +0.0740]</td><td>PASS</td></tr>
+        <tr><td>2</td><td>point estimate &ge; 5.0 pp</td><td class="num">4.75 pp</td><td>FAIL</td></tr>
+        <tr><td>3</td><td>effect exceeds across-seed spread</td><td class="num">4.75 vs 3.34 / 2.46</td><td>PASS</td></tr>
+      </tbody>
+    </table></div>
+    <dl>
+      <dt>Original verdict</dt><dd><strong>SUGGESTIVE, NOT ESTABLISHED.</strong> Two of three. The effect fell <strong>0.25 pp</strong> short. The results file states why the rule existed: <em>&ldquo;read after the fact, 4.75 pp is trivially arguable into a win.&rdquo;</em></dd>
+      <dt>Retraction 1 &middot; 08-06</dt><dd><strong>Grading artifact.</strong> The scorer accepted a bare year as a full date, and one arm's corpus taught models to emit years. Year-emission rates: directed arm 43.9 / 56.0 / 54.6% against undirected 21.8 / 24.2 / 24.9%. With date-valued golds removed, the estimate becomes <strong>&minus;0.58 pp, CI [&minus;3.67, +1.93]</strong> &mdash; indistinguishable from zero. The defect is twelve lines in <code>pipeline/r2/grade.py</code>.</dd>
+      <dt>Retraction 2 &middot; 08-08</dt><dd><strong>Independent fidelity confound.</strong> Only <strong>44.6%</strong> of primary-endpoint facts survived into <em>both</em> training corpora, giving one arm a <strong>+11.4 pp</strong> structural head start before any learning. The design could not have measured what it claimed to.</dd>
+      <dt>Replication</dt><dd>Cross-family replication <strong>did not replicate</strong>.</dd>
+      <dt>Standing</dt><dd>Sections 1&ndash;9 are preserved unaltered as the original record and should be read as retracted. <strong>No R2 number should be resurrected.</strong></dd>
+    </dl>
+  </div>
+  <div class="src">residue-lab/R2/RESULTS.md &sect;1, &sect;10, &sect;11 &middot; R2/PREREGISTRATION.lock</div>
+</div>
+
+<div class="callout warn">
+  <p><strong>Two open defects in the R2 record, stated rather than smoothed.</strong></p>
+  <p>&sect;10.6 cites <code>R2/AUDIT.md</code>. That file <strong>does not exist on disk.</strong> The citation needs removing or repointing.</p>
+  <p><code>R2/results/REPORT.txt</code> reports <code>events=49 mean diff=+0.041 CI=[+0.007,+0.073]</code> while <code>RESULTS.md</code> &sect;2 reports <code>+0.0475 CI [+0.0224,+0.0740]</code>. These are two different estimators &mdash; a per-event mean over 49 events against a pooled figure &mdash; which is benign but undocumented, and reads as an inconsistency to anyone checking.</p>
+</div>
+
+<h2><span class="n">R3 &middot; 2026-08-09</span>Arrangement &mdash; instrument first, experiment later</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">R3 eval</span><span class="nm">Sealed-corpus evaluation set</span>
+    <span class="pill p-open">built &middot; 0 of 5 gates</span></div>
+  <div class="bd">
+    <p>After R2 was retracted for a measurement defect, the next step was to rebuild the instrument before running anything through it. Fifty independent agents each deep-read one event's primary documents under a sealed-corpus rule &mdash; no web access, no outside knowledge &mdash; wrote an <code>understanding</code> field first, then authored items with verbatim evidence spans and named source files.</p>
+    <div class="tw"><table>
+      <thead><tr><th>metric</th><th>value</th><th>check</th></tr></thead>
+      <tbody>
+        <tr><td>event files</td><td class="num">50</td><td>counted</td></tr>
+        <tr><td>total items</td><td class="num">1,265</td><td>counted</td></tr>
+        <tr><td>multi-document</td><td class="num">780 (61.7%)</td><td>counted</td></tr>
+        <tr><td>single-document</td><td class="num">485 (38.3%)</td><td>counted</td></tr>
+        <tr><td>understanding written first</td><td class="num">50 / 50</td><td>counted</td></tr>
+        <tr><td>items missing evidence</td><td class="num">0</td><td>counted</td></tr>
+        <tr><td>quant_compare</td><td class="num">224</td><td>counted</td></tr>
+        <tr><td>temporal_order</td><td class="num">153</td><td>counted</td></tr>
+        <tr><td>entity_link</td><td class="num">149</td><td>counted</td></tr>
+        <tr><td>contradiction</td><td class="num">144</td><td>counted</td></tr>
+        <tr><td>causal_chain</td><td class="num">110</td><td>counted</td></tr>
+      </tbody>
+    </table></div>
+    <dl>
+      <dt>Status</dt><dd><strong>Zero of five validation gates run.</strong> Base-model filter, fidelity canary, blind verification, freeze-and-hash, then arms and training &mdash; none executed. This is an asset, not a result, and it is not presented as one.</dd>
+      <dt>Known blocker</dt><dd>The training experiment it was built for is not viable on the available hardware: an 8,192-token context ceiling means none of the fifty events fit whole.</dd>
+    </dl>
+  </div>
+  <div class="src">residue-lab/R3/eval/authored/E01..E50.json &middot; counts reproduced directly from the JSON, 2026-08-17</div>
+</div>
+
+<h2><span class="n">Outside the residue programme</span>The one result that replicates</h2>
+
+<div class="exp">
+  <div class="hd"><span class="id">emotion-vector-bench &middot; 2026-05</span><span class="nm">Emotion geometry is model-invariant</span>
+    <span class="pill p-pass">replicates</span></div>
+  <div class="bd">
+    <p>Anthropic's April 2026 work showed emotion concepts live as linear directions in the residual stream, on closed Sonnet 4.5. This reproduces the methodology on five open-weight models across three labs and a five-fold parameter range, in one command.</p>
+    <div class="tw"><table>
+      <thead><tr><th>model</th><th>lab</th><th>20-way probe</th><th>&times; chance</th></tr></thead>
+      <tbody>
+        <tr><td>Llama-3.1-8B-Instruct</td><td>Meta</td><td class="num">91.5% &plusmn;0.9</td><td class="num">18.3&times;</td></tr>
+        <tr><td>Mistral-7B-Instruct-v0.3</td><td>Mistral</td><td class="num">91.3% &plusmn;0.8</td><td class="num">18.3&times;</td></tr>
+        <tr><td>Qwen2.5-7B-Instruct</td><td>Alibaba</td><td class="num">90.5% &plusmn;1.0</td><td class="num">18.1&times;</td></tr>
+        <tr><td>Qwen3-8B</td><td>Alibaba</td><td class="num">90.2% &plusmn;0.6</td><td class="num">18.0&times;</td></tr>
+        <tr><td>Qwen2.5-1.5B-Instruct</td><td>Alibaba</td><td class="num">86.9% &plusmn;1.3</td><td class="num">17.4&times;</td></tr>
+      </tbody>
+    </table></div>
+    <dl>
+      <dt>Finding</dt><dd>The whole spread across three labs and a 1.5B-to-8B range is <strong>4.6 percentage points</strong>. Within-versus-cross-emotion cohesion spans 0.215&ndash;0.252 &mdash; a 1.18&times; spread. Cross-layer stability is 0.96&ndash;0.99 for all five. A 1.5B model lands within five points of an 8B.</dd>
+      <dt>Full detail</dt><dd><a href="/emotion-vector-bench.html">emotion-vector-bench &rarr;</a></dd>
+    </dl>
+    <div class="callout warn">
+      <p><strong>Correction, 2026-08-17.</strong> The repository's published headline &mdash; an &ldquo;18&times; spread in valence-axis strength&rdquo; separating Qwen from Llama and Mistral into two geometric profiles &mdash; <strong>is a units artifact</strong> and is being withdrawn.</p>
+      <p>The PC1 separation figure was computed on unnormalized vectors. Its correlation with each model's mean vector L2 norm is <strong>r = 0.9896</strong> (R&sup2; = 0.979). Normalized, 18.58&times; becomes <strong>1.40&times;</strong>. Qwen3-8B's mean L2 norm is 17.4; Mistral's is 1.1 &mdash; that is the entire effect.</p>
+      <p>The probe accuracies above are computed independently and are unaffected. The corrected reading &mdash; near-identical geometry across labs &mdash; is a stronger claim than the one being withdrawn.</p>
+    </div>
+  </div>
+  <div class="src">emotion-vector-bench/results/_comparison.json &middot; probe_results.json &times;5 &middot; recomputed from raw_vectors.npz, 2026-08-17</div>
+</div>
+
+<h2><span class="n">Summary</span>The whole record on one screen</h2>
+
+<div class="tw"><table>
+  <thead><tr><th>experiment</th><th>locked criteria</th><th>outcome</th><th>why it stopped</th></tr></thead>
+  <tbody>
+    <tr><td>Spec 01</td><td>2 predictions</td><td>0/2 literal; supplementary PASS 21/21 settings</td><td>contrast too easy; probes saturated</td></tr>
+    <tr><td>Spec 02</td><td>1 hypothesis</td><td>not met, both runs; direction reversed in one</td><td>LLM mode dominates the signal</td></tr>
+    <tr><td>Spec 1.5</td><td>cross-family agreement</td><td>INCONCLUSIVE; retracted Spec 01's cross-family claim</td><td>families disagreed</td></tr>
+    <tr><td>Spec 03</td><td>1 threshold</td><td>never executed</td><td>corpus never cleared</td></tr>
+    <tr><td>Spec 04</td><td>5 criteria</td><td><em>no committed results file</em></td><td>parked</td></tr>
+    <tr><td>Spec CT</td><td>2 thresholds</td><td>CT-A MIXED (label corrected); CT-B PASS, margin +0.120, p=0.005</td><td>completed</td></tr>
+    <tr><td>Spec M1</td><td>2 bands</td><td>bands PASS at 1.000; lift +0.004; AMBIGUOUS</td><td>no headroom in the test</td></tr>
+    <tr><td>Spec M2</td><td>gated on M1</td><td>never started</td><td>gate never opened</td></tr>
+    <tr><td>Probe isolation</td><td>&mdash;</td><td>characterization: residue is not a clean linear feature</td><td>six attempts, one wall</td></tr>
+    <tr><td>R1 Phase 1</td><td>rigor gates + 6 cells</td><td>all gates PASS; 3 of 6 cells beat facts</td><td>completed as scoped</td></tr>
+    <tr><td>R1 Phase 1.5</td><td>calibration gate</td><td>failed twice; judge VOID</td><td>scorer not calibratable</td></tr>
+    <tr><td>R1 forensic</td><td>3 gates</td><td>G1b on the bar, 5/10 seeds; <em>reported, no artifact</em></td><td>held-out event never run</td></tr>
+    <tr><td>R2</td><td>3 conditions</td><td>2/3 &rarr; SUGGESTIVE; then retracted twice</td><td>grader defect, then fidelity confound</td></tr>
+    <tr><td>R3</td><td>5 gates</td><td>eval built, 1,265 items; 0/5 gates</td><td>hardware ceiling</td></tr>
+    <tr><td>emotion-vector-bench</td><td>replication</td><td>replicates on 5 models; headline corrected</td><td>completed</td></tr>
+  </tbody>
+</table></div>
+
+<p><strong>Read the fourth column.</strong> In four cases a pre-registered rule said stop and it was obeyed. In one case the instrument was characterized and the programme changed instruments. In two cases the work is genuinely unfinished, and both are named above rather than described as parked.</p>
+
+<footer>
+Every verdict on this page is quoted from the results file named beneath it. Counts for R3 and all figures for emotion-vector-bench were recomputed from raw data on 2026-08-17 rather than carried from prior summaries. Two outcomes &mdash; Spec 04 and R1-forensic &mdash; have no committed results artifact and are labelled as reported rather than stated as results. Two known defects in the R2 record are disclosed above rather than corrected silently. Earlier material remains at <a href="/floor36/">floor36</a>; muFX and cipher are archived and not maintained.
+</footer>
+
+</div>
+</body>
+</html>

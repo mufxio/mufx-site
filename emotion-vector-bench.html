@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>emotion-vector-bench — Residue Lab</title>
+<meta name="description" content="Anthropic's emotion-vector geometry, reproduced on five open-weight models across three labs. Emotion geometry is close to model-invariant. Includes a withdrawn headline.">
+<style>
+:root{
+  --paper:#f5f2eb; --paper-dark:#ece8df; --paper-darker:#e0dbd0;
+  --ink:#1a1814; --ink-mid:#3d3a35; --ink-light:#6b6760; --ink-faint:#a09d97;
+  --rule:#c8c3b8; --rule-dark:#9a958c; --rule-faint:#ddd9d0;
+  --red:#b5200d; --red-light:#e8c5bf;
+  --blue:#0d3b6b; --blue-mid:#1a5fa8; --blue-light:#c2d8f0;
+  --green:#0a4a2a; --green-light:#c5e0d0;
+  --amber:#7a4500; --amber-light:#f0ddb5;
+  --gold:#c4956a; --gold-light:#ead8c0;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem 6rem}
+nav{border-bottom:1px solid var(--rule);margin-bottom:2.5rem}
+nav .inner{max-width:52rem;margin:0 auto;padding:1rem 1.25rem;display:flex;flex-wrap:wrap;
+  gap:.4rem 1.4rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+nav a{color:var(--ink-light);text-decoration:none}
+nav a:hover{color:var(--ink);text-decoration:underline}
+nav a.here{color:var(--ink);font-weight:600}
+nav .brand{color:var(--ink);font-weight:600;margin-right:.6rem}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);margin:1rem 0}
+h1{font-family:var(--sans);font-size:clamp(1.9rem,5.2vw,2.7rem);font-weight:600;letter-spacing:-.03em;
+  line-height:1.05;margin:0 0 .8rem;text-wrap:balance}
+.deck{font-size:1.1rem;color:var(--ink-mid);max-width:38rem;margin:0 0 1.6rem;text-wrap:balance}
+h2{font-family:var(--sans);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;
+  margin:3.2rem 0 1.1rem;padding-top:1.1rem;border-top:2px solid var(--ink);text-wrap:balance}
+h2 .n{display:block;font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:.6rem}
+h3{font-family:var(--sans);font-size:1.03rem;font-weight:600;margin:2rem 0 .6rem}
+p{margin:0 0 1rem}
+a{color:var(--blue)}
+code{font-family:var(--mono);font-size:.85em;background:var(--paper-dark);padding:.08em .3em}
+.callout{border-left:3px solid var(--rule-dark);background:var(--paper-dark);
+  padding:.9rem 1.1rem;margin:1.6rem 0;font-size:.95rem;line-height:1.55}
+.callout p{margin:0 0 .6rem}.callout p:last-child{margin:0}
+.callout.warn{border-color:var(--amber);background:var(--amber-light)}
+.callout.big{border-left-width:4px;border-color:var(--green);background:var(--green-light)}
+.tw{overflow-x:auto;margin:1.7rem 0}
+table{border-collapse:collapse;width:100%;font-size:.85rem;font-family:var(--mono)}
+th{text-align:left;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);
+  font-weight:600;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);
+  padding:.55rem .9rem .5rem 0;white-space:nowrap}
+td{border-bottom:1px solid var(--rule-faint);padding:.55rem .9rem .55rem 0;vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:2px solid var(--ink)}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.strike td{color:var(--ink-faint);text-decoration:line-through}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin:1.8rem 0}
+.fig{padding:.95rem .9rem .95rem 0;border-right:1px solid var(--rule)}
+.fig:last-child{border-right:0}
+.fig .v{display:block;font-family:var(--mono);font-size:1.35rem;font-weight:500;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1;margin-bottom:.35rem}
+.fig .k{font-size:.75rem;line-height:1.38;color:var(--ink-light)}
+pre{font-family:var(--mono);font-size:.78rem;line-height:1.55;background:var(--paper-dark);
+  border-left:3px solid var(--rule);padding:.9rem 1rem;overflow-x:auto;margin:1.3rem 0}
+ul,ol{margin:0 0 1rem;padding-left:1.3rem}li{margin-bottom:.45rem}
+footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-light);
+  border-top:2px solid var(--ink);padding-top:1.2rem;margin-top:4rem}
+@media(max-width:34rem){body{font-size:16px}.figs{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <span class="brand">residue lab</span>
+  <a href="/">program</a>
+  <a href="/results.html">results</a>
+  <a href="/emotion-vector-bench.html" class="here">emotion-vector-bench</a>
+  <a href="/methodology.html">methodology</a>
+  <a href="/lineage.html">lineage</a>
+  <a href="/floor36/">floor36</a>
+  <a href="https://github.com/mufxio">github</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="eyebrow">Replication &middot; executed 2026-05 &middot; corrected 2026-08-17</div>
+  <h1>emotion-vector-bench</h1>
+  <p class="deck">Anthropic showed that emotion concepts live as linear directions in a model's residual stream. They proved it on closed Sonnet&nbsp;4.5. This reproduces the methodology on five open-weight models from three labs, in one command, on a Mac mini.</p>
+
+  <div class="callout big">
+    <p><strong>The finding: emotion geometry is close to model-invariant.</strong></p>
+    <p>Across three labs and a five-fold parameter range, every geometric property lands in a narrow band. A 1.5B model comes within 4.6 points of an 8B on 20-way emotion classification. <strong>The differences between model families are smaller than the differences between layers inside one model.</strong></p>
+  </div>
+
+  <div class="figs">
+    <div class="fig"><span class="v">5</span><span class="k">models</span></div>
+    <div class="fig"><span class="v">3</span><span class="k">labs &mdash; Meta, Mistral, Alibaba</span></div>
+    <div class="fig"><span class="v">1.5&ndash;8B</span><span class="k">parameter range</span></div>
+    <div class="fig"><span class="v">3,050</span><span class="k">frozen corpus items</span></div>
+  </div>
+
+<h2><span class="n">Results</span>Five models, one narrow band</h2>
+
+<div class="tw"><table>
+  <thead><tr><th>model</th><th>lab</th><th>probe acc</th><th>&times; chance</th><th>valence sep</th><th>effect d</th><th>cohesion</th><th>layer stab.</th></tr></thead>
+  <tbody>
+    <tr><td>Llama-3.1-8B-Instruct</td><td>Meta</td><td class="num">91.5% &plusmn;0.9</td><td class="num">18.3&times;</td><td class="num">0.716</td><td class="num">1.36</td><td class="num">0.252</td><td class="num">0.987</td></tr>
+    <tr><td>Mistral-7B-Instruct-v0.3</td><td>Mistral</td><td class="num">91.3% &plusmn;0.8</td><td class="num">18.3&times;</td><td class="num">0.693</td><td class="num">1.30</td><td class="num">0.247</td><td class="num">0.987</td></tr>
+    <tr><td>Qwen2.5-7B-Instruct</td><td>Alibaba</td><td class="num">90.5% &plusmn;1.0</td><td class="num">18.1&times;</td><td class="num">0.694</td><td class="num">1.22</td><td class="num">0.215</td><td class="num">0.961</td></tr>
+    <tr><td>Qwen3-8B</td><td>Alibaba</td><td class="num">90.2% &plusmn;0.6</td><td class="num">18.0&times;</td><td class="num">0.671</td><td class="num">1.24</td><td class="num">0.233</td><td class="num">0.980</td></tr>
+    <tr><td>Qwen2.5-1.5B-Instruct</td><td>Alibaba</td><td class="num">86.9% &plusmn;1.3</td><td class="num">17.4&times;</td><td class="num">0.636</td><td class="num">1.13</td><td class="num">0.222</td><td class="num">0.962</td></tr>
+  </tbody>
+</table></div>
+
+<p><strong>Probe accuracy</strong> is 20-way emotion classification from a single residual-stream direction, mean across four probed layers &plusmn; standard deviation; chance is 5%. <strong>Valence sep</strong> is PC1 separation between positive and negative emotion clusters on unit-normalized vectors. <strong>Effect d</strong> expresses that separation in PC1 standard deviations, so it is comparable across models. <strong>Cohesion</strong> is within-cluster minus cross-cluster cosine similarity. Permutation tests return p &lt; 0.001 for every model at every layer.</p>
+
+<div class="figs">
+  <div class="fig"><span class="v">4.6 pts</span><span class="k">total probe-accuracy spread across all five</span></div>
+  <div class="fig"><span class="v">1.13&times;</span><span class="k">valence separation spread</span></div>
+  <div class="fig"><span class="v">1.18&times;</span><span class="k">cohesion spread</span></div>
+  <div class="fig"><span class="v">0.96&ndash;0.99</span><span class="k">cross-layer stability, all models</span></div>
+</div>
+
+<h2><span class="n">Correction</span>The headline this page used to carry is withdrawn</h2>
+
+<div class="callout warn">
+  <p><strong>Withdrawn 2026-08-17: the &ldquo;18&times; spread in valence-axis strength.&rdquo;</strong></p>
+  <p>Until today this project's published headline claimed Qwen3-8B had an <strong>18&times; cleaner valence axis</strong> than Mistral, and concluded there were <strong>&ldquo;two valid geometric profiles&rdquo;</strong> &mdash; a Qwen family organized by a dominant valence axis, and a Llama/Mistral family organized by tighter distributed clusters. Both claims are withdrawn. The repository and its findings document have been corrected in place.</p>
+</div>
+
+<p>The defect was in <code>check_pca</code>. It ran PCA on the raw mean-difference vectors and reported PC1 separation in those raw units. Activation magnitude varies by an order of magnitude across model families, so the number was measuring vector scale, not geometry.</p>
+
+<p>The test that settles it &mdash; correlate the reported separation against each model's mean vector L2 norm:</p>
+
+<pre>model                      raw PC1 sep    mean L2 norm
+llama-3.1-8b-instruct            2.709           1.865
+mistral-7b-instruct-v0.3         1.571           1.110
+qwen2.5-1.5b-instruct            7.300           6.115
+qwen2.5-7b-instruct             12.056           9.209
+qwen3-8b                        29.189          17.438
+
+corr(raw PC1 sep, mean L2 norm) = 0.9896     R² = 0.979</pre>
+
+<p>The ordering of the five models by raw separation is <strong>identical</strong> to their ordering by activation magnitude. The apparent &ldquo;scale ladder&rdquo; inside the Qwen family &mdash; 7.3 &rarr; 12.1 &rarr; 29.2 &mdash; tracks the norms 6.1 &rarr; 9.2 &rarr; 17.4 almost exactly. It was never a ladder of valence organization.</p>
+
+<p>Unit-normalize the vectors before PCA, so the comparison is between directions rather than magnitudes, and the spread collapses:</p>
+
+<div class="tw"><table>
+  <thead><tr><th>measure</th><th>as published</th><th>corrected</th></tr></thead>
+  <tbody>
+    <tr class="strike"><td>valence spread, raw units</td><td class="num">18.58&times;</td><td class="num">&mdash;</td></tr>
+    <tr><td>valence spread, unit-normalized</td><td class="num">&mdash;</td><td class="num"><strong>1.13&times;</strong></td></tr>
+    <tr><td>models passing the criterion</td><td class="num">5 / 5</td><td class="num">5 / 5</td></tr>
+    <tr><td>&ldquo;two geometric profiles&rdquo;</td><td class="num">claimed</td><td class="num"><strong>withdrawn</strong></td></tr>
+  </tbody>
+</table></div>
+
+<p><strong>What the second withdrawal rests on.</strong> The two-profiles claim combined the valence artifact with a real cohesion difference &mdash; Llama and Mistral at 0.247&ndash;0.252 against the Qwen family at 0.215&ndash;0.233. Remove the artifact and what remains is a <strong>1.18&times; gap</strong> whose confidence intervals overlap for four of the five models at n=50. That is worth a sentence, not a taxonomy.</p>
+
+<p><strong>What is unaffected.</strong> Every probe accuracy, every permutation test, cross-layer stability, and the arousal and implicit-emotion results are computed independently of PCA scale and stand unchanged. The fix is in <code>code/validate.py</code>; the old value is retained as <code>valence_separation_pc1_raw</code> with a comment stating it must not be compared across models.</p>
+
+<div class="callout">
+  <p><strong>The corrected claim is stronger than the withdrawn one.</strong> &ldquo;One model family organizes emotion 18&times; more cleanly&rdquo; is a curiosity about Qwen. &ldquo;Emotion geometry is close to invariant across labs and scales&rdquo; is a reason to trust that a result found on one open-weight model transfers to another &mdash; which is the whole argument for doing this work on hardware you own.</p>
+</div>
+
+<h2><span class="n">Method</span>What it actually runs</h2>
+
+<p>Six stages: extraction &rarr; vectors &rarr; validation &rarr; probes &rarr; arousal &rarr; implicit emotion. Twenty emotions grouped into valence clusters, a frozen 3,050-item corpus, four probed layers per model, permutation baselines at every stage. One command per model. Everything in the table above was produced on a 24GB Mac mini.</p>
+
+<p>The corpus is frozen precisely so a later run can be compared to an earlier one. The correction above was found by recomputing from the stored <code>raw_vectors.npz</code> files rather than from any summary &mdash; which is the only reason it was findable three months later.</p>
+
+<p><a href="https://github.com/mufxio/emotion-vector-bench">Repository &rarr;</a> &nbsp;&middot;&nbsp; <a href="/results.html">Full experimental record &rarr;</a></p>
+
+<footer>
+Anthropic's original work: <em>emotion vectors in Claude Sonnet 4.5</em>, transformer-circuits.pub, April 2026. This is an independent reproduction of the published methodology on open-weight models; it is not affiliated with Anthropic. All figures on this page were recomputed from stored raw vectors on 2026-08-17, not carried from the May summaries. Sources: <code>results/_comparison.json</code>, <code>results/&lt;model&gt;/probe_results.json</code>, <code>results/&lt;model&gt;/raw_vectors.npz</code>.
+</footer>
+
+</div>
+</body>
+</html>

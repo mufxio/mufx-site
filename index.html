@@ -388,6 +388,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
 .status-progress { color: var(--status-progress); }
 .status-done { color: var(--status-done); }
 .status-gap { color: var(--status-gap); }
+.status-external { color: var(--status-external); }
 .exp-tier {
   font-family: var(--mono);
   font-size: 0.62rem;
@@ -854,6 +855,8 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
       <a href="#program">program</a>
       <a href="#experiments">experiments</a>
       <a href="#mechanics">mechanics</a>
+      <a href="/results.html">results</a>
+      <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
       <a href="/methodology.html">methodology</a>
       <a href="/lineage.html">lineage</a>
       <a href="/floor36/">floor36</a>
@@ -870,20 +873,28 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
   <div class="doc-class">Research Program · 2026—</div>
   <h1 class="hero-title"><span class="accent">residue</span> lab</h1>
   <p class="hero-mission">felt-sense for digital beings</p>
-  <p class="hero-subtitle">A bet on the side of AI that doesn't get built by default. Most current work is improving on capability &mdash; math, code, reasoning. The side that's weakest, the one nobody is centrally building, is <em>felt-sense</em>: the layer that reads what should be built, what affects people emotionally, what pure math misses. This lab builds methodology for extracting felt-sense signal from <em>emotional residue</em> &mdash; traces people leave in text during real (or simulated) events, often unintentionally. Toward digital beings raised with that signal, paired with cold-logic systems for decisions where both ground truths matter.</p>
+  <p class="hero-subtitle">A bet on the side of AI that doesn't get built by default. Most current work improves capability &mdash; math, code, reasoning. The side that's weakest, the one nobody is centrally building, is <em>felt-sense</em>: the layer that reads what should be built, what affects people emotionally, what pure math misses. This lab builds a <em>methodology for autonomously constructing</em> felt-sense capability &mdash; an agent loop that, for a given event, gathers emotional residue, probes for what's there, fine-tunes a model on it, and self-verifies against pre-registered honesty bands. <em>Emotional residue</em> &mdash; the traces people leave in text during real (or simulated) events, often unintentionally &mdash; is the first domain. Toward digital beings raised with that signal, paired with cold-logic systems for decisions where both ground truths matter.</p>
   <div class="hero-meta">
     <span><span class="label">status:</span> <span class="status-progress">active research</span></span>
-    <span><span class="label">experiments:</span> 4 specified</span>
-    <span><span class="label">substrate:</span> validated</span>
-    <span><span class="label">last update:</span> 2026.05.27</span>
+    <span><span class="label">probing:</span> closed — <a href="/results.html">all results</a></span>
+    <span><span class="label">substrate:</span> not a clean linear feature</span>
+    <span><span class="label">last update:</span> 2026.08.17</span>
   </div>
 </header>
+
+<div style="max-width:52rem;margin:0 auto 2rem;padding:1rem 1.15rem;border-left:4px solid var(--amber);background:var(--amber-light);font-family:var(--serif);font-size:.97rem;line-height:1.55">
+  <p style="margin:0 0 .55rem"><strong>Read this before the experiment cards below.</strong> The probing programme is closed. Every spec on this page has now run or been formally cancelled, and the outcomes are not what the specs anticipated.</p>
+  <p style="margin:0 0 .55rem">Headline: six independent attempts established that <strong>residue does not exist as a clean separable linear feature</strong> in these representations &mdash; it is distributed and entangled with event-presence and register. Spec&nbsp;M2, the lab's stated deliverable, was gated on M1 passing; M1 returned a lift of <strong>+0.004</strong> and instructed against proceeding, so M2 was never started. The cards below are preserved as the original pre-registered designs.</p>
+  <p style="margin:0"><strong><a href="/results.html">Every experiment, its locked criteria, and what it returned &rarr;</a></strong> &nbsp;&middot;&nbsp; <a href="/emotion-vector-bench.html">the one result that replicates &rarr;</a></p>
+</div>
 
 <!-- I. THE BET -->
 <section class="section" id="program">
   <div class="section-label"><span class="section-num">§ 01</span> The bet</div>
   <h2>Capability is being solved. <span class="accent">Felt-sense</span> isn't.</h2>
   <p class="lede">Most current AI work &mdash; Karpathy's new team at Anthropic, OpenAI's o-series, the wave of synthetic-data research &mdash; is improving capability through better training data and recursive self-improvement. That side is moving fast. The side nobody is centrally building, the one current methods consistently miss, is <em>felt-sense</em>: the layer that reads what should be built, what affects people emotionally, what humans notice that pure math doesn't capture. <a href="/lineage.html">Intellectual lineage →</a></p>
+
+  <p>The probing experiments (Specs 01, 02, 1.5) were <em>infrastructure</em>, not the deliverable. What they showed: the residue substrate is real but <strong>marginal and model-specific</strong> &mdash; Qwen3-8B can fragily isolate residue from ordinary personal voice; other families can't. A probing result like that isn't a win you ship. The actual bet, the one always in this lab's scope, is the layer above probing: an <em>autonomous fine-tuning loop</em> (codename <em>shorekeeper</em>) that takes any new event, collects a tiered residue corpus, builds controls, probes, fine-tunes a model on it, self-verifies against pre-registered honesty bands, and integrates the result into a persistent base that reads the next event better. Probing is how you find out whether the floor is there; fine-tuning is how you turn a marginal floor into trained capability. Residue is simply the <em>first domain</em> of that general methodology.</p>
 
   <div class="two-halves">
     <div class="half dim">
@@ -898,58 +909,92 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
       <div class="half-label">Core II</div>
       <h3 class="half-title">Affective</h3>
       <p class="half-desc">Felt-sense. Reads what should be built. Reads what affects people emotionally. Catches what pure math misses. Trained on residue from real or simulated human events.</p>
-      <div class="half-ref">Currently underbuilt. Open-weight models have residue-detection substrate (we replicated Anthropic's emotion-vector work on 5 models, 89-92% probe accuracy) but no validated methodology for raising digital beings with it. This is where this lab works.</div>
+      <div class="half-ref">Currently underbuilt. Probing established that the residue substrate exists but is <em>marginal and model-specific</em> &mdash; a per-model property, not a universal one. The bet isn't the probe; it's the autonomous loop that turns that marginal floor into trained capability. This is where this lab works.</div>
       <div class="half-status">— where this lab works</div>
     </div>
     <div class="halves-caption">Together they make decisions where both ground truths matter. Pure quantitative misses what humans notice. Pure affective can't validate physics. Neither alone is enough. <strong>First deployment target: finance</strong> &mdash; markets price things (cold ground truth) AND human emotional dynamics drive market behavior in ways pure math misses (felt ground truth).</div>
   </div>
 
-  <p class="note"><strong>Honest framing of where we sit:</strong> environment construction broadly is now where most labs are working &mdash; synthetic data generation (Karpathy direction), context engineering (Zhao direction), validation environments (Noyron direction). What's distinct about this lab is narrower: <em>felt-sense capability via residue from causally-coherent multi-participant events</em>, real or simulated, calibrated against real-world signal, aimed at paired-decision systems where felt-sense and cold logic together cover what neither alone can.</p>
+  <p class="note"><strong>Honest framing of where we sit:</strong> environment construction broadly is now where most labs are working &mdash; synthetic data generation (Karpathy direction), context engineering (Zhao direction), validation environments (Noyron direction). What's distinct about this lab is narrower: <em>felt-sense capability via residue from causally-coherent multi-participant events</em>, real or simulated, calibrated against real-world signal, aimed at paired-decision systems where felt-sense and cold logic together cover what neither alone can. The deliverable is not a single model &mdash; it's <em>a runnable, self-verifying methodology</em>: a loop an agent can drive on a fresh event, with the honesty checks (locked bands + controls) built in. Pairs with the cold-ground-truth side: Karpathy-style synthetic-data environments validate cold logic; this lab does the felt side.</p>
 </section>
 
 <!-- II. EXPERIMENTS -->
 <section class="section" id="experiments">
   <div class="section-label"><span class="section-num">§ 02</span> Active experiments</div>
-  <h2>Four specified. Click any card for detail.</h2>
-  <p class="lede">Each experiment tests a specific load-bearing claim of the methodology. All have explicit pre-specified propositions, numerical pass/fail criteria, and named failure modes. ENFSI-style discipline — proposition fitting after seeing data is not allowed.</p>
+  <h2>Probing <span class="accent">done</span>. Building the loop. Click any card for detail.</h2>
+  <p class="lede">Two phases. <strong>Probing (Specs 01, 02, 1.5) is executed</strong> &mdash; it was infrastructure to find out whether the residue floor exists and how robust it is. The honest answer: a marginal, model-specific floor, not a finished capability. The <strong>mission track (Chemtech, M1, M2)</strong> is the forward path &mdash; from measuring a floor to fine-tuning a model that stands on it, then automating the whole loop. All specs carry pre-specified propositions, numerical pass/fail criteria, and named failure modes. ENFSI-style discipline &mdash; fitting propositions after seeing data is not allowed, and the May audit retracted the claims that didn't survive their controls.</p>
 
   <div class="exp-grid">
+
+    <p style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin:0.5rem 0 -0.5rem;grid-column:1/-1;">— Phase 1 · probing (executed)</p>
 
     <!-- Spec 01 -->
     <div class="exp-card" onclick="toggleCard(this)">
       <div class="exp-card-head">
         <div>
           <div class="exp-id">SPEC 01</div>
-          <div class="exp-tier">tier 1 · priority high</div>
+          <div class="exp-tier">tier 1 · priority high · <em>executed 2026-05</em></div>
         </div>
-        <div class="exp-status status-ready">○ ready</div>
+        <div class="exp-status status-done">● executed</div>
       </div>
       <h3 class="exp-title">Tier-A vs Tier-C Residue Transfer</h3>
       <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Tests whether the methodology's central commitment actually generalizes. If first-person residue patterns from one event transfer to another, the methodology captured something real about residue itself. If they don't transfer, we've been measuring event-specific noise.</p>
-      <p class="exp-hyp">First-person on-the-ground residue (<em>tier A</em>) produces more transferable probe directions than institutional secondary residue (<em>tier C</em>), across events. Tests the methodology's load-bearing commitment.</p>
+      <p class="exp-hyp"><strong>Verdict:</strong> 0/2 on the literal pre-registered criteria &mdash; the chosen tier-A/tier-C contrast was too easy and probes saturated. A supplementary tier-A-vs-tier-C contrast separated ~0.98 cross-event, but the follow-up control (Spec 1.5) showed that signal is <em>entangled with register</em> (personal-vs-institutional voice). Honest read: a real but <strong>marginal, single-model-family</strong> signal &mdash; not the clean generalization the criteria asked for.</p>
       <div class="exp-meta">
-        <div class="item"><span class="label">duration</span>3 weeks</div>
-        <div class="item"><span class="label">probes</span>Mass-mean + Logistic + follow-up</div>
-        <div class="item"><span class="label">events</span>2 (yen carry unwind + Event B)</div>
+        <div class="item"><span class="label">status</span>executed 2026-05</div>
+        <div class="item"><span class="label">literal criteria</span>0 / 2</div>
+        <div class="item"><span class="label">follow-up</span>Spec 1.5 (register control)</div>
       </div>
       <div class="exp-card-expand"></div>
       <div class="exp-details">
         <h4>Residue tiers (recap)</h4>
         <p>Tier A = first-person on-the-ground texts written during the event (panicked Slack, traders' notes). Tier B = first-person slightly removed. Tier C = institutional secondary (BIS reports, press releases, analyst notes). Tier D = outside commentary / retrospectives. Mapping borrowed from Carrier &amp; Spafford's primary/secondary digital crime scene distinction.</p>
         <h4>Event A: yen carry unwind</h4>
-        <p>The Aug 5 2024 USD/JPY rapid unwind &mdash; Nikkei dropped 12.4%, VIX spiked to 65, large carry-trade losses globally. Provides Tier-A residue from on-the-ground traders. The lab already has 25 tiered quotes + a 16-step extraction pipeline + projections from this event.</p>
-        <h4>Three falsifiable predictions</h4>
+        <p>The Aug 5 2024 USD/JPY rapid unwind &mdash; Nikkei dropped 12.4%, VIX spiked to 65, large carry-trade losses globally. Provides Tier-A residue from on-the-ground traders. The lab has 25 tiered quotes + a 16-step extraction pipeline + projections from this event.</p>
+        <h4>What was tested (two pre-registered predictions)</h4>
         <ul class="exp-predictions">
-          <li>Mass-mean probes show less classification degradation than Logistic across distribution shift (Event A → Event B). The practical analog of Marks &amp; Tegmark 2024's causal-validity finding (which they measured via Normalized Indirect Effect under intervention; we measure via cross-event AUROC stability). Threshold: MM AUROC degradation ≤ 0.05 vs Logistic degradation &gt; 0.10.</li>
+          <li>Mass-mean probes show less classification degradation than Logistic across distribution shift. Threshold: MM AUROC degradation ≤ 0.05 vs Logistic degradation &gt; 0.10.</li>
           <li>Tier-A probes transfer better than Tier-C probes across events (≥0.05 AUROC gap). Tests the bottom-up first-person-residue commitment &mdash; the bible's load-bearing decision.</li>
-          <li>Tier-A residue signal persists longer in the model's generated continuation than Tier-C (≥0.10 gap at offset ≥100 tokens). Applies Zhang &amp; Zhong 2025's offset-aware probe technique to residue.</li>
         </ul>
-        <h4>Outcome interpretation</h4>
-        <p><strong>3/3 validated:</strong> program-level validation. Write up as methodology-validation paper.<br><strong>2/3:</strong> partial; update bible accordingly.<br><strong>0-1/3:</strong> revisit core commitments.</p>
-        <h4>Failure modes named</h4>
-        <p>10 in spec, including: yen-carry tier counts insufficient, length confound dominates, probes don't transfer at all, spurious correlation to morality.</p>
-        <h4>Spec doc</h4>
-        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
+        <h4>Result, honestly</h4>
+        <p><strong>0/2 on the literal criteria.</strong> The contrast chosen for the pre-registered test was too easy &mdash; probes saturated, so the criteria (which assume a measurable degradation gap) had no room to register. A <em>supplementary</em> tier-A-vs-tier-C contrast did separate cleanly (~0.98 AUROC cross-event), which looked promising &mdash; until the register/valence control (Spec 1.5) showed that separation rides on personal-vs-institutional voice, not on residue specifically. So the surviving claim is narrow: a real but <strong>marginal, single-model-family</strong> signal on Qwen3-8B, not a generalizing property of residue.</p>
+        <p style="font-size:0.85rem;color:var(--ink-light);font-style:italic;margin-top:0.5rem;">Original prediction #3 (tier-A residue persists longer in continuation) was dropped <em>before</em> execution after Spec 02 surfaced an LLM mode-drift confound — see the Spec 02 card. Measurement lives at the input boundary, not downstream in generation.</p>
+        <h4>Failure modes named (10 in spec)</h4>
+        <p>Including: yen-carry tier counts insufficient, length confound dominates, probes saturate / don't transfer, spurious correlation to morality, register confound (← the one that bit), LLM mode-drift if measurements drift downstream of input.</p>
+        <h4>Result memo</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; superseded-claim audit applied 2026-05</p>
+      </div>
+    </div>
+
+    <!-- Spec 1.5 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 1.5</div>
+          <div class="exp-tier">tier 1 · register/valence control · <em>new · executed 2026-05</em></div>
+        </div>
+        <div class="exp-status status-done">● executed</div>
+      </div>
+      <h3 class="exp-title">Register/Valence Control — the decisive one</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Spec 01's supplementary contrast separated cleanly &mdash; but was it reading <em>residue</em>, or just personal-vs-institutional <em>voice</em>? This is the control that decides. It asks whether a probe can isolate residue from <em>ordinary personal writing</em> (same register, no event), not just from institutional press copy.</p>
+      <p class="exp-hyp"><strong>Verdict:</strong> residue isolability is a <strong>cross-family gradient, not a universal property.</strong> Qwen3-8B marginally isolates residue from ordinary personal voice (AUROC 0.79, 95% CI [0.64, 0.93] &mdash; a fragile pass); Qwen2.5-7B is partial; Llama-3.1-8B-Instruct fails at every tested layer. The earlier "cross-family confirmation" claim was <strong>retracted</strong>. Key finding: substrate availability is a measurable <em>per-model</em> property.</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">status</span>executed 2026-05</div>
+        <div class="item"><span class="label">qwen3-8b</span>AUROC 0.79 · CI [0.64, 0.93]</div>
+        <div class="item"><span class="label">llama-3.1-8b</span>fails at all layers</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>The control</h4>
+        <p>Spec 01's clean supplementary separation could have been the probe reading register (personal voice) or valence (emotional intensity) rather than event-residue itself. Spec 1.5 swaps the easy institutional foil for a hard one: <em>ordinary personal writing in the same register, with no event behind it.</em> If the probe still separates residue, the signal is residue-specific. If it collapses, Spec 01 was register all along.</p>
+        <h4>Result, per family</h4>
+        <p><strong>Qwen3-8B:</strong> marginally separates residue from ordinary personal voice &mdash; AUROC 0.79, 95% CI [0.64, 0.93]. The lower bound sits near chance, so this is a <em>fragile pass</em>, not a robust capability.<br><strong>Qwen2.5-7B:</strong> partial &mdash; some layers, not stably.<br><strong>Llama-3.1-8B-Instruct:</strong> fails at every tested layer.</p>
+        <h4>What this retracts</h4>
+        <p>The prior "cross-family confirmation" framing is <strong>withdrawn</strong>. Residue isolability is not a property of open-weight models in general; it's a <em>gradient that varies by model family</em>. Substrate availability is itself a measurable per-model quantity &mdash; which is a finding, just a more modest one than "residue is detectable."</p>
+        <h4>Why it's load-bearing for the loop</h4>
+        <p>This is exactly the kind of confound the autonomous loop's self-honesty mechanism (locked bands + controls) has to catch on its own. Spec 1.5 is the human-run proof that the check works; M2 tests whether an agent driving the loop catches the same thing.</p>
+        <h4>Result memo</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; retraction logged in the May audit</p>
       </div>
     </div>
 
@@ -958,43 +1003,140 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
       <div class="exp-card-head">
         <div>
           <div class="exp-id">SPEC 02</div>
-          <div class="exp-tier">tier 2 · pre-flight</div>
+          <div class="exp-tier">tier 2 · pre-flight · <em>executed</em></div>
         </div>
-        <div class="exp-status status-ready">○ ready</div>
+        <div class="exp-status status-done" style="background:#fef3c7;color:#92400e;">◐ fail mode B</div>
       </div>
       <h3 class="exp-title">Persistence-Decay on Yen-Carry</h3>
       <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Cheap pre-flight before committing 3 weeks to the bigger experiment. Tests whether residue STICKS in what the model generates next, or disappears immediately. If residue persists into the model's output, it has more reach than just input analysis &mdash; you can read it from many parts of generated text, not just the prompt.</p>
       <p class="exp-hyp">Tier-A residue signal persists longer in model's generated continuation than Tier-C residue. Standalone fast pre-flight (~3-5 days) before committing to full Spec 01.</p>
       <div class="exp-meta">
-        <div class="item"><span class="label">duration</span>3-5 days</div>
-        <div class="item"><span class="label">technique</span>Zhang &amp; Zhong offset-probe</div>
-        <div class="item"><span class="label">corpus</span>existing yen-carry</div>
+        <div class="item"><span class="label">duration</span>executed 2026-05-27</div>
+        <div class="item"><span class="label">verdict</span>Fail Mode B (with mechanism caveat)</div>
+        <div class="item"><span class="label">impact</span>Spec 01 prediction #3 dropped</div>
       </div>
       <div class="exp-card-expand"></div>
       <div class="exp-details">
-        <h4>Single hypothesis</h4>
-        <p>At offset ≥ 100 tokens of generated continuation, probe accuracy on tier-A-prompted continuations exceeds tier-C-prompted continuations by ≥ 0.10, statistically significant after Bonferroni correction.</p>
-        <h4>Why this experiment</h4>
-        <p>Validates whether Zhang &amp; Zhong's technique transfers from overt emotion (their domain) to emotional residue (ours) BEFORE committing weeks to the full transfer test. Cheap risk-mitigation.</p>
-        <h4>Decision tree</h4>
-        <p><strong>Pass:</strong> proceed with full Spec 01 with confidence.<br><strong>Fail mode A:</strong> drop persistence-decay from Spec 01; document negative.<br><strong>Fail mode B (counter-intuitive direction):</strong> pause Spec 01; revisit the bottom-up methodology commitment.</p>
-        <h4>Spec doc</h4>
-        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; not yet web-rendered</p>
+        <h4>Result</h4>
+        <p><strong>At offset 0: 100% probe accuracy for both tiers (5/5 each).</strong> Detection works perfectly at the input boundary. <strong>At offsets ≥ 150: tier-C maintains ~96% accuracy; tier-A drops to ~33%.</strong> Direction is opposite to the hypothesis — tier-C residue persists longer than tier-A.</p>
+        <h4>Mechanism (post-hoc, descriptive)</h4>
+        <p>Reading the generated continuations: the model itself drifts from empathetic engagement (offsets 0-100) into help/explainer mode (offsets 150+) when prompted with a tier-A quote. By offset 150 the model is in "let me explain what 250% loss means mathematically" mode, which is tier-C-shaped content. The probe correctly detects that late tier-A continuations have shifted into tier-C voice. The residue didn't decay — the model exited it.</p>
+        <h4>Implication</h4>
+        <p>Persistence-into-continuation is not a clean measurement target for residue work. LLM conversational mode dominates the long-horizon signal. Residue measurement should live at or near the input boundary (offset 0), not downstream in generation. Spec 01 prediction #3 dropped accordingly; predictions #1 and #2 are unaffected (both measure at input boundary).</p>
+        <h4>Single hypothesis (locked at execution time)</h4>
+        <p>At offset ≥ 100 tokens of generated continuation, probe accuracy on tier-A-prompted continuations exceeds tier-C-prompted continuations by ≥ 0.10, statistically significant after Bonferroni correction. <em>Verdict: not met. Direction reversed across all offsets ≥ 150.</em></p>
+        <h4>Decision tree (was)</h4>
+        <p><strong>Pass:</strong> proceed with full Spec 01 with confidence.<br><strong>Fail mode A:</strong> drop persistence-decay from Spec 01; document negative.<br><strong>Fail mode B (counter-intuitive direction):</strong> pause Spec 01; revisit the bottom-up methodology commitment. ← <em>landed here</em></p>
+        <h4>Result memo</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">synthesis/results/02-persistence-decay-results.md</p>
       </div>
     </div>
 
-    <!-- Spec 03 -->
+    <p style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin:1rem 0 -0.5rem;grid-column:1/-1;">— Phase 2 · mission track (forward path)</p>
+
+    <!-- Spec CT Chemtech -->
     <div class="exp-card" onclick="toggleCard(this)">
       <div class="exp-card-head">
         <div>
-          <div class="exp-id">SPEC 03</div>
-          <div class="exp-tier">tier 2 · independent</div>
+          <div class="exp-id">SPEC CT · "CHEMTECH"</div>
+          <div class="exp-tier">mission track · <em>new · bred from 03 + 04</em></div>
         </div>
-        <div class="exp-status status-ready">○ ready</div>
+        <div class="exp-status status-done">● executed 2026-05-30 · CT-A mixed / CT-B pass</div>
+      </div>
+      <h3 class="exp-title">Chemtech — residue structure + breadth</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Before fine-tuning, the loop needs two things the parked specs were going to give: a read on <em>how residue is structured</em> (so M1 has a training objective) and a <em>corpus quality-control gate</em> (so the agent doesn't train on text that only beats a surface baseline). Chemtech is the lean hybrid that salvages exactly those two.</p>
+      <p class="exp-hyp">A bred hybrid of the old Specs 03 + 04. Salvages only (a) the <strong>residue-structure question</strong> &mdash; is residue localized or distributed? &mdash; which feeds the M1 fine-tune objective, and (b) <strong>designed-vs-genuine beats a surface baseline</strong>, which gives the agent loop its corpus quality-control + breadth check. The heavyweight 03/04 specs are parked as reference.</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">role</span>feeds M1 objective</div>
+        <div class="item"><span class="label">salvages</span>03 (QC) + 04 (structure)</div>
+        <div class="item"><span class="label">status</span>next up</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>What it keeps from the parked specs</h4>
+        <p><strong>From Spec 04 &mdash; structure:</strong> is the residue signal localized in a few token spans or distributed across the text? This isn't run for its own sake anymore; the answer sets how M1 should be trained (what to weight, what to ablate).</p>
+        <p><strong>From Spec 03 &mdash; quality control:</strong> does a residue corpus beat a surface-feature baseline at separating designed from genuine text? In the loop, this is the gate that stops the agent from fine-tuning on a corpus whose only signal is writing polish.</p>
+        <h4>Why a hybrid instead of both</h4>
+        <p>Running the full 03 and 04 specs would cost weeks of compute for questions the mission no longer needs answered in full. Chemtech keeps the two load-bearing sub-questions and drops the rest. Honest about scope: this is breadth + corpus QC for the agent loop, not a fresh validation claim.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; bred 2026-05</p>
+      </div>
+    </div>
+
+    <!-- Spec M1 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC M1</div>
+          <div class="exp-tier">mission track · <em>build-not-measure</em></div>
+        </div>
+        <div class="exp-status status-gap">● executed 2026-05-30 · lift +0.004 · ambiguous</div>
+      </div>
+      <h3 class="exp-title">Fine-tune Qwen3-8B — raise the floor</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> This is the first rung where the lab <em>builds</em> rather than <em>measures</em>. Probing found a marginal 0.79 floor on Qwen3-8B. M1 asks the real question: can fine-tuning push that floor up into a signal robust enough to survive a held-out event with held-out controls it can't game?</p>
+      <p class="exp-hyp">Fine-tune Qwen3-8B to push the marginal probing floor (AUROC 0.79) up to a <em>robust</em> residue signal, validated on a <strong>held-out event</strong> with <strong>held-out controls</strong> engineered so the result can't be gamed. The first proof-of-concept of a residue-trained model.</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">model</span>Qwen3-8B</div>
+        <div class="item"><span class="label">from → to</span>0.79 floor → robust</div>
+        <div class="item"><span class="label">validated on</span>held-out event + controls</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>The shift this represents</h4>
+        <p>Specs 01/02/1.5 measured whether a substrate exists. M1 tries to <em>train one in</em>. Same discipline, opposite direction: instead of asking "is the floor there," it asks "can we lift it." A marginal probing floor isn't a capability; a model that reliably reads residue on events it was never trained on would be.</p>
+        <h4>What "can't be gamed" means here</h4>
+        <p>The validation event and its controls are held out and engineered adversarially &mdash; same register foils Spec 1.5 used to break the earlier claim, applied to a fresh event. If the fine-tuned model only learned register or the training event's surface, the held-out controls catch it. A pass has to clear pre-registered honesty bands, not just beat chance.</p>
+        <h4>Honest framing</h4>
+        <p>This is a proof-of-concept on one model family (the one that showed a fragile pass), not a claim that residue training generalizes across families. Llama-3.1-8B failed probing entirely; M1 does not assume it would train.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; mission track</p>
+      </div>
+    </div>
+
+    <!-- Spec M2 -->
+    <div class="exp-card" onclick="toggleCard(this)">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC M2 · "SHOREKEEPER"</div>
+          <div class="exp-tier">mission track · <em>new · automate the loop</em></div>
+        </div>
+        <div class="exp-status status-gap">◆ never started · M1 gate never opened</div>
+      </div>
+      <h3 class="exp-title">Automate the loop — agent-driven, self-honest</h3>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> M1 proves a human can fine-tune one event into a model. M2 asks whether an <em>agent</em> can run the whole loop &mdash; and, more sharply, whether the self-honesty mechanism still catches confounds when a careful human isn't the one driving. That second question is the real test.</p>
+      <p class="exp-hyp">Automate the full loop into an agent-executable pipeline &mdash; collect tiered corpus → build controls → probe → fine-tune → self-verify against locked bands → integrate into a persistent base &mdash; and demonstrate it on a <em>fresh</em> event. Central test: does the self-honesty mechanism (locked bands + controls) catch confounds when an agent, not a careful human, is driving?</p>
+      <div class="exp-meta">
+        <div class="item"><span class="label">codename</span>shorekeeper</div>
+        <div class="item"><span class="label">demonstrates on</span>a fresh event</div>
+        <div class="item"><span class="label">central test</span>self-honesty under autonomy</div>
+      </div>
+      <div class="exp-card-expand"></div>
+      <div class="exp-details">
+        <h4>The loop, end to end</h4>
+        <p>For any new event the agent: (1) collects a tiered corpus of emotional residue, (2) builds control corpora, (3) probes, (4) fine-tunes a model on it, (5) self-verifies against pre-registered honesty bands, (6) integrates the result into a persistent base that gets better at reading the next event. This is the lab's actual deliverable &mdash; a runnable, self-verifying methodology, not a single model.</p>
+        <h4>The hard part</h4>
+        <p>Spec 1.5 is proof that a careful human, holding the locked bands, will retract a claim that fails its control. M2 asks whether that discipline survives automation &mdash; whether an agent driving the loop catches the same register/valence confound that the May audit had to catch by hand. If the self-honesty mechanism only works when a human is watching, the methodology isn't actually autonomous yet.</p>
+        <h4>Why residue is just the first domain</h4>
+        <p>The loop &mdash; corpus, controls, probe, fine-tune, self-verify, integrate &mdash; is a general recipe for felt-side environment construction. Residue is the first domain it's being proven on. The cold-ground-truth side (Karpathy-style synthetic-data environments) validates cold logic; shorekeeper does the felt side.</p>
+        <h4>Spec doc</h4>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--ink-light);">in research repo &middot; mission track</p>
+      </div>
+    </div>
+
+    <p style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin:1rem 0 -0.5rem;grid-column:1/-1;">— parked · kept as reference</p>
+
+    <!-- Spec 03 (parked) -->
+    <div class="exp-card" onclick="toggleCard(this)" style="opacity:0.78;">
+      <div class="exp-card-head">
+        <div>
+          <div class="exp-id">SPEC 03</div>
+          <div class="exp-tier">parked · reference · <em>salvage merged into Chemtech</em></div>
+        </div>
+        <div class="exp-status status-external">▢ parked</div>
       </div>
       <h3 class="exp-title">Designed vs Genuine Residue Detection</h3>
-      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Critical sanity check on the whole program. Tests whether the residue methodology distinguishes deliberately curated text (press releases, official statements) from genuine first-person leakage BEYOND what surface-feature methods (vocabulary, tone, style) would catch. If the methodology doesn't beat a surface-feature baseline, we've been measuring writing polish, not real residue.</p>
-      <p class="exp-hyp">Residue methodology beats surface-feature baseline at distinguishing deliberately constructed text from genuinely leaked text (AUROC gap &gt; 0.10 over baseline). Tests whether the methodology adds value beyond stylistic classification.</p>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--rule-dark);"><strong style="color:var(--ink-mid);font-style:normal;">Status:</strong> <strong>parked.</strong> The one still-useful question here &mdash; does residue beat a surface-feature baseline at telling designed text from genuine leakage? &mdash; was bred into <strong>Spec CT (Chemtech)</strong> as a corpus quality-control gate for the agent loop. The heavyweight standalone spec is kept as reference, not on the critical path.</p>
+      <p class="exp-hyp">Original claim: residue methodology beats a surface-feature baseline at distinguishing deliberately constructed text from genuinely leaked text (AUROC gap &gt; 0.10 over baseline). The designed-vs-genuine half of this survives inside Chemtech; the rest is parked.</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
         <div class="item"><span class="label">corpus</span>curation is gating step</div>
@@ -1013,18 +1155,18 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
       </div>
     </div>
 
-    <!-- Spec 04 -->
-    <div class="exp-card" onclick="toggleCard(this)">
+    <!-- Spec 04 (parked) -->
+    <div class="exp-card" onclick="toggleCard(this)" style="opacity:0.78;">
       <div class="exp-card-head">
         <div>
           <div class="exp-id">SPEC 04</div>
-          <div class="exp-tier">tier 2 · methodology</div>
+          <div class="exp-tier">parked · reference · <em>salvage merged into Chemtech</em></div>
         </div>
-        <div class="exp-status status-ready">○ ready</div>
+        <div class="exp-status status-external">▢ parked</div>
       </div>
       <h3 class="exp-title">Math Residue Criteria Evaluation</h3>
-      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--gold);"><strong style="color:var(--ink-mid);font-style:normal;">Why this matters:</strong> Tests the mathematical foundation underneath the whole methodology. We claim text behavior decomposes additively as contributions from a small number of specific token spans (think of it like: hotel monthly revenue = baseline + sum of impacts from specific events). Five falsifiability criteria test whether the decomposition mathematically holds. If 4-5 pass, the methodology has rigorous foundation. If 0-2 pass, the math framing is rhetoric and we drop it.</p>
-      <p class="exp-hyp">Tests whether the <em>linear-residue hypothesis</em> Φ(x) ≈ Φ₀ + Σ⟨v_Φ, r(s)⟩ holds on yen-carry data. Φ = downstream probe output; r(s) = residue vector at causally-mediated token span s; v_Φ = the probe direction. Verified via 5 falsifiability criteria (locality / additivity / paraphrase invariance / compression / sufficiency-necessity).</p>
+      <p style="font-style:italic;font-size:0.88rem;color:var(--ink-light);line-height:1.6;margin-bottom:0.85rem;padding-left:0.85rem;border-left:2px solid var(--rule-dark);"><strong style="color:var(--ink-mid);font-style:normal;">Status:</strong> <strong>parked.</strong> The piece that feeds the fine-tune &mdash; <em>is residue localized or distributed?</em> &mdash; was carried into <strong>Spec CT (Chemtech)</strong>, because the answer shapes the M1 training objective. The full five-criterion compute-heavy evaluation is kept as reference, not on the critical path.</p>
+      <p class="exp-hyp">Original claim: the <em>linear-residue hypothesis</em> Φ(x) ≈ Φ₀ + Σ⟨v_Φ, r(s)⟩ holds on yen-carry data. Φ = downstream probe output; r(s) = residue vector at a causally-mediated token span s; v_Φ = the probe direction. The localized-vs-distributed structure question survives inside Chemtech; the rest is parked.</p>
       <div class="exp-meta">
         <div class="item"><span class="label">duration</span>1.5-2 weeks</div>
         <div class="item"><span class="label">cost</span>compute-heavy (20K passes)</div>
@@ -1038,7 +1180,7 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
           <li><strong>Additivity:</strong> R² ≥ 0.7 between sum-of-residues and observed Φ on held-out.</li>
           <li><strong>Paraphrase invariance:</strong> ‖r(s) − r(s')‖ / ‖r(s)‖ &lt; 0.2 for paraphrases.</li>
           <li><strong>Compression:</strong> ρ = (|S(x)| · k) / n &lt; 0.1 — residue is at most 10% of text.</li>
-          <li><strong>Sufficiency-necessity:</strong> ≥7/10 sufficient + ≥8/10 necessary spans per text.</li>
+          <li><strong>Sufficiency-necessity:</strong> Sufficiency — ≥7/10 <em>texts</em> pass (Φ preserved when non-singular tokens replaced). Necessity — ≥8/10 <em>singular spans per text</em> trigger (ablation shifts Φ by &gt; τ).</li>
         </ul>
         <h4>Aggregate verdict</h4>
         <p><strong>4-5/5 pass:</strong> linear-residue framing is rigorous; bible decision #5 locked. <strong>3/5:</strong> framework partly holds; revise specific decision. <strong>≤2/5:</strong> the math residue framing is rhetoric; drop decision #5 from bible.</p>
@@ -1053,76 +1195,76 @@ a:hover { color: var(--red); border-bottom-color: var(--red-light); }
 <!-- III. BUILD ORDER -->
 <section class="section">
   <div class="section-label"><span class="section-num">§ 03</span> Build order</div>
-  <h2>Critical path: ~7 weeks minimum.</h2>
-  <p class="lede">Spec 02 (pre-flight) gates Spec 01 (load-bearing). Spec 04 depends on Spec 01's best probes. Spec 03 is independent — its corpus curation starts day 1 since it's the longest serial task.</p>
+  <h2>Probing behind us. The <span class="accent">build</span> ahead.</h2>
+  <p class="lede">The critical path has turned a corner. Probing (Specs 01, 02, 1.5) is <em>done</em> &mdash; it told us the residue floor is marginal and model-specific. From here the path is a build, not a measurement: <strong>Chemtech</strong> fixes the structure + corpus-quality questions the fine-tune needs answered, <strong>M1</strong> is the first build-not-measure rung (fine-tune Qwen3-8B to lift the floor, validated on a held-out event), and <strong>M2</strong> automates the whole loop so an agent can run it on a fresh event. The deliverable at the end isn't a single model &mdash; it's a runnable, self-verifying methodology.</p>
 
   <div class="timeline-wrap">
     <div class="timeline">
       <!-- Header row -->
       <div class="tl-header spec-label">spec</div>
-      <div class="tl-header">wk 1</div>
-      <div class="tl-header">wk 2</div>
-      <div class="tl-header">wk 3</div>
-      <div class="tl-header">wk 4</div>
-      <div class="tl-header">wk 5</div>
-      <div class="tl-header">wk 6</div>
-      <div class="tl-header">wk 7</div>
-      <div class="tl-header">wk 8</div>
+      <div class="tl-header">done</div>
+      <div class="tl-header">done</div>
+      <div class="tl-header">now →</div>
+      <div class="tl-header">+1</div>
+      <div class="tl-header">+2</div>
+      <div class="tl-header">+3</div>
+      <div class="tl-header">+4</div>
+      <div class="tl-header">+5</div>
 
-      <!-- Spec 02 (pre-flight) -->
-      <div class="tl-spec">02 pre-flight</div>
-      <div class="tl-cell active-02 critical">3-5d</div>
+      <!-- Probing (01/02/1.5) — executed -->
+      <div class="tl-spec">probing 01·02·1.5</div>
+      <div class="tl-cell active-01">probe</div>
+      <div class="tl-cell active-01">control 1.5</div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
-      <div class="tl-cell"></div>
-      <div class="tl-cell"></div>
-      <div class="tl-cell"></div>
-      <div class="tl-cell"></div>
-
-      <!-- Spec 01 (tier 1) -->
-      <div class="tl-spec">01 tier 1</div>
-      <div class="tl-cell"></div>
-      <div class="tl-cell active-01 critical">setup</div>
-      <div class="tl-cell active-01 critical">extract</div>
-      <div class="tl-cell active-01 critical">eval</div>
-      <div class="tl-cell active-01">report</div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
 
-      <!-- Spec 03 (designed vs genuine) -->
-      <div class="tl-spec">03 independent</div>
-      <div class="tl-cell active-03">corpus</div>
-      <div class="tl-cell active-03">corpus</div>
-      <div class="tl-cell active-03">corpus</div>
-      <div class="tl-cell active-03">probes</div>
-      <div class="tl-cell active-03">eval+report</div>
+      <!-- Chemtech (structure + breadth) -->
+      <div class="tl-spec">CT chemtech</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell active-03 critical">structure</div>
+      <div class="tl-cell active-03 critical">corpus QC</div>
+      <div class="tl-cell"></div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
 
-      <!-- Spec 04 (math criteria) -->
-      <div class="tl-spec">04 math</div>
+      <!-- M1 (fine-tune) -->
+      <div class="tl-spec">M1 fine-tune</div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
       <div class="tl-cell"></div>
-      <div class="tl-cell active-04 critical">setup</div>
-      <div class="tl-cell active-04 critical">locality+add</div>
-      <div class="tl-cell active-04 critical">paraphrase+comp</div>
-      <div class="tl-cell active-04 critical">suff-nec+report</div>
-      <div class="tl-cell active-04">synthesis</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell active-04 critical">train</div>
+      <div class="tl-cell active-04 critical">held-out eval</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+
+      <!-- M2 (automate the loop) -->
+      <div class="tl-spec">M2 shorekeeper</div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell"></div>
+      <div class="tl-cell active-02 critical">automate</div>
+      <div class="tl-cell active-02 critical">fresh-event run</div>
     </div>
     <div class="tl-legend">
-      <span><span class="swatch" style="background:var(--amber-light);color:var(--amber);"></span>02 pre-flight</span>
-      <span><span class="swatch" style="background:var(--blue-light);color:var(--blue);"></span>01 tier 1</span>
-      <span><span class="swatch" style="background:var(--green-light);color:var(--green);"></span>03 independent</span>
-      <span><span class="swatch" style="background:var(--red-light);color:var(--red);"></span>04 math criteria</span>
-      <span><span class="swatch" style="background:transparent;border:2px solid var(--ink);"></span>critical path</span>
+      <span><span class="swatch" style="background:var(--blue-light);color:var(--blue);"></span>probing 01·02·1.5 (done)</span>
+      <span><span class="swatch" style="background:var(--green-light);color:var(--green);"></span>CT chemtech</span>
+      <span><span class="swatch" style="background:var(--red-light);color:var(--red);"></span>M1 fine-tune</span>
+      <span><span class="swatch" style="background:var(--amber-light);color:var(--amber);"></span>M2 shorekeeper</span>
+      <span><span class="swatch" style="background:transparent;border:2px solid var(--ink);"></span>critical path (forward)</span>
     </div>
   </div>
 
-  <p class="note"><strong>Day 1 actions:</strong> kick off Spec 02 setup + Spec 03 corpus curation in parallel. They don't compete on compute (corpus is research, Spec 02 needs MPS time). By day 5 you have a go/no-go signal for Spec 01.</p>
+  <p class="note"><strong>Where the path turns:</strong> probing was the measurement phase &mdash; it answered "is the floor there?" with a fragile yes on one model family. Everything from Chemtech onward is a build. Chemtech feeds M1's training objective; M1 is the first model that's trained on residue rather than just probed for it; M2 wraps the whole sequence into a loop an agent can drive on a new event, with the locked honesty bands as the thing that keeps it honest without a human in the seat.</p>
 </section>
 
 <!-- IV. WHAT IS RESIDUE WALKTHROUGH -->
