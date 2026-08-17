@@ -143,6 +143,21 @@ footer a{color:var(--ink3)}
   .hist dt{float:none;width:auto}
   .hist dd{margin-left:0}
 }
+
+details.dd{position:relative;display:inline}
+details.dd summary{list-style:none;cursor:pointer;color:var(--ink3);display:inline}
+details.dd summary::-webkit-details-marker{display:none}
+details.dd summary::after{content:" \25BE";font-size:.85em}
+details.dd summary:hover{color:var(--ink);text-decoration:underline}
+details.dd[open] summary{color:var(--ink);font-weight:600}
+.dd-panel{position:absolute;top:1.6rem;left:-1rem;z-index:50;background:var(--bg,#f7f8f8);
+  border:1px solid var(--line2,#b9c0c4);min-width:19rem;padding:.5rem 0}
+.dd-hd{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4,#98a0a5);padding:.35rem 1rem .5rem}
+.dd-panel a{display:block;padding:.42rem 1rem;line-height:1.45}
+.dd-panel a:hover{background:var(--bg2,#eef0f0);text-decoration:none;color:var(--ink,#191d1f)}
+.dd-panel .dt{color:var(--acc,#14538c);font-variant-numeric:tabular-nums;margin-right:.55rem}
+.dd-panel .ds{display:block;color:var(--ink4,#98a0a5);font-size:.62rem}
+@media(max-width:44rem){.dd-panel{position:fixed;left:1rem;right:1rem;min-width:0}}
 </style>
 </head>
 <body>
@@ -154,9 +169,14 @@ footer a{color:var(--ink3)}
   <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
   <a href="/methodology.html">methodology</a>
   <a href="/lineage.html">lineage</a>
-  <a href="/floor36/">floor36</a>
-  <a href="/floor36/mufx.html">mufx</a>
-  <a href="/floor36/cipher.html">cipher</a>
+  <details class="dd"><summary>archive</summary>
+    <div class="dd-panel">
+      <div class="dd-hd">Predecessor projects &middot; preserved in place</div>
+      <a href="/floor36/mufx.html"><span class="dt">2026-02&ndash;03</span>mufx<span class="ds">FX research desk &mdash; daily signals, weeklies, fair-value models</span></a>
+      <a href="/floor36/cipher.html"><span class="dt">2026-03</span>cipher<span class="ds">macro data terminal &mdash; 26 collectors, live API</span></a>
+      <a href="/floor36/"><span class="dt">2026-03&ndash;04</span>floor36<span class="ds">research journal &mdash; reading notes, agents, blueprints</span></a>
+    </div>
+  </details>
   <a href="https://github.com/mufxio">github</a>
 </div></nav>
 
