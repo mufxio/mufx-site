@@ -560,28 +560,34 @@ a.crosslink:hover { color: inherit; border-bottom-color: var(--red); }
   .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 </style>
+<style id="cohesion-override">
+/* cohesion with the technical-report template, 2026-08-17 */
+*{border-radius:0!important;box-shadow:none!important}
+nav{border-bottom:1px solid #d5dadc;background:#f7f8f8}
+nav .inner{max-width:62rem;margin:0 auto;padding:.8rem 1.3rem;display:flex;flex-wrap:wrap;
+  align-items:baseline;gap:.35rem 1.25rem;font-family:'Spline Sans Mono',monospace;
+  font-size:.7rem;letter-spacing:.05em;text-transform:none}
+nav .inner a{color:#6a7379;text-decoration:none;font-weight:400;border:0;padding:0;background:none}
+nav .inner a:hover{color:#191d1f;text-decoration:underline}
+nav .inner a.here{color:#191d1f;font-weight:600}
+nav .brand{color:#191d1f;font-weight:600;margin-right:.7rem;letter-spacing:.08em;text-transform:uppercase}
+</style>
 </head>
 <body>
 
 <!-- Navigation -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo"><span class="accent">residue</span> lab</a>
-    <div class="nav-links">
-      <a href="/#program">program</a>
-      <a href="/#experiments">experiments</a>
-      <a href="/results.html">results</a>
-      <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
-      <a href="/methodology.html">methodology</a>
-      <a href="/lineage.html" class="active">lineage</a>
-      <a href="/floor36/">floor36</a>
-      <a href="/floor36/archive.html">mufx</a>
-      <a href="/floor36/cipher.html">cipher</a>
-      <a href="https://github.com/mufxio/emotion-vector-bench" target="_blank">github</a>
-      <span class="nav-pulse" title="active research"></span>
-    </div>
-  </div>
-</nav>
+<nav><div class="inner">
+  <span class="brand">Residue Lab</span>
+  <a href="/">overview</a>
+  <a href="/results.html">results</a>
+  <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
+  <a href="/methodology.html">methodology</a>
+  <a href="/lineage.html" class="here">lineage</a>
+  <a href="/floor36/">floor36</a>
+  <a href="/floor36/mufx.html">mufx</a>
+  <a href="/floor36/cipher.html">cipher</a>
+  <a href="https://github.com/mufxio">github</a>
+</div></nav>
 <div style="max-width:52rem;margin:1.2rem auto 0;padding:.7rem 1.1rem;border-left:2px solid #b9c0c4;background:#eef0f0;font-family:'Spline Sans Mono',monospace;font-size:.7rem;line-height:1.6;color:#3f474b">Written 2026-05, before the probing programme closed. For experimental outcomes see <a href="/results.html" style="color:#14538c">/results</a>.</div>
 
 <div class="page">
