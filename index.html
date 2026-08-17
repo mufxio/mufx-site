@@ -48,10 +48,12 @@ nav .brand{color:var(--ink);font-weight:600;margin-right:.7rem;letter-spacing:.0
 .cover{padding:3rem 0 0}
 h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5vw,2.6rem);
   letter-spacing:-.01em;line-height:1.12;margin:0 0 .4rem}
-.subtitle{font-size:1.06rem;font-style:italic;color:var(--ink2);margin:0 0 1.6rem}
+.subtitle{font-size:1.06rem;font-style:italic;color:var(--ink2);margin:0 0 .45rem}
+.byline{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--ink2);margin:0 0 1.6rem}
 .fields{border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
   display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));margin:0 0 2.2rem}
-.field{padding:.7rem 1rem .7rem 0;border-right:1px solid var(--line)}
+.field{padding:.7rem 1.1rem;border-right:1px solid var(--line)}
+.field:first-child{padding-left:0}
 .field:last-child{border-right:0}
 .field .k{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink3);margin-bottom:.25rem}
@@ -136,7 +138,7 @@ footer a{color:var(--ink3)}
   body{font-size:16px}
   .entry{grid-template-columns:1fr}
   .entry .no{padding:0 0 .2rem}
-  .field{border-right:0;border-bottom:1px solid var(--line)}
+  .field{border-right:0;border-bottom:1px solid var(--line);padding-left:0}
   .field:last-child{border-bottom:0}
   .hist dt{float:none;width:auto}
   .hist dd{margin-left:0}
@@ -153,6 +155,8 @@ footer a{color:var(--ink3)}
   <a href="/methodology.html">methodology</a>
   <a href="/lineage.html">lineage</a>
   <a href="/floor36/">floor36</a>
+  <a href="/floor36/archive.html">mufx</a>
+  <a href="/floor36/cipher.html">cipher</a>
   <a href="https://github.com/mufxio">github</a>
 </div></nav>
 
@@ -161,6 +165,7 @@ footer a{color:var(--ink3)}
 <header class="cover">
   <h1>Residue Lab</h1>
   <p class="subtitle">Experimental record: emotional residue as a machine-learning signal, May&ndash;August 2026</p>
+  <p class="byline">Hao Zhang</p>
   <div class="fields">
     <div class="field"><span class="k">Status</span><span class="v">active</span></div>
     <div class="field"><span class="k">Experiments executed</span><span class="v">10</span></div>

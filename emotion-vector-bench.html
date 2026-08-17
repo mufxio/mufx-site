@@ -100,7 +100,8 @@ tr.strike td{color:var(--ink4);text-decoration:line-through}
 
 .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
   border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);margin:1.7rem 0}
-.fig{padding:.9rem .9rem .9rem 0;border-right:1px solid var(--line)}
+.fig{padding:.9rem 1.1rem;border-right:1px solid var(--line)}
+.fig:first-child{padding-left:0}
 .fig:last-child{border-right:0}
 .fig .v{display:block;font-family:var(--mono);font-size:1.25rem;font-weight:500;
   letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.15;margin-bottom:.35rem}
@@ -120,6 +121,7 @@ footer a{color:var(--ink3)}
   .exp dl{grid-template-columns:1fr;gap:.15rem}
   .exp dt{margin-top:.55rem}
   .figs{grid-template-columns:1fr 1fr}
+  .fig:nth-child(odd){padding-left:0}
 }
 </style>
 </head>
@@ -133,6 +135,8 @@ footer a{color:var(--ink3)}
   <a href="/methodology.html">methodology</a>
   <a href="/lineage.html">lineage</a>
   <a href="/floor36/">floor36</a>
+  <a href="/floor36/archive.html">mufx</a>
+  <a href="/floor36/cipher.html">cipher</a>
   <a href="https://github.com/mufxio">github</a>
 </div></nav>
 
