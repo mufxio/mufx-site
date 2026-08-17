@@ -8,82 +8,128 @@
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f5f2eb; --paper-dark:#ece8df; --paper-darker:#e0dbd0;
-  --ink:#1a1814; --ink-mid:#3d3a35; --ink-light:#6b6760; --ink-faint:#a09d97;
-  --rule:#c8c3b8; --rule-dark:#9a958c; --rule-faint:#ddd9d0;
-  --red:#b5200d; --red-light:#e8c5bf;
-  --blue:#0d3b6b; --blue-mid:#1a5fa8; --blue-light:#c2d8f0;
-  --green:#0a4a2a; --green-light:#c5e0d0;
-  --amber:#7a4500; --amber-light:#f0ddb5;
-  --gold:#c4956a; --gold-light:#ead8c0;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
-  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+  --bg:#f7f8f8; --bg2:#eef0f0; --bg3:#e4e7e8;
+  --ink:#191d1f; --ink2:#3f474b; --ink3:#6a7379; --ink4:#98a0a5;
+  --line:#d5dadc; --line2:#b9c0c4;
+  --acc:#14538c; --acc-bg:#e7eef4;
+  --pass:#17663f; --pass-bg:#e3efe8;
+  --fail:#a8261d; --fail-bg:#f3e5e3;
+  --mixed:#7a5410; --mixed-bg:#f0e9d8;
+  --open:#14538c; --open-bg:#e7eef4;
+  --void:#6a7379; --void-bg:#eef0f0;
+  --serif:'STIX Two Text',Georgia,'Times New Roman',serif;
+  --mono:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
-  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
-.wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem 6rem}
-nav{border-bottom:1px solid var(--rule);margin-bottom:2.5rem}
-nav .inner{max-width:52rem;margin:0 auto;padding:1rem 1.25rem;display:flex;flex-wrap:wrap;
-  gap:.4rem 1.4rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
-nav a{color:var(--ink-light);text-decoration:none}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:47rem;margin:0 auto;padding:0 1.3rem 5rem}
+a{color:var(--acc)}
+p{margin:0 0 1rem}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.85em;background:var(--bg2);padding:.05em .3em}
+
+nav{border-bottom:1px solid var(--line)}
+nav .inner{max-width:47rem;margin:0 auto;padding:.8rem 1.3rem;display:flex;flex-wrap:wrap;
+  align-items:baseline;gap:.35rem 1.25rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em}
+nav a{color:var(--ink3);text-decoration:none}
 nav a:hover{color:var(--ink);text-decoration:underline}
 nav a.here{color:var(--ink);font-weight:600}
-nav .brand{color:var(--ink);font-weight:600;margin-right:.6rem}
-nav .brand::after{content:"·";color:var(--gold);margin-left:.8rem}
-.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-faint);margin:1rem 0}
-h1{font-family:var(--sans);font-size:clamp(1.9rem,5.2vw,2.7rem);font-weight:600;letter-spacing:-.03em;
-  line-height:1.05;margin:0 0 .8rem;text-wrap:balance}
-.deck{font-size:1.1rem;color:var(--ink-mid);max-width:38rem;margin:0 0 1.6rem;text-wrap:balance}
-h2{font-family:var(--sans);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;
-  margin:3.2rem 0 1.1rem;padding-top:1.1rem;border-top:2px solid var(--ink);text-wrap:balance}
-h2 .n{display:block;font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
-h3{font-family:var(--sans);font-size:1.03rem;font-weight:600;margin:2rem 0 .6rem}
-p{margin:0 0 1rem}
-a{color:var(--blue)}
-code{font-family:var(--mono);font-size:.85em;background:var(--paper-dark);padding:.08em .3em}
-.callout{border-left:3px solid var(--rule-dark);background:var(--paper-dark);
-  padding:.9rem 1.1rem;margin:1.6rem 0;font-size:.95rem;line-height:1.55}
+nav .brand{color:var(--ink);font-weight:600;margin-right:.7rem;letter-spacing:.08em;text-transform:uppercase}
+
+header.page{padding:2.6rem 0 0}
+.eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin:2.2rem 0 .9rem}
+header.page .eyebrow{margin-top:0}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5vw,2.5rem);
+  letter-spacing:-.01em;line-height:1.12;margin:0 0 .5rem}
+.deck{font-size:1.04rem;font-style:italic;color:var(--ink2);max-width:40rem;margin:0 0 1.5rem}
+
+.callout{border-left:2px solid var(--line2);background:var(--bg2);
+  padding:.85rem 1.05rem;margin:1.5rem 0;font-size:.93rem;line-height:1.58}
 .callout p{margin:0 0 .6rem}.callout p:last-child{margin:0}
-.callout.warn{border-color:var(--amber);background:var(--amber-light)}
-.callout.big{border-left-width:4px;border-color:var(--green);background:var(--green-light)}
-.tw{overflow-x:auto;margin:1.7rem 0}
-table{border-collapse:collapse;width:100%;font-size:.85rem;font-family:var(--mono)}
-th{text-align:left;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);
-  font-weight:600;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);
-  padding:.55rem .9rem .5rem 0;white-space:nowrap}
-td{border-bottom:1px solid var(--rule-faint);padding:.55rem .9rem .55rem 0;vertical-align:top;line-height:1.5}
+.callout.warn{border-color:var(--mixed);background:var(--mixed-bg)}
+.callout.big{border-color:var(--pass);background:var(--pass-bg)}
+
+h2{font-family:var(--serif);font-weight:700;font-size:1.32rem;letter-spacing:-.008em;line-height:1.2;
+  margin:3rem 0 1.1rem;padding-top:1rem;border-top:2px solid var(--ink)}
+h2 .n{display:block;font-family:var(--mono);font-size:.66rem;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acc);margin-bottom:.55rem}
+h3{font-family:var(--serif);font-weight:700;font-size:1.05rem;letter-spacing:-.005em;margin:2rem 0 .65rem}
+
+.exp{border:1px solid var(--line);margin:1.5rem 0;background:transparent}
+.exp > .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .9rem;
+  padding:.75rem 1rem;border-bottom:1px solid var(--line);background:var(--bg2)}
+.exp .id{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.exp .nm{font-family:var(--serif);font-weight:700;font-size:.98rem;letter-spacing:-.005em}
+.exp .bd{padding:1rem 1rem .6rem}
+.exp dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1.1rem;font-size:.92rem}
+.exp dt{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);padding-top:.25em}
+.exp dd{margin:0;line-height:1.58}
+.exp .src{font-family:var(--mono);font-size:.64rem;color:var(--ink4);
+  border-top:1px dotted var(--line2);padding:.55rem 1rem;word-break:break-word;line-height:1.5}
+.exp .src a{color:var(--acc)}
+
+.pill{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;
+  white-space:nowrap;padding:.1em .35em;border:0}
+.pill::before{content:"["}
+.pill::after{content:"]"}
+.p-pass{color:var(--pass);background:var(--pass-bg)}
+.p-fail{color:var(--fail);background:var(--fail-bg)}
+.p-mixed{color:var(--mixed);background:var(--mixed-bg)}
+.p-void{color:var(--void);background:var(--void-bg)}
+.p-open{color:var(--open);background:var(--open-bg)}
+
+blockquote{margin:.8rem 0;padding:.6rem .95rem;border-left:2px solid var(--line2);
+  background:var(--bg);font-family:var(--mono);font-size:.75rem;line-height:1.65;color:var(--ink2)}
+blockquote p{margin:0}
+
+.tw{overflow-x:auto;margin:1.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.8rem;font-family:var(--mono)}
+th{text-align:left;font-weight:600;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
+  padding:.5rem .9rem .45rem 0;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:.52rem .9rem .52rem 0;vertical-align:top;line-height:1.55}
 tbody tr:last-child td{border-bottom:2px solid var(--ink)}
 td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-tr.strike td{color:var(--ink-faint);text-decoration:line-through}
+tr.strike td{color:var(--ink4);text-decoration:line-through}
+
 .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
-  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin:1.8rem 0}
-.fig{padding:.95rem .9rem .95rem 0;border-right:1px solid var(--rule)}
+  border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);margin:1.7rem 0}
+.fig{padding:.9rem .9rem .9rem 0;border-right:1px solid var(--line)}
 .fig:last-child{border-right:0}
-.fig .v{display:block;font-family:var(--mono);font-size:1.35rem;font-weight:500;
-  letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1;margin-bottom:.35rem}
-.fig .k{font-size:.75rem;line-height:1.38;color:var(--ink-light)}
-pre{font-family:var(--mono);font-size:.78rem;line-height:1.55;background:var(--paper-dark);
-  border-left:3px solid var(--rule);padding:.9rem 1rem;overflow-x:auto;margin:1.3rem 0}
-ul,ol{margin:0 0 1rem;padding-left:1.3rem}li{margin-bottom:.45rem}
-footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-light);
-  border-top:2px solid var(--ink);padding-top:1.2rem;margin-top:4rem}
-@media(max-width:34rem){body{font-size:16px}.figs{grid-template-columns:1fr 1fr}}
+.fig .v{display:block;font-family:var(--mono);font-size:1.25rem;font-weight:500;
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.15;margin-bottom:.35rem}
+.fig .k{font-family:var(--mono);font-size:.64rem;line-height:1.45;color:var(--ink3)}
+
+pre{font-family:var(--mono);font-size:.74rem;line-height:1.6;background:var(--bg2);
+  border-left:2px solid var(--line2);padding:.85rem 1rem;overflow-x:auto;margin:1.3rem 0}
+ul,ol{margin:0 0 1rem;padding-left:1.3rem}
+li{margin-bottom:.45rem}
+
+footer{font-family:var(--mono);font-size:.66rem;line-height:1.75;color:var(--ink3);
+  border-top:2px solid var(--ink);padding-top:1.1rem;margin-top:3.4rem}
+footer a{color:var(--ink3)}
+
+@media(max-width:40rem){
+  body{font-size:16px}
+  .exp dl{grid-template-columns:1fr;gap:.15rem}
+  .exp dt{margin-top:.55rem}
+  .figs{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 
 <nav><div class="inner">
-  <span class="brand">residue lab</span>
-  <a href="/">program</a>
+  <span class="brand">Residue Lab</span>
+  <a href="/">overview</a>
   <a href="/results.html">results</a>
-  <a href="/emotion-vector-bench.html" class="here">emotion-vector-bench</a>
+  <a href="/emotion-vector-bench.html" class="here">emotion&#8209;vector&#8209;bench</a>
   <a href="/methodology.html">methodology</a>
   <a href="/lineage.html">lineage</a>
   <a href="/floor36/">floor36</a>
@@ -93,7 +139,7 @@ footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-
 <div class="wrap">
   <div class="eyebrow">Replication &middot; executed 2026-05 &middot; corrected 2026-08-17</div>
   <h1>emotion-vector-bench</h1>
-  <p class="deck">Anthropic showed that emotion concepts live as linear directions in a model's residual stream. They proved it on closed Sonnet&nbsp;4.5. This reproduces the methodology on five open-weight models from three labs, in one command, on a Mac mini.</p>
+  <p class="deck">Anthropic showed that emotion concepts live as linear directions in a model's residual stream. They proved it on closed Sonnet&nbsp;4.5. This reproduces the methodology on five open-weight models from three labs, in one command, on consumer hardware.</p>
 
   <div class="callout big">
     <p><strong>The finding: emotion geometry is close to model-invariant.</strong></p>
@@ -168,12 +214,12 @@ corr(raw PC1 sep, mean L2 norm) = 0.9896     R² = 0.979</pre>
 <p><strong>What is unaffected.</strong> Every probe accuracy, every permutation test, cross-layer stability, and the arousal and implicit-emotion results are computed independently of PCA scale and stand unchanged. The fix is in <code>code/validate.py</code>; the old value is retained as <code>valence_separation_pc1_raw</code> with a comment stating it must not be compared across models.</p>
 
 <div class="callout">
-  <p><strong>The corrected claim is stronger than the withdrawn one.</strong> &ldquo;One model family organizes emotion 18&times; more cleanly&rdquo; is a curiosity about Qwen. &ldquo;Emotion geometry is close to invariant across labs and scales&rdquo; is a reason to trust that a result found on one open-weight model transfers to another &mdash; which is the whole argument for doing this work on hardware you own.</p>
+  <p><strong>The corrected claim is stronger than the withdrawn one.</strong> &ldquo;One model family organizes emotion 18&times; more cleanly&rdquo; is a curiosity about Qwen. &ldquo;Emotion geometry is close to invariant across labs and scales&rdquo; is a reason to trust that a result found on one open-weight model transfers to another &mdash; which is what makes the methodology viable on consumer hardware.</p>
 </div>
 
 <h2><span class="n">Method</span>What it actually runs</h2>
 
-<p>Six stages: extraction &rarr; vectors &rarr; validation &rarr; probes &rarr; arousal &rarr; implicit emotion. Twenty emotions grouped into valence clusters, a frozen 3,050-item corpus, four probed layers per model, permutation baselines at every stage. One command per model. Everything in the table above was produced on a 24GB Mac mini.</p>
+<p>Six stages: extraction &rarr; vectors &rarr; validation &rarr; probes &rarr; arousal &rarr; implicit emotion. Twenty emotions grouped into valence clusters, a frozen 3,050-item corpus, four probed layers per model, permutation baselines at every stage. One command per model. All figures were produced locally on consumer hardware (Apple M-series, 24&nbsp;GB memory).</p>
 
 <p>The corpus is frozen precisely so a later run can be compared to an earlier one. The correction above was found by recomputing from the stored <code>raw_vectors.npz</code> files rather than from any summary &mdash; which is the only reason it was findable three months later.</p>
 

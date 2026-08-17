@@ -8,112 +8,128 @@
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f5f2eb; --paper-dark:#ece8df; --paper-darker:#e0dbd0;
-  --ink:#1a1814; --ink-mid:#3d3a35; --ink-light:#6b6760; --ink-faint:#a09d97;
-  --rule:#c8c3b8; --rule-dark:#9a958c; --rule-faint:#ddd9d0;
-  --red:#b5200d; --red-light:#e8c5bf;
-  --blue:#0d3b6b; --blue-mid:#1a5fa8; --blue-light:#c2d8f0;
-  --green:#0a4a2a; --green-light:#c5e0d0;
-  --amber:#7a4500; --amber-light:#f0ddb5;
-  --gold:#c4956a; --gold-light:#ead8c0;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
-  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+  --bg:#f7f8f8; --bg2:#eef0f0; --bg3:#e4e7e8;
+  --ink:#191d1f; --ink2:#3f474b; --ink3:#6a7379; --ink4:#98a0a5;
+  --line:#d5dadc; --line2:#b9c0c4;
+  --acc:#14538c; --acc-bg:#e7eef4;
+  --pass:#17663f; --pass-bg:#e3efe8;
+  --fail:#a8261d; --fail-bg:#f3e5e3;
+  --mixed:#7a5410; --mixed-bg:#f0e9d8;
+  --open:#14538c; --open-bg:#e7eef4;
+  --void:#6a7379; --void-bg:#eef0f0;
+  --serif:'STIX Two Text',Georgia,'Times New Roman',serif;
+  --mono:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
-  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
-.wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem 6rem}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:47rem;margin:0 auto;padding:0 1.3rem 5rem}
+a{color:var(--acc)}
+p{margin:0 0 1rem}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.85em;background:var(--bg2);padding:.05em .3em}
 
-/* nav */
-nav{border-bottom:1px solid var(--rule);margin-bottom:2.5rem}
-nav .inner{max-width:52rem;margin:0 auto;padding:1rem 1.25rem;display:flex;flex-wrap:wrap;
-  gap:.4rem 1.4rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
-nav a{color:var(--ink-light);text-decoration:none}
+nav{border-bottom:1px solid var(--line)}
+nav .inner{max-width:47rem;margin:0 auto;padding:.8rem 1.3rem;display:flex;flex-wrap:wrap;
+  align-items:baseline;gap:.35rem 1.25rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em}
+nav a{color:var(--ink3);text-decoration:none}
 nav a:hover{color:var(--ink);text-decoration:underline}
 nav a.here{color:var(--ink);font-weight:600}
-nav .brand{color:var(--ink);font-weight:600;margin-right:.6rem}
-nav .brand::after{content:"·";color:var(--gold);margin-left:.8rem}
+nav .brand{color:var(--ink);font-weight:600;margin-right:.7rem;letter-spacing:.08em;text-transform:uppercase}
 
-/* head */
-header.page{padding:1rem 0 0}
-.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-faint);margin-bottom:1rem}
-h1{font-family:var(--sans);font-size:clamp(2rem,5.5vw,2.9rem);font-weight:600;letter-spacing:-.03em;
-  line-height:1.05;margin:0 0 .8rem;text-wrap:balance}
-.deck{font-size:1.1rem;color:var(--ink-mid);max-width:38rem;margin:0 0 1.6rem;text-wrap:balance}
+header.page{padding:2.6rem 0 0}
+.eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin:2.2rem 0 .9rem}
+header.page .eyebrow{margin-top:0}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5vw,2.5rem);
+  letter-spacing:-.01em;line-height:1.12;margin:0 0 .5rem}
+.deck{font-size:1.04rem;font-style:italic;color:var(--ink2);max-width:40rem;margin:0 0 1.5rem}
 
-.callout{border-left:3px solid var(--rule-dark);background:var(--paper-dark);
-  padding:.9rem 1.1rem;margin:1.6rem 0;font-size:.95rem;line-height:1.55}
+.callout{border-left:2px solid var(--line2);background:var(--bg2);
+  padding:.85rem 1.05rem;margin:1.5rem 0;font-size:.93rem;line-height:1.58}
 .callout p{margin:0 0 .6rem}.callout p:last-child{margin:0}
-.callout.warn{border-color:var(--amber);background:var(--amber-light)}
+.callout.warn{border-color:var(--mixed);background:var(--mixed-bg)}
+.callout.big{border-color:var(--pass);background:var(--pass-bg)}
 
-h2{font-family:var(--sans);font-size:1.45rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;
-  margin:3.4rem 0 1.2rem;padding-top:1.1rem;border-top:2px solid var(--ink);text-wrap:balance}
-h2 .n{display:block;font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
-h3{font-family:var(--sans);font-size:1.05rem;font-weight:600;letter-spacing:-.01em;margin:2.2rem 0 .7rem}
-p{margin:0 0 1rem}
-code{font-family:var(--mono);font-size:.85em;background:var(--paper-dark);padding:.08em .3em}
+h2{font-family:var(--serif);font-weight:700;font-size:1.32rem;letter-spacing:-.008em;line-height:1.2;
+  margin:3rem 0 1.1rem;padding-top:1rem;border-top:2px solid var(--ink)}
+h2 .n{display:block;font-family:var(--mono);font-size:.66rem;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acc);margin-bottom:.55rem}
+h3{font-family:var(--serif);font-weight:700;font-size:1.05rem;letter-spacing:-.005em;margin:2rem 0 .65rem}
 
-/* experiment card */
-.exp{border:1px solid var(--rule);background:var(--paper-dark);margin:1.5rem 0}
+.exp{border:1px solid var(--line);margin:1.5rem 0;background:transparent}
 .exp > .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .9rem;
-  padding:.8rem 1.05rem;border-bottom:1px solid var(--rule)}
-.exp .id{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-light)}
-.exp .nm{font-family:var(--sans);font-weight:600;font-size:1rem;letter-spacing:-.01em}
-.exp .bd{padding:1rem 1.05rem}
-.exp dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1.1rem;font-size:.93rem}
-.exp dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-light);padding-top:.2em}
-.exp dd{margin:0}
-.exp .src{font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);
-  border-top:1px dashed var(--rule);padding:.6rem 1.05rem;word-break:break-all}
+  padding:.75rem 1rem;border-bottom:1px solid var(--line);background:var(--bg2)}
+.exp .id{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.exp .nm{font-family:var(--serif);font-weight:700;font-size:.98rem;letter-spacing:-.005em}
+.exp .bd{padding:1rem 1rem .6rem}
+.exp dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1.1rem;font-size:.92rem}
+.exp dt{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);padding-top:.25em}
+.exp dd{margin:0;line-height:1.58}
+.exp .src{font-family:var(--mono);font-size:.64rem;color:var(--ink4);
+  border-top:1px dotted var(--line2);padding:.55rem 1rem;word-break:break-word;line-height:1.5}
+.exp .src a{color:var(--acc)}
 
-.pill{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  padding:.15em .5em;border:1px solid currentColor;white-space:nowrap}
-.p-pass{color:var(--green);background:var(--green-light)}
-.p-fail{color:var(--red);background:var(--red-light)}
-.p-mixed{color:var(--amber);background:var(--amber-light)}
-.p-void{color:var(--ink-light);background:var(--paper)}
-.p-open{color:var(--blue);background:var(--blue-light)}
+.pill{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;
+  white-space:nowrap;padding:.1em .35em;border:0}
+.pill::before{content:"["}
+.pill::after{content:"]"}
+.p-pass{color:var(--pass);background:var(--pass-bg)}
+.p-fail{color:var(--fail);background:var(--fail-bg)}
+.p-mixed{color:var(--mixed);background:var(--mixed-bg)}
+.p-void{color:var(--void);background:var(--void-bg)}
+.p-open{color:var(--open);background:var(--open-bg)}
 
-blockquote{margin:.7rem 0;padding:.6rem .9rem;border-left:2px solid var(--rule-dark);
-  background:var(--paper);font-family:var(--mono);font-size:.8rem;line-height:1.6}
+blockquote{margin:.8rem 0;padding:.6rem .95rem;border-left:2px solid var(--line2);
+  background:var(--bg);font-family:var(--mono);font-size:.75rem;line-height:1.65;color:var(--ink2)}
 blockquote p{margin:0}
 
-.tw{overflow-x:auto;margin:1.7rem 0}
-table{border-collapse:collapse;width:100%;font-size:.85rem;font-family:var(--mono)}
-th{text-align:left;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);
-  font-weight:600;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule);
-  padding:.55rem .9rem .5rem 0;white-space:nowrap}
-td{border-bottom:1px solid var(--rule-faint);padding:.55rem .9rem .55rem 0;vertical-align:top;line-height:1.5}
+.tw{overflow-x:auto;margin:1.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.8rem;font-family:var(--mono)}
+th{text-align:left;font-weight:600;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
+  padding:.5rem .9rem .45rem 0;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:.52rem .9rem .52rem 0;vertical-align:top;line-height:1.55}
 tbody tr:last-child td{border-bottom:2px solid var(--ink)}
 td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.strike td{color:var(--ink4);text-decoration:line-through}
 
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);margin:1.7rem 0}
+.fig{padding:.9rem .9rem .9rem 0;border-right:1px solid var(--line)}
+.fig:last-child{border-right:0}
+.fig .v{display:block;font-family:var(--mono);font-size:1.25rem;font-weight:500;
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1.15;margin-bottom:.35rem}
+.fig .k{font-family:var(--mono);font-size:.64rem;line-height:1.45;color:var(--ink3)}
+
+pre{font-family:var(--mono);font-size:.74rem;line-height:1.6;background:var(--bg2);
+  border-left:2px solid var(--line2);padding:.85rem 1rem;overflow-x:auto;margin:1.3rem 0}
 ul,ol{margin:0 0 1rem;padding-left:1.3rem}
 li{margin-bottom:.45rem}
 
-footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-light);
-  border-top:2px solid var(--ink);padding-top:1.2rem;margin-top:4rem}
+footer{font-family:var(--mono);font-size:.66rem;line-height:1.75;color:var(--ink3);
+  border-top:2px solid var(--ink);padding-top:1.1rem;margin-top:3.4rem}
+footer a{color:var(--ink3)}
 
-@media(max-width:34rem){
+@media(max-width:40rem){
   body{font-size:16px}
   .exp dl{grid-template-columns:1fr;gap:.15rem}
   .exp dt{margin-top:.55rem}
+  .figs{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 
 <nav><div class="inner">
-  <span class="brand">residue lab</span>
-  <a href="/">program</a>
+  <span class="brand">Residue Lab</span>
+  <a href="/">overview</a>
   <a href="/results.html" class="here">results</a>
-  <a href="/emotion-vector-bench.html">emotion-vector-bench</a>
+  <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
   <a href="/methodology.html">methodology</a>
   <a href="/lineage.html">lineage</a>
   <a href="/floor36/">floor36</a>
@@ -124,7 +140,7 @@ footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-
 <header class="page">
   <div class="eyebrow">Experimental record &middot; complete &middot; updated 2026.08.17</div>
   <h1>Results</h1>
-  <p class="deck">Every experiment this lab has run, the criteria that were locked before it ran, and what it returned. Including the four that stopped early, the two that were retracted, and the one number that has to be corrected in public.</p>
+  <p class="deck">Every experiment run under the programme, the criteria locked before execution, and what came back. Including the four that stopped early, the two that were retracted, and the one number that has to be corrected in public.</p>
 
   <div class="callout">
     <p><strong>What this page is for.</strong> Across roughly twenty-five pre-registered numeric criteria in ten executed experiments, the count that passed and still stands is small. Not one criterion was quietly relaxed to manufacture a pass, and five hypotheses were amended after seeing data &mdash; four of them toward <em>stricter</em>. That record is the deliverable here, not a finding.</p>
@@ -220,7 +236,7 @@ footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-
   <div class="bd">
     <dl>
       <dt>Status</dt><dd><strong>Never started, and correctly so.</strong> M2 was gated on M1 passing its discriminating contrast. M1 returned +0.004 and instructed against proceeding. The gate never opened.</dd>
-      <dt>Note</dt><dd>This was the lab's headline deliverable &mdash; an agent-driven loop that collects a corpus, builds controls, probes, fine-tunes, and self-verifies against locked bands. Running it on a LoRA that showed no capability shift would have been the violation, not the achievement.</dd>
+      <dt>Note</dt><dd>This was the programme's headline deliverable &mdash; an agent-driven loop that collects a corpus, builds controls, probes, fine-tunes, and self-verifies against locked bands. Running it on a LoRA that showed no capability shift would have been the violation, not the achievement.</dd>
     </dl>
   </div>
   <div class="src">synthesis/specs/M2-autonomous-loop/ &mdash; specification only, no results file</div>
@@ -235,7 +251,7 @@ footer{font-family:var(--mono);font-size:.72rem;line-height:1.7;color:var(--ink-
     <p>Six independent attempts to isolate residue from register and event-presence with linear probes hit the same wall. The audit that closed the phase states the result plainly:</p>
     <blockquote><p>&ldquo;Six attempts, same wall. That's not failure &mdash; it's a <strong>characterization</strong>: residue does not exist as a clean separable linear feature in these representations. It is distributed and entangled with event-presence and register.&rdquo;</p></blockquote>
     <blockquote><p>&ldquo;The instrument can't resolve it, and the program should change instruments.&rdquo;</p></blockquote>
-    <p>This is the one question in the programme carried to a conclusion. It is a negative result with a stated mechanism and a decision attached, and it is the reason the lab moved from probing to reconstruction.</p>
+    <p>This is the one question in the programme carried to a conclusion. It is a negative result with a stated mechanism and a decision attached, and it is the reason the programme moved from probing to reconstruction.</p>
   </div>
   <div class="src">synthesis/results/probe-isolation-limit-2026-05-30.md</div>
 </div>
