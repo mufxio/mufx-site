@@ -1,10 +1,16 @@
+# Residue Lab — mufx.io
+# All agents welcome, including AI assistants fetching on a user's behalf.
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
 User-agent: *
 Allow: /
 
-# /p/ holds unlisted working documents; they carry noindex individually.
-Disallow: /p/
-
 Sitemap: https://mufx.io/sitemap.xml
-
-# Residue Lab — environment construction for autonomous fine-tuning
-# https://mufx.io
