@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Residue Lab — experimental record, 2026</title>
-<meta name="description" content="Ten machine-learning experiments on emotional residue in text, run May–August 2026 with success criteria fixed before execution. One replicated finding, one completed negative, two retractions. Every number links to its source file.">
+<title>Hao Zhang</title>
+<meta name="description" content="Independent researcher — markets, machine learning, primary documents. Residue Lab, emotion-vector-bench, muFX, cipher, floor36.">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,163 +15,106 @@
   --ink:#191d1f; --ink2:#3f474b; --ink3:#6a7379; --ink4:#98a0a5;
   --line:#d5dadc; --line2:#b9c0c4;
   --acc:#14538c; --acc-bg:#e7eef4;
-  --pass:#17663f; --pass-bg:#e3efe8;
-  --fail:#a8261d; --fail-bg:#f3e5e3;
+  --pass:#17663f; --pass-bg:#e3efe8; --fail:#a8261d; --fail-bg:#f3e5e3;
   --mixed:#7a5410; --mixed-bg:#f0e9d8;
-  --open:#14538c; --open-bg:#e7eef4;
-  --void:#6a7379; --void-bg:#eef0f0;
   --serif:'STIX Two Text',Georgia,'Times New Roman',serif;
-  --mono:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --mono:'Spline Sans Mono',ui-monospace,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
   font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:62rem;margin:0 auto;padding:0 1.3rem}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1.3rem 5rem}
 a{color:var(--acc)}
 p{margin:0 0 1rem}
 strong{font-weight:600}
-em{font-style:italic}
-code{font-family:var(--mono);font-size:.85em;background:var(--bg2);padding:.05em .3em}
 
-/* nav */
 nav{border-bottom:1px solid var(--line)}
 nav .inner{max-width:62rem;margin:0 auto;padding:.8rem 1.3rem;display:flex;flex-wrap:wrap;
-  align-items:baseline;gap:.35rem 1.25rem;font-family:var(--mono);font-size:.7rem;
-  letter-spacing:.05em}
+  align-items:baseline;gap:.35rem 1.25rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em}
 nav a{color:var(--ink3);text-decoration:none}
 nav a:hover{color:var(--ink);text-decoration:underline}
 nav a.here{color:var(--ink);font-weight:600}
 nav .brand{color:var(--ink);font-weight:600;margin-right:.7rem;letter-spacing:.08em;text-transform:uppercase}
-
-/* document cover */
-.cover{padding:3rem 0 0}
-h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5vw,2.6rem);
-  letter-spacing:-.01em;line-height:1.12;margin:0 0 .4rem}
-.subtitle{font-size:1.06rem;font-style:italic;color:var(--ink2);margin:0 0 .45rem}
-.byline{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--ink2);margin:0 0 1.6rem}
-.fields{border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));margin:0 0 2.2rem}
-.field{padding:.7rem 1.1rem;border-right:1px solid var(--line)}
-.field:first-child{padding-left:0}
-.field:last-child{border-right:0}
-.field .k{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink3);margin-bottom:.25rem}
-.field .v{font-family:var(--mono);font-size:.8rem;color:var(--ink)}
-
-/* abstract */
-.abstract{border-left:2px solid var(--line2);padding:.1rem 0 .1rem 1.2rem;margin:0 0 2.6rem}
-.abstract .h{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem}
-.abstract p{font-size:.98rem;line-height:1.62}
-.abstract p:last-child{margin-bottom:0}
-
-/* summary table + all tables: booktabs */
-.tw{overflow-x:auto;margin:1.4rem 0}
-table{border-collapse:collapse;width:100%;font-size:.82rem;font-family:var(--mono)}
-caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.66rem;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding-bottom:.5rem}
-th{text-align:left;font-weight:600;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink3);border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
-  padding:.5rem .9rem .45rem 0;white-space:nowrap}
-td{border-bottom:1px solid var(--line);padding:.52rem .9rem .52rem 0;vertical-align:top;line-height:1.55}
-tbody tr:last-child td{border-bottom:2px solid var(--ink)}
-td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-
-/* sections: hanging numbers */
-section{margin:3rem 0 0}
-h2{font-family:var(--serif);font-weight:700;font-size:1.35rem;letter-spacing:-.008em;
-  line-height:1.2;margin:0 0 1.1rem;padding-top:1rem;border-top:2px solid var(--ink)}
-h2 .sn{font-family:var(--mono);font-weight:500;font-size:.85rem;color:var(--acc);margin-right:.7rem}
-.sec-note{font-size:.95rem;color:var(--ink2);margin-bottom:1.6rem}
-
-/* numbered findings */
-.entry{display:grid;grid-template-columns:3.1rem 1fr;gap:0 .6rem;margin:0 0 2rem}
-.entry .no{font-family:var(--mono);font-size:.8rem;color:var(--acc);padding-top:.2rem}
-.entry h3{font-family:var(--serif);font-weight:700;font-size:1.06rem;line-height:1.3;
-  margin:0 0 .5rem;letter-spacing:-.005em}
-.entry p{font-size:.94rem;line-height:1.6;margin:0 0 .7rem}
-.entry .body{min-width:0}
-
-/* verdict tags: bracketed mono */
-.tag{font-family:var(--mono);font-size:.64rem;font-weight:600;letter-spacing:.08em;
-  white-space:nowrap;padding:.1em .35em}
-.tag::before{content:"["}
-.tag::after{content:"]"}
-.t-pass{color:var(--pass);background:var(--pass-bg)}
-.t-fail{color:var(--fail);background:var(--fail-bg)}
-.t-mixed{color:var(--mixed);background:var(--mixed-bg)}
-.t-open{color:var(--open);background:var(--open-bg)}
-.t-void{color:var(--void);background:var(--void-bg)}
-
-/* quoted verdicts */
-blockquote{margin:.8rem 0;padding:.6rem .95rem;border-left:2px solid var(--line2);
-  background:var(--bg2);font-family:var(--mono);font-size:.76rem;line-height:1.65;color:var(--ink2)}
-blockquote p{margin:0}
-
-/* data rows inside entries */
-.data{display:flex;flex-wrap:wrap;gap:.3rem 1.6rem;margin:.5rem 0 .8rem}
-.d .v{font-family:var(--mono);font-size:.92rem;font-weight:500;
-  font-variant-numeric:tabular-nums;display:block;line-height:1.25}
-.d .k{font-family:var(--mono);font-size:.62rem;color:var(--ink3);letter-spacing:.04em}
-
-/* source line */
-.src{font-family:var(--mono);font-size:.66rem;color:var(--ink4);line-height:1.5;
-  border-top:1px dotted var(--line2);padding-top:.4rem;margin-top:.2rem;word-break:break-word}
-.src a{color:var(--acc);text-decoration:none}
-.src a:hover{text-decoration:underline}
-
-/* definitions */
-dfn{font-style:normal;font-weight:600}
-
-/* document history */
-.hist{margin:1rem 0}
-.hist dt{font-family:var(--mono);font-size:.74rem;color:var(--ink3);float:left;width:6.2rem;
-  padding-top:.15em;clear:left}
-.hist dd{margin:0 0 .8rem 6.8rem;font-size:.92rem;line-height:1.6}
-
-footer{margin-top:3.4rem;border-top:2px solid var(--ink);padding:1.1rem 0 4rem;
-  font-family:var(--mono);font-size:.68rem;line-height:1.75;color:var(--ink3)}
-footer a{color:var(--ink3)}
-
-@media(max-width:40rem){
-  body{font-size:16px}
-  .entry{grid-template-columns:1fr}
-  .entry .no{padding:0 0 .2rem}
-  .field{border-right:0;border-bottom:1px solid var(--line);padding-left:0}
-  .field:last-child{border-bottom:0}
-  .hist dt{float:none;width:auto}
-  .hist dd{margin-left:0}
-}
-
 details.dd{position:relative;display:inline}
 details.dd summary{list-style:none;cursor:pointer;color:var(--ink3);display:inline}
 details.dd summary::-webkit-details-marker{display:none}
 details.dd summary::after{content:" \25BE";font-size:.85em}
 details.dd summary:hover{color:var(--ink);text-decoration:underline}
 details.dd[open] summary{color:var(--ink);font-weight:600}
-.dd-panel{position:absolute;top:1.6rem;left:-1rem;z-index:50;background:var(--bg,#f7f8f8);
-  border:1px solid var(--line2,#b9c0c4);min-width:19rem;padding:.5rem 0}
-.dd-hd{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4,#98a0a5);padding:.35rem 1rem .5rem}
+.dd-panel{position:absolute;top:1.6rem;left:-1rem;z-index:50;background:var(--bg);
+  border:1px solid var(--line2);min-width:19rem;padding:.5rem 0}
+.dd-hd{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);padding:.35rem 1rem .5rem}
 .dd-panel a{display:block;padding:.42rem 1rem;line-height:1.45}
-.dd-panel a:hover{background:var(--bg2,#eef0f0);text-decoration:none;color:var(--ink,#191d1f)}
-.dd-panel .dt{color:var(--acc,#14538c);font-variant-numeric:tabular-nums;margin-right:.55rem}
-.dd-panel .ds{display:block;color:var(--ink4,#98a0a5);font-size:.62rem}
+.dd-panel a:hover{background:var(--bg2);text-decoration:none;color:var(--ink)}
+.dd-panel .dt{color:var(--acc);font-variant-numeric:tabular-nums;margin-right:.55rem}
+.dd-panel .ds{display:block;color:var(--ink4);font-size:.62rem}
 @media(max-width:44rem){.dd-panel{position:fixed;left:1rem;right:1rem;min-width:0}}
+
+.cover{padding:3.4rem 0 0}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.1rem,5.5vw,3rem);
+  letter-spacing:-.01em;line-height:1.08;margin:0 0 .5rem}
+.role{font-size:1.08rem;font-style:italic;color:var(--ink2);margin:0 0 1.5rem}
+.fields{border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));margin:0 0 2rem}
+.field{padding:.7rem 1.1rem;border-right:1px solid var(--line)}
+.field:first-child{padding-left:0}
+.field:last-child{border-right:0}
+.field .k{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:.25rem}
+.field .v{font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+.field .v a{text-decoration:none}
+
+.bio{border-left:2px solid var(--line2);padding:.1rem 0 .1rem 1.2rem;margin:0 0 2.8rem;max-width:46rem}
+.bio p{font-size:1rem;line-height:1.65}
+.bio p:last-child{margin-bottom:0}
+
+h2{font-family:var(--serif);font-weight:700;font-size:1.35rem;letter-spacing:-.008em;
+  line-height:1.2;margin:2.6rem 0 .4rem;padding-top:1rem;border-top:2px solid var(--ink)}
+h2 .sn{font-family:var(--mono);font-weight:500;font-size:.85rem;color:var(--acc);margin-right:.7rem}
+.sec-note{font-size:.95rem;color:var(--ink2);max-width:44rem;margin-bottom:1.6rem}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin:0 0 1rem}
+.portal{border:1px solid var(--line);display:flex;flex-direction:column;text-decoration:none;color:var(--ink)}
+a.portal:hover{border-color:var(--acc)}
+.portal .hd{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;
+  padding:.7rem 1rem;border-bottom:1px solid var(--line);background:var(--bg2)}
+.portal .nm{font-family:var(--serif);font-weight:700;font-size:1.05rem}
+.portal .dt{font-family:var(--mono);font-size:.66rem;color:var(--ink3);white-space:nowrap}
+.portal .bd{padding:.85rem 1rem;font-size:.92rem;line-height:1.55;flex:1}
+.portal .bd p{margin:0}
+.portal .ft{padding:.5rem 1rem;border-top:1px dashed var(--line);font-family:var(--mono);
+  font-size:.64rem;color:var(--ink4)}
+.tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.06em;
+  white-space:nowrap;padding:.1em .35em}
+.tag::before{content:"["} .tag::after{content:"]"}
+.t-active{color:var(--pass);background:var(--pass-bg)}
+.t-pub{color:var(--acc);background:var(--acc-bg)}
+.t-arch{color:var(--ink3);background:var(--bg2)}
+.t-soon{color:var(--mixed);background:var(--mixed-bg)}
+
+footer{margin-top:3rem;border-top:2px solid var(--ink);padding:1.1rem 0 4rem;
+  font-family:var(--mono);font-size:.68rem;line-height:1.75;color:var(--ink3)}
+footer a{color:var(--ink3)}
+
+@media(max-width:44rem){
+  body{font-size:16px}
+  .grid{grid-template-columns:1fr}
+  .field{border-right:0;border-bottom:1px solid var(--line);padding-left:0}
+  .field:last-child{border-bottom:0}
+}
 </style>
 </head>
 <body>
 
 <nav><div class="inner">
-  <span class="brand">Residue Lab</span>
-  <a href="/" class="here">overview</a>
+  <span class="brand">Hao Zhang</span>
+  <a href="/" class="here">home</a>
+  <a href="/lab.html">residue lab</a>
   <a href="/results.html">results</a>
   <a href="/emotion-vector-bench.html">emotion&#8209;vector&#8209;bench</a>
-  <a href="/methodology.html">methodology</a>
-  <a href="/lineage.html">lineage</a>
   <details class="dd"><summary>archive</summary>
     <div class="dd-panel">
-      <div class="dd-hd">Predecessor projects &middot; preserved in place</div>
+      <div class="dd-hd">Earlier projects &middot; preserved in place</div>
       <a href="/floor36/mufx.html"><span class="dt">2026-02&ndash;03</span>mufx<span class="ds">FX research desk &mdash; daily signals, weeklies, fair-value models</span></a>
       <a href="/floor36/cipher.html"><span class="dt">2026-03</span>cipher<span class="ds">macro data terminal &mdash; 26 collectors, live API</span></a>
       <a href="/floor36/"><span class="dt">2026-03&ndash;04</span>floor36<span class="ds">research journal &mdash; reading notes, agents, blueprints</span></a>
@@ -183,189 +126,84 @@ details.dd[open] summary{color:var(--ink);font-weight:600}
 <div class="wrap">
 
 <header class="cover">
-  <h1>Residue Lab</h1>
-  <p class="subtitle">Experimental record: emotional residue as a machine-learning signal, May&ndash;August 2026</p>
-  <p class="byline">Hao Zhang</p>
+  <h1>Hao Zhang</h1>
+  <p class="role">Independent researcher &mdash; markets, machine learning, primary documents.</p>
   <div class="fields">
-    <div class="field"><span class="k">Status</span><span class="v">active</span></div>
-    <div class="field"><span class="k">Experiments executed</span><span class="v">10</span></div>
-    <div class="field"><span class="k">Probing programme</span><span class="v">closed 2026-05-30</span></div>
-    <div class="field"><span class="k">Latest revision</span><span class="v">2026-08-17</span></div>
+    <div class="field"><span class="k">Languages</span><span class="v">English &middot; 中文</span></div>
+    <div class="field"><span class="k">Contact</span><span class="v"><a href="mailto:research@mufx.io">research@mufx.io</a></span></div>
+    <div class="field"><span class="k">Code &amp; data</span><span class="v"><a href="https://github.com/mufxio">github.com/mufxio</a></span></div>
+    <div class="field"><span class="k">Site updated</span><span class="v">2026-08-18</span></div>
   </div>
 
-  <div class="abstract">
-    <div class="h">Summary</div>
-    <p>Text written <em>during</em> a stressful event &mdash; a trader's messages in the middle of a market crash &mdash; differs from text written <em>about</em> the event afterward. The difference is here called <dfn>emotional residue</dfn>: traces of felt experience left in writing, usually unintentionally. The experiments documented on this site test whether language models can detect this residue, whether they can be trained on it, and whether the way a training corpus is collected changes what a model learns from it.</p>
-    <p>Ten experiments were run between May and August 2026. For each, numeric success criteria were fixed and recorded <em>before</em> execution, so a failed prediction could not be reinterpreted as a success afterward. Outcome in brief: one external finding replicated (&sect;1.1); the central hypothesis did not survive its own controls (&sect;1.2); two published results were retracted after internal audit (&sect;2). Every number on this site links to the results file it is quoted from. The complete record, including all failures, is at <a href="/results.html">/results</a>.</p>
+  <div class="bio">
+    <p>Hao Zhang works at the intersection of markets and machine learning. He holds a degree in Hospitality &amp; Tourism Management with a finance concentration from Purdue University and works in English and Mandarin.</p>
+    <p>The work is measurement-first. On the markets side: reading primary documents &mdash; SEC registration statements, exchange inquiry letters, annual reports, government filings in the original Chinese &mdash; against the claims publicly made about them. On the machine-learning side: pre-registered experiments on consumer hardware, with success criteria fixed before any data is seen. Results are published with their criteria, their failures, and their retractions left intact; two headline results on this site were withdrawn by their own author, and the withdrawals are part of the record.</p>
   </div>
-
-  <div class="tw"><table>
-    <caption>Record summary</caption>
-    <thead><tr><th>measure</th><th>count</th><th>note</th></tr></thead>
-    <tbody>
-      <tr><td>experiments executed</td><td class="num">10</td><td>May&ndash;August 2026</td></tr>
-      <tr><td>numeric criteria fixed before execution</td><td class="num">~25</td><td>none relaxed after data without disclosure</td></tr>
-      <tr><td>stopping rules triggered</td><td class="num">4</td><td>all four obeyed; one planned experiment cancelled by its gate</td></tr>
-      <tr><td>retractions</td><td class="num">2</td><td>both self-issued, originals preserved unaltered</td></tr>
-      <tr><td>public corrections of a published headline</td><td class="num">1</td><td>2026-08-17, &sect;2.2</td></tr>
-    </tbody>
-  </table></div>
 </header>
 
-<section id="experiments">
-  <h2><span class="sn">1</span>Findings that survived their controls</h2>
-  <p class="sec-note">Four results stand as stated. Each entry gives the claim, the numbers, and the file the verdict is quoted from.</p>
-
-  <div class="entry">
-    <div class="no">1.1</div>
-    <div class="body">
-      <h3>Emotion geometry is nearly identical across language models <span class="tag t-pass">replicates</span></h3>
-      <p>Anthropic reported in April 2026 that emotions are encoded as consistent directions in a model's internal activity, demonstrated on their own model, whose weights are not public. The same methodology, applied here to five openly downloadable models from three companies (Meta, Mistral, Alibaba), reproduces the result &mdash; and the five models turn out to encode emotion in nearly the same way.</p>
-      <div class="data">
-        <span class="d"><span class="v">86.9&ndash;91.5%</span><span class="k">accuracy identifying which of 20 emotions a text expresses, from internal activity alone (chance: 5%)</span></span>
-      </div>
-      <div class="data">
-        <span class="d"><span class="v">1.13&times;</span><span class="k">spread in valence separation across all five models</span></span>
-        <span class="d"><span class="v">0.96&ndash;0.99</span><span class="k">stability of the geometry across model layers</span></span>
-      </div>
-      <p>The differences between companies' models are smaller than the differences between layers inside a single model. An earlier headline claiming an 18&times; difference between models was withdrawn on 2026-08-17 as a measurement-unit error (&sect;2.2).</p>
-      <div class="src">emotion-vector-bench/results/ &middot; <a href="/emotion-vector-bench.html">full page</a> &middot; <a href="https://github.com/mufxio/emotion-vector-bench">repository</a></div>
-    </div>
+<section>
+  <h2><span class="sn">I</span>Active</h2>
+  <p class="sec-note">Current research programmes.</p>
+  <div class="grid">
+    <a class="portal" href="/lab.html">
+      <div class="hd"><span class="nm">Residue Lab</span><span class="dt">2026-05 &rarr;</span></div>
+      <div class="bd"><p>Measurement-first machine-learning experiments: does the way a training corpus is collected and arranged change what a model learns? Ten experiments, ~25 criteria locked before data, four stopping rules obeyed, two self-issued retractions.</p></div>
+      <div class="ft"><span class="tag t-active">active</span> &nbsp;overview &middot; complete experimental record at /results</div>
+    </a>
+    <a class="portal" href="/emotion-vector-bench.html">
+      <div class="hd"><span class="nm">emotion-vector-bench</span><span class="dt">2026-05, corrected 08</span></div>
+      <div class="bd"><p>An emotion-geometry replication on five open-weight models from three labs, runnable in one command on consumer hardware. Finding: the geometry is close to model-invariant. The original &ldquo;18&times;&rdquo; headline was withdrawn as a units artifact &mdash; the correction is on the page and in the repository.</p></div>
+      <div class="ft"><span class="tag t-pub">published</span> &nbsp;page + open repository</div>
+    </a>
   </div>
+</section>
 
-  <div class="entry">
-    <div class="no">1.2</div>
-    <div class="body">
-      <h3>Residue is not linearly separable from style and context <span class="tag t-fail">completed negative</span></h3>
-      <p>A <dfn>linear probe</dfn> &mdash; a simple classifier reading a model's internal activity &mdash; can easily detect emotional event text. But six independent attempts failed to separate <em>residue itself</em> from two confounds: writing register (personal versus institutional voice) and event context. The closing audit states the result:</p>
-      <blockquote><p>&ldquo;Six attempts, same wall. That's not failure &mdash; it's a characterization: residue does not exist as a clean separable linear feature in these representations. It is distributed and entangled with event-presence and register.&rdquo;</p></blockquote>
-      <p>This finding closed the probing programme on 2026-05-30 and is the reason the programme changed instruments &mdash; first to reconstruction (&sect;1.3), then to corpus-level experiments (&sect;2.1, &sect;3.1).</p>
-      <div class="src">synthesis/results/probe-isolation-limit-2026-05-30.md &middot; <a href="/results.html">context</a></div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="no">1.3</div>
-    <div class="body">
-      <h3>Reconstruction beats a facts-only baseline &mdash; on synthetic data <span class="tag t-pass">pass &middot; synthetic only</span></h3>
-      <p>In artificial test worlds where the hidden emotional states are known by construction, reconstructing those states from residue outperformed a baseline given only the factual record, in three of six measured cells. All integrity checks passed, including a negative control in which worlds built with no emotional signal produced no effect.</p>
-      <div class="data">
-        <span class="d"><span class="v">+0.171</span><span class="k">longitudinal residue [+0.133, +0.209]</span></span>
-        <span class="d"><span class="v">+0.040</span><span class="k">longitudinal action [+0.015, +0.067]</span></span>
-        <span class="d"><span class="v">+0.028</span><span class="k">cross-sectional action [+0.007, +0.049]</span></span>
-      </div>
-      <p>Stated limit, from the report itself: the method &ldquo;only wins where the structure is&rdquo; &mdash; and the confirmatory run on real data was never executed.</p>
-      <div class="src">residue-lab/PHASE1-REPORT.md &middot; <a href="/results.html">context</a></div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="no">1.4</div>
-    <div class="body">
-      <h3>A residue probe outperforms surface features <span class="tag t-pass">pre-registered pass</span></h3>
-      <p>Distinguishing genuinely leaked text from deliberately constructed text, a residue probe was tested against a baseline using only word statistics &mdash; vocabulary, length, readability. Both thresholds were fixed before the test ran, on a held-out event.</p>
-      <div class="data">
-        <span class="d"><span class="v">0.980 vs 0.860</span><span class="k">probe vs baseline (AUROC: a 0&ndash;1 accuracy score; 0.5 is chance)</span></span>
-        <span class="d"><span class="v">+0.120</span><span class="k">margin; required 0.10</span></span>
-        <span class="d"><span class="v">p = 0.005</span><span class="k">required 0.01</span></span>
-      </div>
-      <p>Carried caveat: this shows the probe beats surface features, not that it reads pure residue (&sect;1.2).</p>
-      <div class="src">synthesis/results/CT-chemtech-results.md &middot; <a href="/results.html">context</a></div>
+<section>
+  <h2><span class="sn">II</span>Papers &amp; records</h2>
+  <div class="grid">
+    <a class="portal" href="/results.html">
+      <div class="hd"><span class="nm">The experimental record</span><span class="dt">2026-05 &rarr; 08</span></div>
+      <div class="bd"><p>Every experiment run under the programme, the criteria locked before execution, and what came back &mdash; verdicts quoted from their own results files, one hop from source. Includes both retractions in full.</p></div>
+      <div class="ft"><span class="tag t-pub">published</span> &nbsp;/results</div>
+    </a>
+    <div class="portal">
+      <div class="hd"><span class="nm">Articles</span><span class="dt">2026 &rarr;</span></div>
+      <div class="bd"><p>A research publication assembled from six months of primary-source work: the AI trades of 2026, one chipmaker read through its own filings, gold seen from outside China, what agents can and cannot do as analysts &mdash; plus a graded record of every call made on this site.</p></div>
+      <div class="ft"><span class="tag t-soon">in preparation</span></div>
     </div>
   </div>
 </section>
 
 <section>
-  <h2><span class="sn">2</span>Retractions and corrections</h2>
-  <p class="sec-note">Retractions are treated as results. Original documents are never edited; the withdrawal is appended where the claim was made, so the error remains legible.</p>
-
-  <div class="entry">
-    <div class="no">2.1</div>
-    <div class="body">
-      <h3>The acquisition experiment <span class="tag t-fail">retracted twice</span></h3>
-      <p>An experiment tested whether the way a training corpus is collected changes what a model learns from it. It reported a +4.75 percentage-point effect &mdash; which missed its own pre-registered bar of 5.0 by 0.25, and was therefore recorded as suggestive rather than established:</p>
-      <blockquote><p>&ldquo;This is recorded exactly as the rule requires, and is the reason the rule existed: read after the fact, 4.75&thinsp;pp is trivially arguable into a win.&rdquo;</p></blockquote>
-      <p>Audit then found two independent defects. First, a grading error: the scorer accepted a bare year where a full date was required, and one arm's corpus taught models to emit bare years &mdash; with the affected questions removed, the effect became &minus;0.58&thinsp;pp, indistinguishable from zero. Second, a data-integrity error: only 44.6% of the facts being tested existed in both training corpora, so the comparison could not have measured what it claimed. Retracted 2026-08-06 and 2026-08-08.</p>
-      <div class="src">residue-lab/R2/RESULTS.md &sect;1, &sect;10&ndash;11 &middot; <a href="/results.html">full record</a></div>
-    </div>
+  <h2><span class="sn">III</span>Archive</h2>
+  <p class="sec-note">Earlier projects, preserved as built rather than rewritten. The dates are the work.</p>
+  <div class="grid">
+    <a class="portal" href="/floor36/mufx.html">
+      <div class="hd"><span class="nm">muFX</span><span class="dt">2026-02 &ndash; 03</span></div>
+      <div class="bd"><p>An FX research desk: daily market notes, weekly reviews, a 252-day fair-value model, and a cryptographic integrity register for its own articles. The origin of this domain.</p></div>
+      <div class="ft"><span class="tag t-arch">archived</span> &nbsp;original design restored</div>
+    </a>
+    <a class="portal" href="/floor36/cipher.html">
+      <div class="hd"><span class="nm">cipher</span><span class="dt">2026-03</span></div>
+      <div class="bd"><p>A macro-intelligence terminal: 26 data collectors &mdash; positioning, liquidity, satellite fire detections, prediction markets &mdash; feeding a daily briefing and a live API that still serves.</p></div>
+      <div class="ft"><span class="tag t-arch">archived</span> &nbsp;portal opens directly</div>
+    </a>
+    <a class="portal" href="/floor36/">
+      <div class="hd"><span class="nm">floor36</span><span class="dt">2026-03 &ndash; 04</span></div>
+      <div class="bd"><p>A research journal: ~1MB of annotated reading notes on neuroscience, music and machine learning, trading-agent experiments with their own falsification, and two speculative architecture blueprints.</p></div>
+      <div class="ft"><span class="tag t-arch">archived</span> &nbsp;journal homepage</div>
+    </a>
+    <a class="portal" href="https://github.com/mufxio/emotion-vector-bench">
+      <div class="hd"><span class="nm">Code</span><span class="dt">github.com/mufxio</span></div>
+      <div class="bd"><p>Open repositories: emotion-vector-bench (the five-model replication, with its correction history in the commits) and this site.</p></div>
+      <div class="ft"><span class="tag t-pub">public</span></div>
+    </a>
   </div>
-
-  <div class="entry">
-    <div class="no">2.2</div>
-    <div class="body">
-      <h3>The &ldquo;18&times; valence spread&rdquo; <span class="tag t-fail">headline withdrawn</span></h3>
-      <p>The published headline of the emotion-geometry work (&sect;1.1) claimed one model family organized emotion 18&times; more cleanly than another. The number was a measurement-unit error: it was computed on vectors whose raw sizes differ &mdash; for uninteresting architectural reasons &mdash; by an order of magnitude between models, so it measured vector size, not emotional organization.</p>
-      <div class="data">
-        <span class="d"><span class="v">r = 0.9896</span><span class="k">correlation of the &ldquo;finding&rdquo; with raw vector size</span></span>
-        <span class="d"><span class="v">18.58&times; &rarr; 1.13&times;</span><span class="k">the spread, before and after unit correction</span></span>
-      </div>
-      <p>Withdrawn 2026-08-17 on this site and in the repository, with the original struck through in place. The corrected finding &mdash; near-identical geometry across companies and scales &mdash; is the stronger claim.</p>
-      <div class="src"><a href="/emotion-vector-bench.html">the correction in full</a></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2><span class="sn">3</span>Built, not yet validated</h2>
-  <p class="sec-note">Two assets exist whose decisive tests have not been run. They are listed as assets, not results.</p>
-
-  <div class="entry">
-    <div class="no">3.1</div>
-    <div class="body">
-      <h3>A sealed-corpus evaluation set <span class="tag t-open">built &middot; 0 of 5 gates</span></h3>
-      <p>After the retraction in &sect;2.1, the measurement instrument was rebuilt before any further experiment. Fifty independent agents each read the primary documents of one real-world event with no internet access, recorded their understanding first, then wrote test questions with the supporting evidence quoted verbatim and the source document named.</p>
-      <div class="data">
-        <span class="d"><span class="v">1,265</span><span class="k">questions; counts reproduced directly from the data files</span></span>
-        <span class="d"><span class="v">780</span><span class="k">require combining two or more documents (61.7%)</span></span>
-        <span class="d"><span class="v">0 / 5</span><span class="k">validation gates run</span></span>
-      </div>
-      <p>The training experiment it was built for exceeds the memory limits of the available hardware; the evaluation set stands on its own, ungated.</p>
-      <div class="src">residue-lab/R3/eval/authored/ &middot; <a href="/results.html">context</a></div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="no">3.2</div>
-    <div class="body">
-      <h3>Likelihood-ratio gates on real residue <span class="tag t-mixed">borderline &middot; unfinished</span></h3>
-      <p>A forensic-style test of residue on real event data reached calibration exactly on its own bar &mdash; error 0.103 against a limit of 0.10, passing about half of random data splits &mdash; and the decisive held-out event was never run. These figures were reported during working sessions; no committed results file exists, so they are labelled <em>reported</em>, not established.</p>
-      <div class="src">gate machinery on disk &middot; no results artifact &middot; <a href="/results.html">context</a></div>
-    </div>
-  </div>
-</section>
-
-<section id="program">
-  <h2><span class="sn">4</span>Programme description</h2>
-  <p>The programme's original hypothesis: emotional residue is a trainable signal &mdash; a model could gather it from a new event, train on it, and verify its own results against criteria fixed in advance. The record revised the hypothesis in three steps. Probing (May) established that the signal exists but cannot be isolated by linear methods (&sect;1.2), and a small training run moved the capability by +0.004 &mdash; effectively nothing &mdash; which cancelled the planned autonomous-loop experiment by its own entry condition. Reconstruction (June) outperformed its baseline only on synthetic data (&sect;1.3). Corpus-level experiments (August) produced one double retraction (&sect;2.1) and one rebuilt instrument awaiting validation (&sect;3.1).</p>
-  <p>Methods common to all experiments: numeric success criteria recorded before execution; controls designed to break the claim rather than support it; stopping rules stated in advance and followed; negative and ambiguous results published with the same prominence as positive ones. All computation was local, on consumer hardware (Apple M-series, 24&nbsp;GB memory, models up to 8&nbsp;billion parameters).</p>
-  <div class="tw"><table>
-    <caption>Chronology</caption>
-    <thead><tr><th>period</th><th>phase</th><th>disposition</th></tr></thead>
-    <tbody>
-      <tr><td class="num">2026-02 &ndash; 03</td><td>muFX (FX research), cipher (macro data pipeline)</td><td>archived, unmaintained</td></tr>
-      <tr><td class="num">2026-03 &ndash; 04</td><td>floor36 research journal; trading-agent experiments</td><td>preserved at <a href="/floor36/">/floor36/</a></td></tr>
-      <tr><td class="num">2026-05</td><td>probing programme; emotion-vector-bench</td><td>closed by &sect;1.2; bench published</td></tr>
-      <tr><td class="num">2026-06</td><td>reconstruction (R1)</td><td>synthetic pass; real-data run not executed</td></tr>
-      <tr><td class="num">2026-08</td><td>corpus experiments (R2, R3)</td><td>R2 retracted; R3 instrument built, ungated</td></tr>
-    </tbody>
-  </table></div>
-  <p><a href="/methodology.html">Methodology in depth</a> &nbsp;&middot;&nbsp; <a href="/lineage.html">Intellectual lineage</a> &nbsp;&middot;&nbsp; <a href="/results.html">Complete experimental record</a></p>
-</section>
-
-<section>
-  <h2><span class="sn">5</span>Document history</h2>
-  <dl class="hist">
-    <dt>2026-08-17</dt>
-    <dd>Site rebuilt around the experimental record. The previous version described four experiments as ready to run; all four had executed or been cancelled months earlier. Added: <a href="/results.html">the complete record</a> and <a href="/emotion-vector-bench.html">emotion-vector-bench</a>. The 18&times; headline withdrawn here and in the repository the same day. Sitemap and robots rebuilt.</dd>
-    <dt>2026-05-29</dt>
-    <dd>Previous revision: programme framing and experiment designs, written before execution. Preserved in version control.</dd>
-    <dt>2026-02 &ndash; 04</dt>
-    <dd>Predecessor projects (muFX, cipher, floor36) archived in place; see chronology, &sect;4.</dd>
-  </dl>
 </section>
 
 <footer>
-Residue Lab &middot; 2026 &mdash; every verdict on this site is quoted from the results file named beside it; counts are recomputed from raw data rather than carried from summaries. Two outcomes lacking a committed results artifact are labelled as reported. <a href="/results.html">results</a> &middot; <a href="/floor36/">floor36</a> &middot; <a href="https://github.com/mufxio">github</a>
+Hao Zhang &middot; mufx.io &middot; <a href="mailto:research@mufx.io">research@mufx.io</a> &middot; <a href="https://github.com/mufxio">github</a><br>
+Every research claim on this site links to the document it is quoted from. Retractions are appended where the claim was made, never deleted.
 </footer>
 
 </div>

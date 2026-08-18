@@ -2,32 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://mufx.io/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://mufx.io/lab.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://mufx.io/results.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://mufx.io/emotion-vector-bench.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://mufx.io/methodology.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://mufx.io/lineage.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://mufx.io/floor36/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://mufx.io/floor36/mufx.html</loc>
+    <lastmod>2026-08-18</lastmod>
     <priority>0.4</priority>
   </url>
 </urlset>
