@@ -4,98 +4,97 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hao (Howard) Zhang</title>
-<meta name="description" content="Hao (Howard) Zhang — hotel operations and property accounting, mortgage underwriting, independent macro research at muFX. Live macro data platform, FX research, pre-registered ML experiments.">
+<meta name="description" content="Hao (Howard) Zhang — hotel operations and property accounting, mortgage underwriting, independent macro and machine-learning research at muFX. Primary documents, criteria fixed before the data, misses published.">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f6f5ef; --ink:#121210; --dim:#4f4f49; --faint:#8a8a82;
-  --line:#d8d7cd; --card:#fdfcf8; --card-hover:#ffffff;
-  --acc:#0f5f3a; --acc-ink:#0b4a2d; --acc-soft:#dcebe1;
-  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --bg:#0f100e; --bg2:#151614; --tile:#191b18; --tile-h:#1e201c;
+  --ink:#ece9df; --ink2:#c9c6bb; --dim:#8f8d83; --faint:#5c5b54;
+  --line:#2a2c27; --line2:#383a34;
+  --acc:#7fcf9c; --acc2:#3f8f5f; --acc-dim:#254a35;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root{--bg:#121311; --ink:#ecebe4; --dim:#b3b2aa; --faint:#75746d; --line:#2b2c28; --card:#191a17; --card-hover:#1e1f1c; --acc:#5fc48d; --acc-ink:#8fdcb2; --acc-soft:#183627}
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;border-top:4px solid var(--acc)}
-.wrap{max-width:44rem;margin:0 auto;padding:3.2rem 1.4rem 5rem;position:relative}
-a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px;text-decoration-thickness:1px}
-a:hover{color:var(--acc);text-decoration-color:var(--acc)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(ellipse at top left, #16201a 0%, transparent 55%), radial-gradient(ellipse at bottom right, #131a16 0%, transparent 60%);background-attachment:fixed}
+.wrap{max-width:60rem;margin:0 auto;padding:3.4rem 1.6rem 5rem;position:relative}
+a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line2);transition:color .15s,border-color .15s}
+a:hover{color:var(--acc);border-color:var(--acc)}
 p{margin:0 0 1rem}
-b{font-weight:600}
 
 /* header */
-.head{margin-bottom:2.6rem}
-h1{font-size:2rem;font-weight:700;letter-spacing:-.02em;margin:0 0 .3rem;line-height:1.15}
-h1 span{color:var(--dim);font-weight:400}
-.tag{color:var(--dim);margin:0 0 1.2rem;font-size:1.05rem}
-.tag b{color:var(--ink);font-weight:500}
-nav{font-family:var(--mono);font-size:.86rem}
-nav a{color:var(--dim);text-decoration:none;margin-right:1.1rem}
-nav a:hover{color:var(--acc)}
-nav a.res{color:#fff;background:var(--acc);padding:.28rem .7rem;border-radius:4px;font-weight:500}
-nav a.res:hover{background:var(--acc-ink);color:#fff}
-@media (prefers-color-scheme: dark){ nav a.res{color:#0d1a13} nav a.res:hover{color:#0d1a13;background:var(--acc-ink)} }
+.head{display:grid;grid-template-columns:1fr auto;gap:1rem 2rem;align-items:start;margin-bottom:3.2rem}
+.name{font-family:var(--mono);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 1.1rem}
+.name b{color:var(--ink);font-weight:500}
+h1{font-size:clamp(1.9rem,4.2vw,2.9rem);font-weight:300;line-height:1.18;letter-spacing:-.012em;margin:0 0 1rem;max-width:22ch;font-variation-settings:"opsz" 144}
+h1 em{font-style:italic;font-weight:300;color:var(--acc)}
+.path{font-family:var(--mono);font-size:.84rem;color:var(--dim);margin:0;line-height:1.7}
+.path span{color:var(--faint);margin:0 .45rem}
+.res{font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;color:var(--bg);background:var(--acc);border:0;padding:.55rem .95rem;border-radius:3px;white-space:nowrap;margin-top:.15rem}
+.res:hover{background:#9fdfb6;color:var(--bg)}
 
-/* sections */
-.sec{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600;margin:2.6rem 0 1rem;display:flex;align-items:center;gap:.9rem}
-.sec::after{content:"";flex:1;border-top:2px solid var(--line)}
-.bio p{margin:0 0 .9rem}
-.now{border-left:3px solid var(--acc);padding:.15rem 0 .15rem .95rem;color:var(--dim);margin:1.2rem 0 0}
-.now b{color:var(--ink);font-weight:600}
-.contact{font-family:var(--mono);font-size:.86rem;color:var(--dim);margin:1.1rem 0 0}
-.contact a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line)}
+/* section label */
+.sec{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:0 0 1.2rem;display:flex;align-items:center;gap:1rem}
+.sec::after{content:"";flex:1;border-top:1px solid var(--line)}
+.sec i{font-style:normal;color:var(--faint)}
+
+/* about */
+.about{display:grid;grid-template-columns:1.15fr 1fr;gap:2.4rem;margin-bottom:3.4rem}
+.about p{color:var(--ink2);font-size:1.02rem;margin:0 0 .9rem}
+.about p:last-of-type{margin:0}
+.contact{font-family:var(--mono);font-size:.82rem;color:var(--dim);margin:1.4rem 0 0}
+.contact a{color:var(--dim);border-color:var(--line2)}
 .contact a:hover{color:var(--acc);border-color:var(--acc)}
-.contact span{color:var(--faint);margin:0 .5rem}
+.contact span{color:var(--faint);margin:0 .55rem}
+.tl{font-family:var(--mono);font-size:.8rem;line-height:1.55;margin:0;padding:0;list-style:none;border-left:1px solid var(--line)}
+.tl li{display:grid;grid-template-columns:3.2rem 1fr;gap:0 .6rem;padding:.32rem 0 .32rem 1rem;position:relative}
+.tl li::before{content:"";position:absolute;left:-3px;top:.85rem;width:5px;height:5px;border-radius:50%;background:var(--faint)}
+.tl li.on::before{background:var(--acc);box-shadow:0 0 0 3px var(--acc-dim)}
+.tl .y{color:var(--faint)}
+.tl .w{color:var(--ink2)}
+.tl .w b{color:var(--ink);font-weight:500}
+.tl .w small{color:var(--dim);font-size:.95em}
 
-/* work cards */
-.work{display:grid;gap:.9rem}
-.card{border:1px solid var(--line);border-radius:8px;padding:1rem 1.15rem;background:var(--card);transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;position:relative}
-.card:hover{border-color:var(--acc);background:var(--card-hover);transform:translateY(-1px);box-shadow:0 6px 18px -12px rgba(0,0,0,.35)}
-.card h3{margin:0 0 .35rem;font-size:1.12rem;font-weight:700;display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .6rem}
-.card h3 a{text-decoration:none}
-.card h3 a:hover{color:var(--acc)}
-.card .k{font-family:var(--mono);font-size:.76rem;color:var(--faint);font-weight:400}
-.card p{margin:0 0 .5rem;font-size:.97rem;color:var(--dim)}
-.card p:last-child{margin:0}
-.card .n{color:var(--ink)}
-.card .links{font-family:var(--mono);font-size:.8rem}
-.card .links a{color:var(--dim);margin-right:.9rem;text-decoration:none;border-bottom:1px solid var(--line)}
-.card .links a:hover{color:var(--acc);border-color:var(--acc)}
-.live{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;background:var(--acc);margin-right:.4rem;vertical-align:.05rem;box-shadow:0 0 0 3px var(--acc-soft)}
-.pill{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .45rem;border-radius:3px;background:var(--acc-soft);color:var(--acc-ink);font-weight:500}
-.pill.grey{background:var(--line);color:var(--dim)}
+/* work tiles */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;counter-reset:tile}
+.tile{position:relative;aspect-ratio:1/1;background:var(--tile);border:1px solid var(--line);border-radius:6px;padding:1.3rem 1.35rem;display:flex;flex-direction:column;transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;overflow:hidden;counter-increment:tile}
+.tile::before{content:counter(tile,decimal-leading-zero);position:absolute;top:1.05rem;left:1.35rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--faint)}
+.tile::after{content:"";position:absolute;inset:auto -30% -30% auto;width:60%;height:60%;border-radius:50%;background:radial-gradient(circle,var(--acc-dim) 0%,transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+.tile:hover{border-color:var(--acc2);background:var(--tile-h);transform:translateY(-2px);box-shadow:0 20px 40px -24px rgba(0,0,0,.8)}
+.tile:hover::after{opacity:.55}
+.tile .st{position:absolute;top:1rem;right:1.2rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line2);padding:.15rem .5rem;border-radius:2px}
+.tile .st.live{color:var(--acc);border-color:var(--acc-dim)}
+.tile .st.live::before{content:"";display:inline-block;width:.42rem;height:.42rem;border-radius:50%;background:var(--acc);margin-right:.4rem;vertical-align:.02rem;box-shadow:0 0 0 3px var(--acc-dim)}
+.tile h3{margin:2.2rem 0 .35rem;font-size:1.9rem;font-weight:400;letter-spacing:-.01em;line-height:1.1;font-variation-settings:"opsz" 144}
+.tile h3 a{border:0}
+.tile h3 a:hover{color:var(--acc)}
+.tile .k{font-family:var(--mono);font-size:.76rem;color:var(--dim);margin:0 0 .9rem}
+.tile p.d{color:var(--ink2);font-size:.98rem;line-height:1.5;margin:0;flex:1}
+.tile p.d b{color:var(--ink);font-weight:500}
+.tile .links{font-family:var(--mono);font-size:.78rem;margin:1rem 0 0;padding-top:.85rem;border-top:1px solid var(--line)}
+.tile .links a{color:var(--dim);border:0;margin-right:1rem}
+.tile .links a:hover{color:var(--acc)}
 
-/* hover preview (desktop only) */
-#pv{display:none;position:fixed;width:440px;height:290px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card);box-shadow:0 18px 40px -18px rgba(0,0,0,.45);pointer-events:none;z-index:9;opacity:0;transition:opacity .15s}
+/* hover preview */
+#pv{display:none;position:fixed;width:440px;height:290px;border:1px solid var(--line2);border-radius:6px;overflow:hidden;background:var(--tile);box-shadow:0 24px 50px -20px rgba(0,0,0,.9);pointer-events:none;z-index:9;opacity:0;transition:opacity .15s}
 #pv iframe{width:880px;height:580px;border:0;transform:scale(.5);transform-origin:0 0;background:#fff}
-#pv .cap{position:absolute;left:0;right:0;bottom:0;font-family:var(--mono);font-size:.7rem;color:var(--faint);background:var(--card);border-top:1px solid var(--line);padding:.25rem .6rem}
-@media (min-width:74rem) and (hover:hover) and (pointer:fine){ #pv.on{display:block;opacity:1} }
+#pv .cap{position:absolute;left:0;right:0;bottom:0;font-family:var(--mono);font-size:.68rem;color:var(--dim);background:var(--tile);border-top:1px solid var(--line);padding:.25rem .6rem}
+@media (min-width:88rem) and (hover:hover) and (pointer:fine){ #pv.on{display:block;opacity:1} }
 
-/* log */
-.log{margin:0}
-.entry{display:grid;grid-template-columns:4.2rem 1fr;gap:0 1rem;padding:.6rem 0;border-bottom:1px solid var(--line)}
-.entry:last-child{border-bottom:0}
-.entry .d{font-family:var(--mono);font-size:.82rem;color:var(--faint);padding-top:.2rem;white-space:nowrap}
-.entry .t{font-weight:600}
-.entry .t a{text-decoration:none}
-.entry .t a:hover{color:var(--acc)}
-.entry .st{font-family:var(--mono);font-size:.72rem;color:var(--faint);font-weight:400;margin-left:.5rem}
-.entry .b{color:var(--dim);font-size:.94rem;line-height:1.55;margin-top:.1rem}
-
-footer{margin-top:3rem;padding-top:1.2rem;border-top:2px solid var(--line);color:var(--faint);font-size:.84rem;line-height:1.8;font-family:var(--mono)}
-footer a{color:var(--faint);text-decoration:none;border-bottom:1px solid var(--line)}
+footer{margin-top:3.6rem;padding-top:1.2rem;border-top:1px solid var(--line);color:var(--faint);font-size:.78rem;line-height:1.8;font-family:var(--mono);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem 1.5rem}
+footer a{color:var(--faint);border-color:var(--line)}
 footer a:hover{color:var(--acc);border-color:var(--acc)}
 
-@media(max-width:34rem){
-  h1{font-size:1.65rem}
-  .entry{grid-template-columns:1fr;gap:0}
-  nav a{display:inline-block;margin-bottom:.45rem}
+@media(max-width:52rem){
+  .head{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr;gap:1.8rem}
+  .grid{grid-template-columns:1fr}
+  .tile{aspect-ratio:auto;min-height:15rem}
 }
 </style>
 </head>
@@ -103,125 +102,73 @@ footer a:hover{color:var(--acc);border-color:var(--acc)}
 <div class="wrap">
 
 <header class="head">
-  <h1>Hao Zhang <span>(Howard)</span></h1>
-  <p class="tag"><b>Hotels → finance → markets.</b> Five years in hotel operations and property accounting, a year in mortgage underwriting, and since 2026 an independent research practice — muFX.</p>
-  <nav>
-    <a href="#about">about</a>
-    <a href="#work">work</a>
-    <a href="#log">log</a>
-    <a href="https://github.com/mufxio">github</a>
-    <a class="res" href="resume.pdf">résumé ↓</a>
-  </nav>
+  <div>
+    <p class="name"><b>Hao (Howard) Zhang</b> · mufx.io</p>
+    <h1>Reads the primary document. Fixes the criterion first. <em>Publishes the misses.</em></h1>
+    <p class="path">hotel operations<span>→</span>property accounting<span>→</span>mortgage underwriting<span>→</span>independent research, 2026</p>
+  </div>
+  <a class="res" href="resume.pdf">RÉSUMÉ ↓</a>
 </header>
 
-<div class="sec" id="about">About</div>
-<div class="bio">
-  <p>Purdue B.S. in Hospitality &amp; Tourism Management (finance concentration). Front desk, night audit, housekeeping and banquets; long-stay corporate sales at Kempinski Shanghai; property accounting at White Lodging; residential loan origination at Royal United Mortgage. Native English and Mandarin.</p>
-  <p>Since early 2026 I run <b>muFX</b>: a macro data platform with a live API, FX research, and pre-registered machine-learning experiments. Success criteria are fixed before the data is seen, and results are published with their failures and corrections intact.</p>
-  <p class="now"><b>Now:</b> looking for an analyst seat in hotel real estate — brokerage, advisory, or asset management. Open to relocation.</p>
-</div>
-<p class="contact"><a href="mailto:research@mufx.io">research@mufx.io</a><span>·</span><a href="https://www.linkedin.com/in/haozzhang">linkedin</a><span>·</span><a href="https://github.com/mufxio">github</a><span>·</span><a href="resume.pdf">résumé (pdf)</a></p>
-
-<div class="sec" id="work">Work</div>
-<div class="work">
-
-  <div class="card" data-pv="/floor36/mufx.html">
-    <h3><a href="/floor36/mufx.html">muFX</a><span class="k">FX research desk · Feb–Mar 2026</span><span class="pill grey">archived</span></h3>
-    <p>Daily signals, weekly reviews and a Q2 2026 dollar outlook, driven by a 252-day fair-value model and CFTC positioning. <span class="n">The desk closed in March; the name continues as this site.</span></p>
-    <p class="links"><a href="/floor36/mufx.html">desk</a><a href="/floor36/q2-2026-outlook.html">q2 outlook</a><a href="/floor36/weekly-20260314.html">last weekly</a></p>
+<div class="sec">About <i>·</i> <i>third person, chronological</i></div>
+<div class="about">
+  <div>
+    <p>Hao Zhang holds a B.S. in Hospitality &amp; Tourism Management (finance concentration) from Purdue, entered on merit scholarships in engineering. He spent five years inside full-service hotels and restaurants — front desk and night audit, housekeeping and banquets, corporate long-stay sales at Kempinski Shanghai, property accounting at White Lodging — then a year originating and underwriting residential mortgages and a self-funded land-acquisition campaign.</p>
+    <p>Since 2026 he has run muFX, an independent research practice: a macro data platform with a public API, FX research, and pre-registered machine-learning experiments run on consumer hardware. Success criteria are written down before the data arrives; results are published with their failures and corrections. He works in English and Mandarin and reads Chinese filings in the original.</p>
+    <p class="contact"><a href="mailto:research@mufx.io">research@mufx.io</a><span>·</span><a href="https://github.com/mufxio">github</a><span>·</span><a href="https://www.linkedin.com/in/haozzhang">linkedin</a></p>
   </div>
-
-  <div class="card" data-pv="/floor36/cipher.html">
-    <h3><a href="/floor36/cipher.html"><span class="live"></span>cipher</a><span class="k">macro data platform · Mar 2026 →</span><span class="pill">api live</span></h3>
-    <p>21 automated collectors — CFTC positioning, Fed liquidity, prediction markets, filings, satellite fire detections — feeding a daily briefing generator and a public API. <span class="n">Built in March; has run unattended every day since.</span></p>
-    <p class="links"><a href="/floor36/cipher.html">terminal</a><a href="https://api.mufx.io/api/status">api/status</a></p>
-  </div>
-
-  <div class="card" data-pv="/lab.html">
-    <h3><a href="/lab.html">Residue Lab</a><span class="k">experimental record · May–Aug 2026</span></h3>
-    <p>Ten pre-registered machine-learning experiments on whether language models can detect emotional residue in text. <span class="n">One external finding replicated, one clean negative that closed the programme, two self-issued retractions</span> — criteria, failures and corrections published together.</p>
-    <p class="links"><a href="/lab.html">summary</a><a href="/results.html">results</a><a href="/methodology.html">methodology</a><a href="/emotion-vector-bench.html">emotion-vector-bench ↗</a></p>
-  </div>
-
-  <div class="card" data-pv="/floor36/index.html">
-    <h3><a href="/floor36/">floor36</a><span class="k">research journal · Mar–Apr 2026</span><span class="pill grey">archived</span></h3>
-    <p>Annotated reading notes across neuroscience, music theory and machine learning; Q-learning trading agents tested against a deflated Sharpe ratio and killed by their own falsification. <span class="n">The notebook the later work grew out of.</span></p>
-    <p class="links"><a href="/floor36/">journal</a><a href="/floor36/archive.html">archive</a></p>
-  </div>
-
+  <ul class="tl">
+    <li><span class="y">2019</span><span class="w"><b>Marriott Shanghai Hongqiao</b> — guest services intern</span></li>
+    <li><span class="y">2020</span><span class="w"><b>Purdue</b> — first-year engineering → HTM (finance)</span></li>
+    <li><span class="y">2021</span><span class="w"><b>Four Points by Sheraton</b> — front desk &amp; night audit<br><b>Thai Essence</b> — front of house <small>(2021–24 · 2026–)</small></span></li>
+    <li><span class="y">2022</span><span class="w"><b>White Lodging</b> — guest attendant, rooms &amp; banquets</span></li>
+    <li><span class="y">2023</span><span class="w"><b>Kempinski THE ONE Shanghai</b> — internal sales<br><b>White Lodging</b> — accounting coordinator</span></li>
+    <li><span class="y">2024</span><span class="w"><b>B.S. HTM (Finance)</b>, Purdue · Shanghai</span></li>
+    <li><span class="y">2025</span><span class="w"><b>Royal United Mortgage</b> — loan advisor<br><b>Independent land acquisition</b> — principal</span></li>
+    <li class="on"><span class="y">2026</span><span class="w"><b>muFX</b> — independent research</span></li>
+  </ul>
 </div>
 
-<div class="sec" id="log">Log · 2026</div>
-<div class="log">
+<div class="sec">Work <i>·</i> <i>2026</i></div>
+<div class="grid">
 
-  <div class="entry">
-    <div class="d">Feb</div>
-    <div class="t"><a href="/floor36/mufx.html">muFX research desk</a><span class="st">archived Mar</span>
-      <div class="b">Q2 2026 dollar outlook, weekly reviews, daily signals off a 252-day fair-value model.</div>
-    </div>
+  <div class="tile" data-pv="floor36/cipher.html">
+    <span class="st live">api live</span>
+    <h3><a href="floor36/cipher.html">cipher</a></h3>
+    <p class="k">macro data platform · mar 2026 →</p>
+    <p class="d">Twenty-one automated collectors — CFTC positioning, Fed liquidity, prediction markets, filings, satellite fire detections — feeding a daily briefing generator and a public API. <b>Built in March; has run unattended every day since.</b></p>
+    <p class="links"><a href="floor36/cipher.html">terminal</a><a href="https://api.mufx.io/api/status">api/status</a></p>
   </div>
 
-  <div class="entry">
-    <div class="d">Mar</div>
-    <div class="t"><a href="/floor36/cipher.html">cipher</a><span class="st">api live</span>
-      <div class="b">Macro data platform and terminal; 21 collectors, daily briefing, public API.</div>
-    </div>
+  <div class="tile" data-pv="lab.html">
+    <span class="st">record</span>
+    <h3><a href="lab.html">Residue Lab</a></h3>
+    <p class="k">experimental record · may–aug 2026</p>
+    <p class="d">Ten pre-registered experiments on whether language models can detect emotional residue in text. <b>One external finding replicated, one clean negative that closed the programme, two self-issued retractions</b> — criteria, failures and corrections published together.</p>
+    <p class="links"><a href="lab.html">summary</a><a href="results.html">results</a><a href="methodology.html">methodology</a><a href="emotion-vector-bench.html">emotion-vector-bench</a></p>
   </div>
 
-  <div class="entry">
-    <div class="d">Mar</div>
-    <div class="t"><a href="/floor36/">floor36</a><span class="st">archived Apr</span>
-      <div class="b">Research journal; Q-learning trading agents, 1,080-probe search, deflated Sharpe.</div>
-    </div>
+  <div class="tile" data-pv="floor36/index.html">
+    <span class="st">journal</span>
+    <h3><a href="floor36/">floor36</a></h3>
+    <p class="k">research journal · mar–apr 2026</p>
+    <p class="d">Annotated reading notes across neuroscience, music theory and machine learning, and <b>blakcat</b> — Q-learning trading agents put through a 1,080-probe search and a deflated Sharpe ratio, and killed by their own falsification. The notebook the later work grew out of.</p>
+    <p class="links"><a href="floor36/">journal</a><a href="floor36/street-cat.html">blakcat</a></p>
   </div>
 
-  <div class="entry">
-    <div class="d">Apr</div>
-    <div class="t"><span>yen-carry-unwind-2024</span><span class="st">complete</span>
-      <div class="b">15-table event database reconstructing the August 2024 yen-carry unwind from primary sources.</div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="d">May</div>
-    <div class="t"><a href="/emotion-vector-bench.html">emotion-vector-bench</a><span class="st">public repo · corrected Aug 17</span>
-      <div class="b">Anthropic's emotion-geometry method reproduced on five open-weight models from three labs. Finding: geometry is close to model-invariant (1.13× spread). An earlier 18× headline was withdrawn as a unit error.</div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="d">May</div>
-    <div class="t"><a href="/results.html">probing programme</a><span class="st">closed May 30</span>
-      <div class="b">Five pre-registered experiments on linear probes over LLM activations. Closed by its own result: residue is not linearly separable from writing register.</div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="d">Jun</div>
-    <div class="t"><a href="/results.html">R1 — reconstruction</a><span class="st">synthetic pass</span>
-      <div class="b">Reconstructing hidden states from residue beats a facts-only baseline in synthetic worlds; β=0 negative control passed.</div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="d">Jun</div>
-    <div class="t"><span>research dossiers</span>
-      <div class="b">Jane Street institutional dossier; primary-source studies of gold market structure (SGE/SHFE, the Shanghai premium) and US–Asia copper scrap flows.</div>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="d">Aug</div>
-    <div class="t"><a href="/results.html">R2 · R3 — corpus experiments</a><span class="st">negative</span>
-      <div class="b">Does how a training corpus is collected change what a model learns? R2 retracted after audit; R3's sealed 1,265-item eval passed 0 of 5 gates.</div>
-    </div>
+  <div class="tile" data-pv="floor36/mufx.html">
+    <span class="st">archived</span>
+    <h3><a href="floor36/mufx.html">muFX</a></h3>
+    <p class="k">fx research desk · feb–mar 2026</p>
+    <p class="d">Daily signals, weekly reviews and a Q2 2026 dollar outlook, driven by a 252-day fair-value model and CFTC positioning. <b>The desk closed in March; the name continues as this site.</b></p>
+    <p class="links"><a href="floor36/mufx.html">desk</a><a href="floor36/q2-2026-outlook.html">q2 outlook</a><a href="floor36/weekly-20260314.html">last weekly</a></p>
   </div>
 
 </div>
 
 <footer>
-Hao (Howard) Zhang · mufx.io · <a href="mailto:research@mufx.io">research@mufx.io</a> · <a href="https://github.com/mufxio">github</a> · <a href="resume.pdf">résumé</a><br>
-Numbers quoted on this site cite the results file they come from; where the file is not yet public it is available on request.
+  <span>Hao (Howard) Zhang · <a href="mailto:research@mufx.io">research@mufx.io</a> · <a href="https://github.com/mufxio">github</a> · <a href="https://www.linkedin.com/in/haozzhang">linkedin</a></span>
+  <span>numbers cite the results file they come from · not-yet-public files on request</span>
 </footer>
 
 </div>
@@ -230,17 +177,17 @@ Numbers quoted on this site cite the results file they come from; where the file
 <script>
 (function(){
   var pv=document.getElementById('pv'),fr=pv.querySelector('iframe'),cap=pv.querySelector('.cap');
-  if(!window.matchMedia('(min-width:74rem) and (hover:hover) and (pointer:fine)').matches) return;
+  if(!window.matchMedia('(min-width:88rem) and (hover:hover) and (pointer:fine)').matches) return;
   var t;
-  document.querySelectorAll('.card[data-pv]').forEach(function(c){
+  document.querySelectorAll('.tile[data-pv]').forEach(function(c){
     c.addEventListener('mouseenter',function(){
       clearTimeout(t);
       var src=c.getAttribute('data-pv');
       t=setTimeout(function(){
         if(fr.getAttribute('src')!==src) fr.setAttribute('src',src);
-        cap.textContent=src.replace(/\/index\.html$/,'/');
+        cap.textContent='/'+src.replace(/\/index\.html$/,'/');
         var r=c.getBoundingClientRect(), wrap=document.querySelector('.wrap').getBoundingClientRect();
-        var left=wrap.right+24, top=Math.max(12,Math.min(r.top,window.innerHeight-302));
+        var left=wrap.right+20, top=Math.max(12,Math.min(r.top,window.innerHeight-302));
         pv.style.left=left+'px'; pv.style.top=top+'px';
         pv.classList.add('on');
       },180);
