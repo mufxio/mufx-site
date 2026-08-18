@@ -3,65 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hao Zhang</title>
-<meta name="description" content="Hao Zhang — markets, machine learning, primary documents. Project log: muFX, cipher, floor36, emotion-vector-bench, Residue Lab.">
+<title>Hao (Howard) Zhang — research analyst</title>
+<meta name="description" content="Hao (Howard) Zhang. Hotel operations and property accounting, mortgage underwriting, and an independent macro research practice — muFX. Primary-document research, a live macro data platform, pre-registered ML experiments.">
 <link rel="icon" type="image/svg+xml" href="/mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#fbfbf9; --ink:#1b1b19; --dim:#6e6e68; --faint:#a8a8a0;
-  --line:#dcdcd4; --panel:#f1f1ec;
-  --acc:#177245;
-  --m:'Fragment Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --bg:#fbfbf9; --ink:#1b1b19; --dim:#5f5f59; --faint:#9a9a92;
+  --line:#e2e2da; --panel:#f3f3ee; --acc:#177245; --acc-soft:#e6f1ea;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#141413; --ink:#e8e8e2; --dim:#a4a49c; --faint:#6e6e67; --line:#2a2a27; --panel:#1c1c1a; --acc:#5fbf8a; --acc-soft:#173224}
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--m);
-  font-size:14.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
-.wrap{max-width:46rem;margin:0 auto;padding:2.6rem 1.3rem 5rem}
-a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:44rem;margin:0 auto;padding:3rem 1.4rem 5rem}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{color:var(--acc);text-decoration-color:var(--acc)}
 p{margin:0 0 1rem}
+.mono{font-family:var(--mono)}
 
-.head{margin-bottom:2.2rem}
-h1{font-size:1.05rem;font-weight:400;margin:0 0 .1rem;letter-spacing:.02em}
-h1::before{content:"$ ";color:var(--acc)}
-.sub{color:var(--dim);margin:0 0 1.2rem}
-.navline{color:var(--dim);font-size:.92em}
-.navline a{color:var(--dim)}
-.navline a:hover{color:var(--acc)}
-.navline .here{color:var(--ink);text-decoration:none}
+/* header */
+.head{margin-bottom:2.4rem}
+h1{font-size:1.55rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .25rem}
+h1 span{color:var(--dim);font-weight:400}
+.tag{color:var(--dim);margin:0 0 1.1rem;font-size:1.02rem}
+nav{font-family:var(--mono);font-size:.84rem;color:var(--faint)}
+nav a{color:var(--dim);text-decoration:none;margin-right:.9rem}
+nav a:hover{color:var(--acc)}
+nav a.res{color:var(--acc);font-weight:500}
 
-.hr{border:0;border-top:1px solid var(--line);margin:1.8rem 0}
-.sec{color:var(--faint);font-size:.86em;letter-spacing:.04em;margin:0 0 .9rem;white-space:nowrap;overflow:hidden}
-.sec::after{content:" ────────────────────────────";color:var(--line);letter-spacing:0}
+/* sections */
+.sec{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 .9rem;display:flex;align-items:center;gap:.8rem}
+.sec::after{content:"";flex:1;border-top:1px solid var(--line)}
+.bio p{margin:0 0 .85rem}
+.now{background:var(--panel);border-left:3px solid var(--acc);padding:.7rem .95rem;font-size:.95rem;color:var(--dim);margin:1.1rem 0 0}
+.now b{color:var(--ink);font-weight:500}
 
-.bio p{margin:0 0 .9rem}
-.bio{margin-bottom:.4rem}
+/* facts */
+.facts{display:grid;grid-template-columns:6.5rem 1fr;gap:.25rem 1rem;font-size:.92rem;color:var(--dim);margin:1rem 0 0}
+.facts dt{font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);padding-top:.15rem}
+.facts dd{margin:0}
+.facts a{color:var(--dim)}
 
-.meta{color:var(--dim);font-size:.94em;line-height:1.9;margin-bottom:.4rem}
-.meta b{color:var(--ink);font-weight:400}
-.meta a{color:var(--dim)}
-.meta a:hover{color:var(--acc)}
+/* work cards */
+.work{display:grid;gap:.9rem}
+.card{border:1px solid var(--line);border-radius:6px;padding:.95rem 1.05rem;background:var(--bg)}
+.card h3{margin:0 0 .3rem;font-size:1.02rem;font-weight:600}
+.card h3 a{text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card .k{font-family:var(--mono);font-size:.76rem;color:var(--faint);margin-left:.5rem;font-weight:400}
+.card p{margin:0 0 .45rem;font-size:.95rem;color:var(--dim)}
+.card p:last-child{margin:0}
+.card .n{color:var(--ink)}
+.card .links{font-family:var(--mono);font-size:.8rem}
+.card .links a{color:var(--dim);margin-right:.8rem}
+.live{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;background:var(--acc);margin-right:.35rem;vertical-align:baseline;box-shadow:0 0 0 3px var(--acc-soft)}
 
+/* log */
 .log{margin:0}
-.entry{display:grid;grid-template-columns:5.4rem 1fr;gap:0 1.1rem;padding:.55rem 0;
-  border-bottom:1px dotted var(--line)}
+.entry{display:grid;grid-template-columns:5.2rem 1fr;gap:0 1rem;padding:.55rem 0;border-bottom:1px solid var(--line)}
 .entry:last-child{border-bottom:0}
-.entry .d{color:var(--faint);font-size:.92em;white-space:nowrap}
-.entry .t a,.entry .t .nm{color:var(--ink)}
-.entry .t .nm{text-decoration:none}
-.entry .b{color:var(--dim);font-size:.94em;line-height:1.65;margin-top:.1rem}
-.entry .b em{font-style:normal;color:var(--ink)}
+.entry .d{font-family:var(--mono);font-size:.8rem;color:var(--faint);padding-top:.2rem;white-space:nowrap}
+.entry .t{font-weight:500}
+.entry .t a{text-decoration:none}
+.entry .t a:hover{text-decoration:underline}
+.entry .st{font-family:var(--mono);font-size:.74rem;color:var(--faint);font-weight:400;margin-left:.45rem}
+.entry .b{color:var(--dim);font-size:.93rem;line-height:1.55;margin-top:.1rem}
 
-footer{margin-top:2.6rem;color:var(--faint);font-size:.88em;line-height:1.8}
+footer{margin-top:3rem;padding-top:1.2rem;border-top:1px solid var(--line);color:var(--faint);font-size:.85rem;line-height:1.8;font-family:var(--mono)}
 footer a{color:var(--faint)}
 footer a:hover{color:var(--acc)}
 
 @media(max-width:34rem){
   .entry{grid-template-columns:1fr;gap:0}
-  .entry .d{margin-bottom:.05rem}
+  .facts{grid-template-columns:1fr;gap:0 0}
+  .facts dt{margin-top:.5rem}
+  nav a{display:inline-block;margin-bottom:.3rem}
 }
 </style>
 </head>
@@ -69,104 +92,130 @@ footer a:hover{color:var(--acc)}
 <div class="wrap">
 
 <header class="head">
-  <h1>hao zhang</h1>
-  <p class="sub">markets · machine learning · primary documents</p>
-  <p class="navline">
-    <span class="here">home</span> ·
-    <a href="/lab.html">residue lab</a> ·
-    <a href="/results.html">results</a> ·
-    <a href="/emotion-vector-bench.html">emotion-vector-bench</a> ·
-    <a href="/floor36/mufx.html">mufx</a> ·
-    <a href="/floor36/cipher.html">cipher</a> ·
-    <a href="/floor36/">floor36</a> ·
+  <h1>Hao Zhang <span>(Howard)</span></h1>
+  <p class="tag">Research analyst. Hotel operations and property accounting → mortgage underwriting → independent macro research.</p>
+  <nav>
+    <a href="#about">about</a>
+    <a href="#work">work</a>
+    <a href="#log">log</a>
+    <a href="/lab.html">residue lab</a>
     <a href="https://github.com/mufxio">github</a>
-  </p>
+    <a class="res" href="/resume.pdf">résumé ↓</a>
+  </nav>
 </header>
 
-<div class="sec">about</div>
+<div class="sec" id="about">About</div>
 <div class="bio">
-  <p>Hao Zhang works at the intersection of markets and machine learning. He holds a degree in Hospitality &amp; Tourism Management with a finance concentration from Purdue University and works in English and Mandarin.</p>
-  <p>The work is measurement-first. On the markets side: reading primary documents — SEC registration statements, exchange inquiry letters, annual reports, government filings in the original Chinese — against the claims publicly made about them. On the machine-learning side: pre-registered experiments on consumer hardware, with success criteria fixed before any data is seen. Results are published with their criteria, their failures, and their corrections intact.</p>
+  <p>I spent five years inside full-service hotels and restaurants — front desk and night audit, housekeeping and banquets, long-stay corporate sales at Kempinski Shanghai, and property accounting (AP/AR/GL, budgeting, forecasting, variance) at White Lodging — then underwrote residential mortgages and ran a self-funded land-acquisition campaign. Purdue B.S. in Hospitality &amp; Tourism Management, finance concentration.</p>
+  <p>Since early 2026 I run <b>muFX</b>, an independent research practice. The method is the same throughout: read the primary document, fix the success criterion before looking at the data, and publish the result with its failures and corrections intact.</p>
+  <p class="now"><b>Now:</b> targeting analyst roles in hotel real estate — brokerage, advisory, asset management — while continuing the research below. Native English and Mandarin. Open to relocation.</p>
 </div>
-<div class="meta">
-  tools&nbsp;&nbsp;&nbsp;<b>python · sql · git · mlx/lora · linear probes · multi-agent pipelines</b><br>
-  sources&nbsp;<b>sec edgar &amp; xbrl · 上交所/巨潮 · cftc cot · primary documents in the original</b><br>
-  contact&nbsp;<a href="mailto:research@mufx.io">research@mufx.io</a>
+<dl class="facts">
+  <dt>Tools</dt><dd>Excel · Python (pandas) · SQL · VBA · multi-agent research pipelines · MLX/LoRA · linear probes</dd>
+  <dt>Sources</dt><dd>SEC EDGAR &amp; XBRL · 上交所 / 巨潮 filings in the original · CFTC COT · Fed H.4.1 · primary documents first</dd>
+  <dt>Contact</dt><dd><a href="mailto:research@mufx.io">research@mufx.io</a> · <a href="https://www.linkedin.com/in/haozzhang">linkedin</a> · <a href="https://github.com/mufxio">github</a></dd>
+</dl>
+
+<div class="sec" id="work">Selected work</div>
+<div class="work">
+
+  <div class="card">
+    <h3><a href="/floor36/cipher.html"><span class="live"></span>cipher</a><span class="k">macro data platform · Mar 2026 → running</span></h3>
+    <p>21 automated collectors — CFTC positioning, Fed liquidity, prediction markets, filings, satellite fire detections — feeding a daily briefing generator and a public API. Built in March; has run unattended every day since. <span class="n">Status endpoint reports 21/21 pipes OK as of Aug 18, 2026.</span></p>
+    <p class="links"><a href="/floor36/cipher.html">terminal</a><a href="https://api.mufx.io/api/status">api/status</a></p>
+  </div>
+
+  <div class="card">
+    <h3><span>Ask the Filing</span><span class="k">working paper · Aug 2026</span></h3>
+    <p>Primary-document research reading securities filings against the claims made about them: SK hynix's 424(b)(4), CXMT's Shanghai Stock Exchange inquiry-letter responses in the original Chinese, the 15th Five-Year Plan, Micron's disclosures. <span class="n">Five forward predictions staked to public observables through 2029.</span> Built with multi-agent research pipelines over the source documents.</p>
+    <p class="links"><span style="color:var(--faint)">paper link pending</span></p>
+  </div>
+
+  <div class="card">
+    <h3><a href="/emotion-vector-bench.html">emotion-vector-bench</a><span class="k">replication · May 2026 · corrected Aug 17</span></h3>
+    <p>Reproduced Anthropic's emotion-geometry method on five open-weight models from three labs, on a 24 GB laptop, one command per model. <span class="n">Finding: emotion geometry is close to model-invariant — 1.13× spread across labs and a 5× parameter range.</span> An earlier 18× headline was withdrawn as a unit error; the correction is on the page.</p>
+    <p class="links"><a href="/emotion-vector-bench.html">results</a><a href="https://github.com/mufxio/emotion-vector-bench">repository</a></p>
+  </div>
+
+  <div class="card">
+    <h3><a href="/lab.html">Residue Lab</a><span class="k">experimental record · May–Aug 2026</span></h3>
+    <p>Ten pre-registered machine-learning experiments on whether models can detect emotional residue in text. <span class="n">One external finding replicated, one clean negative that closed the programme, two self-issued retractions</span> — criteria, failures and corrections published together.</p>
+    <p class="links"><a href="/lab.html">summary</a><a href="/results.html">full results</a><a href="/methodology.html">methodology</a></p>
+  </div>
+
 </div>
 
-<hr class="hr">
-
-<div class="sec">log</div>
+<div class="sec" id="log">Log · 2026</div>
 <div class="log">
 
   <div class="entry">
-    <div class="d">2026-02</div>
-    <div class="t"><a href="/floor36/mufx.html">mufx</a>
-      <div class="b">fx research desk — daily notes, weekly reviews, a <em>252-day fair-value model</em>, a hash register for its own articles. <em>resuming 08→ as the research publication:</em> the articles from the months below will publish here.</div>
+    <div class="d">Feb</div>
+    <div class="t"><a href="/floor36/mufx.html">muFX research desk</a><span class="st">archived Mar</span>
+      <div class="b">Q2 2026 dollar outlook, weekly reviews, daily signals off a 252-day fair-value model. The desk closed in March; the name continues as this site.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-03</div>
-    <div class="t"><a href="/floor36/cipher.html">cipher</a>
-      <div class="b">macro-intelligence terminal — <em>26 automated collectors</em> (positioning, fed liquidity, satellite fire detections, prediction markets), daily briefing generator, live api still serving.</div>
+    <div class="d">Mar</div>
+    <div class="t"><a href="/floor36/cipher.html">cipher</a><span class="st">api live</span>
+      <div class="b">Macro data platform and terminal — see above.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-03</div>
-    <div class="t"><a href="/floor36/">floor36</a>
-      <div class="b">research journal — ~1mb of annotated reading notes (neuroscience, music theory, ml); q-learning trading agents tested with a <em>1,080-probe search and deflated sharpe ratio</em>.</div>
+    <div class="d">Apr</div>
+    <div class="t"><span>yen-carry-unwind-2024</span><span class="st">complete</span>
+      <div class="b">15-table event database reconstructing the August 2024 yen-carry unwind from primary sources; later mined for the residue experiments.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-05</div>
-    <div class="t"><a href="/results.html">probing programme</a>
-      <div class="b">five pre-registered experiments on <em>linear probes over llm activations</em> (qwen, llama): transfer tests, register/valence controls, a lora fine-tune, likelihood-ratio gates.</div>
+    <div class="d">May</div>
+    <div class="t"><a href="/emotion-vector-bench.html">emotion-vector-bench</a><span class="st">public repo</span>
+      <div class="b">Five-model emotion-geometry replication — see above.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-05</div>
-    <div class="t"><a href="/emotion-vector-bench.html">emotion-vector-bench</a>
-      <div class="b">replication of anthropic's emotion-geometry method on <em>five open-weight models from three labs</em> — frozen 3,050-item corpus, one command per model, 24gb machine. repository public.</div>
+    <div class="d">May</div>
+    <div class="t"><a href="/results.html">probing programme</a><span class="st">closed May 30</span>
+      <div class="b">Five pre-registered experiments on linear probes over LLM activations. Closed by its own result: residue is not linearly separable from writing register.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-06</div>
-    <div class="t"><a href="/results.html">r1 — reconstruction</a>
-      <div class="b">synthetic-world experiments: reconstructing hidden states from residue vs a facts-only baseline. authored answer keys, oracle ceilings, <em>β=0 negative control</em>.</div>
+    <div class="d">Jun</div>
+    <div class="t"><a href="/results.html">R1 — reconstruction</a><span class="st">synthetic pass</span>
+      <div class="b">Reconstructing hidden states from residue beats a facts-only baseline in synthetic worlds; β=0 negative control passed. Real-data confirmation not run.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-06</div>
-    <div class="t"><span class="nm">research dossiers</span>
-      <div class="b">a <em>215-page jane street dossier</em> built with 100 agents (~1,438 sources); primary-source studies of gold market structure (sge/shfe, the shanghai premium) and us–asia copper scrap flows.</div>
+    <div class="d">Jun</div>
+    <div class="t"><span>research dossiers</span>
+      <div class="b">Jane Street institutional dossier; primary-source studies of gold market structure (SGE/SHFE, the Shanghai premium) and US–Asia copper scrap flows.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-08</div>
-    <div class="t"><a href="/results.html">r2 · r3 — corpus experiments</a>
-      <div class="b">does how a training corpus is collected and arranged change what a model learns? lora fine-tunes over a <em>50-event, 479-document corpus</em>; a sealed-corpus eval of <em>1,265 items</em> authored by 50 isolated agents, frozen before the arms exist.</div>
+    <div class="d">Aug</div>
+    <div class="t"><a href="/results.html">R2 · R3 — corpus experiments</a><span class="st">negative</span>
+      <div class="b">Does how a training corpus is collected change what a model learns? R2 retracted after audit; R3's sealed 1,265-item eval passed 0 of 5 gates. Both reported as failures.</div>
     </div>
   </div>
 
   <div class="entry">
-    <div class="d">2026-08</div>
-    <div class="t"><span class="nm">ask the filing</span>
-      <div class="b">working paper reading primary filings against public claims — sk hynix's 424(b)(4), cxmt's <em>上交所问询函回复</em>, the 15th five-year plan, micron's disclosures. five forward predictions staked to public observables through 2029.</div>
+    <div class="d">Aug</div>
+    <div class="t"><span>Ask the Filing</span><span class="st">working paper</span>
+      <div class="b">Primary filings against public claims — see above.</div>
     </div>
   </div>
 
 </div>
 
 <footer>
-hao zhang · mufx.io · <a href="mailto:research@mufx.io">research@mufx.io</a> · <a href="https://github.com/mufxio">github</a><br>
-every research claim on this site links to the document it is quoted from.
+Hao (Howard) Zhang · mufx.io · <a href="mailto:research@mufx.io">research@mufx.io</a> · <a href="https://github.com/mufxio">github</a> · <a href="/floor36/">journal archive (floor36)</a><br>
+Numbers quoted on this site cite the results file they come from; where the file is not yet public it is available on request.
 </footer>
 
 </div>
