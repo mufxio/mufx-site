@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hao (Howard) Zhang</title>
 <meta name="description" content="Hao (Howard) Zhang — hospitality, finance, real estate, agentic research. muFX: live macro data platform, FX research, pre-registered ML experiments.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="mufx.io">
+<meta property="og:title" content="Hao (Howard) Zhang">
+<meta property="og:description" content="hospitality · finance · real estate · agentic research — cipher (live macro API), Residue Lab, floor36, muFX.">
+<meta property="og:url" content="https://mufx.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hao (Howard) Zhang">
+<meta name="twitter:description" content="hospitality · finance · real estate · agentic research — cipher (live macro API), Residue Lab, floor36, muFX.">
+<link rel="canonical" href="https://mufx.io/">
 <link rel="icon" type="image/svg+xml" href="mufx-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,6 +96,7 @@ h1 span{color:var(--dim);font-weight:300}
 .t-cipher:hover{border-color:#4ecdc4}
 .t-cipher .top{color:#4a5560}
 .t-cipher .st{color:#4ecdc4;border-color:#1f4a47}
+.t-cipher .st.off{color:#6b7885;border-color:#1b2430}.t-cipher .st.off::before{display:none}
 .t-cipher .st::before{content:"";display:inline-block;width:.38rem;height:.38rem;border-radius:50%;background:#4ecdc4;margin-right:.35rem;vertical-align:.05rem;box-shadow:0 0 6px #4ecdc4}
 .t-cipher h3{font-weight:400;letter-spacing:.06em}
 .t-cipher h3 a:hover{color:#4ecdc4}
@@ -297,7 +307,7 @@ footer a:hover{color:var(--acc);border-color:var(--acc)}
   fetch('https://api.mufx.io/api/status',{mode:'cors'}).then(function(r){return r.json()}).then(function(j){
     var ok=j.pipes_ok||0, bad=j.pipes_failed||0, t=(j.last_run||'').replace('T',' ').slice(0,16);
     el.textContent='status: '+ok+'/'+(ok+bad)+' pipes ok · '+t+' UTC';
-  }).catch(function(){ el.textContent='status: see api'; });
+  }).catch(function(){ el.textContent='status: see api'; var st=document.querySelector('.t-cipher .st'); if(st){st.textContent='api';st.classList.add('off');} });
 
   var pv=document.getElementById('pv'),fr=pv.querySelector('iframe'),cap=pv.querySelector('.cap');
   if(!window.matchMedia('(min-width:92rem) and (hover:hover) and (pointer:fine)').matches) return;
