@@ -165,7 +165,7 @@ body[data-cipher-state="STORM"]{border-top:2px solid rgba(255,34,34,1);box-shado
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <script>
 const CIPHER_API='https://api.mufx.io',PW='';// gate removed 2026-08-17
-async function fetchJSON(p){try{const r=await fetch(CIPHER_API+p);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){console.error(p,e);window.__LASTERR__=p+' \u2192 '+((e&&e.message)||e);return null}}
+async function fetchJSON(p){try{const r=await fetch(CIPHER_API+p);if(!r.ok)throw new Error('HTTP '+r.status);const t=await r.text();return JSON.parse(t.replace(/([:\[,]\s*)-?(NaN|Infinity)\b/g,'$1null'))}catch(e){console.error(p,e);window.__LASTERR__=p+' \u2192 '+((e&&e.message)||e);return null}}
 async function boot(){const[briefing,intel,narrative,identity,history,operator]=await Promise.all([
 fetchJSON('/api/briefing/latest'),fetchJSON('/api/intel'),
 fetchJSON('/api/narrative'),fetchJSON('/api/identity'),fetchJSON('/api/history'),fetchJSON('/api/operator')]);
