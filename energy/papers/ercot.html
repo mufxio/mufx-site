@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Evening Price Spikes in ERCOT: Net Load, Dispatchable Capacity and the Day-Ahead Premium · Hao Zhang</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="paper.css"></head>
+<title>Evening Price Spikes in ERCOT: Net Load, Gas and Battery Output, and the Day-Ahead Premium · Hao Zhang</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="paper.css"></head>
 <body><nav><div class="inner"><a class="home" href="https://mufx.io/">← mufx.io</a><span class="sp"></span><a href="../resume.pdf">résumé</a></div></nav><div class="wrap">
 <header class="cover"><a class="back" href="../">← energy working papers</a>
-<h1>Evening Price Spikes in ERCOT: Net Load, Dispatchable Capacity and the Day-Ahead Premium</h1><p class="subtitle">Working paper</p><p class="byline">Hao Zhang</p>
+<h1>Evening Price Spikes in ERCOT: Net Load, Gas and Battery Output, and the Day-Ahead Premium</h1><p class="subtitle">Working paper</p><p class="byline">Hao Zhang</p>
 <div class="fields"><div class="field"><span class="k">Date</span><span class="v">2026-10-28</span></div><div class="field"><span class="k">Market</span><span class="v">ERCOT · HB_HUBAVG</span></div><div class="field"><span class="k">Data</span><span class="v">2019-01 – 2026-09</span></div><div class="field"><span class="k">Status</span><span class="v">working paper</span></div></div>
-<div class="abstract"><div class="h">Abstract</div><p>This paper describes evening price spikes in the ERCOT real-time market using 15-minute settlement prices and generation by fuel from January 2019 to September 2026. Grid-tightness indicators (headroom and Physical Responsive Capability) are strongly associated with the contemporaneous price level but do not lead it. Changes coincide within the same 5-minute dispatch interval, and the tightest decile is followed by a higher price one hour later in only 34% of cases. Spike timing has shifted from 15:00–18:00 in 2019 to 19:00–22:00 in 2025, tracking sunset as solar capacity grew. Across 1,369 evenings since 2023, the probability of a $100/MWh interval rises from 8% when gas and battery fleets have spare output to 91% when both run near their trailing 30-day maximum. Low wind at sunset is the largest day-to-day source of variation. A simple test of buying sunset hours day-ahead and settling at real-time finds a consistently negative typical outcome. This is consistent with day-ahead prices already including a premium for scarcity risk.</p></div></header>
+<div class="abstract"><div class="h">Abstract</div><p>This paper describes evening price spikes in the ERCOT real-time market using 15-minute settlement prices and generation by fuel from January 2019 to September 2026. Grid-tightness indicators (headroom and Physical Responsive Capability) are strongly associated with the contemporaneous price level but do not lead it. Changes coincide within the same 5-minute dispatch interval, and the tightest decile is followed by a higher price one hour later in only 34% of cases. Spike timing has shifted from 15:00–18:00 in 2019 to 19:00–22:00 in 2025, tracking sunset as solar capacity grew. Across 1,369 evenings since 2023, 8% had a $100/MWh interval when gas and batteries were well below their 30-day highs, against 91% when both were running near them. Low wind at sunset is one of the clearest differences between spike and calm evenings. A simple test of buying sunset hours day-ahead and settling at real-time finds a consistently negative typical outcome. This is consistent with day-ahead prices already including a premium for scarcity risk.</p></div></header>
 <main class="doc"><style>.doc th{text-align:right;white-space:nowrap}
 .doc td{text-align:right;white-space:nowrap}
 .doc th:first-child,.doc td:first-child{text-align:left}
@@ -42,7 +42,7 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
     <li><strong>Tightness.</strong> Headroom (online capacity minus dispatched output, a proxy built from the dispatch archive) and PRC, each below the 10th percentile of the trailing 90 days.</li>
     <li><strong>Evening and spike.</strong> Evening = 16:00–23:00 Central. A spike evening has at least one 15-minute price ≥ $100/MWh.</li>
   </ul>
-  <p class="sec-note">Each test's definitions and outcome measures were written down before results were computed. ERCOT's market redesign (RTC+B, 5 Dec 2025) changes how reserves are procured, so 2026 is reported separately where it matters.</p>
+  <p class="sec-note">Most tests had their definitions and outcome measures written down before results were computed. ERCOT's market redesign (RTC+B, 5 Dec 2025) changes how reserves are procured, so 2026 is reported separately where it matters.</p>
 
   <h2><span class="sn">2</span>Tightness and price move together</h2>
   <p>Headroom, PRC and the price come out of the same security-constrained dispatch run. Their contemporaneous association is strong. Their predictive association is weak and has the opposite sign from the naive expectation, because tight intervals cluster at the daily price peak.</p>
@@ -52,6 +52,7 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
     <tbody>
       <tr><td class="l">Median price, tightest vs most abundant decile</td><td>$52 vs $13</td></tr>
       <tr><td class="l">Tight intervals followed by a higher price after 1 h</td><td>34%</td></tr>
+      <tr><td class="l">Same intervals, "what usually happens at this hour" guess right after 1 h</td><td>65%</td></tr>
       <tr><td class="l">Tight intervals followed by a higher price after 4 h</td><td>13%</td></tr>
       <tr><td class="l">Corr., Δheadroom vs Δprice, same 5-min interval</td><td>0.31</td></tr>
       <tr><td class="l">Corr., Δheadroom vs Δprice, price leading by 5 min</td><td>0.10</td></tr>
@@ -62,14 +63,14 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
   <div class="src">Signs oriented so a fall in headroom paired with a rise in price is positive. Tight = headroom and PRC both below trailing 90-day P10. The move-size row was identified after the direction tests; exploratory.</div></div>
 
   <h2><span class="sn">3</span>Timing</h2>
-  <p>Spike intervals concentrate in a three-hour window that has moved later each year as solar capacity grew (peak solar output: 2.0 GW in 2019, 29.9 GW in 2025). In 2024–2026, 72–74% of spike days had their spike inside the main evening window. The clock predicts timing but not occurrence: 36% of days in 2025 and 21% in Jan–Sep 2026 had any interval at or above $100/MWh.</p>
+  <p>Spike intervals concentrate in a three-hour window that has moved later over the years as solar capacity grew (peak solar output: 2.0 GW in 2019, 29.9 GW in 2025). In 2024–2026, 72–74% of spike days had their spike inside the main evening window. The clock predicts timing but not occurrence: 36% of days in 2025 and 21% in Jan–Sep 2026 had any interval at or above $100/MWh.</p>
   <figure>
     <div class="heatwrap"><svg id="fig-heat" viewBox="0 0 640 250" role="img" aria-label="Share of 15-minute intervals at or above 100 dollars by year and hour"></svg></div>
     <figcaption><b>Figure 1</b> · Share of 15-minute intervals with hub price ≥ $100/MWh, by year and hour of day (Central, interval start). Darkest cell = 15.2%. 2026* = Jan–Sep, post-RTC+B.</figcaption>
   </figure>
 
   <h2><span class="sn">4</span>The net-load squeeze</h2>
-  <p>Spikes occur when net load at the evening peak is high relative to the gas and battery output actually available that day. Figure 2 compares two August 2025 evenings with nearly identical peak demand (80.9 and 79.9 GW). On 20 August, wind at the net-load peak was 3.7 GW against 16.4 GW on 5 August. Net load peaked 10.6 GW higher, gas and battery fleets reached 99% and 98% of their trailing maxima (vs 80% and 86%), and the hub price reached $326/MWh (vs $49).</p>
+  <p>Spike evenings are the ones where net load is high and gas and batteries are already running close to their recent highs. Figure 2 compares two August 2025 evenings with nearly the same peak demand (80.9 GW on 5 August, 79.9 GW on 20 August; the calm evening was actually slightly higher). On 20 August, wind at the net-load peak was 3.7 GW against 16.4 GW on 5 August. Net load peaked 10.6 GW higher, gas and battery fleets reached 99% and 98% of their trailing maxima (vs 80% and 86%), and the hub price reached $326/MWh (vs $49).</p>
   <figure>
     <div class="panels" id="fig-eve"></div>
     <div class="legend"><span><i></i>20 Aug 2025</span><span><i class="d"></i>5 Aug 2025</span></div>
@@ -86,15 +87,15 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
   </table>
   <div class="src">Fleet use = output at the evening net-load peak ÷ maximum output over the previous 30 days. Realised values; descriptive, not a forecast.</div></div>
 
-  <p>Ranked against the evening maximum price, wind at sunset has the largest correlation in recent years (−0.5 to −0.6). The level and size of the net-load climb matter. The top quintile of evening ramps spiked on 45–70% of evenings and the bottom quintile on 10–14%. The speed of the climb adds little. April and October, the main maintenance months, show the highest spike rates for large ramps (8 of 8 and 21 of 35 evenings). That pattern has not been checked against outage data.</p>
-  <p>Battery capacity has offset part of the rise in net load. The evening net-load ramp grew from 6.7 GW (2019) to 26.2 GW (2026). Over the same period, average battery discharge at the evening peak rose from near zero to 6.9 GW, and the share of evenings reaching $250/MWh fell from 21.6% in 2023 to 5.1% in 2026.</p>
+  <p>Wind at sunset is one of the strongest links to the evening's top price (about −0.5 to −0.6 in recent years), alongside how hard gas and batteries are running. The level and size of the net-load climb matter. The top quintile of evening ramps spiked on 45–70% of evenings and the bottom quintile on 10–14%. The speed of the climb adds little. Big-ramp evenings in April (8 of 8) and October (21 of 35) spiked often, which fits spring and autumn plant maintenance; that hasn't been checked against outage data.</p>
+  <p>Batteries look like they have taken some of the edge off. The evening net-load ramp grew from 6.7 GW (2019) to 26.2 GW (2026), while average battery discharge at the evening peak went from near zero to 6.9 GW and $250+ evenings became rarer (21.6% in 2023, 5.1% in 2026). Other things changed too, including the December 2025 market redesign, and 2026 is January–September only.</p>
   <figure>
     <div class="wide"><svg id="fig-years" viewBox="0 0 640 300" role="img" aria-label="Battery discharge at the evening peak and share of evenings above 250 dollars by year"></svg></div>
     <figcaption><b>Figure 3</b> · Average battery discharge at the evening net-load peak (GW, upper) and share of evenings with a 15-minute price ≥ $250/MWh (lower), 2019–2026. 2026* = Jan–Sep.</figcaption>
   </figure>
 
   <h2><span class="sn">5</span>Day-ahead versus real-time</h2>
-  <p>The test buys 1 MW in the day-ahead market for each of three sunset hours, which settles against the real-time price. P&amp;L per MWh = real-time hourly average − day-ahead price. Four day-selection rules use only information available before day-ahead bids are due. Rules were developed on 2019–2023 and checked on 2024. January 2025 – September 2026 is held out and has not been examined.</p>
+  <p>The test buys 1 MW in the day-ahead market for each of three sunset hours, which settles against the real-time price. P&amp;L per MWh = real-time hourly average − day-ahead price. Four day-selection rules use only information available before day-ahead bids are due. Rules were developed on 2019–2023 and checked on 2024. The day-ahead test hasn't been run on January 2025 – September 2026 yet.</p>
   <div class="tw"><table>
     <caption>Table 3 · Real-time minus day-ahead, $/MWh, three sunset hours, HB_HUBAVG, before costs</caption>
     <thead><tr><th>Rule / period</th><th>Days</th><th>Mean</th><th>90% CI</th><th>Median</th><th>RT &gt; DA</th></tr></thead>
@@ -114,13 +115,14 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
     </tbody>
   </table>
   <div class="src">ᵃ Driven almost entirely by 20 Aug 2024. ᵇ In-sample by construction. No rule met the pre-set criteria: development CI above zero after $1/MWh costs, a positive 2024 mean after $1/MWh costs, and beating 95% of random day selections in both periods.</div></div>
-  <p>The typical day loses for every rule: the median is negative in all eight rows, and real time settles below day-ahead on 61–77% of days. After a spike, day-ahead averaged $189/MWh against a real-time outcome of $184. The day-ahead price includes a scarcity premium and tends to overshoot after recent spikes. The opposite position, selling day-ahead, has a positive median but large tail losses; 16 February 2021 alone costs about $7,900 per MW.</p>
+  <p>On average day-ahead lands close to real-time, but the typical day loses about $5 for every rule, and real time settles below day-ahead on 61–77% of days. Buying day-ahead works like insurance: a small loss most days and a payout on the rare spike evening. After a spike, day-ahead also sat a little above real-time ($189 vs $184). The opposite position, selling day-ahead, has a positive median but large tail losses; 16 February 2021 alone costs about $7,900 per MW.</p>
 
   <h2><span class="sn">6</span>Limitations</h2>
   <ul class="plain">
-    <li>Historical headroom is a proxy (online high sustained limit minus base point). It matches the published 2026 method at r = 0.97.</li>
+    <li>Historical headroom is a proxy (online high sustained limit minus base point). It matches a second proxy built from 2026 data at r = 0.97.</li>
+    <li>These are settlement prices, not tradeable quotes, and the hub average isn't the North-hub evening contracts that actually trade.</li>
     <li>The net-load results use realised values. A forecast version using ERCOT's day-ahead wind, solar, load and outage forecasts is specified but not run.</li>
-    <li>Trailing maximum output is not available capacity, and battery discharge is not state of charge.</li>
+    <li>Output near its 30-day high isn't the same as capacity, and batteries discharge partly because price is high, so fleet use is a description of spike evenings rather than a cause.</li>
     <li>Publication timing of dispatch data is assumed (about a 2-minute delay), not measured.</li>
   </ul>
 

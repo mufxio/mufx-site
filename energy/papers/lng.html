@@ -4,9 +4,9 @@
 <body><nav><div class="inner"><a class="home" href="https://mufx.io/">← mufx.io</a><span class="sp"></span><a href="../resume.pdf">résumé</a></div></nav><div class="wrap">
 <header class="cover"><a class="back" href="../">← energy working papers</a>
 <h1>Where Does the Marginal Cargo Go?</h1><p class="subtitle">Europe's gas balance, US liquefaction limits and the HH–TTF–JKM link</p><p class="byline">Hao Zhang</p>
-<div class="fields"><div class="field"><span class="k">Date</span><span class="v">2026-11 (research 2026-09 – 10)</span></div><div class="field"><span class="k">Markets</span><span class="v">TTF · Henry Hub · JKM</span></div><div class="field"><span class="k">Data</span><span class="v">2016 – 2026</span></div><div class="field"><span class="k">Status</span><span class="v">working paper</span></div></div>
+<div class="fields"><div class="field"><span class="k">Date</span><span class="v">2026-11-23</span></div><div class="field"><span class="k">Markets</span><span class="v">TTF · Henry Hub · JKM</span></div><div class="field"><span class="k">Data</span><span class="v">2016 – 2026</span></div><div class="field"><span class="k">Status</span><span class="v">working paper</span></div></div>
 <div class="abstract"><div class="h">Abstract</div><p>This paper follows one chain of reasoning: European gas demand, how Europe covers it, how much LNG Europe needs, how Europe and Asia compete for that LNG, and whether binding US liquefaction capacity limits the transmission of overseas prices to Henry Hub.</p>
-<p>A monthly European supply balance built from public data (production + pipeline imports + LNG send-out + net storage withdrawal) reproduces Eurostat’s calculated consumption to within about 2.6%. Within that balance, storage does almost all the work of following demand: consumption correlates 0.957 with net storage withdrawal and −0.006 with LNG send-out. LNG behaves like baseload supply, and import terminals never ran above 79% of capacity. On prices, Henry Hub is only weakly linked to TTF (weekly correlation 0.09–0.17), while same-month TTF and JKM move almost as one price (0.994). The liquefaction hypothesis points the expected way (HH–TTF correlation 0.05 in months with US plants at ≥ 90% utilisation vs 0.24 otherwise), but only 11 such months exist, too few for a meaningful test. Competition for cargoes is visible in quantities rather than prices: Europe’s share of US cargoes doubled in 2022, and the volume came from buyers without contract cover.</p>
+<p>A monthly European supply balance built from public data (production + pipeline imports + LNG send-out + net storage withdrawal) comes out about 2.6% below Eurostat’s official consumption figure, close enough to work with. Within that balance, storage does almost all the work of following demand: consumption correlates 0.957 with net storage withdrawal and −0.006 with LNG send-out. LNG doesn’t follow the seasonal demand cycle, and EU-wide, import terminals never ran above 79% of capacity. On prices, Henry Hub is only weakly linked to TTF (weekly correlation 0.09–0.17), while same-month TTF and JKM move almost as one price (0.994). The liquefaction hypothesis points the expected way (HH–TTF correlation 0.05 in months with US plants at ≥ 90% utilisation vs 0.24 otherwise), but only 11 such months exist, too few for a meaningful test. Competition for cargoes is visible in quantities rather than prices: Europe’s share of US cargoes doubled in 2022, and most of the extra volume came from buyers without long-term contracts.</p>
 </div></header>
 <main class="doc"><h2 id="the-question"><span class="sn">1</span>The question</h2>
 <p>The research began with a chain of physical links, each a hypothesis:</p>
@@ -56,7 +56,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>Against Eurostat’s calculated consumption, the assembled balance has a median difference of −2.6% over 48 months with complete pipeline data. After aligning the treatment of Polish production, the median difference is −1.1%. The balance is a working measurement. Poland’s production has been confidential since October 2023, and 20 months have incomplete pipeline days.</p>
+<p>Against Eurostat’s calculated consumption, the assembled balance runs a median 2.6% below over 48 months with complete pipeline data (range −7% to +1%). After aligning the treatment of Polish production, the median difference is −1.1%. The balance is a working measurement. Poland’s production has been confidential since October 2023, and 20 months have incomplete pipeline days.</p>
 <h3 id="storage-follows-demand-lng-does-not">2.2 Storage follows demand; LNG does not</h3>
 <p><strong>Table 1.</strong> Correlation of monthly EU consumption with each supply component, 2021-01 to 2026-08.</p>
 <div class="table-wrap"><table>
@@ -71,7 +71,7 @@
 <th>Component</th>
 <th style="text-align: right;">Correlation with consumption</th>
 <th style="text-align: right;">Months</th>
-<th style="text-align: right;">Monthly SD (GWh/d)</th>
+<th style="text-align: right;">Monthly SD (TWh/d)</th>
 </tr>
 </thead>
 <tbody>
@@ -79,25 +79,25 @@
 <td>Net storage withdrawal</td>
 <td style="text-align: right;"><strong>0.957</strong></td>
 <td style="text-align: right;">67</td>
-<td style="text-align: right;">3,575</td>
+<td style="text-align: right;">3.58</td>
 </tr>
 <tr>
 <td>Production (ex-PL)</td>
 <td style="text-align: right;">0.541</td>
 <td style="text-align: right;">67</td>
-<td style="text-align: right;">156</td>
+<td style="text-align: right;">0.16</td>
 </tr>
 <tr>
 <td>Net pipeline imports</td>
 <td style="text-align: right;">0.083</td>
 <td style="text-align: right;">47</td>
-<td style="text-align: right;">1,338</td>
+<td style="text-align: right;">1.34</td>
 </tr>
 <tr>
 <td>LNG send-out</td>
 <td style="text-align: right;"><strong>−0.006</strong></td>
 <td style="text-align: right;">67</td>
-<td style="text-align: right;">784</td>
+<td style="text-align: right;">0.78</td>
 </tr>
 </tbody>
 </table></div>
@@ -107,7 +107,7 @@
 </div>
 <p><strong>Figure 1</strong> · EU-27 monthly gas consumption, net storage withdrawal (negative = injection) and LNG send-out, TWh per day. Sources: Eurostat, GIE AGSI+ and ALSI.</p>
 </div>
-<p>Measured as year-on-year changes, the LNG correlation is −0.31, driven by 2022, when demand fell and LNG rose to replace Russian pipeline gas. Storage swings about 4.5 times as much as LNG and moves almost one-for-one with demand. LNG send-out is nearly flat by comparison. Its seasonal amplitude is 8–16% of storage’s in every year, and it peaks in April, not in midwinter.</p>
+<p>Measured as year-on-year changes, the LNG correlation is −0.31, driven by 2022, when demand fell and LNG rose to replace Russian pipeline gas. Storage swings about 4.5 times as much as LNG and moves almost one-for-one with demand. LNG send-out is nearly flat by comparison: its seasonal swing is 8–16% of storage’s in every year. Storage follows the demand cycle; LNG fills the gap left by lost pipeline gas.</p>
 <p>Defining <strong>residual need</strong> as consumption minus production minus pipeline imports, LNG plus storage matches it almost exactly (r = 0.9995, n = 47). In winter (November–March), LNG covered this share of residual need:</p>
 <div class="table-wrap"><table>
 <thead>
@@ -142,7 +142,7 @@
 <li><strong>Storage below normal → more LNG 1–2 weeks later.</strong> The within-period correlation changes sign: −0.15 before the 2022 invasion, then +0.52, +0.30 and +0.33.</li>
 <li><strong>Pipeline drop → more LNG two weeks later:</strong> r = +0.07 (n = 277).</li>
 <li><strong>Higher demand → more LNG:</strong> r = −0.006 (Table 1).</li>
-<li><strong>Terminal capacity binds when storage is tight:</strong> utilisation never exceeded 79.25%, on any day.</li>
+<li><strong>Terminal capacity binds when storage is tight:</strong> EU-wide utilisation never exceeded 79.25% on any day. Individual terminals weren’t tested; some in Northwest Europe were likely full in 2022.</li>
 </ul>
 <p>One substitution does hold: year-on-year, lower pipeline supply goes with higher LNG at monthly frequency (r = −0.49; −0.84 in 2023–24, −0.67 in 2025–26). LNG replaces lost Russian pipeline gas over months, while storage handles weeks and seasons.</p>
 <h2 id="prices-across-the-three-hubs"><span class="sn">3</span>Prices across the three hubs</h2>
@@ -183,7 +183,7 @@
 </tr>
 <tr>
 <td>European delivered LNG vs TTF</td>
-<td>price levels</td>
+<td>price levels (largely by construction)</td>
 <td style="text-align: right;">0.975</td>
 </tr>
 <tr>
@@ -193,9 +193,9 @@
 </tr>
 </tbody>
 </table></div>
-<p>Neither TTF nor Henry Hub leads the other at weekly frequency (lagged correlations q ≥ 0.68).</p>
-<p>European delivered LNG is effectively TTF. The ACER assessment is TTF plus a small benchmark, averaged over ten weekdays, so its weekly movements partly echo last week’s TTF. The link that matters runs through quantities, not weekly prices.</p>
-<p>The same pattern as Table 1 appears in prices. The TTF level correlates −0.61 with EU storage relative to normal, and −0.09 with LNG send-out relative to its seasonal norm. Storage is the state variable. LNG flows respond to price rather than set it.</p>
+<p>Neither TTF nor Henry Hub leads the other at weekly frequency (lagged correlations −0.08 to 0.12, none significant).</p>
+<p>European delivered LNG is effectively TTF. The ACER assessment is TTF plus a small, usually negative benchmark, averaged over ten weekdays, so its weekly movements partly echo last week’s TTF. The link that matters runs through quantities, not weekly prices.</p>
+<p>A similar pattern shows up in prices. TTF tends to be high when EU storage is below normal (−0.61), while LNG send-out barely relates to it (−0.09). Much of the storage link is one long swing, from the 2022 shortage to the 2023–24 surplus, so it says more about regimes than about week-to-week moves.</p>
 <h2 id="europe-and-asia-competing-for-cargoes"><span class="sn">4</span>Europe and Asia competing for cargoes</h2>
 <p><strong>Same-month JKM and TTF are one market.</strong> At 0.994, the spread between them is small and slow-moving. Flexible cargoes arbitrage it away, so the competition is not visible as a widening price gap.</p>
 <p>It is visible in three other places, each with caveats:</p>
@@ -210,7 +210,7 @@
 </div>
 <p><strong>Figure 2</strong> · Share of US LNG export volume by destination, monthly, January 2017 – July 2026. Asia = Northeast Asia plus other Asia. Source: DOE LNG export reports.</p>
 </div>
-<p><strong>Who gives up cargoes.</strong> In 2022, Europe imported about 45 Mt more LNG (+44.7 Mt on GIIGNL figures), while world supply rose only about 20 Mt. The difference came from buyers relying on flexible Atlantic cargoes without contract cover.</p>
+<p><strong>Who gives up cargoes.</strong> In 2022, Europe imported about 45 Mt more LNG (+44.7 Mt on GIIGNL figures), while world supply rose only about 20 Mt. Most of the difference came from buyers relying on flexible Atlantic cargoes without long-term contracts.</p>
 <p><strong>Table 3.</strong> Change in LNG imports, 2021 to 2022.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -242,7 +242,7 @@
 </tr>
 </tbody>
 </table></div>
-<p><em>Europe and South Asia on GIIGNL figures; others from reconciled customs data. For China, lower demand (lockdowns, pipeline gas, coal) rather than being outbid is not ruled out.</em></p>
+<p><em>Europe and South Asia on GIIGNL figures; others from reconciled customs data. For China, lower demand (lockdowns, pipeline gas, coal) explains part of the drop. The figures mix sources, so they don’t sum exactly.</em></p>
 <p>Exporters outside the US barely responded: output rose 1.4% in 2022 (2.8% on GIIGNL figures). In a shortage, the marginal cargo comes from the US or from another buyer giving one up.</p>
 <p><strong>Cargoes and knowable prices.</strong> Europe’s share of US cargoes tracks the lagged netback differential only through the post-2022 regime shift. Within each regime the slope is about zero, and month-to-month shares do not respond to netback changes knowable in advance (out-of-sample R² −0.04 to −0.07).</p>
 <h2 id="the-liquefaction-hypothesis"><span class="sn">5</span>The liquefaction hypothesis</h2>
@@ -269,7 +269,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>The difference points the way the hypothesis predicts. But with 11 high-utilisation months, all in winter, the test had about an 11% chance of detecting an effect of plausible size. The result is <strong>uninformative</strong>. The hypothesis is neither supported nor refuted.</p>
+<p>The difference points the way the hypothesis predicts. But with 11 high-utilisation months, all in winter, the test had about an 11% chance of detecting an effect of plausible size. The result is <strong>uninformative</strong>. The hypothesis is neither supported nor refuted. Utilisation before 2021 also uses capacity figures that EIA revised later.</p>
 <p>Two further checks give no clean answer:</p>
 <ul>
 <li>US supply shocks have no identified directional effect on Henry Hub. Henry Hub fell 9.6% in the five days after 15 unplanned outages, but restarts and capacity additions were followed by a similar fall (−11.8%).</li>
@@ -291,7 +291,7 @@
 <tbody>
 <tr>
 <td>Europe’s balance</td>
-<td>Measurable from free data to within about 2.6%. Storage follows demand (0.957); LNG is near-baseload (−0.006).</td>
+<td>Measurable from free data, about 2.6% below Eurostat. Storage follows demand (0.957); LNG doesn’t (−0.006).</td>
 </tr>
 <tr>
 <td>What pulls LNG to Europe</td>
@@ -318,7 +318,7 @@
 <h2 id="limitations"><span class="sn">7</span>Limitations</h2>
 <ul>
 <li><strong>Gaps in the balance:</strong> daily demand and production are not published (Eurostat is monthly, 2–3 months late), Poland’s production is confidential from October 2023, and 20 months have incomplete pipeline data.</li>
-<li><strong>One crisis:</strong> the sample contains one scarcity regime (2021–22), so storage–price relationships cannot be separated from that episode.</li>
+<li><strong>Few crises:</strong> the sample has one full scarcity regime (2021–22), plus the 2026 Hormuz disruption, which is still unfolding and wasn’t analysed in depth. Storage–price relationships are hard to separate from those episodes.</li>
 <li><strong>JKM data:</strong> free JKM data is limited to ICE deferred contracts from October 2024. Platts JKM and expired contracts are paid.</li>
 <li><strong>Cargo destinations:</strong> DOE records destination at departure. Diversions, resales and contract terms are not public.</li>
 <li><strong>Timing:</strong> most results are same-period associations. Where publication delays were respected, no physical fundamental led prices (72 monthly tests, none significant after correction).</li>
