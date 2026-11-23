@@ -1,8 +1,8 @@
 /* mufx.io light document system (shared with /lab). Used by the energy full-text pages. */
 :root{
-  --bg:#f7f8f8; --bg2:#eef0f0; --bg3:#e4e7e8;
+  --bg:#e8eae6; --bg2:#dfe2dd; --bg3:#d6dad4;
   --ink:#191d1f; --ink2:#3f474b; --ink3:#6a7379; --ink4:#98a0a5;
-  --line:#d5dadc; --line2:#b9c0c4;
+  --line:#cdd2cd; --line2:#b3bab5;
   --acc:#14538c; --acc-bg:#e7eef4;
   --serif:'STIX Two Text',Georgia,'Times New Roman',serif;
   --mono:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -53,7 +53,7 @@ h1{font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);letter-spacing:-.01em;line
 .doc li{margin-bottom:.35rem}
 .doc blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:2px solid var(--line2);background:var(--bg2);font-size:.95rem}
 .doc figure{margin:1.8rem 0}
-.doc figure img,.doc img{display:block;max-width:100%;height:auto;background:#fff;border:1px solid var(--line)}
+.doc figure img,.doc img{display:block;max-width:100%;height:auto;background:var(--bg2);border:1px solid var(--line)}
 .doc figcaption{font-family:var(--mono);font-size:.68rem;line-height:1.6;color:var(--ink3);margin-top:.6rem}
 .sec-note{font-size:.92rem;color:var(--ink2)}
 

@@ -1,7 +1,7 @@
 /* Small SVG chart helpers in the mufx light paper style. No dependencies. */
 (function(){
 var NS='http://www.w3.org/2000/svg';
-var C={ink:'#191d1f',ink2:'#3f474b',ink3:'#6a7379',grid:'#e4e7e8',acc:'#14538c',band:'#eef0f0'};
+var C={ink:'#191d1f',ink2:'#3f474b',ink3:'#6a7379',grid:'#d3d8d2',acc:'#14538c',band:'#dcdfda'};
 function el(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
 function svg(host,W,H,label){var s=el('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':label||''});s.style.width='100%';s.style.height='auto';s.style.display='block';host.appendChild(s);return s;}
 function text(s,x,y,t,o){o=o||{};var a={x:x,y:y,'font-size':o.size||10,'text-anchor':o.anchor||'start'};a.style='fill:'+(o.color||C.ink2)+';font-family:Spline Sans Mono,ui-monospace,monospace';s.appendChild(el('text',a,t));}

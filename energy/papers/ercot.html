@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Evening Price Spikes in ERCOT: Net Load, Gas and Battery Output, and the Day-Ahead Premium · Hao Zhang</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="paper.css"></head>
-<body><nav><div class="inner"><a class="home" href="https://mufx.io/">← mufx.io</a><span class="sp"></span><a href="../resume.pdf">résumé</a></div></nav><div class="wrap">
+<body><nav><div class="inner"><a class="home" href="https://mufx.io/">← mufx.io</a><span class="sp"></span><a href="../resume.pdf?v=20261123b">résumé</a></div></nav><div class="wrap">
 <header class="cover"><a class="back" href="../">← energy working papers</a>
 <h1>Evening Price Spikes in ERCOT: Net Load, Gas and Battery Output, and the Day-Ahead Premium</h1><p class="subtitle">Working paper</p><p class="byline">Hao Zhang</p>
 <div class="fields"><div class="field"><span class="k">Date</span><span class="v">2026-10-28</span></div><div class="field"><span class="k">Market</span><span class="v">ERCOT · HB_HUBAVG</span></div><div class="field"><span class="k">Data</span><span class="v">2019-01 – 2026-09</span></div><div class="field"><span class="k">Status</span><span class="v">working paper</span></div></div>
@@ -133,7 +133,7 @@ svg text{font-family:var(--mono);fill:var(--ink2)}
 var NS='http://www.w3.org/2000/svg',INK='#191d1f',INK3='#6a7379',ACC='#14538c',LINE='#b9c0c4';
 function el(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
 function ramp(f){ // bg #f7f8f8 -> acc #14538c
-  var a=[247,248,248],b=[20,83,140];return 'rgb('+a.map(function(v,i){return Math.round(v+(b[i]-v)*f)}).join(',')+')';}
+  var a=[232,234,230],b=[20,83,140];return 'rgb('+a.map(function(v,i){return Math.round(v+(b[i]-v)*f)}).join(',')+')';}
 
 var H={2019:[0.3,0.1,0.0,0.1,0.0,0.1,2.5,1.2,0.8,0.9,0.8,0.1,1.2,3.6,6.6,10.3,9.8,6.8,2.1,1.6,0.8,0.3,0.2,0.2],
 2020:[0.1,0.1,0.0,0.0,0.0,0.1,1.0,0.3,0.1,0.6,0.4,1.0,1.2,1.6,3.1,5.3,5.9,4.4,2.2,1.4,0.9,0.1,0.1,0.0],
@@ -173,7 +173,7 @@ P.forEach(function(p){
   s.appendChild(el('text',{x:l,y:12,'font-size':10.5,style:'fill:'+INK}, p[1]));
   function X(i){return l+i*pw/40} function Y(v){return t+ph-(v-p[2])/(p[3]-p[2])*ph}
   p[4].forEach(function(tk){
-    s.appendChild(el('line',{x1:l,x2:l+pw,y1:Y(tk),y2:Y(tk),stroke:'#e4e7e8','stroke-width':.6}));
+    s.appendChild(el('line',{x1:l,x2:l+pw,y1:Y(tk),y2:Y(tk),stroke:'#d3d8d2','stroke-width':.6}));
     s.appendChild(el('text',{x:l-5,y:Y(tk)+3,'text-anchor':'end','font-size':8.5},tk));
   });
   s.appendChild(el('line',{x1:l,x2:l+pw,y1:t+ph,y2:t+ph,stroke:INK,'stroke-width':.7}));
@@ -200,7 +200,7 @@ document.getElementById('tbl-grid').innerHTML=h;
   function panel(y0,hh,vals,max,ticks,unit,fill,lab,fmt){
     s.appendChild(el('text',{x:L,y:y0-8,'font-size':11,style:'fill:'+INK},lab));
     ticks.forEach(function(t){var y=y0+hh-(t/max)*hh;
-      s.appendChild(el('line',{x1:L,x2:W-R,y1:y,y2:y,stroke:'#e4e7e8','stroke-width':.7}));
+      s.appendChild(el('line',{x1:L,x2:W-R,y1:y,y2:y,stroke:'#d3d8d2','stroke-width':.7}));
       s.appendChild(el('text',{x:L-7,y:y+3.5,'text-anchor':'end','font-size':10},t+unit));});
     s.appendChild(el('line',{x1:L,x2:W-R,y1:y0+hh,y2:y0+hh,stroke:INK,'stroke-width':.8}));
     vals.forEach(function(v,i){var x=L+i*step+(step-bw)/2,bh=(v/max)*hh;
