@@ -1,0 +1,105 @@
+/* mufx.io light document system (shared with /lab). Used by the energy full-text pages. */
+:root{
+  --bg:#f7f8f8; --bg2:#eef0f0; --bg3:#e4e7e8;
+  --ink:#191d1f; --ink2:#3f474b; --ink3:#6a7379; --ink4:#98a0a5;
+  --line:#d5dadc; --line2:#b9c0c4;
+  --acc:#14538c; --acc-bg:#e7eef4;
+  --serif:'STIX Two Text',Georgia,'Times New Roman',serif;
+  --mono:'Spline Sans Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:52rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--acc);overflow-wrap:anywhere}
+a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+p{margin:0 0 1rem}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.82em;background:var(--bg2);padding:.05em .3em}
+
+nav{border-bottom:1px solid var(--line)}
+nav .inner{max-width:52rem;margin:0 auto;padding-block:.8rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1.25rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em}
+nav a{color:var(--ink3);text-decoration:none}
+nav a:hover{color:var(--ink);text-decoration:underline}
+nav a.here{color:var(--ink);font-weight:600}
+nav .brand{color:var(--ink);font-weight:600;margin-right:.7rem;letter-spacing:.08em;text-transform:uppercase}
+nav .sp{flex:1}
+
+.cover{padding-top:3rem}
+.back{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:var(--ink3);text-decoration:none;margin-bottom:1.4rem}
+.back:hover{color:var(--acc)}
+h1{font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);letter-spacing:-.01em;line-height:1.14;margin:0 0 .45rem;text-wrap:balance}
+.subtitle{font-size:1.06rem;font-style:italic;color:var(--ink2);margin:0 0 .45rem}
+.byline{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:var(--ink2);margin:0 0 1.6rem}
+.fields{border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));margin:0 0 2.2rem}
+.field{padding:.7rem 1.1rem;border-right:1px solid var(--line)}
+.field:first-child{padding-left:0}
+.field:last-child{border-right:0}
+.field .k{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:.25rem}
+.field .v{font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+
+.abstract{border-left:2px solid var(--line2);padding:.1rem 0 .1rem 1.2rem;margin:0 0 2.4rem}
+.abstract .h{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem}
+.abstract p{font-size:.98rem;line-height:1.62}
+.abstract p:last-child{margin-bottom:0}
+
+/* body text from markdown or hand-written */
+.doc h2{font-weight:700;font-size:1.35rem;letter-spacing:-.008em;line-height:1.22;margin:2.8rem 0 1rem;padding-top:1rem;border-top:2px solid var(--ink);text-wrap:balance}
+.doc h3{font-weight:700;font-size:1.06rem;margin:2rem 0 .6rem}
+.doc h4{font-weight:600;font-style:italic;font-size:1rem;margin:1.4rem 0 .5rem}
+.doc h2 .sn,.doc h3 .sn{font-family:var(--mono);font-weight:500;font-size:.8rem;color:var(--acc);margin-right:.6rem}
+.doc ul,.doc ol{padding-left:1.3rem;margin:0 0 1rem}
+.doc li{margin-bottom:.35rem}
+.doc blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:2px solid var(--line2);background:var(--bg2);font-size:.95rem}
+.doc figure{margin:1.8rem 0}
+.doc figure img,.doc img{display:block;max-width:100%;height:auto;background:#fff;border:1px solid var(--line)}
+.doc figcaption{font-family:var(--mono);font-size:.68rem;line-height:1.6;color:var(--ink3);margin-top:.6rem}
+.sec-note{font-size:.92rem;color:var(--ink2)}
+
+.tw,.doc .table-wrap{overflow-x:auto;margin:1.4rem 0}
+table{border-collapse:collapse;width:100%;font-size:.8rem;font-family:var(--mono);font-variant-numeric:tabular-nums}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding-bottom:.5rem;line-height:1.5}
+th{text-align:left;font-weight:600;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);border-top:2px solid var(--ink);border-bottom:1px solid var(--line2);padding:.5rem .8rem .45rem 0;vertical-align:bottom}
+td{border-bottom:1px solid var(--line);padding:.5rem .8rem .5rem 0;vertical-align:top;line-height:1.5}
+tbody tr:last-child td{border-bottom:2px solid var(--ink)}
+td.num,th.num{text-align:right;white-space:nowrap}
+td.l{font-family:var(--serif);font-size:.92rem;line-height:1.45}
+.src{font-family:var(--mono);font-size:.66rem;color:var(--ink4);line-height:1.55;border-top:1px dotted var(--line2);padding-top:.4rem;margin-top:.5rem}
+
+footer{margin-top:3.4rem;border-top:2px solid var(--ink);padding-block:1.1rem 4rem;font-family:var(--mono);font-size:.68rem;line-height:1.75;color:var(--ink3);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer a{color:var(--ink3)}
+
+@media (max-width:40rem){
+  body{font-size:16px}
+  .field{padding-left:0;border-right:0}
+}
+
+/* nav: back to main site + résumé only */
+nav .inner a.home{color:var(--ink);font-weight:600;letter-spacing:.06em}
+
+/* figures from markdown fenced divs */
+.doc .figure{margin:1.8rem 0}
+.doc .figure>p{font-family:var(--mono);font-size:.68rem;line-height:1.6;color:var(--ink3);margin:.6rem 0 0}
+.doc .figure>p strong{color:var(--ink);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.legend{display:flex;gap:1.4rem;justify-content:center;font-family:var(--mono);font-size:.68rem;color:var(--ink2);margin-top:.5rem;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:.45rem}
+.legend i{display:inline-block;width:1.6rem}
+.doc td[style*="right"],.doc th[style*="right"]{white-space:nowrap}
+
+/* index page */
+.entry{display:grid;grid-template-columns:3.1rem 1fr;gap:0 .6rem;margin:0 0 1.3rem}
+.entry .no{font-family:var(--mono);font-size:.8rem;color:var(--acc);padding-top:.2rem}
+.entry .body{min-width:0}
+.entry h3{font-weight:700;font-size:1.04rem;line-height:1.3;margin:0 0 .2rem}
+.entry h3 a{color:var(--ink);text-decoration:none}
+.entry h3 a:hover{color:var(--acc);text-decoration:underline}
+.entry .m{font-family:var(--mono);font-size:.68rem;color:var(--ink3);letter-spacing:.04em}
+.entry .m a{color:var(--acc);text-decoration:none}
+section.paper{margin:3.4rem 0 0}
+section.paper h2{font-weight:700;font-size:1.35rem;letter-spacing:-.008em;line-height:1.22;margin:0 0 .4rem;padding-top:1rem;border-top:2px solid var(--ink);text-wrap:balance}
+section.paper h2 .sn{font-family:var(--mono);font-weight:500;font-size:.85rem;color:var(--acc);margin-right:.7rem}
+.pmeta{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:var(--ink3);margin:0 0 1.2rem}
+.full{font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;margin:-1rem 0 0}
+.full a{text-decoration:none;border-bottom:1px solid var(--acc)}
+@media (max-width:40rem){.entry{grid-template-columns:1fr}.entry .no{padding:0 0 .2rem}}

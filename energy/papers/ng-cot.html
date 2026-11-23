@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reading Natural Gas COT Through Time · Hao Zhang</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="paper.css"></head>
+<body><nav><div class="inner"><a class="home" href="https://mufx.io/">← mufx.io</a><span class="sp"></span><a href="../resume.pdf">résumé</a></div></nav><div class="wrap">
+<header class="cover"><a class="back" href="../">← energy working papers</a>
+<h1>Reading Natural Gas COT Through Time</h1><p class="subtitle">Henry Hub positioning, 2006–2026</p><p class="byline">Hao Zhang</p>
+<div class="fields"><div class="field"><span class="k">Date</span><span class="v">2026-11-07</span></div><div class="field"><span class="k">Market</span><span class="v">NYMEX NG · CFTC 023651</span></div><div class="field"><span class="k">Data</span><span class="v">1,065 weekly reports</span></div><div class="field"><span class="k">Status</span><span class="v">working paper</span></div></div>
+<div class="abstract"><div class="h">Abstract</div><p>The CFTC’s weekly Commitments of Traders (COT) report shows how hedge funds and other groups are positioned in NYMEX Henry Hub natural gas. This paper tests whether that positioning helps predict price, using 1,065 weekly reports from June 2006 to November 2026.</p>
+<p>Managed-money position changes line up closely with the price move in the same week (correlation 0.494) but not with the following week (−0.005). The report is published three days after the positions are counted, and price moves almost as much in that gap as in the reported week itself. “Funds are at an extreme” does not predict turns: 17 independent extreme episodes in 20 years did no better than the base rate. COT describes who holds exposure. It does not time entries or exits.</p>
+</div></header>
+<main class="doc"><h2 id="data"><span class="sn">1</span>Data</h2>
+<ul>
+<li><strong>Positions:</strong> CFTC Disaggregated COT, NAT GAS NYME (code 023651), futures only, Tuesday positions published Friday afternoon. The groups are managed money, producers and merchants, swap dealers, other reportables and non-reportables.</li>
+<li><strong>Prices:</strong> front-month NYMEX natural gas, rolled at expiry into a continuous log-return index. Returns are measured from the first settlement after publication, so no result uses information before it was public.</li>
+<li><strong>Caution:</strong> the Disaggregated report first appeared in September 2009. Earlier history was reconstructed later, so 2006–09 readings were not visible to anyone at the time.</li>
+</ul>
+<h2 id="positions-move-with-price-in-the-same-week"><span class="sn">2</span>Positions move with price in the same week</h2>
+<p><strong>Table 1.</strong> Same-week correlation between position change and front-month return, 1,033 weeks.</p>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 40%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Position change</th>
+<th style="text-align: right;">Correlation</th>
+<th>Reading</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Managed money, net</td>
+<td style="text-align: right;">+0.494</td>
+<td>Net buying goes with rising price</td>
+</tr>
+<tr>
+<td>Managed money, gross long</td>
+<td style="text-align: right;">+0.149</td>
+<td>Adding longs matters less</td>
+</tr>
+<tr>
+<td>Managed money, gross short</td>
+<td style="text-align: right;">−0.460</td>
+<td>Covering shorts goes with rising price</td>
+</tr>
+<tr>
+<td>Other reportables, net</td>
+<td style="text-align: right;">−0.510</td>
+<td>The other side of the trade</td>
+</tr>
+<tr>
+<td>Producer/merchant, net</td>
+<td style="text-align: right;">−0.261</td>
+<td>Hedgers lean against moves</td>
+</tr>
+</tbody>
+</table></div>
+<p>The short side does most of the moving. Weekly changes in gross shorts vary about three times as much as changes in gross longs. Among the largest 20% of weekly moves, 43% were driven by short covering and 41% by new shorts, against only 8% by new longs.</p>
+<div class="figure">
+<div id="fig-cot1" class="chart">
+
+</div>
+<p><strong>Figure 1</strong> · Correlation between the weekly change in managed-money net position and the front-month return, in the same week and over the following 1–13 weeks. Futures only, about 1,030 weeks.</p>
+</div>
+<h2 id="the-report-is-late"><span class="sn">3</span>The report is late</h2>
+<p>Positions are counted on Tuesday and published Friday. Between those two points:</p>
+<ul>
+<li>price moved with a standard deviation of 7.0% (log), against 7.4% for the reported week itself;</li>
+<li>the move went the same way as the reported week only 52% of the time;</li>
+<li>it fully reversed the reported week’s move 24% of the time.</li>
+</ul>
+<p>By the time the report is out, the market has often moved on.</p>
+<h2 id="no-forecasting-power-in-the-common-readings"><span class="sn">4</span>No forecasting power in the common readings</h2>
+<p><strong>Table 2.</strong> Correlation between a reading at publication and the return over the following weeks.</p>
+<div class="table-wrap"><table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th>Reading</th>
+<th style="text-align: right;">1 week</th>
+<th style="text-align: right;">2 weeks</th>
+<th style="text-align: right;">4 weeks</th>
+<th style="text-align: right;">8 weeks</th>
+<th style="text-align: right;">13 weeks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weekly managed-money flow</td>
+<td style="text-align: right;">−0.005</td>
+<td style="text-align: right;">−0.002</td>
+<td style="text-align: right;">−0.042</td>
+<td style="text-align: right;">−0.047</td>
+<td style="text-align: right;">−0.042</td>
+</tr>
+<tr>
+<td>Trailing 3-year percentile</td>
+<td style="text-align: right;">−0.003</td>
+<td style="text-align: right;">+0.004</td>
+<td style="text-align: right;">+0.004</td>
+<td style="text-align: right;">+0.035</td>
+<td style="text-align: right;">+0.075</td>
+</tr>
+<tr>
+<td>Raw net position, % of OI</td>
+<td style="text-align: right;">+0.028</td>
+<td style="text-align: right;">+0.042</td>
+<td style="text-align: right;">+0.070</td>
+<td style="text-align: right;">+0.119</td>
+<td style="text-align: right;">+0.177</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>About 1,030 weeks for flow and raw position, about 875 for percentile. None of the flow or percentile values is statistically distinguishable from zero (HAC |t| ≤ 1.65).</em></p>
+<ul>
+<li><strong>Extremes don’t mark turns.</strong> De-clustered, there are only 17 independent extreme episodes in 20 years. Fading them did no better than the direction base rate for the same periods, and 73–83% of extremes became more extreme after first being flagged.</li>
+<li><strong>“Concentrated shorts must squeeze” was contradicted.</strong> Concentrated short positioning was followed by further price declines on average.</li>
+<li><strong>Scale matters.</strong> Open interest nearly doubled (810,000 contracts in 2006–09 to 1.5 million in 2023–26). A “record” contract count can be ordinary as a share of the market.</li>
+<li><strong>One exception, fragile.</strong> The raw level of managed-money net position had a weak positive link with returns 13 weeks later (about 0.18). That is with the funds, not against them, and it reversed sign in 2023–26.</li>
+</ul>
+<div class="figure">
+<div id="fig-cot2" class="chart">
+
+</div>
+<p><strong>Figure 2</strong> · Correlation between each reading at publication and the return over the following weeks.</p>
+</div>
+<h2 id="conclusion"><span class="sn">5</span>Conclusion</h2>
+<p>COT is a good record of who holds exposure and how it changed. It is a poor timing tool:</p>
+<ul>
+<li>the same-week link is strong because positions and prices move together;</li>
+<li>the report arrives late;</li>
+<li>extremes persist longer than a contrarian reading assumes.</li>
+</ul>
+<p>Useful questions to ask of a report:</p>
+<ol type="1">
+<li>Is the exposure measured in the right market and at the right time?</li>
+<li>Did the change come from longs or shorts?</li>
+<li>How far has price moved since Tuesday?</li>
+</ol>
+<h2 id="data-1">Data</h2>
+<p>CFTC Disaggregated Commitments of Traders, NAT GAS NYME (023651); EIA and NYMEX natural gas futures settlements. Full study, with 16 figures, a 14-episode ledger and an audit appendix: <em>Reading Natural Gas COT Through Time</em> (7 Nov 2026).</p>
+</main><footer><span><a href="https://mufx.io/">mufx.io</a></span><span>Data collection and code with AI research assistants (Claude, Codex); questions, test design and interpretation by the author.</span></footer>
+</div><script src="charts.js"></script><script>
+var C=mfC;
+mfBars(document.getElementById('fig-cot1'),{groups:['same week','+1 wk','+2','+4','+8','+13'],ymin:-0.1,ymax:0.55,yticks:[-0.1,0,0.1,0.2,0.3,0.4,0.5],
+ ytitle:'Correlation with front-month return',valfmt:function(v){return v.toFixed(3)},label:'Managed-money flow vs return by horizon',
+ series:[{name:'Weekly managed-money flow',values:[0.494,-0.005,-0.002,-0.042,-0.047,-0.042],color:C.acc}]});
+mfBars(document.getElementById('fig-cot2'),{groups:['1 week','2','4','8','13 weeks'],ymin:-0.1,ymax:0.2,yticks:[-0.1,0,0.1,0.2],
+ ytitle:'Correlation with return after publication',label:'Forward correlations by reading',
+ series:[{name:'Weekly flow',values:[-0.005,-0.002,-0.042,-0.047,-0.042],color:C.acc},
+ {name:'3-year percentile',values:[-0.003,0.004,0.004,0.035,0.075],color:'#98a0a5'},
+ {name:'Raw net position, % OI',values:[0.028,0.042,0.070,0.119,0.177],color:C.ink2}]});
+</script></body></html>
